@@ -31,10 +31,6 @@ component grammar Interval{
         method public vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
             throw new UnsupportedOperationException("Please specify a interval corresponding to this type in the grammar.");
         }
-
-        method public String getName(){
-            throw new UnsupportedOperationException("Please specify a name for the interval symbol.");
-        }
     ;
 
     astrule Day =
