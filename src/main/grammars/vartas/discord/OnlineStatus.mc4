@@ -1,0 +1,59 @@
+package vartas.discord;
+
+/**
+ * This grammar defines the syntax of the different online statuses of the bot.
+ */
+component grammar OnlineStatus{
+    abstract OnlineStatus;
+
+    /*=========================================================*/
+    /*=======================  Symbols  =======================*/
+    /*=========================================================*/
+
+    symbol Online extends OnlineStatus =
+        name:"online";
+
+    symbol Invisible extends OnlineStatus =
+        name:"invisible";
+
+    symbol Busy extends OnlineStatus =
+        name:"busy";
+
+    symbol Idle extends OnlineStatus =
+        name:"idle";
+
+
+    /*=========================================================*/
+    /*======================= AST RULES =======================*/
+    /*=========================================================*/
+
+    astrule OnlineStatus =
+        method public net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+            throw new UnsupportedOperationException("Please specify an online status corresponding to this type in the grammar.");
+        }
+    ;
+
+    astrule Online =
+        method public net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.core.OnlineStatus.ONLINE;
+        }
+    ;
+
+    astrule Invisible =
+        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.core.OnlineStatus.INVISIBLE;
+        }
+    ;
+
+    astrule Busy =
+        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.core.OnlineStatus.DO_NOT_DISTURB;
+        }
+    ;
+
+    astrule Idle =
+        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.core.OnlineStatus.IDLE;
+        }
+    ;
+}

@@ -1,0 +1,17 @@
+package vartas.discord;
+
+component grammar Entity extends vartas.Numbers{
+    interface DiscordEntity = id:DecimalNumber;
+
+    User implements DiscordEntity =
+        "<" "@" semicolon:["!"]? id:DecimalNumber ">"
+    ;
+
+    TextChannel implements DiscordEntity =
+        "<" "#" id:DecimalNumber ">"
+    ;
+
+    Role implements DiscordEntity =
+        "<" "@" "&" id:DecimalNumber ">"
+    ;
+}

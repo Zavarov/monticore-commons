@@ -1,0 +1,87 @@
+package vartas;
+
+component grammar Numbers{
+    interface Number;
+    interface SignedNumber;
+
+    /*================================================================================================================*/
+    /*==  Number Interfaces  =========================================================================================*/
+    /*================================================================================================================*/
+
+    astrule Number =
+        method public java.math.BigDecimal getValue(){
+            return new java.math.BigDecimal(getSource());
+        }
+        method public String getSource(){
+            throw new UnsupportedOperationException("Please implement the getSource method of this number type");
+        }
+    ;
+
+    astrule SignedNumber =
+        method public java.math.BigDecimal getValue(){
+            return new java.math.BigDecimal(getSource());
+        }
+        method public String getSource(){
+            throw new UnsupportedOperationException("Please implement the getSource method of this number type");
+        }
+    ;
+
+    /*================================================================================================================*/
+    /*==  Decimals  ==================================================================================================*/
+    /*================================================================================================================*/
+
+
+    DecimalNumber implements Number =
+        number:Digits
+    ;
+
+    SignedDecimalNumber implements SignedNumber =
+        negative:["-"]? number:Digits
+    ;
+
+    astrule DecimalNumber =
+        method public String getSource(){
+            return number;
+        }
+    ;
+
+    astrule SignedDecimalNumber =
+        method public String getSource(){
+            return (isNegative() ? "-" : "") + number;
+        }
+    ;
+
+    /*================================================================================================================*/
+    /*==  Floating Point Numbers  ====================================================================================*/
+    /*================================================================================================================*/
+
+    FloatingPointNumber implements Number =
+        pre:DecimalNumber "." post:Digits
+    ;
+
+    SignedFloatingPointNumber implements SignedNumber =
+        pre:SignedDecimalNumber "." post:Digits
+    ;
+
+    astrule FloatingPointNumber =
+        method public String getSource(){
+            return getPre().getSource() + "." + getPost();
+        }
+    ;
+
+    astrule SignedFloatingPointNumber =
+        method public String getSource(){
+            return getPre().getSource() + "." + getPost();
+        }
+    ;
+
+    /*================================================================================================================*/
+    /*==  Digits  ====================================================================================================*/
+    /*================================================================================================================*/
+
+    token Digits =
+        Digit+;
+
+    fragment token Digit = '0'..'9';
+    fragment token NonZeroDigit = '1'..'9';
+}

@@ -1,0 +1,63 @@
+package vartas.chart;
+
+/**
+ * This grammar defines the syntax of the different intervals for the charts.
+ */
+component grammar Interval{
+    abstract Interval;
+
+    /*=========================================================*/
+    /*=======================  Symbols  =======================*/
+    /*=========================================================*/
+
+    symbol Day extends Interval =
+        name:"day";
+
+    symbol Week extends Interval =
+        name:"week";
+
+    symbol Month extends Interval =
+        name:"month";
+
+    symbol Year extends Interval =
+        name:"year";
+
+
+    /*=========================================================*/
+    /*======================= AST RULES =======================*/
+    /*=========================================================*/
+
+    astrule Interval =
+        method public vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+            throw new UnsupportedOperationException("Please specify a interval corresponding to this type in the grammar.");
+        }
+
+        method public String getName(){
+            throw new UnsupportedOperationException("Please specify a name for the interval symbol.");
+        }
+    ;
+
+    astrule Day =
+        method public vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+            return vartas.reddit.chart.line.AbstractChart.Interval.DAY;
+        }
+    ;
+
+    astrule Week =
+        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+            return vartas.reddit.chart.line.AbstractChart.Interval.WEEK;
+        }
+    ;
+
+    astrule Month =
+        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+            return vartas.reddit.chart.line.AbstractChart.Interval.MONTH;
+        }
+    ;
+
+    astrule Year =
+        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+            return vartas.reddit.chart.line.AbstractChart.Interval.YEAR;
+        }
+    ;
+}

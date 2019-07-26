@@ -1,0 +1,93 @@
+package vartas;
+
+/**
+ * This grammar defines the syntax of the parameter specified in Parameter.mc4.
+ */
+grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions,
+                                      de.monticore.expressions.ExpressionsBasis,
+                                      vartas.Numbers{
+    start Expression;
+    ExtLiteral = SignedNumber;
+
+    /*================================================================================================================*/
+    /*==  Arguments  =================================================================================================*/
+    /*================================================================================================================*/
+
+    interface SingleArgument = Expression;
+
+    AtArgument implements SingleArgument =
+        "@" Expression
+    ;
+
+    BracketArgument implements SingleArgument =
+        "(" Expression ")"
+    ;
+
+    /*================================================================================================================*/
+    /*==  Methods  ===================================================================================================*/
+    /*================================================================================================================*/
+
+    PowExpression implements Expression <185> =
+        left:Expression operator:"^" right:Expression
+    ;
+
+    RandomNumberExpression implements Expression <250> =
+        "random" "(" dice:Expression "," eyes:Expression ")"
+    ;
+
+    AbsExpression implements Expression <250> =
+        "abs" argument:SingleArgument
+    ;
+
+    ACosExpression implements Expression <250> =
+        "acos" argument:SingleArgument
+    ;
+
+    ASinExpression implements Expression <250> =
+        "asin" argument:SingleArgument
+    ;
+
+    ATanExpression implements Expression <250> =
+        "atan" argument:SingleArgument
+    ;
+
+    CeilExpression implements Expression <250> =
+        "ceil" argument:SingleArgument
+    ;
+
+    CosExpression implements Expression <250> =
+        "cos" argument:SingleArgument
+    ;
+
+    FloorExpression implements Expression <250> =
+        "floor" argument:SingleArgument
+    ;
+
+    LogExpression implements Expression <250> =
+        "log" argument:SingleArgument
+    ;
+
+    LnExpression implements Expression <250> =
+        "ln" argument:SingleArgument
+    ;
+
+    MaxExpression implements Expression <250> =
+        "max" "(" left:Expression "," right:Expression ")"
+    ;
+
+    MinExpression implements Expression <250> =
+        "min" "(" left:Expression "," right:Expression ")"
+    ;
+
+    SinExpression implements Expression <250> =
+        "sin" argument:SingleArgument
+    ;
+
+    SqrtExpression implements Expression <250> =
+        "sqrt" argument:SingleArgument
+    ;
+
+    TanExpression implements Expression <250> =
+        "tan" argument:SingleArgument
+    ;
+}
