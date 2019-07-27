@@ -11,6 +11,10 @@ component grammar Permission{
         method public net.dv8tion.jda.core.Permission getPermissionType(){
             throw new UnsupportedOperationException("Please specify a permission corresponding to this type in the grammar.");
         }
+
+        method public String getName(){
+            throw new UnsupportedOperationException("Please specify a name for this online status.");
+        }
     ;
 
     /*================================================================================================================*/
