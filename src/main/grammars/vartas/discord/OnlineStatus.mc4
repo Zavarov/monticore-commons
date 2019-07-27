@@ -31,6 +31,9 @@ component grammar OnlineStatus{
         method public net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
             throw new UnsupportedOperationException("Please specify an online status corresponding to this type in the grammar.");
         }
+        method public String getName(){
+            throw new UnsupportedOperationException("Please specify a name for this online status.");
+        }
     ;
 
     astrule Online =
