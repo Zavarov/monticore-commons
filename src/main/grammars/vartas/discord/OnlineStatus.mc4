@@ -28,7 +28,7 @@ component grammar OnlineStatus{
     /*=========================================================*/
 
     astrule OnlineStatus =
-        method public net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
+        method public net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
             throw new UnsupportedOperationException("Please specify an online status corresponding to this type in the grammar.");
         }
         method public String getName(){
@@ -37,26 +37,26 @@ component grammar OnlineStatus{
     ;
 
     astrule Online =
-        method public net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.core.OnlineStatus.ONLINE;
+        method public net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.api.OnlineStatus.ONLINE;
         }
     ;
 
     astrule Invisible =
-        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.core.OnlineStatus.INVISIBLE;
+        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.api.OnlineStatus.INVISIBLE;
         }
     ;
 
     astrule Busy =
-        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.core.OnlineStatus.DO_NOT_DISTURB;
+        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.api.OnlineStatus.DO_NOT_DISTURB;
         }
     ;
 
     astrule Idle =
-        method net.dv8tion.jda.core.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.core.OnlineStatus.IDLE;
+        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
+            return net.dv8tion.jda.api.OnlineStatus.IDLE;
         }
     ;
 }

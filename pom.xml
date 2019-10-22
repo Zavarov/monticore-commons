@@ -29,19 +29,13 @@
         <!-- .. Libraries ..................................................... -->
 
         <monticore.version>5.0.5</monticore.version>
-        <jda.version>3.8.3_464</jda.version>
+        <jda.version>4.0.0_53</jda.version>
         <chart.version>1.0</chart.version>
-        <commons-text.version>1.7</commons-text.version>
-
-        <commons.collections.version>4.4</commons.collections.version>
+        <commons-text.version>1.8</commons-text.version>
         <assertj.version>3.12.2</assertj.version>
         <junit.version>4.12</junit.version>
-        <httpclient.version>4.5.9</httpclient.version>
-        <commons-text.version>1.7</commons-text.version>
-        <json.version>20180813</json.version>
-        <guava.version>18.0</guava.version>
-        <jfreechart.version>1.5.0</jfreechart.version>
-        <evo.inflector.version>1.2.2</evo.inflector.version>
+
+        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 
         <!-- .. Misc .......................................................... -->
 
@@ -72,6 +66,21 @@
         </extensions>
 
         <plugins>
+            <!-- create docs jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- MontiCore Generation -->
             <plugin>
                 <groupId>de.monticore.mojo</groupId>

@@ -8,7 +8,7 @@ component grammar Permission{
     interface Permission;
 
     astrule Permission =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
             throw new UnsupportedOperationException("Please specify a permission corresponding to this type in the grammar.");
         }
 
@@ -25,8 +25,8 @@ component grammar Permission{
         name:"create instant invite";
 
     astrule CreateInstantInvite =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.CREATE_INSTANT_INVITE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.CREATE_INSTANT_INVITE;
         }
     ;
 
@@ -34,8 +34,8 @@ component grammar Permission{
         name:"kick members";
 
     astrule KickMembers =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.KICK_MEMBERS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.KICK_MEMBERS;
         }
     ;
 
@@ -43,8 +43,8 @@ component grammar Permission{
         name:"ban members";
 
     astrule BanMembers =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.BAN_MEMBERS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.BAN_MEMBERS;
         }
     ;
 
@@ -52,8 +52,8 @@ component grammar Permission{
         name:"administrator";
 
     astrule Administrator =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.ADMINISTRATOR;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.ADMINISTRATOR;
         }
     ;
 
@@ -61,8 +61,8 @@ component grammar Permission{
         name:"manage channels";
 
     astrule ManageChannels =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_CHANNEL;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_CHANNEL;
         }
     ;
 
@@ -70,8 +70,8 @@ component grammar Permission{
         name:"manage server";
 
     astrule ManageServer =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_SERVER;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_SERVER;
         }
     ;
 
@@ -79,8 +79,8 @@ component grammar Permission{
         name:"add reactions";
 
     astrule AddReactions =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_ADD_REACTION;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_ADD_REACTION;
         }
     ;
 
@@ -88,8 +88,8 @@ component grammar Permission{
         name:"view audit logs";
 
     astrule ViewAuditLogs =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VIEW_AUDIT_LOGS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VIEW_AUDIT_LOGS;
         }
     ;
 
@@ -97,8 +97,8 @@ component grammar Permission{
         name:"priority speaker";
 
     astrule PrioritySpeaker =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.PRIORITY_SPEAKER;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.PRIORITY_SPEAKER;
         }
     ;
 
@@ -110,8 +110,8 @@ component grammar Permission{
         name:"view channels";
 
     astrule ViewChannels =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VIEW_CHANNEL;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VIEW_CHANNEL;
         }
     ;
 
@@ -123,8 +123,8 @@ component grammar Permission{
         name:"read messages";
 
     astrule ReadMessages =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_READ;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_READ;
         }
     ;
 
@@ -132,8 +132,8 @@ component grammar Permission{
         name:"send messages";
 
     astrule SendMessages =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_WRITE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_WRITE;
         }
     ;
 
@@ -141,8 +141,8 @@ component grammar Permission{
         name:"text to speech";
 
     astrule TextToSpeech =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_TTS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_TTS;
         }
     ;
 
@@ -150,8 +150,8 @@ component grammar Permission{
         name:"manage messages";
 
     astrule ManageMessages =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_MANAGE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_MANAGE;
         }
     ;
 
@@ -159,8 +159,8 @@ component grammar Permission{
         name:"embed links";
 
     astrule EmbedLinks =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_EMBED_LINKS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS;
         }
     ;
 
@@ -168,8 +168,8 @@ component grammar Permission{
         name:"attach files";
 
     astrule AttachFiles =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_ATTACH_FILES;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_ATTACH_FILES;
         }
     ;
 
@@ -177,8 +177,8 @@ component grammar Permission{
         name:"read history";
 
     astrule ReadHistory =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_HISTORY;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_HISTORY;
         }
     ;
 
@@ -186,8 +186,8 @@ component grammar Permission{
         name:"mention everyone";
 
     astrule MentionEveryone =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_MENTION_EVERYONE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_MENTION_EVERYONE;
         }
     ;
 
@@ -195,8 +195,8 @@ component grammar Permission{
         name:"external emojis";
 
     astrule ExternalEmojis =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MESSAGE_EXT_EMOJI;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MESSAGE_EXT_EMOJI;
         }
     ;
 
@@ -208,8 +208,8 @@ component grammar Permission{
         name:"connect";
 
     astrule Connect =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_CONNECT;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_CONNECT;
         }
     ;
 
@@ -217,8 +217,8 @@ component grammar Permission{
         name:"speak";
 
     astrule Speak =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_SPEAK;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_SPEAK;
         }
     ;
 
@@ -226,8 +226,8 @@ component grammar Permission{
         name:"mute others";
 
     astrule MuteOthers =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_MUTE_OTHERS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_MUTE_OTHERS;
         }
     ;
 
@@ -235,8 +235,8 @@ component grammar Permission{
         name:"deaf others";
 
     astrule DeafOthers =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_DEAF_OTHERS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_DEAF_OTHERS;
         }
     ;
 
@@ -244,8 +244,8 @@ component grammar Permission{
         name:"move others";
 
     astrule MoveOthers =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_MOVE_OTHERS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_MOVE_OTHERS;
         }
     ;
 
@@ -253,8 +253,8 @@ component grammar Permission{
         name:"use voice activity";
 
     astrule UseVoiceActivity =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.VOICE_USE_VAD;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.VOICE_USE_VAD;
         }
     ;
 
@@ -267,8 +267,8 @@ component grammar Permission{
         name:"change nickname";
 
     astrule ChangeNickname =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.NICKNAME_CHANGE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.NICKNAME_CHANGE;
         }
     ;
 
@@ -276,8 +276,8 @@ component grammar Permission{
         name:"manage nicknames";
 
     astrule ManageNicknames =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.NICKNAME_MANAGE;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.NICKNAME_MANAGE;
         }
     ;
 
@@ -285,8 +285,8 @@ component grammar Permission{
         name:"manage roles";
 
     astrule ManageRoles =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_ROLES;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_ROLES;
         }
     ;
 
@@ -294,8 +294,8 @@ component grammar Permission{
         name:"manage permissions";
 
     astrule ManagePermissions =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_PERMISSIONS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_PERMISSIONS;
         }
     ;
 
@@ -303,8 +303,8 @@ component grammar Permission{
         name:"manage webhooks";
 
     astrule ManageWebhooks =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_WEBHOOKS;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_WEBHOOKS;
         }
     ;
 
@@ -312,8 +312,8 @@ component grammar Permission{
         name:"manage emotes";
 
     astrule ManageEmotes =
-        method public net.dv8tion.jda.core.Permission getPermissionType(){
-            return net.dv8tion.jda.core.Permission.MANAGE_EMOTES;
+        method public net.dv8tion.jda.api.Permission getPermissionType(){
+            return net.dv8tion.jda.api.Permission.MANAGE_EMOTES;
         }
     ;
 }
