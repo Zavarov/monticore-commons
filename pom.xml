@@ -23,7 +23,14 @@
 
     <groupId>vartas</groupId>
     <artifactId>monticore-commons</artifactId>
+    <packaging>pom</packaging>
     <version>1.2</version>
+    <modules>
+        <module>monticore-commons-numbers</module>
+        <module>monticore-commons-discord</module>
+        <module>monticore-commons-reddit</module>
+        <module>monticore-commons-chart</module>
+    </modules>
 
     <properties>
         <!-- .. Libraries ..................................................... -->
@@ -35,7 +42,12 @@
         <assertj.version>3.12.2</assertj.version>
         <junit.version>4.12</junit.version>
 
+        <!-- .. Plugins......................................................... -->
+
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+        <maven-sources-plugin.version>3.1.0</maven-sources-plugin.version>
+
 
         <!-- .. Misc .......................................................... -->
 
@@ -52,74 +64,6 @@
 
         <grammars.classifier>grammars</grammars.classifier>
     </properties>
-
-
-    <!-- == DEFAULT BUILD SETTINGS =========================================== -->
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>${wagon.provider.version}</version>
-            </extension>
-        </extensions>
-
-        <plugins>
-            <!-- create docs jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-docs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- MontiCore Generation -->
-            <plugin>
-                <groupId>de.monticore.mojo</groupId>
-                <artifactId>monticore-maven-plugin</artifactId>
-                <version>${monticore.version}</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <script>de/monticore/monticore_noemf.groovy</script>
-                        </configuration>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- create grammar jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-                <executions>
-                    <!-- grammars -->
-                    <execution>
-                        <id>generate-grammars</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>${grammars.classifier}</classifier>
-                            <classesDirectory>src/main/grammars</classesDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -206,5 +150,63 @@
             <url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
         </pluginRepository>
     </pluginRepositories>
+
+
+
+    <!-- == DEFAULT BUILD SETTINGS =========================================== -->
+
+    <build>
+        <plugins>
+            <!-- create grammar jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <executions>
+                    <!-- grammars -->
+                    <execution>
+                        <id>generate-grammars</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>${grammars.classifier}</classifier>
+                            <classesDirectory>src/main/grammars</classesDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- create sources jar -->
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-sources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- create docs jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

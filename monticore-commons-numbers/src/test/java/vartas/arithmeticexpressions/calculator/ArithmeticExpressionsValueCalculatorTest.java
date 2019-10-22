@@ -15,14 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.arithmeticexpression.calculator;
+package vartas.arithmeticexpressions.calculator;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
+import vartas.AbstractTest;
 import vartas.arithmeticexpressions._parser.ArithmeticExpressionsParser;
-import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.AbstractTest;
 
 import java.io.IOException;
 import java.math.BigDecimal;
