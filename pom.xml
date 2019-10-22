@@ -23,14 +23,15 @@
 
     <groupId>vartas</groupId>
     <artifactId>monticore-commons</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <properties>
         <!-- .. Libraries ..................................................... -->
 
         <monticore.version>5.0.5</monticore.version>
         <jda.version>3.8.3_464</jda.version>
-        <reddit.api.version>2.0.9</reddit.api.version>
+        <chart.version>1.0</chart.version>
+        <commons-text.version>1.7</commons-text.version>
 
         <commons.collections.version>4.4</commons.collections.version>
         <assertj.version>3.12.2</assertj.version>
@@ -113,15 +114,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>vartas.reddit</groupId>
+            <groupId>vartas</groupId>
             <artifactId>chart</artifactId>
-            <version>${reddit.api.version}</version>
+            <version>${chart.version}</version>
         </dependency>
 
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>${jda.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text.version}</version>
         </dependency>
 
         <!-- MontiCore Dependencies -->

@@ -28,7 +28,7 @@ component grammar Interval{
     /*=========================================================*/
 
     astrule Interval =
-        method public vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
+        method public vartas.chart.Interval getIntervalType(){
             throw new UnsupportedOperationException("Please specify a interval corresponding to this type in the grammar.");
         }
         method public String getName(){
@@ -37,26 +37,26 @@ component grammar Interval{
     ;
 
     astrule Day =
-        method public vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
-            return vartas.reddit.chart.line.AbstractChart.Interval.DAY;
+        method public vartas.chart.Interval getIntervalType(){
+            return vartas.chart.Interval.DAY;
         }
     ;
 
     astrule Week =
-        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
-            return vartas.reddit.chart.line.AbstractChart.Interval.WEEK;
+        method vartas.chart.Interval getIntervalType(){
+            return vartas.chart.Interval.WEEK;
         }
     ;
 
     astrule Month =
-        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
-            return vartas.reddit.chart.line.AbstractChart.Interval.MONTH;
+        method vartas.chart.Interval getIntervalType(){
+            return vartas.chart.Interval.MONTH;
         }
     ;
 
     astrule Year =
-        method vartas.reddit.chart.line.AbstractChart.Interval getIntervalType(){
-            return vartas.reddit.chart.line.AbstractChart.Interval.YEAR;
+        method vartas.chart.Interval getIntervalType(){
+            return vartas.chart.Interval.YEAR;
         }
     ;
 }
