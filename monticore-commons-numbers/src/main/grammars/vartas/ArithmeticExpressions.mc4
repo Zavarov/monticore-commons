@@ -4,10 +4,11 @@ package vartas;
  * This grammar defines primitive arithmetic functions.
  */
 grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions,
-                                      de.monticore.expressions.ExpressionsBasis,
-                                      vartas.Numbers{
+                                      de.monticore.literals.MCCommonLiterals{
     start Expression;
-    ExtLiteral = SignedNumber;
+
+    SignedLiteralExpression implements Expression<340>
+        = SignedLiteral;
 
     /*================================================================================================================*/
     /*==  Arguments  =================================================================================================*/
