@@ -17,28 +17,30 @@
 
 package vartas.reddit.submission._symboltable;
 
-import de.monticore.symboltable.ArtifactScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
 import vartas.reddit.submission._ast.ASTSubmission;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
 public class SubmissionSymbolTableCreator extends SubmissionSymbolTableCreatorTOP{
 
-    public SubmissionSymbolTableCreator(ResolvingConfiguration resolverConfig, Scope enclosingScope) {
-        super(resolverConfig, enclosingScope);
+    public SubmissionSymbolTableCreator(ISubmissionScope enclosingScope) {
+        super(enclosingScope);
+    }
+
+    public SubmissionSymbolTableCreator(final Deque<? extends ISubmissionScope> scopeStack) {
+        super(scopeStack);
     }
 
     @Override
-    public ArtifactScope createFromAST(ASTSubmissionArtifact rootNode) {
+    public SubmissionArtifactScope createFromAST(ASTSubmissionArtifact rootNode) {
         requireNonNull(rootNode);
 
-        final ArtifactScope artifactScope = new ArtifactScope(Optional.empty(), "", new ArrayList<>());
+        final SubmissionArtifactScope artifactScope = new SubmissionArtifactScope(Optional.empty(), "", new ArrayList<>());
         putOnStack(artifactScope);
 
         rootNode.accept(this);
@@ -49,6 +51,6 @@ public class SubmissionSymbolTableCreator extends SubmissionSymbolTableCreatorTO
     @Override
     public void visit(ASTSubmission node){
         super.visit(node);
-        currentScope().ifPresent(node::setEnclosingScope);
+        getCurrentScope().ifPresent(node::setEnclosingScope);
     }
 }

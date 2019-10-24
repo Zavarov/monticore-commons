@@ -1,6 +1,6 @@
 package vartas.reddit;
 
-grammar Comment extends de.monticore.MCBasicLiterals{
+grammar Comment extends de.monticore.literals.MCCommonLiterals{
     CommentArtifact =
         Comment*;
 

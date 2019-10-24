@@ -17,28 +17,30 @@
 
 package vartas.reddit.comment._symboltable;
 
-import de.monticore.symboltable.ArtifactScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
 import vartas.reddit.comment._ast.ASTComment;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
 public class CommentSymbolTableCreator extends CommentSymbolTableCreatorTOP{
 
-    public CommentSymbolTableCreator(ResolvingConfiguration resolverConfig, Scope enclosingScope) {
-        super(resolverConfig, enclosingScope);
+    public CommentSymbolTableCreator(ICommentScope enclosingScope) {
+        super(enclosingScope);
+    }
+
+    public CommentSymbolTableCreator(final Deque<? extends ICommentScope> scopeStack) {
+        super(scopeStack);
     }
 
     @Override
-    public ArtifactScope createFromAST(ASTCommentArtifact rootNode) {
+    public CommentArtifactScope createFromAST(ASTCommentArtifact rootNode) {
         requireNonNull(rootNode);
 
-        final ArtifactScope artifactScope = new ArtifactScope(Optional.empty(), "", new ArrayList<>());
+        final CommentArtifactScope artifactScope = new CommentArtifactScope(Optional.empty(), "", new ArrayList<>());
         putOnStack(artifactScope);
 
         rootNode.accept(this);
@@ -49,6 +51,6 @@ public class CommentSymbolTableCreator extends CommentSymbolTableCreatorTOP{
     @Override
     public void visit(ASTComment node){
         super.visit(node);
-        currentScope().ifPresent(node::setEnclosingScope);
+        getCurrentScope().ifPresent(node::setEnclosingScope);
     }
 }

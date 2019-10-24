@@ -20,8 +20,6 @@ package vartas.reddit.submission._symboltable;
 public class SubmissionLanguage extends SubmissionLanguageTOP{
     public SubmissionLanguage(){
         super("Submission Language", "sub");
-
-        setModelNameCalculator(new SubmissionModelNameCalculator());
     }
 
     @Override

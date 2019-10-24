@@ -17,12 +17,11 @@
 
 package vartas.reddit.submission._ast;
 
-import de.monticore.mcbasicliterals._ast.ASTSignedNatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.submission._symboltable.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -31,98 +30,96 @@ public class ASTSubmission extends ASTSubmissionTOP implements SubmissionInterfa
     protected  ASTSubmission (){
 
     }
-    protected  ASTSubmission (List<ASTEntry> entryList){
-        super(entryList);
-    }
 
     public String getAuthor() {
-        Optional<AuthorLiteralSymbol> symbol = getEnclosingScope().resolve("author", AuthorLiteralSymbol.KIND);
+        Optional<AuthorLiteralSymbol> symbol = getEnclosingScope().resolveAuthorLiteral("author");
 
-        return unescapeMonticore(symbol.get().getAuthorLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getId() {
-        Optional<IdLiteralSymbol> symbol = getEnclosingScope().resolve("id", IdLiteralSymbol.KIND);
+        Optional<IdLiteralSymbol> symbol = getEnclosingScope().resolveIdLiteral("id");
 
-        return unescapeMonticore(symbol.get().getIdLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public Optional<String> getLinkFlairText() {
-        Optional<LinkFlairTextLiteralSymbol> symbol = getEnclosingScope().resolve("linkFlairText", LinkFlairTextLiteralSymbol.KIND);
+        Optional<LinkFlairTextLiteralSymbol> symbol = getEnclosingScope().resolveLinkFlairTextLiteral("linkFlairText");
 
         if(symbol.isPresent())
-            return Optional.of(unescapeMonticore(symbol.get().getLinkFlairTextLiteralNode().get().getStringLiteral().getValue()));
+            return Optional.of(unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue()));
         else
             return Optional.empty();
     }
 
     public String getSubreddit() {
-        Optional<SubredditLiteralSymbol> symbol = getEnclosingScope().resolve("subreddit", SubredditLiteralSymbol.KIND);
+        Optional<SubredditLiteralSymbol> symbol = getEnclosingScope().resolveSubredditLiteral("subreddit");
 
-        return symbol.get().getSubredditLiteralNode().get().getStringLiteral().getValue();
+        return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public boolean isNsfw() {
-        Optional<NsfwLiteralSymbol> symbol = getEnclosingScope().resolve("nsfw", NsfwLiteralSymbol.KIND);
+        Optional<NsfwLiteralSymbol> symbol = getEnclosingScope().resolveNsfwLiteral("nsfw");
 
-        return symbol.get().getNsfwLiteralNode().get().getBooleanLiteral().getValue();
+        return symbol.get().getAstNode().get().getBooleanLiteral().getValue();
     }
 
     public boolean isSpoiler() {
-        Optional<SpoilerLiteralSymbol> symbol = getEnclosingScope().resolve("spoiler", SpoilerLiteralSymbol.KIND);
+        Optional<SpoilerLiteralSymbol> symbol = getEnclosingScope().resolveSpoilerLiteral("spoiler");
 
-        return symbol.get().getSpoilerLiteralNode().get().getBooleanLiteral().getValue();
+        return symbol.get().getAstNode().get().getBooleanLiteral().getValue();
     }
 
     public int getScore() {
-        Optional<ScoreLiteralSymbol> symbol = getEnclosingScope().resolve("score", ScoreLiteralSymbol.KIND);
+        Optional<ScoreLiteralSymbol> symbol = getEnclosingScope().resolveScoreLiteral("score");
 
-        ASTSignedNatLiteral ast = symbol.get().getScoreLiteralNode().get().getSignedNatLiteral();
+        //getSource is bugged in 5.3.0
+        ASTSignedNatLiteral ast = symbol.get().getAstNode().get().getSignedNatLiteral();
 
         return Integer.parseInt(ast.isNegative() ? "-" + ast.getDigits() : ast.getDigits());
     }
 
     public String getTitle() {
-        Optional<TitleLiteralSymbol> symbol = getEnclosingScope().resolve("title", TitleLiteralSymbol.KIND);
+        Optional<TitleLiteralSymbol> symbol = getEnclosingScope().resolveTitleLiteral("title");
 
-        return unescapeMonticore(symbol.get().getTitleLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public Date getCreated() {
-        Optional<CreatedLiteralSymbol> symbol = getEnclosingScope().resolve("created", CreatedLiteralSymbol.KIND);
+        Optional<CreatedLiteralSymbol> symbol = getEnclosingScope().resolveCreatedLiteral("created");
 
-        return new Date(symbol.get().getCreatedLiteralNode().get().getBasicLongLiteral().getValue());
+        return new Date(symbol.get().getAstNode().get().getBasicLongLiteral().getValue());
     }
 
     public Optional<String> getSelfText() {
-        Optional<SelfTextLiteralSymbol> symbol = getEnclosingScope().resolve("selfText", SelfTextLiteralSymbol.KIND);
+        Optional<SelfTextLiteralSymbol> symbol = getEnclosingScope().resolveSelfTextLiteral("selfText");
 
         if(symbol.isPresent())
-            return Optional.of(unescapeMonticore(symbol.get().getSelfTextLiteralNode().get().getStringLiteral().getValue()));
+            return Optional.of(unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue()));
         else
             return Optional.empty();
     }
 
     public Optional<String> getThumbnail() {
-        Optional<ThumbnailLiteralSymbol> symbol = getEnclosingScope().resolve("thumbnail", ThumbnailLiteralSymbol.KIND);
+        Optional<ThumbnailLiteralSymbol> symbol = getEnclosingScope().resolveThumbnailLiteral("thumbnail");
 
         if(symbol.isPresent())
-            return Optional.of(unescapeMonticore(symbol.get().getThumbnailLiteralNode().get().getStringLiteral().getValue()));
+            return Optional.of(unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue()));
         else
             return Optional.empty();
     }
 
     public String getUrl() {
-        Optional<UrlLiteralSymbol> symbol = getEnclosingScope().resolve("url", UrlLiteralSymbol.KIND);
+        Optional<UrlLiteralSymbol> symbol = getEnclosingScope().resolveUrlLiteral("url");
 
-        return unescapeMonticore(symbol.get().getUrlLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     @Override
     public String getPermalink(){
-        Optional<PermalinkLiteralSymbol> symbol = getEnclosingScope().resolve("permalink", PermalinkLiteralSymbol.KIND);
+        Optional<PermalinkLiteralSymbol> symbol = getEnclosingScope().resolvePermalinkLiteral("permalink");
 
-        return unescapeMonticore(symbol.get().getPermalinkLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
     /**
      * @return a hash code based on the id of the submission.

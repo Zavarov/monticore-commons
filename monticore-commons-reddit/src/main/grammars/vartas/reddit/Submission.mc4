@@ -1,6 +1,6 @@
 package vartas.reddit;
 
-grammar Submission extends de.monticore.MCBasicLiterals{
+grammar Submission extends de.monticore.literals.MCCommonLiterals{
     SubmissionArtifact =
         Submission*;
 

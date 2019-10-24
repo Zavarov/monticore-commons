@@ -17,15 +17,13 @@
 
 package vartas.reddit.submission;
 
-import de.monticore.ModelingLanguage;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
 import de.se_rwth.commons.Files;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 import vartas.reddit.submission._parser.SubmissionParser;
+import vartas.reddit.submission._symboltable.SubmissionGlobalScope;
 import vartas.reddit.submission._symboltable.SubmissionLanguage;
 import vartas.reddit.submission._symboltable.SubmissionSymbolTableCreator;
 import vartas.reddit.submission.prettyprint.SubmissionPrettyPrinter;
@@ -48,8 +46,10 @@ public class SubmissionHelper {
             StringBuilder fileContent = new StringBuilder();
             submissions.stream().map(printer::prettyprint).forEach(fileContent::append);
 
-            target.getParentFile().mkdirs();
-            target.createNewFile();
+            if(!target.getParentFile().exists())
+                java.nio.file.Files.createDirectories(target.getParentFile().toPath());
+            if(!target.exists())
+                java.nio.file.Files.createFile(target.toPath());
 
             Files.writeToTextFile(new StringReader(fileContent.toString()), target);
         }catch(IOException e){
@@ -77,18 +77,15 @@ public class SubmissionHelper {
         }
     }
 
-    private static GlobalScope createGlobalScope(){
+    private static SubmissionGlobalScope createGlobalScope(){
         ModelPath path = new ModelPath(Paths.get(""));
-        ModelingLanguage language = new SubmissionLanguage();
-        return new GlobalScope(path, language);
+        SubmissionLanguage language = new SubmissionLanguage();
+        return new SubmissionGlobalScope(path, language);
     }
 
     private static SubmissionSymbolTableCreator createSymbolTableCreator(){
-        GlobalScope globalScope = createGlobalScope();
-        ResolvingConfiguration resolvingConfiguration = new ResolvingConfiguration();
+        SubmissionGlobalScope globalScope = createGlobalScope();
 
-        resolvingConfiguration.addDefaultFilters(globalScope.getResolvingFilters());
-
-        return new SubmissionSymbolTableCreator(resolvingConfiguration, globalScope);
+        return new SubmissionSymbolTableCreator(globalScope);
     }
 }

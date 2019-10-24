@@ -17,15 +17,13 @@
 
 package vartas.reddit.comment;
 
-import de.monticore.ModelingLanguage;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
 import de.se_rwth.commons.Files;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
+import vartas.reddit.comment._symboltable.CommentGlobalScope;
 import vartas.reddit.comment._symboltable.CommentLanguage;
 import vartas.reddit.comment._symboltable.CommentSymbolTableCreator;
 import vartas.reddit.comment.prettyprint.CommentPrettyPrinter;
@@ -48,8 +46,10 @@ public abstract class CommentHelper {
             StringBuilder fileContent = new StringBuilder();
             comments.stream().map(printer::prettyprint).forEach(fileContent::append);
 
-            target.getParentFile().mkdirs();
-            target.createNewFile();
+            if(!target.getParentFile().exists())
+                java.nio.file.Files.createDirectories(target.getParentFile().toPath());
+            if(!target.exists())
+                java.nio.file.Files.createFile(target.toPath());
 
             Files.writeToTextFile(new StringReader(fileContent.toString()), target);
         }catch(IOException e){
@@ -77,18 +77,15 @@ public abstract class CommentHelper {
         }
     }
 
-    private static GlobalScope createGlobalScope(){
+    private static CommentGlobalScope createGlobalScope(){
         ModelPath path = new ModelPath(Paths.get(""));
-        ModelingLanguage language = new CommentLanguage();
-        return new GlobalScope(path, language);
+        CommentLanguage language = new CommentLanguage();
+        return new CommentGlobalScope(path, language);
     }
 
     private static CommentSymbolTableCreator createSymbolTableCreator(){
-        GlobalScope globalScope = createGlobalScope();
-        ResolvingConfiguration resolvingConfiguration = new ResolvingConfiguration();
+        CommentGlobalScope globalScope = createGlobalScope();
 
-        resolvingConfiguration.addDefaultFilters(globalScope.getResolvingFilters());
-
-        return new CommentSymbolTableCreator(resolvingConfiguration, globalScope);
+        return new CommentSymbolTableCreator(globalScope);
     }
 }

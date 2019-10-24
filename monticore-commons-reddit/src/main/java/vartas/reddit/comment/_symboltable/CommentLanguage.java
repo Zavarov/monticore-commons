@@ -20,8 +20,6 @@ package vartas.reddit.comment._symboltable;
 public class CommentLanguage extends CommentLanguageTOP{
     public CommentLanguage(){
         super("Comment Language", "com");
-
-        setModelNameCalculator(new CommentModelNameCalculator());
     }
 
     @Override

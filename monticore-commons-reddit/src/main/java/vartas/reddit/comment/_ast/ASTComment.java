@@ -17,11 +17,10 @@
 
 package vartas.reddit.comment._ast;
 
-import de.monticore.mcbasicliterals._ast.ASTSignedNatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._symboltable.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -30,46 +29,44 @@ public class ASTComment extends ASTCommentTOP implements CommentInterface {
     protected  ASTComment (){
 
     }
-    protected  ASTComment (List<ASTEntry> entryList){
-        super(entryList);
-    }
 
     public String getAuthor() {
-        Optional<AuthorLiteralSymbol> symbol = getEnclosingScope().resolve("author", AuthorLiteralSymbol.KIND);
+        Optional<AuthorLiteralSymbol> symbol = getEnclosingScope().resolveAuthorLiteral("author");
 
-        return unescapeMonticore(symbol.get().getAuthorLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getId() {
-        Optional<IdLiteralSymbol> symbol = getEnclosingScope().resolve("id", IdLiteralSymbol.KIND);
+        Optional<IdLiteralSymbol> symbol = getEnclosingScope().resolveIdLiteral("id");
 
-        return unescapeMonticore(symbol.get().getIdLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getSubreddit() {
-        Optional<SubredditLiteralSymbol> symbol = getEnclosingScope().resolve("subreddit", SubredditLiteralSymbol.KIND);
+        Optional<SubredditLiteralSymbol> symbol = getEnclosingScope().resolveSubredditLiteral("subreddit");
 
-        return unescapeMonticore(symbol.get().getSubredditLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public int getScore() {
-        Optional<ScoreLiteralSymbol> symbol = getEnclosingScope().resolve("score", ScoreLiteralSymbol.KIND);
+        Optional<ScoreLiteralSymbol> symbol = getEnclosingScope().resolveScoreLiteral("score");
 
-        ASTSignedNatLiteral ast = symbol.get().getScoreLiteralNode().get().getSignedNatLiteral();
+        //getSource is bugged in 5.3.0
+        ASTSignedNatLiteral ast = symbol.get().getAstNode().get().getSignedNatLiteral();
 
         return Integer.parseInt(ast.isNegative() ? "-" + ast.getDigits() : ast.getDigits());
     }
 
     public String getSubmissionTitle() {
-        Optional<SubmissionTitleLiteralSymbol> symbol = getEnclosingScope().resolve("submissionTitle", SubmissionTitleLiteralSymbol.KIND);
+        Optional<SubmissionTitleLiteralSymbol> symbol = getEnclosingScope().resolveSubmissionTitleLiteral("submissionTitle");
 
-        return unescapeMonticore(symbol.get().getSubmissionTitleLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getSubmission() {
-        Optional<SubmissionLiteralSymbol> symbol = getEnclosingScope().resolve("submission", SubmissionLiteralSymbol.KIND);
+        Optional<SubmissionLiteralSymbol> symbol = getEnclosingScope().resolveSubmissionLiteral("submission");
 
-        return unescapeMonticore(symbol.get().getSubmissionLiteralNode().get().getStringLiteral().getValue());
+        return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
     /**
      * @return a hash code based on the id of the comment.
