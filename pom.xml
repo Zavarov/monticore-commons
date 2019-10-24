@@ -30,6 +30,10 @@
         <module>monticore-commons-discord</module>
         <module>monticore-commons-reddit</module>
         <module>monticore-commons-chart</module>
+        <module>monticore-commons-discord-bot</module>
+        <module>monticore-commons-discord-command</module>
+        <module>monticore-commons-discord-call</module>
+        <module>monticore-commons-aggregated-discord-command</module>
     </modules>
 
     <properties>
