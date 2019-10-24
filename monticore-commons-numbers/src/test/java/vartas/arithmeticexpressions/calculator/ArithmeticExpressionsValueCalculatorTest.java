@@ -100,7 +100,9 @@ public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
 
     @Test
     public void testDivision(){
-        assertThat(valueOf("3/1.5").doubleValue()).isCloseTo(2.0, precision);
+        assertThat(valueOf("3/2").doubleValue()).isCloseTo(1.5, precision);
+        assertThat(valueOf("3/2.0").doubleValue()).isCloseTo(1.5, precision);
+        assertThat(valueOf("3.0/2").doubleValue()).isCloseTo(1.5, precision);
     }
 
     @Test

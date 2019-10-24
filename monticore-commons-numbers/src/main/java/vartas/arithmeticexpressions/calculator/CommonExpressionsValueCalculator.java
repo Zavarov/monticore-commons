@@ -134,7 +134,7 @@ public class CommonExpressionsValueCalculator implements CommonExpressionsVisito
         BigDecimal left = values.get(node.getLeft());
         BigDecimal right = values.get(node.getRight());
 
-        values.put(node, left.divide(right, RoundingMode.HALF_EVEN));
+        values.put(node, left.divide(right, 15, RoundingMode.HALF_EVEN));
     }
 
     @Override
