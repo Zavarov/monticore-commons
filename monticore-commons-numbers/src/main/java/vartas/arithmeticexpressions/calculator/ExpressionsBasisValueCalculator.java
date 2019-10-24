@@ -29,6 +29,8 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class ExpressionsBasisValueCalculator implements ExpressionsBasisVisitor {
+    public static final String E = "e";
+    public static final String PI = "pi";
     private Map<ASTNode, BigDecimal> values;
     private ExpressionsBasisVisitor realThis;
 
@@ -50,11 +52,11 @@ public class ExpressionsBasisValueCalculator implements ExpressionsBasisVisitor 
     @Override
     public void visit(ASTNameExpression name) {
         switch (name.getName().toLowerCase(Locale.ENGLISH)) {
-            case "pi": {
+            case PI: {
                 values.put(name, BigDecimal.valueOf(Math.PI));
                 break;
             }
-            case "e": {
+            case E: {
                 values.put(name, BigDecimal.valueOf(Math.E));
                 break;
             }
