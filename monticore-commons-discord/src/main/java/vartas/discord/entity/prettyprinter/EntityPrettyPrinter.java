@@ -54,21 +54,21 @@ public class EntityPrettyPrinter implements EntityVisitor{
         printer.print("<@");
         if(node.isSemicolon())
             printer.print("!");
-        printer.print(node.getId());
+        printer.print(node.getId().getDigits());
         printer.print(">");
     }
 
     @Override
     public void handle(ASTTextChannel node){
         printer.print("<#");
-        printer.print(node.getId());
+        printer.print(node.getId().getDigits());
         printer.print(">");
     }
 
     @Override
     public void handle(ASTRole node){
         printer.print("<@&");
-        printer.print(node.getId());
+        printer.print(node.getId().getDigits());
         printer.print(">");
     }
 }

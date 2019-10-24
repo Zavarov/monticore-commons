@@ -1,17 +1,17 @@
 package vartas.discord;
 
-component grammar Entity extends vartas.Numbers{
-    interface DiscordEntity = id:DecimalNumber;
+component grammar Entity extends de.monticore.literals.MCCommonLiterals{
+    interface DiscordEntity = id:NatLiteral;
 
     User implements DiscordEntity =
-        "<" "@" semicolon:["!"]? id:DecimalNumber ">"
+        "<" "@" semicolon:["!"]? id:NatLiteral ">"
     ;
 
     TextChannel implements DiscordEntity =
-        "<" "#" id:DecimalNumber ">"
+        "<" "#" id:NatLiteral ">"
     ;
 
     Role implements DiscordEntity =
-        "<" "@" "&" id:DecimalNumber ">"
+        "<" "@" "&" id:NatLiteral ">"
     ;
 }
