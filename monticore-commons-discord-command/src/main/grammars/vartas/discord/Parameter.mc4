@@ -1,0 +1,46 @@
+package vartas.discord;
+
+/**
+ * This grammar defines all valid parameter types of the commands.
+ * It also defines for each type the class of each instance of the parameter.
+ */
+component grammar Parameter extends de.monticore.MCBasics{
+    interface ParameterType = Name&;
+
+    /*=========================================================*/
+    /*=======================  Symbols  =======================*/
+    /*=========================================================*/
+
+    symbol IntervalParameter implements ParameterType =
+        Name& ":" "interval";
+
+    symbol OnlineStatusParameter implements ParameterType =
+        Name& ":" "onlinestatus";
+
+    symbol StringParameter implements ParameterType =
+        Name& ":" "string";
+
+    symbol DateParameter implements ParameterType =
+        Name& ":" "date";
+
+    symbol MessageParameter implements ParameterType =
+        Name& ":" "message";
+
+    symbol GuildParameter implements ParameterType =
+        Name& ":" "guild";
+
+    symbol MemberParameter implements ParameterType =
+        Name& ":" "member";
+
+    symbol UserParameter implements ParameterType =
+        Name& ":" "user";
+
+    symbol TextChannelParameter implements ParameterType =
+        Name& ":" "textchannel";
+
+    symbol RoleParameter implements ParameterType =
+        Name& ":" "role";
+
+    symbol ExpressionParameter implements ParameterType =
+        Name& ":" "expression";
+}

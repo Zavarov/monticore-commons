@@ -1,0 +1,54 @@
+package vartas.discord.bot;
+
+grammar Rank extends de.monticore.literals.MCCommonLiterals{
+    scope RankArtifact =
+        "rank" "{"
+            Rank*
+        "}";
+
+    scope Rank =
+        "user" ":" BasicLongLiteral "has" "rank" (RankType || ",")+ ;
+
+    abstract RankType;
+
+    /*=========================================================*/
+    /*=======================  Symbols  =======================*/
+    /*=========================================================*/
+
+    symbol Root extends RankType =
+        name:"root";
+
+    symbol Reddit extends RankType =
+        name:"reddit";
+
+    symbol Developer extends RankType =
+        name:"dev";
+
+    /*=========================================================*/
+    /*======================= AST RULES =======================*/
+    /*=========================================================*/
+
+    astrule RankType =
+        method public vartas.discord.bot.rank.RankType getRankType(){
+            throw new UnsupportedOperationException("Please specify a rank corresponding to this type in the grammar.");
+        }
+    ;
+
+    astrule Root =
+        method public vartas.discord.bot.rank.RankType getRankType(){
+            return vartas.discord.bot.rank.RankType.ROOT;
+        }
+    ;
+
+    astrule Reddit =
+        method public vartas.discord.bot.rank.RankType getRankType(){
+            return vartas.discord.bot.rank.RankType.REDDIT;
+        }
+    ;
+
+    astrule Developer =
+        method public vartas.discord.bot.rank.RankType getRankType(){
+            return vartas.discord.bot.rank.RankType.DEVELOPER;
+        }
+    ;
+}

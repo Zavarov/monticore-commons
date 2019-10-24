@@ -1,0 +1,50 @@
+package vartas.discord;
+
+/**
+ * This grammar specifies the properties of the commands.
+ * For example, it is possible to specify the number of arguments or the permissions that are required to execute it.
+ */
+grammar Command extends vartas.discord.Permission,
+                        vartas.discord.Parameter,
+                        vartas.discord.bot.Rank{
+    CommandArtifact =
+        ("package" package:(Name& || ".")+ ";")?
+        "command" ("@" prefix:(Name& || ".")+)? "{"
+            Command*
+        "}";
+
+    symbol scope Command =
+        Name& ("@" (Restriction || ",")+ )? "{"
+            Attribute*
+        "}";
+
+    /**
+     * A restriction imposes a condition on a command.
+     * The command will then be executed if and only if this condition is satisfied.
+     */
+    interface Restriction;
+
+    symbol GuildRestriction implements Restriction =
+        name:"guild";
+
+    symbol AttachmentRestriction implements Restriction =
+        name:"attachment";
+
+    /**
+     * An attribute of a command provides are more specific description of the command.
+     * Examples of this can be the name of the command and the number of expected parameters.
+     */
+    interface Attribute;
+
+    symbol ClassNameAttribute implements Attribute =
+        name:"class" ":" value:Name;
+
+    symbol PermissionAttribute implements Attribute =
+        name:"permission" ":" (Permission || ",")+;
+
+    symbol ParameterAttribute implements Attribute =
+         name:"parameter" ":" (ParameterType || ",")+;
+
+    symbol RankAttribute implements Attribute =
+         name:"rank" ":" (RankType || ",")+;
+}

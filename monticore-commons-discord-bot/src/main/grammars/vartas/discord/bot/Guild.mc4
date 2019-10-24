@@ -1,0 +1,28 @@
+package vartas.discord.bot;
+
+grammar Guild extends de.monticore.literals.MCCommonLiterals{
+    scope GuildArtifact =
+        "guild" "{"
+            Entry*
+        "}";
+
+    interface Entry;
+
+    symbol Prefix implements Entry =
+        name:"prefix" "=" prefix:StringLiteral;
+
+    symbol Subreddit implements Entry =
+        name:"subreddit" subreddit:StringLiteral "{"
+            ("channel" ":" textchannel:BasicLongLiteral)+
+        "}";
+
+    symbol Filter implements Entry =
+        name:"filter" "{"
+            expression:StringLiteral+
+        "}";
+
+    symbol Tag implements Entry =
+        name:"tag" tag:StringLiteral "{"
+            ("role" ":" role:BasicLongLiteral)+
+        "}";
+}

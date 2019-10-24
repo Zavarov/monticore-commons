@@ -1,0 +1,52 @@
+package vartas.discord.bot;
+
+grammar Config extends de.monticore.literals.MCCommonLiterals{
+    ConfigArtifact =
+        "config" "{"
+            Entry*
+        "}";
+
+    interface Entry;
+
+    symbol StatusMessageUpdateInterval implements Entry =
+        name:"statusMessageUpdateInterval" "=" NatLiteral "min";
+
+    symbol DiscordShards implements Entry =
+        name:"discordShards" "=" NatLiteral;
+
+    symbol InteractiveMessageLifetime implements Entry =
+        name:"interactiveMessageLifetime" "=" NatLiteral "min";
+
+    symbol ActivityUpdateInterval implements Entry =
+        name:"activityUpdateInterval" "=" NatLiteral "min";
+
+    symbol InviteSupportServer implements Entry =
+        name:"inviteSupportServer" "=" StringLiteral;
+
+    symbol BotName implements Entry =
+        name:"botName" "=" StringLiteral;
+
+    symbol GlobalPrefix implements Entry =
+        name:"globalPrefix" "=" StringLiteral;
+
+    symbol WikiLink implements Entry =
+        name:"wikiLink" "=" StringLiteral;
+
+    symbol ImageWidth implements Entry =
+        name:"imageWidth" "=" NatLiteral "px";
+
+    symbol ImageHeight implements Entry =
+        name:"imageHeight" "=" NatLiteral "px";
+
+    symbol DiscordToken implements Entry =
+        name:"discordToken" "=" StringLiteral;
+
+    symbol RedditAccount implements Entry =
+        name:"redditAccount" "=" StringLiteral;
+
+    symbol RedditId implements Entry =
+        name:"redditId" "=" StringLiteral;
+
+    symbol RedditSecret implements Entry =
+        name:"redditSecret" "=" StringLiteral;
+}

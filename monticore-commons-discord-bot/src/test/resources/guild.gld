@@ -1,0 +1,31 @@
+guild {
+    prefix = "prefix"
+    filter {
+        "expression0"
+        "expression1"
+        "expression2"
+        "expression3"
+    }
+    subreddit "x" {
+        channel:0L
+        channel:1L
+    }
+    subreddit "y" {
+        channel:2L
+        channel:3L
+    }
+    subreddit "z" {
+        channel:4L
+    }
+    tag "a" {
+        role:5L
+        role:6L
+    }
+    tag "b" {
+        role:7L
+        role:8L
+    }
+    tag "c" {
+        role:9L
+    }
+}

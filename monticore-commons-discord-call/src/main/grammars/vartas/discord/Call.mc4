@@ -1,0 +1,19 @@
+package vartas.discord;
+
+/**
+ * This grammar specifies the semantic of the expressions that are able to execute a command.
+ * It consists of two parts, the qualified name of the command and the required parameters.
+ */
+grammar Call extends de.monticore.MCBasics, vartas.discord.Argument{
+    scope CallArtifact = command:(Name& || ".")+ argument:ArgumentType*;
+
+    /*=========================================================*/
+    /*======================= AST RULES =======================*/
+    /*=========================================================*/
+
+    astrule CallArtifact =
+        method public String getQualifiedName(){
+            return de.se_rwth.commons.Joiners.DOT.join(getCommandList());
+        }
+    ;
+}

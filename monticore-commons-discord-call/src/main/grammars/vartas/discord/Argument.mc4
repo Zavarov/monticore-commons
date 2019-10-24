@@ -1,0 +1,70 @@
+package vartas.discord;
+
+/**
+ * This grammar defines all valid arguments for the command calls.
+ */
+component grammar Argument extends vartas.ArithmeticExpressions,
+                                 vartas.chart.Interval,
+                                 vartas.discord.Entity,
+                                 vartas.discord.OnlineStatus{
+    interface ArgumentType;
+
+    /*=========================================================*/
+    /*========================  Misc  =========================*/
+    /*=========================================================*/
+
+    StringArgument implements ArgumentType <500> =
+        StringLiteral
+    ;
+
+    IntervalArgument implements ArgumentType <500> =
+        Interval
+    ;
+
+    OnlineStatusArgument implements ArgumentType <500> =
+        OnlineStatus
+    ;
+
+    /*=========================================================*/
+    /*========================  Time  =========================*/
+    /*=========================================================*/
+
+    //All dates are also arithmetic expressions
+    DateArgument implements ArgumentType <400> =
+          day:Expression "-"
+        month:Expression "-"
+         year:Expression
+    ;
+
+    /*=========================================================*/
+    /*==================  Discord Entities  ===================*/
+    /*=========================================================*/
+
+    UserArgument implements ArgumentType <400> =
+        User
+    ;
+
+    TextChannelArgument implements ArgumentType <400> =
+        TextChannel
+    ;
+
+    RoleArgument implements ArgumentType <400> =
+        Role
+    ;
+
+    /*=========================================================*/
+    /*=======================  Raw Text  ======================*/
+    /*=========================================================*/
+
+    RawTextArgument implements ArgumentType <350> =
+        Name
+    ;
+
+    /*=========================================================*/
+    /*================  Arithmetic Expression  ================*/
+    /*=========================================================*/
+
+    ExpressionArgument implements ArgumentType <300> =
+        Expression
+    ;
+}
