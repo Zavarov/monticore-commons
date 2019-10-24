@@ -21,7 +21,7 @@ import de.monticore.ast.ASTNode;
 import de.monticore.expressions.commonexpressions._ast.*;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisitor;
 import de.monticore.prettyprint.IndentPrinter;
-import vartas.arithmeticexpressions.prettyprinter.ArithmeticExpressionPrettyPrinter;
+import vartas.arithmeticexpressions.prettyprinter.ArithmeticExpressionsPrettyPrinter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -50,7 +50,7 @@ public class CommonExpressionsValueCalculator implements CommonExpressionsVisito
 
     @Override
     public void visit(ASTCallExpression node) {
-        ArithmeticExpressionPrettyPrinter prettyPrinter = new ArithmeticExpressionPrettyPrinter(new IndentPrinter());
+        ArithmeticExpressionsPrettyPrinter prettyPrinter = new ArithmeticExpressionsPrettyPrinter(new IndentPrinter());
 
         throw new IllegalArgumentException("The expression " + prettyPrinter.prettyprint(node) + " is not defined.");
     }

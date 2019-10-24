@@ -28,9 +28,9 @@ import vartas.arithmeticexpressions._ast.ASTBracketArgument;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsDelegatorVisitor;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 
-public class ArithmeticExpressionPrettyPrinter extends ArithmeticExpressionsDelegatorVisitor {
+public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDelegatorVisitor {
     private IndentPrinter printer;
-    public ArithmeticExpressionPrettyPrinter(IndentPrinter printer){
+    public ArithmeticExpressionsPrettyPrinter(IndentPrinter printer){
         this.printer = printer;
 
         setArithmeticExpressionsVisitor(new ArithmeticExpressionSublanguagePrettyPrinter(printer));
