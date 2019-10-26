@@ -15,37 +15,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Role;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTArgumentType;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.UserParameterSymbol;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-public class UserParameter2ArgumentSymbol extends UserParameterSymbol implements Parameter2ArgumentInterface<User>{
-    protected ASTArgumentType argument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class RoleArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected User user;
-    protected JDA jda;
+    protected Role role;
+    protected Guild guild;
 
-    public UserParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public RoleArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
@@ -59,15 +58,16 @@ public class UserParameter2ArgumentSymbol extends UserParameterSymbol implements
     }
 
     @Override
-    public Optional<User> resolve(Message context){
-        jda = context.getJDA();
+    public Optional<Role> resolve(Message context){
+        checkNotNull(context.getGuild());
+        guild = context.getGuild();
 
-        argument.accept(visitor);
-        return Optional.ofNullable(user);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        return Optional.ofNullable(role);
     }
 
     /**
-     * This class evaluates the id of the user by using the arithmetic expression inside the argument.
+     * This class evaluates the id of the role by using the arithmetic expression inside the argument.
      */
     private class ExpressionArgumentVisitor implements ArithmeticExpressionsInheritanceVisitor {
         ArithmeticExpressionsVisitor realThis = this;
@@ -85,12 +85,12 @@ public class UserParameter2ArgumentSymbol extends UserParameterSymbol implements
         @Override
         public void visit(ASTExpression ast){
             BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
-            user = jda.getUserById(value.longValueExact());
+            role = guild.getRoleById(value.longValueExact());
         }
     }
 
     /**
-     * This class evaluates the name the channel inside the argument.
+     * This class evaluates the name of the role inside the argument.
      * The id is evaluated via the expression.
      */
     private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
@@ -108,9 +108,9 @@ public class UserParameter2ArgumentSymbol extends UserParameterSymbol implements
 
         @Override
         public void visit(ASTStringLiteral ast){
-            List<User> users = jda.getUsersByName(ast.getValue(), false);
-            if(users.size() == 1)
-                user = users.get(0);
+            List<Role> roles = guild.getRolesByName(ast.getValue(), false);
+            if(roles.size() == 1)
+                role = roles.get(0);
         }
     }
 }

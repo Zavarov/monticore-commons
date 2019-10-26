@@ -7,21 +7,29 @@ component grammar Argument extends vartas.ArithmeticExpressions,
                                  vartas.chart.Interval,
                                  vartas.discord.Entity,
                                  vartas.discord.OnlineStatus{
-    interface ArgumentType;
+    interface symbol Argument;
+
+    astrule Argument = name:String;
+
+    symbolrule Argument =
+        method public String getQualifiedResolvedName(){
+            throw new UnsupportedOperationException();
+        }
+    ;
 
     /*=========================================================*/
     /*========================  Misc  =========================*/
     /*=========================================================*/
 
-    StringArgument implements ArgumentType <500> =
+    StringArgument implements Argument <500> =
         StringLiteral
     ;
 
-    IntervalArgument implements ArgumentType <500> =
+    IntervalArgument implements Argument <500> =
         Interval
     ;
 
-    OnlineStatusArgument implements ArgumentType <500> =
+    OnlineStatusArgument implements Argument <500> =
         OnlineStatus
     ;
 
@@ -30,7 +38,7 @@ component grammar Argument extends vartas.ArithmeticExpressions,
     /*=========================================================*/
 
     //All dates are also arithmetic expressions
-    DateArgument implements ArgumentType <400> =
+    DateArgument implements Argument <400> =
           day:Expression "-"
         month:Expression "-"
          year:Expression
@@ -40,15 +48,15 @@ component grammar Argument extends vartas.ArithmeticExpressions,
     /*==================  Discord Entities  ===================*/
     /*=========================================================*/
 
-    UserArgument implements ArgumentType <400> =
+    UserArgument implements Argument <400> =
         User
     ;
 
-    TextChannelArgument implements ArgumentType <400> =
+    TextChannelArgument implements Argument <400> =
         TextChannel
     ;
 
-    RoleArgument implements ArgumentType <400> =
+    RoleArgument implements Argument <400> =
         Role
     ;
 
@@ -56,15 +64,15 @@ component grammar Argument extends vartas.ArithmeticExpressions,
     /*=======================  Raw Text  ======================*/
     /*=========================================================*/
 
-    RawTextArgument implements ArgumentType <350> =
-        Name
+    RawTextArgument implements Argument <350> =
+        text:Name
     ;
 
     /*=========================================================*/
     /*================  Arithmetic Expression  ================*/
     /*=========================================================*/
 
-    ExpressionArgument implements ArgumentType <300> =
+    ExpressionArgument implements Argument <300> =
         Expression
     ;
 }

@@ -5,7 +5,7 @@ package vartas.discord;
  * It consists of two parts, the qualified name of the command and the required parameters.
  */
 grammar Call extends de.monticore.MCBasics, vartas.discord.Argument{
-    scope CallArtifact = command:(Name& || ".")+ argument:ArgumentType*;
+    scope CallArtifact = command:(Name& || ".")+ argument:Argument*;
 
     /*=========================================================*/
     /*======================= AST RULES =======================*/

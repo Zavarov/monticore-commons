@@ -15,63 +15,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
-import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
-import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import net.dv8tion.jda.api.entities.Message;
-import vartas.discord.argument._ast.ASTArgumentType;
+import vartas.chart.Interval;
+import vartas.chart.interval._ast.ASTInterval;
+import vartas.chart.interval._visitor.IntervalInheritanceVisitor;
+import vartas.chart.interval._visitor.IntervalVisitor;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.StringParameterSymbol;
 
 import java.util.Optional;
 
-public class StringParameter2ArgumentSymbol extends StringParameterSymbol implements Parameter2ArgumentInterface<String>{
-    protected ASTArgumentType argument;
+public class IntervalArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected String value;
+    protected Interval interval;
 
-    public StringParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public IntervalArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
+        visitor.setIntervalVisitor(new IntervalArgumentVisitor());
     }
 
     @Override
     public String getQualifiedResolvedName(){
-        return String.class.getCanonicalName();
+        return Interval.class.getCanonicalName();
     }
 
     @Override
-    public Optional<String> resolve(Message context){
-        argument.accept(visitor);
-        return Optional.ofNullable(value);
+    public Optional<Interval> resolve(Message context){
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        return Optional.ofNullable(interval);
     }
 
     /**
-     * This class evaluates the value of the string inside the argument.
+     * This class evaluates the interval inside the argument.
      */
-    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
-        MCCommonLiteralsVisitor realThis = this;
+    private class IntervalArgumentVisitor implements IntervalInheritanceVisitor {
+        IntervalVisitor realThis = this;
 
         @Override
-        public void setRealThis(MCCommonLiteralsVisitor realThis){
+        public void setRealThis(IntervalVisitor realThis){
             this.realThis = realThis;
         }
 
         @Override
-        public MCCommonLiteralsVisitor getRealThis(){
+        public IntervalVisitor getRealThis(){
             return realThis;
         }
 
         @Override
-        public void visit(ASTStringLiteral ast){
-            value = ast.getValue();
+        public void visit(ASTInterval ast){
+            interval = ast.getIntervalType();
         }
     }
 }

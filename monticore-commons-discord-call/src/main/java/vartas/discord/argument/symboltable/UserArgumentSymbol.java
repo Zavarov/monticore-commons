@@ -15,38 +15,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTArgumentType;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.MemberParameterSymbol;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class MemberParameter2ArgumentSymbol extends MemberParameterSymbol implements Parameter2ArgumentInterface<Member>{
-    protected ASTArgumentType argument;
+public class UserArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected Member member;
-    protected Guild guild;
+    protected User user;
+    protected JDA jda;
 
-    public MemberParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public UserArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
@@ -60,16 +56,15 @@ public class MemberParameter2ArgumentSymbol extends MemberParameterSymbol implem
     }
 
     @Override
-    public Optional<Member> resolve(Message context){
-        checkNotNull(context.getGuild());
-        guild = context.getGuild();
+    public Optional<User> resolve(Message context){
+        jda = context.getJDA();
 
-        argument.accept(visitor);
-        return Optional.ofNullable(member);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        return Optional.ofNullable(user);
     }
 
     /**
-     * This class evaluates the id of the member by using the arithmetic expression inside the argument.
+     * This class evaluates the id of the user by using the arithmetic expression inside the argument.
      */
     private class ExpressionArgumentVisitor implements ArithmeticExpressionsInheritanceVisitor {
         ArithmeticExpressionsVisitor realThis = this;
@@ -87,12 +82,12 @@ public class MemberParameter2ArgumentSymbol extends MemberParameterSymbol implem
         @Override
         public void visit(ASTExpression ast){
             BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
-            member = guild.getMemberById(value.longValueExact());
+            user = jda.getUserById(value.longValueExact());
         }
     }
 
     /**
-     * This class evaluates the name of the member inside the argument.
+     * This class evaluates the name the channel inside the argument.
      * The id is evaluated via the expression.
      */
     private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
@@ -110,9 +105,9 @@ public class MemberParameter2ArgumentSymbol extends MemberParameterSymbol implem
 
         @Override
         public void visit(ASTStringLiteral ast){
-            List<Member> members = guild.getMembersByName(ast.getValue(), false);
-            if(members.size() == 1)
-                member = members.get(0);
+            List<User> users = jda.getUsersByName(ast.getValue(), false);
+            if(users.size() == 1)
+                user = users.get(0);
         }
     }
 }

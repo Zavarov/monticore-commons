@@ -15,29 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Message;
-import vartas.discord.argument._ast.ASTArgumentType;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 import vartas.discord.onlinestatus._ast.ASTOnlineStatus;
 import vartas.discord.onlinestatus._visitor.OnlineStatusInheritanceVisitor;
 import vartas.discord.onlinestatus._visitor.OnlineStatusVisitor;
-import vartas.discord.parameter._symboltable.OnlineStatusParameterSymbol;
 
 import java.util.Optional;
 
-public class OnlineStatusParameter2ArgumentSymbol extends OnlineStatusParameterSymbol implements Parameter2ArgumentInterface<OnlineStatus>{
-    protected ASTArgumentType argument;
+public class OnlineStatusArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
     protected OnlineStatus onlineStatus;
 
-    public OnlineStatusParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public OnlineStatusArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
@@ -51,7 +48,7 @@ public class OnlineStatusParameter2ArgumentSymbol extends OnlineStatusParameterS
 
     @Override
     public Optional<OnlineStatus> resolve(Message context){
-        argument.accept(visitor);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(onlineStatus);
     }
 

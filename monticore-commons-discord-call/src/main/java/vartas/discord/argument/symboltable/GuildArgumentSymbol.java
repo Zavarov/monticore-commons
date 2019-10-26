@@ -15,35 +15,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTArgumentType;
 import vartas.discord.argument._ast.ASTExpressionArgument;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.GuildParameterSymbol;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-public class GuildParameter2ArgumentSymbol extends GuildParameterSymbol implements Parameter2ArgumentInterface<Guild>{
-    protected ASTArgumentType argument;
+public class GuildArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
     protected Guild guild;
     protected JDA jda;
 
-    public GuildParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public GuildArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ExpressionArgumentVisitor());
@@ -52,14 +48,14 @@ public class GuildParameter2ArgumentSymbol extends GuildParameterSymbol implemen
 
     @Override
     public String getQualifiedResolvedName(){
-        return User.class.getCanonicalName();
+        return Guild.class.getCanonicalName();
     }
 
     @Override
     public Optional<Guild> resolve(Message context){
         jda = context.getJDA();
 
-        argument.accept(visitor);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(guild);
     }
 

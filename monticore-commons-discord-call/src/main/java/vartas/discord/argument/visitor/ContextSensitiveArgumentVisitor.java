@@ -88,19 +88,19 @@ public class ContextSensitiveArgumentVisitor implements ArgumentVisitor {
 
     @Override
     public void handle(ASTRawTextArgument ast){
-        String name = ast.getName();
-        switch(name){
+        String text = ast.getText();
+        switch(text){
             case ExpressionsBasisValueCalculator.PI:
             case ExpressionsBasisValueCalculator.E:
                 ASTNameExpression expression = ExpressionsBasisNodeFactory.createASTNameExpression();
                 ASTExpressionArgument argument = ArgumentNodeFactory.createASTExpressionArgument();
 
-                expression.setName(name);
+                expression.setName(text);
                 argument.setExpression(expression);
                 ArgumentVisitor.super.handle(argument);
             //Always treat the raw text as a string
             default:
-                handle(name);
+                handle(text);
         }
     }
 }

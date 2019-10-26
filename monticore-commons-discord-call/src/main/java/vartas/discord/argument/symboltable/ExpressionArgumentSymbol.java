@@ -15,28 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import net.dv8tion.jda.api.entities.Message;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTArgumentType;
 import vartas.discord.argument._ast.ASTExpressionArgument;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.ExpressionParameterSymbol;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class ExpressionParameter2ArgumentSymbol extends ExpressionParameterSymbol implements Parameter2ArgumentInterface<BigDecimal> {
-    protected ASTArgumentType argument;
+public class ExpressionArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
     protected BigDecimal value;
 
-    public ExpressionParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public ExpressionArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         this.visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ExpressionArgumentVisitor());
@@ -49,7 +46,7 @@ public class ExpressionParameter2ArgumentSymbol extends ExpressionParameterSymbo
 
     @Override
     public Optional<BigDecimal> resolve(Message context){
-        argument.accept(visitor);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(value);
     }
 

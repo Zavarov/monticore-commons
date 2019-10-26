@@ -15,14 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument._symboltable;
 
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Optional;
 
-public interface Parameter2ArgumentInterface <T>{
-    String getQualifiedResolvedName();
+public class ArgumentSymbol extends ArgumentSymbolTOP {
+    public ArgumentSymbol(String name) {
+        super(name);
+    }
 
-    Optional<T> resolve(Message context);
+    public Optional<?> resolve(Message context){
+        throw new UnsupportedOperationException();
+    }
 }

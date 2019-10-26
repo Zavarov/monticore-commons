@@ -15,16 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.aggregated.parameter.symboltable;
+package vartas.discord.argument.symboltable;
 
 import de.se_rwth.commons.logging.Log;
 import net.dv8tion.jda.api.entities.Message;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTArgumentType;
 import vartas.discord.argument._ast.ASTDateArgument;
+import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.parameter._symboltable.DateParameterSymbol;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,16 +31,14 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
 
-public class DateParameter2ArgumentSymbol extends DateParameterSymbol implements Parameter2ArgumentInterface<Date> {
-    protected ASTArgumentType argument;
+public class DateArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
     protected Date date;
     private SimpleDateFormat dateFormat;
 
-    public DateParameter2ArgumentSymbol(String name, ASTArgumentType argument) {
+    public DateArgumentSymbol(String name) {
         super(name);
-        this.argument = argument;
 
         this.dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -57,7 +54,7 @@ public class DateParameter2ArgumentSymbol extends DateParameterSymbol implements
 
     @Override
     public Optional<Date> resolve(Message context){
-        argument.accept(visitor);
+        getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(date);
     }
 
