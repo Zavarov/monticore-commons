@@ -45,6 +45,10 @@
         <commons-text.version>1.8</commons-text.version>
         <assertj.version>3.12.2</assertj.version>
         <junit.version>4.12</junit.version>
+        <evo.inflector.version>1.2.2</evo.inflector.version>
+
+        <!-- .. Dependency Management........................................... -->
+        <guava.management.version>23.0</guava.management.version>
 
         <!-- .. Plugins......................................................... -->
 
@@ -68,6 +72,16 @@
 
         <grammars.classifier>grammars</grammars.classifier>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.management.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
