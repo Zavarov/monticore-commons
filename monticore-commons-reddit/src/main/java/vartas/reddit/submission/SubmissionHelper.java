@@ -23,9 +23,10 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 import vartas.reddit.submission._parser.SubmissionParser;
+import vartas.reddit.submission._symboltable.SubmissionArtifactScope;
 import vartas.reddit.submission._symboltable.SubmissionGlobalScope;
 import vartas.reddit.submission._symboltable.SubmissionLanguage;
-import vartas.reddit.submission._symboltable.SubmissionSymbolTableCreator;
+import vartas.reddit.submission._symboltable.SubmissionSymbolTableCreatorDelegator;
 import vartas.reddit.submission.prettyprint.SubmissionPrettyPrinter;
 
 import java.io.File;
@@ -57,35 +58,41 @@ public class SubmissionHelper {
         }
     }
 
-    public static List<SubmissionInterface> parse(String filePath){
-        try{
-            SubmissionSymbolTableCreator symbolTableCreator = createSymbolTableCreator();
+    public static List<SubmissionInterface> parse(String filePath) throws IllegalArgumentException{
+        ASTSubmissionArtifact ast = parseArtifact(filePath);
+        SubmissionGlobalScope scope = createGlobalScope();
+        buildSymbolTable(scope, ast);
+        return new ArrayList<>(ast.getSubmissionList());
+    }
 
+    private static ASTSubmissionArtifact parseArtifact(String filePath){
+        try{
             SubmissionParser parser = new SubmissionParser();
-            Optional<ASTSubmissionArtifact> comments = parser.parse(filePath);
+            Optional<ASTSubmissionArtifact> submission = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!comments.isPresent())
-                throw new IllegalArgumentException("The comment file couldn't be parsed");
+            if(!submission.isPresent())
+                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            ASTSubmissionArtifact ast = comments.get();
-            symbolTableCreator.createFromAST(ast);
-
-            return new ArrayList<>(ast.getSubmissionList());
+            return submission.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static SubmissionGlobalScope createGlobalScope(){
-        ModelPath path = new ModelPath(Paths.get(""));
-        SubmissionLanguage language = new SubmissionLanguage();
-        return new SubmissionGlobalScope(path, language);
+    private static void buildSymbolTable(SubmissionGlobalScope scope, ASTSubmissionArtifact ast){
+        SubmissionSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        SubmissionArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
     }
 
-    private static SubmissionSymbolTableCreator createSymbolTableCreator(){
-        SubmissionGlobalScope globalScope = createGlobalScope();
+    private static SubmissionSymbolTableCreatorDelegator createSymbolTableCreator(SubmissionGlobalScope scope){
+        return scope.getSubmissionLanguage().getSymbolTableCreator(scope);
+    }
 
-        return new SubmissionSymbolTableCreator(globalScope);
+    private static SubmissionGlobalScope createGlobalScope(){
+        ModelPath modelPath = new ModelPath(Paths.get(""));
+        SubmissionLanguage language = new SubmissionLanguage();
+        return new SubmissionGlobalScope(modelPath, language);
     }
 }

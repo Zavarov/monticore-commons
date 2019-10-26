@@ -23,9 +23,10 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
+import vartas.reddit.comment._symboltable.CommentArtifactScope;
 import vartas.reddit.comment._symboltable.CommentGlobalScope;
 import vartas.reddit.comment._symboltable.CommentLanguage;
-import vartas.reddit.comment._symboltable.CommentSymbolTableCreator;
+import vartas.reddit.comment._symboltable.CommentSymbolTableCreatorDelegator;
 import vartas.reddit.comment.prettyprint.CommentPrettyPrinter;
 
 import java.io.File;
@@ -56,36 +57,41 @@ public abstract class CommentHelper {
             throw new IllegalArgumentException(e);
         }
     }
+    public static List<CommentInterface> parse(String filePath) throws IllegalArgumentException{
+        ASTCommentArtifact ast = parseArtifact(filePath);
+        CommentGlobalScope scope = createGlobalScope();
+        buildSymbolTable(scope, ast);
+        return new ArrayList<>(ast.getCommentList());
+    }
 
-    public static List<CommentInterface> parse(String filePath){
+    private static ASTCommentArtifact parseArtifact(String filePath){
         try{
-            CommentSymbolTableCreator symbolTableCreator = createSymbolTableCreator();
-
             CommentParser parser = new CommentParser();
-            Optional<ASTCommentArtifact> comments = parser.parse(filePath);
+            Optional<ASTCommentArtifact> comment = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!comments.isPresent())
-                throw new IllegalArgumentException("The comment file couldn't be parsed");
+            if(!comment.isPresent())
+                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            ASTCommentArtifact ast = comments.get();
-            symbolTableCreator.createFromAST(ast);
-
-            return new ArrayList<>(ast.getCommentList());
+            return comment.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static CommentGlobalScope createGlobalScope(){
-        ModelPath path = new ModelPath(Paths.get(""));
-        CommentLanguage language = new CommentLanguage();
-        return new CommentGlobalScope(path, language);
+    private static void buildSymbolTable(CommentGlobalScope scope, ASTCommentArtifact ast){
+        CommentSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        CommentArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
     }
 
-    private static CommentSymbolTableCreator createSymbolTableCreator(){
-        CommentGlobalScope globalScope = createGlobalScope();
+    private static CommentSymbolTableCreatorDelegator createSymbolTableCreator(CommentGlobalScope scope){
+        return scope.getCommentLanguage().getSymbolTableCreator(scope);
+    }
 
-        return new CommentSymbolTableCreator(globalScope);
+    private static CommentGlobalScope createGlobalScope(){
+        ModelPath modelPath = new ModelPath(Paths.get(""));
+        CommentLanguage language = new CommentLanguage();
+        return new CommentGlobalScope(modelPath, language);
     }
 }

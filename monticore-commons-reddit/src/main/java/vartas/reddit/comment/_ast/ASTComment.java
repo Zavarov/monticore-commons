@@ -31,25 +31,25 @@ public class ASTComment extends ASTCommentTOP implements CommentInterface {
     }
 
     public String getAuthor() {
-        Optional<AuthorLiteralSymbol> symbol = getEnclosingScope().resolveAuthorLiteral("author");
+        Optional<AuthorLiteralSymbol> symbol = getSpannedScope().resolveAuthorLiteral("author");
 
         return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getId() {
-        Optional<IdLiteralSymbol> symbol = getEnclosingScope().resolveIdLiteral("id");
+        Optional<IdLiteralSymbol> symbol = getSpannedScope().resolveIdLiteral("id");
 
         return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getSubreddit() {
-        Optional<SubredditLiteralSymbol> symbol = getEnclosingScope().resolveSubredditLiteral("subreddit");
+        Optional<SubredditLiteralSymbol> symbol = getSpannedScope().resolveSubredditLiteral("subreddit");
 
         return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public int getScore() {
-        Optional<ScoreLiteralSymbol> symbol = getEnclosingScope().resolveScoreLiteral("score");
+        Optional<ScoreLiteralSymbol> symbol = getSpannedScope().resolveScoreLiteral("score");
 
         //getSource is bugged in 5.3.0
         ASTSignedNatLiteral ast = symbol.get().getAstNode().get().getSignedNatLiteral();
@@ -58,13 +58,13 @@ public class ASTComment extends ASTCommentTOP implements CommentInterface {
     }
 
     public String getSubmissionTitle() {
-        Optional<SubmissionTitleLiteralSymbol> symbol = getEnclosingScope().resolveSubmissionTitleLiteral("submissionTitle");
+        Optional<SubmissionTitleLiteralSymbol> symbol = getSpannedScope().resolveSubmissionTitleLiteral("submissionTitle");
 
         return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
 
     public String getSubmission() {
-        Optional<SubmissionLiteralSymbol> symbol = getEnclosingScope().resolveSubmissionLiteral("submission");
+        Optional<SubmissionLiteralSymbol> symbol = getSpannedScope().resolveSubmissionLiteral("submission");
 
         return unescapeMonticore(symbol.get().getAstNode().get().getStringLiteral().getValue());
     }
