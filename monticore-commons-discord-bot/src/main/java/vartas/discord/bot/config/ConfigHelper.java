@@ -17,47 +17,44 @@
 
 package vartas.discord.bot.config;
 
-import de.monticore.io.paths.ModelPath;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
 import vartas.discord.bot.config._parser.ConfigParser;
+import vartas.discord.bot.config._symboltable.ConfigArtifactScope;
 import vartas.discord.bot.config._symboltable.ConfigGlobalScope;
-import vartas.discord.bot.config._symboltable.ConfigLanguage;
-import vartas.discord.bot.config._symboltable.ConfigSymbolTableCreator;
+import vartas.discord.bot.config._symboltable.ConfigSymbolTableCreatorDelegator;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 public abstract class ConfigHelper {
-    public static ASTConfigArtifact parse(String filePath){
-        try{
-            ConfigSymbolTableCreator symbolTableCreator = createSymbolTableCreator();
+    public static ASTConfigArtifact parse(ConfigGlobalScope scope, String filePath) throws IllegalArgumentException{
+        ASTConfigArtifact ast = parseArtifact(filePath);
+        buildSymbolTable(scope, ast);
+        return ast;
+    }
 
+    private static ASTConfigArtifact parseArtifact(String filePath){
+        try{
             ConfigParser parser = new ConfigParser();
-            Optional<ASTConfigArtifact> config = parser.parse(filePath);
+            Optional<ASTConfigArtifact> Configs = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!config.isPresent())
-                throw new IllegalArgumentException("The config file couldn't be parsed");
+            if(!Configs.isPresent())
+                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            ASTConfigArtifact ast = config.get();
-            symbolTableCreator.createFromAST(ast);
-
-            return ast;
+            return Configs.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static ConfigGlobalScope createGlobalScope(){
-        ModelPath path = new ModelPath(Paths.get(""));
-        ConfigLanguage language = new ConfigLanguage();
-        return new ConfigGlobalScope(path, language);
+    private static void buildSymbolTable(ConfigGlobalScope scope, ASTConfigArtifact ast){
+        ConfigSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        ConfigArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
     }
 
-    private static ConfigSymbolTableCreator createSymbolTableCreator(){
-        ConfigGlobalScope globalScope = createGlobalScope();
-
-        return new ConfigSymbolTableCreator(globalScope);
+    private static ConfigSymbolTableCreatorDelegator createSymbolTableCreator(ConfigGlobalScope scope){
+        return scope.getConfigLanguage().getSymbolTableCreator(scope);
     }
 }

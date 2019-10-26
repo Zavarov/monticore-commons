@@ -1,7 +1,7 @@
 package vartas.discord.bot;
 
 grammar Config extends de.monticore.literals.MCCommonLiterals{
-    ConfigArtifact =
+    scope ConfigArtifact =
         "config" "{"
             Entry*
         "}";

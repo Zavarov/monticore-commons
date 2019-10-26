@@ -27,72 +27,72 @@ public class ASTConfigArtifact extends ASTConfigArtifactTOP{
     }
 
     public int getStatusMessageUpdateInterval(){
-        Optional<StatusMessageUpdateIntervalSymbol> symbol = getEnclosingScope().resolveStatusMessageUpdateInterval("statusMessageUpdateInterval");
+        Optional<StatusMessageUpdateIntervalSymbol> symbol = getSpannedScope().resolveStatusMessageUpdateInterval("statusMessageUpdateInterval");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public int getInteractiveMessageLifetime(){
-        Optional<InteractiveMessageLifetimeSymbol> symbol = getEnclosingScope().resolveInteractiveMessageLifetime("interactiveMessageLifetime");
+        Optional<InteractiveMessageLifetimeSymbol> symbol = getSpannedScope().resolveInteractiveMessageLifetime("interactiveMessageLifetime");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public int getDiscordShards(){
-        Optional<DiscordShardsSymbol> symbol = getEnclosingScope().resolveDiscordShards("discordShards");
+        Optional<DiscordShardsSymbol> symbol = getSpannedScope().resolveDiscordShards("discordShards");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public int getActivityUpdateInterval(){
-        Optional<ActivityUpdateIntervalSymbol> symbol = getEnclosingScope().resolveActivityUpdateInterval("activityUpdateInterval");
+        Optional<ActivityUpdateIntervalSymbol> symbol = getSpannedScope().resolveActivityUpdateInterval("activityUpdateInterval");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public String getInviteSupportServer(){
-        Optional<InviteSupportServerSymbol> symbol = getEnclosingScope().resolveInviteSupportServer("inviteSupportServer");
+        Optional<InviteSupportServerSymbol> symbol = getSpannedScope().resolveInviteSupportServer("inviteSupportServer");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getBotName(){
-        Optional<BotNameSymbol> symbol = getEnclosingScope().resolveBotName("botName");
+        Optional<BotNameSymbol> symbol = getSpannedScope().resolveBotName("botName");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getGlobalPrefix(){
-        Optional<GlobalPrefixSymbol> symbol = getEnclosingScope().resolveGlobalPrefix("globalPrefix");
+        Optional<GlobalPrefixSymbol> symbol = getSpannedScope().resolveGlobalPrefix("globalPrefix");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getWikiLink(){
-        Optional<WikiLinkSymbol> symbol = getEnclosingScope().resolveWikiLink("wikiLink");
+        Optional<WikiLinkSymbol> symbol = getSpannedScope().resolveWikiLink("wikiLink");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public int getImageWidth(){
-        Optional<ImageWidthSymbol> symbol = getEnclosingScope().resolveImageWidth("imageWidth");
+        Optional<ImageWidthSymbol> symbol = getSpannedScope().resolveImageWidth("imageWidth");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public int getImageHeight(){
-        Optional<ImageHeightSymbol> symbol = getEnclosingScope().resolveImageHeight("imageHeight");
+        Optional<ImageHeightSymbol> symbol = getSpannedScope().resolveImageHeight("imageHeight");
         return symbol.get().getAstNode().get().getNatLiteral().getValue();
     }
 
     public String getDiscordToken(){
-        Optional<DiscordTokenSymbol> symbol = getEnclosingScope().resolveDiscordToken("discordToken");
+        Optional<DiscordTokenSymbol> symbol = getSpannedScope().resolveDiscordToken("discordToken");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getRedditAccount(){
-        Optional<RedditAccountSymbol> symbol = getEnclosingScope().resolveRedditAccount("redditAccount");
+        Optional<RedditAccountSymbol> symbol = getSpannedScope().resolveRedditAccount("redditAccount");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getRedditId(){
-        Optional<RedditIdSymbol> symbol = getEnclosingScope().resolveRedditId("redditId");
+        Optional<RedditIdSymbol> symbol = getSpannedScope().resolveRedditId("redditId");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 
     public String getRedditSecret(){
-        Optional<RedditSecretSymbol> symbol = getEnclosingScope().resolveRedditSecret("redditSecret");
+        Optional<RedditSecretSymbol> symbol = getSpannedScope().resolveRedditSecret("redditSecret");
         return symbol.get().getAstNode().get().getStringLiteral().getValue();
     }
 }

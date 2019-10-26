@@ -19,31 +19,43 @@ package vartas.discord.bot.rank;
 
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 import vartas.discord.bot.rank._parser.RankParser;
+import vartas.discord.bot.rank._symboltable.RankArtifactScope;
+import vartas.discord.bot.rank._symboltable.RankGlobalScope;
+import vartas.discord.bot.rank._symboltable.RankSymbolTableCreatorDelegator;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
 public abstract class RankHelper {
-
-    public static RankConfiguration parse(String filePath, File reference){
-        ASTRankArtifact ast = parse(filePath);
-
+    public static RankConfiguration parse(RankGlobalScope scope, String filePath, File reference) throws IllegalArgumentException{
+        ASTRankArtifact ast = parseArtifact(filePath);
+        buildSymbolTable(scope, ast);
         return new RankConfiguration(ast, reference);
     }
 
-    private static ASTRankArtifact parse(String filePath){
+    private static ASTRankArtifact parseArtifact(String filePath){
         try{
             RankParser parser = new RankParser();
-            Optional<ASTRankArtifact> rank = parser.parse(filePath);
+            Optional<ASTRankArtifact> Ranks = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!rank.isPresent())
-                throw new IllegalArgumentException("The rank file couldn't be parsed");
+            if(!Ranks.isPresent())
+                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            return rank.get();
+            return Ranks.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
+    }
+
+    private static void buildSymbolTable(RankGlobalScope scope, ASTRankArtifact ast){
+        RankSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        RankArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
+    }
+
+    private static RankSymbolTableCreatorDelegator createSymbolTableCreator(RankGlobalScope scope){
+        return scope.getRankLanguage().getSymbolTableCreator(scope);
     }
 }

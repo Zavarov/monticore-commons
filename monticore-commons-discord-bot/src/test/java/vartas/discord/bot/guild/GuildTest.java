@@ -18,25 +18,29 @@
 package vartas.discord.bot.guild;
 
 import com.google.common.collect.Multimap;
+import de.monticore.io.paths.ModelPath;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.guild._ast.ASTGuildArtifact;
-import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreator;
+import vartas.discord.bot.guild._symboltable.GuildGlobalScope;
+import vartas.discord.bot.guild._symboltable.GuildLanguage;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GuildConfigurationTest {
-    ASTGuildArtifact ast;
-    GuildSymbolTableCreator symbolTableCreator;
+public class GuildTest {
     GuildConfiguration config;
 
     @Before
     public void setUp(){
+        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
+        GuildLanguage language = new GuildLanguage();
+        GuildGlobalScope scope = new GuildGlobalScope(modelPath, language);
+
         String source = "src/test/resources/guild.gld";
         File reference = new File("target/test/resources/guild.gld");
-        config = GuildHelper.parse(source, reference);
+        config = GuildHelper.parse(scope, source, reference);
     }
 
     @Test
@@ -75,9 +79,13 @@ public class GuildConfigurationTest {
 
     @Test
     public void testUpdatedFile(){
+        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
+        GuildLanguage language = new GuildLanguage();
+        GuildGlobalScope scope = new GuildGlobalScope(modelPath, language);
+
         String source = "target/test/resources/guild.gld";
         File reference = new File("target/test/resources/guild.gld");
-        config = GuildHelper.parse(source, reference);
+        config = GuildHelper.parse(scope, source, reference);
 
         testFilter();
         testGroup();

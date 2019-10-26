@@ -39,7 +39,7 @@ public class ASTGuildArtifact extends ASTGuildArtifactTOP{
     }
 
     public Optional<String> getPrefix(){
-        Optional<PrefixSymbol> symbol = getEnclosingScope().resolvePrefix("prefix");
+        Optional<PrefixSymbol> symbol = getSpannedScope().resolvePrefix("prefix");
         if(symbol.isPresent())
             return Optional.of(symbol.get().getAstNode().get().getPrefix().getValue());
         else
@@ -47,7 +47,7 @@ public class ASTGuildArtifact extends ASTGuildArtifactTOP{
     }
 
     public Multimap<String, Long> getSubredditFeeds(){
-        Collection<SubredditSymbol> symbols = getEnclosingScope().resolveSubredditMany("subreddit");
+        Collection<SubredditSymbol> symbols = getSpannedScope().resolveSubredditMany("subreddit");
         Multimap<String, Long> target = HashMultimap.create();
 
         for(SubredditSymbol symbol : symbols){
@@ -60,7 +60,7 @@ public class ASTGuildArtifact extends ASTGuildArtifactTOP{
     }
 
     public Multimap<String, Long> getRoleGroups(){
-        Collection<TagSymbol> symbols = getEnclosingScope().resolveTagMany("tag");
+        Collection<TagSymbol> symbols = getSpannedScope().resolveTagMany("tag");
         Multimap<String, Long> target = HashMultimap.create();
 
         for(TagSymbol symbol : symbols){
@@ -73,7 +73,7 @@ public class ASTGuildArtifact extends ASTGuildArtifactTOP{
     }
 
     public Set<String> getFilter(){
-        Optional<FilterSymbol> symbol = getEnclosingScope().resolveFilter("filter");
+        Optional<FilterSymbol> symbol = getSpannedScope().resolveFilter("filter");
 
         if(symbol.isPresent())
             return symbol.get().getAstNode().get().getExpressionList().stream().map(ASTStringLiteral::getValue).collect(Collectors.toSet());

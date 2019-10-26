@@ -17,9 +17,14 @@
 
 package vartas.discord.bot.config;
 
+import de.monticore.io.paths.ModelPath;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
+import vartas.discord.bot.config._symboltable.ConfigGlobalScope;
+import vartas.discord.bot.config._symboltable.ConfigLanguage;
+
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +33,11 @@ public class ConfigTest {
 
     @Before
     public void setUp(){
-        ast = ConfigHelper.parse("src/test/resources/config.cfg");
+        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
+        ConfigLanguage language = new ConfigLanguage();
+        ConfigGlobalScope scope = new ConfigGlobalScope(modelPath, language);
+
+        ast = ConfigHelper.parse(scope, "src/test/resources/config.cfg");
     }
 
     @Test

@@ -15,12 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.bot.guild._symboltable;
+package vartas.discord.bot.rank._symboltable;
 
-public class TagSymbol extends TagSymbolTOP{
-    public TagSymbol(String name) {
-        super(name);
-        //determineFullName() uses a variable that doesn't exist in the later Guava version
-        super.setFullName(name);
+public class RankLanguage extends RankLanguageTOP{
+    public RankLanguage(){
+        super("Permission Language", "perm");
+    }
+
+    @Override
+    protected RankModelLoader provideModelLoader() {
+        return new RankModelLoader(this);
     }
 }

@@ -17,53 +17,45 @@
 
 package vartas.discord.bot.guild;
 
-import de.monticore.io.paths.ModelPath;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
 import vartas.discord.bot.guild._parser.GuildParser;
+import vartas.discord.bot.guild._symboltable.GuildArtifactScope;
 import vartas.discord.bot.guild._symboltable.GuildGlobalScope;
-import vartas.discord.bot.guild._symboltable.GuildLanguage;
-import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreator;
+import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreatorDelegator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 public abstract class GuildHelper {
-    public static GuildConfiguration parse(String filePath, File reference){
-        ASTGuildArtifact ast = parse(filePath);
+    public static GuildConfiguration parse(GuildGlobalScope scope, String filePath, File reference) throws IllegalArgumentException{
+        ASTGuildArtifact ast = parseArtifact(filePath);
+        buildSymbolTable(scope, ast);
         return new GuildConfiguration(ast, reference);
     }
 
-    private static ASTGuildArtifact parse(String filePath){
+    private static ASTGuildArtifact parseArtifact(String filePath){
         try{
-            GuildSymbolTableCreator symbolTableCreator = createSymbolTableCreator();
-
             GuildParser parser = new GuildParser();
-            Optional<ASTGuildArtifact> config = parser.parse(filePath);
+            Optional<ASTGuildArtifact> Guilds = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!config.isPresent())
+            if(!Guilds.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            ASTGuildArtifact ast = config.get();
-            symbolTableCreator.createFromAST(ast);
-
-            return ast;
+            return Guilds.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static GuildGlobalScope createGlobalScope(){
-        ModelPath path = new ModelPath(Paths.get(""));
-        GuildLanguage language = new GuildLanguage();
-        return new GuildGlobalScope(path, language);
+    private static void buildSymbolTable(GuildGlobalScope scope, ASTGuildArtifact ast){
+        GuildSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        GuildArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
     }
 
-    private static GuildSymbolTableCreator createSymbolTableCreator(){
-        GuildGlobalScope globalScope = createGlobalScope();
-
-        return new GuildSymbolTableCreator(globalScope);
+    private static GuildSymbolTableCreatorDelegator createSymbolTableCreator(GuildGlobalScope scope){
+        return scope.getGuildLanguage().getSymbolTableCreator(scope);
     }
 }
