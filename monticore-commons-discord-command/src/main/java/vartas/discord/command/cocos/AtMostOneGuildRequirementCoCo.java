@@ -15,24 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
-import vartas.discord.command._ast.ASTCommandArtifact;
-import vartas.discord.command._symboltable.CommandSymbol;
+import vartas.discord.command._ast.ASTGuildRestriction;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
+import vartas.discord.command._visitor.CommandVisitor;
 
-public class ClassNameIsUniqueCoCo implements CommandASTCommandArtifactCoCo{
-    public static final String ERROR_MESSAGE = "All class names have to be unique.";
+public class AtMostOneGuildRequirementCoCo implements CommandASTCommandCoCo, CommandVisitor {
+    protected int counter;
+    public static final String ERROR_MESSAGE = "%s: The command can have at most one guild restriction.";
     @Override
-    public void check(ASTCommandArtifact node) {
-        long count = node.getCommandList()
-                .stream()
-                .map(ASTCommand::getCommandSymbol)
-                .map(CommandSymbol::getClassName)
-                .distinct()
-                .count();
-        if(count != node.getCommandList().size())
-            Log.error(ERROR_MESSAGE);
+    public void check(ASTCommand node) {
+        counter = 0;
+        node.accept(getRealThis());
+
+        if(counter > 1)
+            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
+
+    }
+
+    @Override
+    public void visit(ASTGuildRestriction node){
+        counter++;
     }
 }

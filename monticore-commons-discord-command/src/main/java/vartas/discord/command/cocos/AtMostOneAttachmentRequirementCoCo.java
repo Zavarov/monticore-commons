@@ -15,16 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
+import vartas.discord.command._ast.ASTAttachmentRestriction;
 import vartas.discord.command._ast.ASTCommand;
-import vartas.discord.command._ast.ASTGuildRestriction;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandVisitor;
 
-public class AtMostOneGuildRequirementCoCo implements CommandASTCommandCoCo, CommandVisitor {
+public class AtMostOneAttachmentRequirementCoCo implements CommandASTCommandCoCo, CommandVisitor {
     protected int counter;
-    public static final String ERROR_MESSAGE = "%s: The command can have at most one guild restriction.";
+    public static final String ERROR_MESSAGE = "%s: The command can have at most one attachment restriction.";
     @Override
     public void check(ASTCommand node) {
         counter = 0;
@@ -36,7 +37,7 @@ public class AtMostOneGuildRequirementCoCo implements CommandASTCommandCoCo, Com
     }
 
     @Override
-    public void visit(ASTGuildRestriction node){
+    public void visit(ASTAttachmentRestriction node){
         counter++;
     }
 }

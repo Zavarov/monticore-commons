@@ -15,24 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.command._ast.ASTCommand;
-import vartas.discord.command._ast.ASTCommandArtifact;
-import vartas.discord.command._symboltable.CommandSymbol;
+import vartas.discord.command._ast.ASTClassNameAttribute;
+import vartas.discord.command._cocos.CommandASTClassNameAttributeCoCo;
+import vartas.discord.command._visitor.CommandVisitor;
 
-public class CommandNameIsUniqueCoCo implements CommandASTCommandArtifactCoCo{
-    public static final String ERROR_MESSAGE = "All command names have to be unique.";
+public class ClassNameStartsWithCapitalLetterCoCo implements CommandASTClassNameAttributeCoCo, CommandVisitor {
+    public static final String ERROR_MESSAGE = "%s: The class name needs to start with a capital letter.";
     @Override
-    public void check(ASTCommandArtifact node) {
-        long count = node.getCommandList()
-                .stream()
-                .map(ASTCommand::getCommandSymbol)
-                .map(CommandSymbol::getName)
-                .distinct()
-                .count();
-        if(count != node.getCommandList().size())
-            Log.error(ERROR_MESSAGE);
+    public void check(ASTClassNameAttribute node) {
+        if(node.getValue().length() > 0 && Character.isLowerCase(node.getValue().charAt(0)))
+            Log.error(String.format(ERROR_MESSAGE, node.getValue()));
     }
 }

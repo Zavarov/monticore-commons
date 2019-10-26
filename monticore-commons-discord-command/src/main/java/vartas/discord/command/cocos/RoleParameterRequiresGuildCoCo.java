@@ -15,28 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.command._ast.ASTAttachmentRestriction;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandVisitor;
+import vartas.discord.parameter._ast.ASTRoleParameter;
 
-public class AtMostOneAttachmentRequirementCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    protected int counter;
-    public static final String ERROR_MESSAGE = "%s: The command can have at most one attachment restriction.";
+public class RoleParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
+    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a role as a parameter.";
+    protected boolean inGuild;
+    protected String name;
+
     @Override
     public void check(ASTCommand node) {
-        counter = 0;
+        inGuild = node.getCommandSymbol().requiresGuild();
+        name = node.getCommandSymbol().getClassName();
+
         node.accept(getRealThis());
-
-        if(counter > 1)
-            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
-
     }
 
     @Override
-    public void visit(ASTAttachmentRestriction node){
-        counter++;
+    public void visit(ASTRoleParameter node){
+        if(!inGuild)
+            Log.error(String.format(ERROR_MESSAGE, name));
     }
 }

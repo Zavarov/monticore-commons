@@ -15,29 +15,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._ast.ASTRankAttribute;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandVisitor;
-import vartas.discord.parameter._ast.ASTTextChannelParameter;
 
-public class TextChannelParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a textchannel as a parameter.";
-    protected boolean inGuild;
-    protected String name;
-
+public class AtMostOneRankAttributeCoCo implements CommandASTCommandCoCo, CommandVisitor {
+    private int counter;
+    public static final String ERROR_MESSAGE = "%s: The command can have at most one rank attribute.";
     @Override
     public void check(ASTCommand node) {
-        inGuild = node.getCommandSymbol().requiresGuild();
-        name = node.getCommandSymbol().getClassName();
-
+        counter = 0;
         node.accept(getRealThis());
+
+        if(counter > 1)
+            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
     }
 
     @Override
-    public void visit(ASTTextChannelParameter node){
-        if(!inGuild)
-            Log.error(String.format(ERROR_MESSAGE, name));
+    public void visit(ASTRankAttribute node){
+        counter++;
     }
 }

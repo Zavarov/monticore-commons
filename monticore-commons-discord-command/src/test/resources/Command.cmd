@@ -1,6 +1,7 @@
 package vartas.discord.bot.exec.example;
+prefix example;
 
-command @ example{
+command {
     test @ guild{
              class : TestCommand
         permission : administrator, manage messages

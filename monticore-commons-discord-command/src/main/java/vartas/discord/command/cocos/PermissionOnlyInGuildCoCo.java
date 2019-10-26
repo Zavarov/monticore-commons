@@ -15,27 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
-import vartas.discord.command._ast.ASTParameterAttribute;
-import vartas.discord.command._visitor.CommandVisitor;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
+import vartas.discord.command._symboltable.CommandSymbol;
 
-public class AtMostOneParameterAttributeCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    private int counter;
-    public static final String ERROR_MESSAGE = "%s:The command can have at most one parameter attribute.";
+public class PermissionOnlyInGuildCoCo implements CommandASTCommandCoCo {
+    public static final String ERROR_MESSAGE = "%s: The command that requires permissions must be restricted to a guild";
     @Override
     public void check(ASTCommand node) {
-        counter = 0;
-        node.accept(getRealThis());
-
-        if(counter > 1)
+        CommandSymbol symbol = node.getCommandSymbol();
+        if(!symbol.requiresGuild() && symbol.getRequiredPermissions().size() > 0)
             Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
-    }
-
-    @Override
-    public void visit(ASTParameterAttribute node){
-        counter++;
     }
 }

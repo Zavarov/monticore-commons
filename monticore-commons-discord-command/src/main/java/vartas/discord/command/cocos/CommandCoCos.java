@@ -15,7 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
+
+import vartas.discord.command._cocos.CommandCoCoChecker;
 
 public abstract class CommandCoCos {
     protected CommandCoCos(){}

@@ -9,7 +9,8 @@ grammar Command extends vartas.discord.Permission,
                         vartas.discord.bot.Rank{
     CommandArtifact =
         ("package" package:(Name& || ".")+ ";")?
-        "command" ("@" prefix:(Name& || ".")+)? "{"
+        ("prefix" prefix:(Name& || ".")+ ";")?
+        "command" "{"
             Command*
         "}";
 

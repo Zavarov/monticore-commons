@@ -42,7 +42,6 @@ public class CommandTest extends AbstractTest {
         scope = createGlobalScope();
         ast = CommandHelper.parse(scope, "src/test/resources/Command.cmd");
         Optional<CommandSymbol> symbol = scope.resolveCommand("example.test");
-
         command = symbol.get();
     }
 
@@ -76,5 +75,21 @@ public class CommandTest extends AbstractTest {
     @Test
     public void testClassName(){
         assertThat(command.getClassName()).isEqualTo("TestCommand");
+    }
+
+    @Test
+    public void testResolveCommand(){
+        assertThat(scope.resolveCommand("test")).isNotPresent();
+        assertThat(scope.resolveCommand("example.test")).isPresent();
+    }
+
+    @Test
+    public void testResolveParameter(){
+        assertThat(scope.resolveGuildParameter("g")).isNotPresent();
+        assertThat(scope.resolveDateParameter("d")).isNotPresent();
+        assertThat(scope.resolveGuildParameter("test.g")).isNotPresent();
+        assertThat(scope.resolveDateParameter("test.d")).isNotPresent();
+        assertThat(scope.resolveGuildParameter("example.test.g")).isPresent();
+        assertThat(scope.resolveDateParameter("example.test.d")).isPresent();
     }
 }

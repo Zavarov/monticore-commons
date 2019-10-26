@@ -17,19 +17,25 @@
 
 package vartas.discord.command;
 
+import de.se_rwth.commons.Joiners;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._parser.CommandParser;
+import vartas.discord.command._symboltable.CommandArtifactScope;
 import vartas.discord.command._symboltable.CommandGlobalScope;
-import vartas.discord.command._symboltable.CommandSymbolTableCreator;
+import vartas.discord.command._symboltable.CommandSymbolTableCreatorDelegator;
 
 import java.io.IOException;
 import java.util.Optional;
 
 public abstract class CommandHelper {
     public static ASTCommandArtifact parse(CommandGlobalScope scope, String filePath) throws IllegalArgumentException{
-        try{
-            CommandSymbolTableCreator symbolTableCreator = createSymbolTableCreator(scope);
+        ASTCommandArtifact ast = parseArtifact(filePath);
+        buildSymbolTable(scope, ast);
+        return ast;
+    }
 
+    private static ASTCommandArtifact parseArtifact(String filePath){
+        try{
             CommandParser parser = new CommandParser();
             Optional<ASTCommandArtifact> commands = parser.parse(filePath);
             if(parser.hasErrors())
@@ -37,16 +43,23 @@ public abstract class CommandHelper {
             if(!commands.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            ASTCommandArtifact ast = commands.get();
-            symbolTableCreator.createFromAST(ast);
-
-            return ast;
+            return commands.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static CommandSymbolTableCreator createSymbolTableCreator(CommandGlobalScope scope){
-        return new CommandSymbolTableCreator(scope);
+    private static void buildSymbolTable(CommandGlobalScope scope, ASTCommandArtifact ast){
+        String packageName = Joiners.DOT.join(ast.getPrefixList());
+
+        CommandSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
+        CommandArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
+        scope.addSubScope(artifactScope);
+
+        artifactScope.setPackageName(packageName);
+    }
+
+    private static CommandSymbolTableCreatorDelegator createSymbolTableCreator(CommandGlobalScope scope){
+        return scope.getCommandLanguage().getSymbolTableCreator(scope);
     }
 }

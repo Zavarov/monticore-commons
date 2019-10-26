@@ -15,15 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command._cocos;
+package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandVisitor;
-import vartas.discord.parameter._ast.ASTMessageParameter;
+import vartas.discord.parameter._ast.ASTMemberParameter;
 
-public class MessageParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a message as a parameter.";
+public class MemberParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
+    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a member as a parameter.";
     protected boolean inGuild;
     protected String name;
 
@@ -36,7 +37,7 @@ public class MessageParameterRequiresGuildCoCo implements CommandASTCommandCoCo,
     }
 
     @Override
-    public void visit(ASTMessageParameter node){
+    public void visit(ASTMemberParameter node){
         if(!inGuild)
             Log.error(String.format(ERROR_MESSAGE, name));
     }

@@ -30,18 +30,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CommandSymbol extends CommandSymbolTOP{
+public class
+CommandSymbol extends CommandSymbolTOP{
     public CommandSymbol(String name){
         super(name);
-    }
-
-    @Override
-    public String getFullName(){
-        //determineFullName() uses a variable that doesn't exist in the later Guava version
-        if(getPackageName() != null && !getPackageName().isEmpty())
-            return getPackageName() + "." + getName();
-        else
-            return getName();
     }
 
     public String getClassName(){
