@@ -51,7 +51,7 @@ public class ASTComment extends ASTCommentTOP implements CommentInterface {
     public int getScore() {
         Optional<ScoreLiteralSymbol> symbol = getSpannedScope().resolveScoreLiteral("score");
 
-        //getSource is bugged in 5.3.0
+        //#TODO getSource is bugged in 5.3.0
         ASTSignedNatLiteral ast = symbol.get().getAstNode().get().getSignedNatLiteral();
 
         return Integer.parseInt(ast.isNegative() ? "-" + ast.getDigits() : ast.getDigits());
