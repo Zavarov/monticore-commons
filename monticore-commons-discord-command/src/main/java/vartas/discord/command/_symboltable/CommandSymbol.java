@@ -22,7 +22,7 @@ import vartas.discord.bot.rank.RankType;
 import vartas.discord.bot.rank._ast.ASTRankType;
 import vartas.discord.command._ast.ASTClassNameAttribute;
 import vartas.discord.command._ast.ASTParameterAttribute;
-import vartas.discord.parameter._ast.ASTParameterType;
+import vartas.discord.parameter._ast.ASTParameter;
 import vartas.discord.permission._ast.ASTPermission;
 
 import java.util.Collections;
@@ -67,11 +67,11 @@ CommandSymbol extends CommandSymbolTOP{
                 .orElse(Collections.emptyList());
     }
 
-    public List<ASTParameterType> getParameters(){
+    public List<ASTParameter> getParameters(){
         Optional<ParameterAttributeSymbol> symbol = getSpannedScope().resolveParameterAttributeLocally("parameter");
         return symbol
                 .flatMap(ParameterAttributeSymbol::getAstNode)
-                .map(ASTParameterAttribute::getParameterTypeList)
+                .map(ASTParameterAttribute::getParameterList)
                 .orElse(Collections.emptyList());
     }
 

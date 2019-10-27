@@ -44,7 +44,7 @@ grammar Command extends vartas.discord.Permission,
         name:"permission" ":" (Permission || ",")+;
 
     symbol ParameterAttribute implements Attribute =
-         name:"parameter" ":" (ParameterType || ",")+;
+         name:"parameter" ":" (Parameter || ",")+;
 
     symbol RankAttribute implements Attribute =
          name:"rank" ":" (RankType || ",")+;
