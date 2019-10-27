@@ -15,48 +15,53 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.argument.symboltable;
+package vartas.discord.aggregated.argument.symboltable;
 
-import net.dv8tion.jda.api.entities.Message;
-import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTExpressionArgument;
+import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
+import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
-public class ExpressionArgumentSymbol extends ArgumentSymbol {
+public class StringArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected BigDecimal value;
+    protected String value;
 
-    public ExpressionArgumentSymbol(String name) {
+    public StringArgumentSymbol(String name) {
         super(name);
 
-        this.visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ExpressionArgumentVisitor());
+        visitor = new ArgumentDelegatorVisitor();
+        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
+        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
     }
 
-    @Override
-    public String getQualifiedResolvedName(){
-        return BigDecimal.class.getCanonicalName();
-    }
-
-    @Override
-    public Optional<BigDecimal> resolve(Message context){
+    public Optional<String> accept(){
         getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(value);
     }
 
     /**
-     * This class evaluates the arithmetic expression inside the argument.
+     * This class evaluates the value of the string inside the argument.
      */
-    private class ExpressionArgumentVisitor extends ContextSensitiveArgumentVisitor {
+    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
+        MCCommonLiteralsVisitor realThis = this;
+
         @Override
-        public void traverse(ASTExpressionArgument ast){
-            value = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
+        public void setRealThis(MCCommonLiteralsVisitor realThis){
+            this.realThis = realThis;
+        }
+
+        @Override
+        public MCCommonLiteralsVisitor getRealThis(){
+            return realThis;
+        }
+
+        @Override
+        public void visit(ASTStringLiteral ast){
+            value = ast.getValue();
         }
     }
 }

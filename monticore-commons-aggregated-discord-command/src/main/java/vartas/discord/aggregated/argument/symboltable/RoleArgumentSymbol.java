@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.argument.symboltable;
+package vartas.discord.aggregated.argument.symboltable;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import net.dv8tion.jda.api.entities.Member;
+import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
+import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import net.dv8tion.jda.api.requests.ErrorResponse;
+import net.dv8tion.jda.api.entities.Role;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
@@ -31,36 +31,34 @@ import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class MessageArgumentSymbol extends ArgumentSymbol {
+public class RoleArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected Message message;
-    protected TextChannel channel;
+    protected Role role;
+    protected Guild guild;
 
-    public MessageArgumentSymbol(String name) {
+    public RoleArgumentSymbol(String name) {
         super(name);
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
+        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
         visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
     }
 
-    @Override
-    public String getQualifiedResolvedName(){
-        return Member.class.getCanonicalName();
-    }
+    public Optional<Role> accept(Message context){
+        role = null;
 
-    @Override
-    public Optional<Message> resolve(Message context){
-        checkNotNull(context.getTextChannel());
-        channel = context.getTextChannel();
+        checkNotNull(context.getGuild());
+        guild = context.getGuild();
 
         getAstNode().ifPresent(ast -> ast.accept(visitor));
-        return Optional.ofNullable(message);
+        return Optional.ofNullable(role);
     }
 
     /**
@@ -82,14 +80,32 @@ public class MessageArgumentSymbol extends ArgumentSymbol {
         @Override
         public void visit(ASTExpression ast){
             BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
+            role = guild.getRoleById(value.longValueExact());
+        }
+    }
 
-            try {
-                message = channel.retrieveMessageById(value.longValueExact()).complete();
-            }catch(ErrorResponseException e){
-                //The message id was invalid
-                if(e.getErrorResponse() != ErrorResponse.UNKNOWN_MESSAGE)
-                    throw e;
-            }
+    /**
+     * This class evaluates the name of the role inside the argument.
+     * The id is evaluated via the expression.
+     */
+    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
+        MCCommonLiteralsVisitor realThis = this;
+
+        @Override
+        public void setRealThis(MCCommonLiteralsVisitor realThis){
+            this.realThis = realThis;
+        }
+
+        @Override
+        public MCCommonLiteralsVisitor getRealThis(){
+            return realThis;
+        }
+
+        @Override
+        public void visit(ASTStringLiteral ast){
+            List<Role> roles = guild.getRolesByName(ast.getValue(), false);
+            if(roles.size() == 1)
+                role = roles.get(0);
         }
     }
 }

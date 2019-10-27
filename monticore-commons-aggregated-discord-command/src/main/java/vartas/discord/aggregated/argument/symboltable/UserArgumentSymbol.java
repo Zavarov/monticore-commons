@@ -15,13 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.argument.symboltable;
+package vartas.discord.aggregated.argument.symboltable;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
@@ -50,13 +49,7 @@ public class UserArgumentSymbol extends ArgumentSymbol {
         visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
     }
 
-    @Override
-    public String getQualifiedResolvedName(){
-        return Member.class.getCanonicalName();
-    }
-
-    @Override
-    public Optional<User> resolve(Message context){
+    public Optional<User> accept(Message context){
         jda = context.getJDA();
 
         getAstNode().ifPresent(ast -> ast.accept(visitor));

@@ -15,10 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.argument.symboltable;
+package vartas.discord.aggregated.argument.symboltable;
 
 import de.se_rwth.commons.logging.Log;
-import net.dv8tion.jda.api.entities.Message;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 import vartas.discord.argument._ast.ASTDateArgument;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
@@ -47,13 +46,8 @@ public class DateArgumentSymbol extends ArgumentSymbol {
         visitor.setArgumentVisitor(new DateArgumentVisitor());
     }
 
-    @Override
-    public String getQualifiedResolvedName(){
-        return Date.class.getCanonicalName();
-    }
-
-    @Override
-    public Optional<Date> resolve(Message context){
+    public Optional<Date> accept(){
+        date = null;
         getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(date);
     }

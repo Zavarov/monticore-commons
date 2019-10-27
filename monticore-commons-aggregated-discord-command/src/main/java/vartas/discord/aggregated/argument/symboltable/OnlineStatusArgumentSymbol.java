@@ -15,62 +15,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.argument.symboltable;
+package vartas.discord.aggregated.argument.symboltable;
 
-import net.dv8tion.jda.api.entities.Message;
-import vartas.chart.Interval;
-import vartas.chart.interval._ast.ASTInterval;
-import vartas.chart.interval._visitor.IntervalInheritanceVisitor;
-import vartas.chart.interval._visitor.IntervalVisitor;
+import net.dv8tion.jda.api.OnlineStatus;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
+import vartas.discord.onlinestatus._ast.ASTOnlineStatus;
+import vartas.discord.onlinestatus._visitor.OnlineStatusInheritanceVisitor;
+import vartas.discord.onlinestatus._visitor.OnlineStatusVisitor;
 
 import java.util.Optional;
 
-public class IntervalArgumentSymbol extends ArgumentSymbol {
+public class OnlineStatusArgumentSymbol extends ArgumentSymbol {
     protected ArgumentDelegatorVisitor visitor;
 
-    protected Interval interval;
+    protected OnlineStatus onlineStatus;
 
-    public IntervalArgumentSymbol(String name) {
+    public OnlineStatusArgumentSymbol(String name) {
         super(name);
 
         visitor = new ArgumentDelegatorVisitor();
         visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setIntervalVisitor(new IntervalArgumentVisitor());
+        visitor.setOnlineStatusVisitor(new OnlineStatusArgumentVisitor());
     }
 
-    @Override
-    public String getQualifiedResolvedName(){
-        return Interval.class.getCanonicalName();
-    }
-
-    @Override
-    public Optional<Interval> resolve(Message context){
+    public Optional<OnlineStatus> accept(){
+        onlineStatus = null;
         getAstNode().ifPresent(ast -> ast.accept(visitor));
-        return Optional.ofNullable(interval);
+        return Optional.ofNullable(onlineStatus);
     }
 
     /**
-     * This class evaluates the interval inside the argument.
+     * This class evaluates the online status inside the argument.
      */
-    private class IntervalArgumentVisitor implements IntervalInheritanceVisitor {
-        IntervalVisitor realThis = this;
+    private class OnlineStatusArgumentVisitor implements OnlineStatusInheritanceVisitor {
+        OnlineStatusVisitor realThis = this;
 
         @Override
-        public void setRealThis(IntervalVisitor realThis){
+        public void setRealThis(OnlineStatusVisitor realThis){
             this.realThis = realThis;
         }
 
         @Override
-        public IntervalVisitor getRealThis(){
+        public OnlineStatusVisitor getRealThis(){
             return realThis;
         }
 
         @Override
-        public void visit(ASTInterval ast){
-            interval = ast.getIntervalType();
+        public void visit(ASTOnlineStatus ast){
+            onlineStatus = ast.getOnlineStatusType();
         }
     }
 }

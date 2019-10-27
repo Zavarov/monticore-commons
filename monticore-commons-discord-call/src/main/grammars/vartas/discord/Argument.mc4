@@ -11,12 +11,6 @@ component grammar Argument extends vartas.ArithmeticExpressions,
 
     astrule Argument = name:String;
 
-    symbolrule Argument =
-        method public String getQualifiedResolvedName(){
-            throw new UnsupportedOperationException();
-        }
-    ;
-
     /*=========================================================*/
     /*========================  Misc  =========================*/
     /*=========================================================*/
