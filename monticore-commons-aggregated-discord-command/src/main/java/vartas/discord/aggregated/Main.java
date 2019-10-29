@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package vartas.discord.aggregated;
 import com.google.common.base.Preconditions;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import de.monticore.generating.GeneratorEngine;
