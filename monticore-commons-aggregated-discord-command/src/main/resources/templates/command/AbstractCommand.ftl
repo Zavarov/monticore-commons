@@ -20,24 +20,19 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${A
     protected ${User} author;
     ${includeArgs("command.AbstractVariableDeclaration", symbol)}
 
-    public ${className}(
-            ${Message} source,
-            ${Communicator} communicator
-    )
-    throws
-        IllegalArgumentException,
-        IllegalStateException
-    {
+    public void setSource(${Message} source){
         this.source = source;
-        this.communicator = communicator;
-        this.environment = communicator.environment();
         this.author = source.getAuthor();
-
         ${includeArgs("command.CheckGuild", symbol)}
         ${includeArgs("command.CheckPermission", symbol)}
-        ${includeArgs("command.CheckRank", symbol)}
+        ${includeArgs("command.AbstractSourceVariableInitialization", symbol)}
+    }
 
-        ${includeArgs("command.AbstractVariableInitialization", symbol)}
+    public void setCommunicator(${Communicator} communicator){
+        this.communicator = communicator;
+        this.environment = communicator.environment();
+        ${includeArgs("command.CheckRank", symbol)}
+        ${includeArgs("command.AbstractCommunicatorVariableInitialization", symbol)}
     }
 
 <#if !existsHandwrittenClass>

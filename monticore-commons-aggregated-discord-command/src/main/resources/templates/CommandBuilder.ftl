@@ -35,9 +35,7 @@ public class CommandBuilder extends ${AbstractCommandBuilder}{
         <#assign parameters = symbol.getParameters()>
         commands.put("${name}", (context, arguments) -> {
             ${includeArgs("CheckArgument", parameters)}
-            return new ${commandPackage}.${className}(
-                context,
-                communicator<#if (parameters?size > 0)>,</#if>
+            ${commandPackage}.${className} command = new ${commandPackage}.${className}(
         <#list parameters as parameter>
             <#assign class = parameter.getClass().getSimpleName()?remove_ending("Parameter")?remove_beginning("AST")>
             <#assign name = parameter.getName()>
@@ -46,6 +44,9 @@ public class CommandBuilder extends ${AbstractCommandBuilder}{
                     .orElseThrow(() -> new IllegalArgumentException("The ${Ordinal.format(index+1)} argument ${name} couldn't be resolved."))<#if parameter?has_next>,</#if>
         </#list>
             );
+            command.setSource(context);
+            command.setCommunicator(communicator);
+            return command;
         });
     </#list>
 </#list>
