@@ -24,8 +24,7 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${A
 
     public ${className}(
             ${Message} source,
-            ${Communicator} communicator,
-            ${List}<${Argument}> arguments
+            ${Communicator} communicator
     )
     throws
         IllegalArgumentException,
@@ -39,7 +38,6 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${A
         ${includeArgs("command.CheckGuild", symbol)}
         ${includeArgs("command.CheckPermission", symbol)}
         ${includeArgs("command.CheckRank", symbol)}
-        ${includeArgs("command.CheckArgument", parameters)}
 
         ${includeArgs("command.AbstractVariableInitialization", symbol)}
     }

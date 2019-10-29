@@ -15,6 +15,7 @@ package ${package};
 <#assign JDALogger = "net.dv8tion.jda.internal.utils.JDALogger">
 <#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
 <#assign CallParser = "vartas.discord.call._parser.CallParser">
+<#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
 
 public class CommandBuilder{
     protected ${Logger} log = ${JDALogger}.getLog("CommandBuilder");
@@ -28,7 +29,21 @@ public class CommandBuilder{
         <#assign symbol = command.getCommandSymbol()>
         <#assign name = symbol.getFullName()>
         <#assign className = symbol.getClassName()>
-        commands.put("${name}", (context, parameter) -> new ${commandPackage}.${className}(context, communicator, parameter));
+        <#assign parameters = symbol.getParameters()>
+        commands.put("${name}", (context, arguments) -> {
+            ${includeArgs("CheckArgument", parameters)}
+            return new ${commandPackage}.${className}(
+                context,
+                communicator<#if (parameters?size > 0)>,</#if>
+        <#list parameters as parameter>
+            <#assign class = parameter.getClass().getSimpleName()?remove_ending("Parameter")?remove_beginning("AST")>
+            <#assign name = parameter.getName()>
+            <#assign index = parameter?index>
+                ${GeneratorHelper}.resolve${class}("${name}", arguments.get(${index}), context)
+                    .orElseThrow(() -> new IllegalArgumentException("The ${helper.formatAsOrdinal(index+1)} argument ${name} couldn't be resolved."))<#if parameter?has_next>,</#if>
+        </#list>
+            );
+        });
     </#list>
 </#list>
     }

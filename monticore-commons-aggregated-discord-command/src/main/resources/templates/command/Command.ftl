@@ -12,15 +12,17 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${p
     ${includeArgs("command.VariableDeclaration", parameters)}
 
     public ${className}(
-        ${Message} source,
-        ${Communicator} communicator,
-        ${List}<${Argument}> arguments
+        ${Message} _source,
+        ${Communicator} _communicator<#if (parameters?size > 0)>,</#if>
+<#list parameters as parameter>
+        ${helper.getType(parameter)} ${parameter.getName()}<#if parameter?has_next>,</#if>
+</#list>
     )
     throws
         IllegalArgumentException,
         IllegalStateException
     {
-        super(source, communicator, arguments);
-        ${includeArgs("command.VariableInitialization", parameters, "source")}
+        super(_source, _communicator);
+        ${includeArgs("command.VariableInitialization", parameters)}
     }
 }
