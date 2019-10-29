@@ -17,59 +17,52 @@
 
 package vartas.discord.bot.guild;
 
-import de.monticore.io.paths.ModelPath;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
 import vartas.discord.bot.guild._parser.GuildParser;
 import vartas.discord.bot.guild._symboltable.GuildArtifactScope;
 import vartas.discord.bot.guild._symboltable.GuildGlobalScope;
-import vartas.discord.bot.guild._symboltable.GuildLanguage;
-import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreatorDelegator;
+import vartas.discord.bot.guild._symboltable.GuildScope;
+import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 public abstract class GuildHelper {
-    private static GuildGlobalScope createGlobalScope(){
-        ModelPath modelPath = new ModelPath(Paths.get(""));
-        GuildLanguage language = new GuildLanguage();
-        return new GuildGlobalScope(modelPath, language);
-    }
-
     public static GuildConfiguration parse(String filePath, File reference) throws IllegalArgumentException{
-        GuildGlobalScope scope = createGlobalScope();
-        return parse(scope, filePath, reference);
+        GuildScope scope = new GuildScope(true);
+
+        ASTGuildArtifact ast = parseArtifact(filePath);
+        buildSymbolTable(scope, ast);
+
+        return new GuildConfiguration(ast, reference);
+
     }
 
     public static GuildConfiguration parse(GuildGlobalScope scope, String filePath, File reference) throws IllegalArgumentException{
         ASTGuildArtifact ast = parseArtifact(filePath);
-        buildSymbolTable(scope, ast);
+        GuildArtifactScope artifactScope = buildSymbolTable(scope, ast);
+        scope.addSubScope(artifactScope);
         return new GuildConfiguration(ast, reference);
     }
 
     private static ASTGuildArtifact parseArtifact(String filePath){
         try{
             GuildParser parser = new GuildParser();
-            Optional<ASTGuildArtifact> Guilds = parser.parse(filePath);
+            Optional<ASTGuildArtifact> guild = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!Guilds.isPresent())
+            if(!guild.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            return Guilds.get();
+            return guild.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static void buildSymbolTable(GuildGlobalScope scope, ASTGuildArtifact ast){
-        GuildSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
-        GuildArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
-        scope.addSubScope(artifactScope);
-    }
-
-    private static GuildSymbolTableCreatorDelegator createSymbolTableCreator(GuildGlobalScope scope){
-        return scope.getGuildLanguage().getSymbolTableCreator(scope);
+    private static GuildArtifactScope buildSymbolTable(GuildScope scope, ASTGuildArtifact ast){
+        GuildSymbolTableCreator symbolTableCreator = new GuildSymbolTableCreator(scope);
+        return symbolTableCreator.createFromAST(ast);
     }
 }

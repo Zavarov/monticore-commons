@@ -18,14 +18,10 @@
 package vartas.discord.bot.rank;
 
 import com.google.common.collect.Multimap;
-import de.monticore.io.paths.ModelPath;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.rank._symboltable.RankGlobalScope;
-import vartas.discord.bot.rank._symboltable.RankLanguage;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,13 +30,9 @@ public class RankTest {
 
     @Before
     public void setUp(){
-        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
-        RankLanguage language = new RankLanguage();
-        RankGlobalScope scope = new RankGlobalScope(modelPath, language);
-
         String source = "src/test/resources/rank.perm";
         File reference = new File("target/test/resources/rank.perm");
-        ranks = RankHelper.parse(scope, source, reference);
+        ranks = RankHelper.parse(source, reference);
     }
 
     @Test
@@ -53,13 +45,9 @@ public class RankTest {
 
     @Test
     public void testUpdate(){
-        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
-        RankLanguage language = new RankLanguage();
-        RankGlobalScope scope = new RankGlobalScope(modelPath, language);
-
         String source = "target/test/resources/rank.perm";
         File reference = new File("target/test/resources/rank.perm");
-        ranks = RankHelper.parse(scope, source, reference);
+        ranks = RankHelper.parse(source, reference);
 
         testPermissions();
     }

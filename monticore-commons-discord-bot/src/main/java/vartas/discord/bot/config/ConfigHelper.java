@@ -20,41 +20,38 @@ package vartas.discord.bot.config;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
 import vartas.discord.bot.config._parser.ConfigParser;
 import vartas.discord.bot.config._symboltable.ConfigArtifactScope;
-import vartas.discord.bot.config._symboltable.ConfigGlobalScope;
-import vartas.discord.bot.config._symboltable.ConfigSymbolTableCreatorDelegator;
+import vartas.discord.bot.config._symboltable.ConfigScope;
+import vartas.discord.bot.config._symboltable.ConfigSymbolTableCreator;
 
 import java.io.IOException;
 import java.util.Optional;
 
 public abstract class ConfigHelper {
-    public static ASTConfigArtifact parse(ConfigGlobalScope scope, String filePath) throws IllegalArgumentException{
+    public static ASTConfigArtifact parse(String filePath) throws IllegalArgumentException{
         ASTConfigArtifact ast = parseArtifact(filePath);
-        buildSymbolTable(scope, ast);
+        buildSymbolTable(ast);
         return ast;
     }
 
     private static ASTConfigArtifact parseArtifact(String filePath){
         try{
             ConfigParser parser = new ConfigParser();
-            Optional<ASTConfigArtifact> Configs = parser.parse(filePath);
+            Optional<ASTConfigArtifact> config = parser.parse(filePath);
             if(parser.hasErrors())
                 throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
-            if(!Configs.isPresent())
+            if(!config.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
-            return Configs.get();
+            return config.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
-    private static void buildSymbolTable(ConfigGlobalScope scope, ASTConfigArtifact ast){
-        ConfigSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
-        ConfigArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
-        scope.addSubScope(artifactScope);
-    }
+    private static ConfigArtifactScope buildSymbolTable(ASTConfigArtifact ast){
+        ConfigScope scope = new ConfigScope(true);
+        ConfigSymbolTableCreator symbolTableCreator = new ConfigSymbolTableCreator(scope);
 
-    private static ConfigSymbolTableCreatorDelegator createSymbolTableCreator(ConfigGlobalScope scope){
-        return scope.getConfigLanguage().getSymbolTableCreator(scope);
+        return symbolTableCreator.createFromAST(ast);
     }
 }
