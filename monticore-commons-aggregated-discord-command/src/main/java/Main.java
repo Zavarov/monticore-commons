@@ -16,12 +16,14 @@
  */
 
 import com.google.common.base.Preconditions;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.io.paths.ModelPath;
 import org.apache.commons.io.FileUtils;
+import org.atteo.evo.inflector.English;
 import vartas.discord.aggregated.generator.CommandBuilderGenerator;
 import vartas.discord.aggregated.generator.CommandGenerator;
 import vartas.discord.aggregated.generator.CommandGeneratorHelper;
@@ -37,6 +39,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -51,7 +54,9 @@ public class Main {
     private static final GeneratorEngine GENERATOR = new GeneratorEngine(SETUP);
 
     static{
-        GLEX.defineGlobalVar("helper", new CommandGeneratorHelper());
+        GLEX.defineGlobalVar("Helper", new CommandGeneratorHelper());
+        GLEX.defineGlobalVar("English", new English());
+        GLEX.defineGlobalVar("Ordinal", new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL));
 
         SETUP.setGlex(GLEX);
     }

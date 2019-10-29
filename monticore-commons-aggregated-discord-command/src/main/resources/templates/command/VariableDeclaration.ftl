@@ -1,5 +1,5 @@
 ${signature("parameters")}
-<#assign helper = getGlobalVar("helper")>
+<#assign Helper = getGlobalVar("Helper")>
 <#list parameters as parameter>
-    protected ${helper.getType(parameter)} ${parameter.getName()};
+    protected ${Helper.getType(parameter)} ${parameter.getName()};
 </#list>

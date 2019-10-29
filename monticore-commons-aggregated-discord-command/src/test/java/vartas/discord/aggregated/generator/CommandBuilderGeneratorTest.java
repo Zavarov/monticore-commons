@@ -17,11 +17,13 @@
 
 package vartas.discord.aggregated.generator;
 
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.io.paths.ModelPath;
+import org.atteo.evo.inflector.English;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.command.CommandHelper;
@@ -34,6 +36,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,7 +77,9 @@ public class CommandBuilderGeneratorTest extends CommandGeneratorTest{
 
 
         glex = new GlobalExtensionManagement();
-        glex.defineGlobalVar("helper", new CommandGeneratorHelper());
+        glex.defineGlobalVar("Helper", new CommandGeneratorHelper());
+        glex.defineGlobalVar("English", new English());
+        glex.defineGlobalVar("Ordinal", new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL));
 
         setup = new GeneratorSetup();
         setup.setGlex(glex);

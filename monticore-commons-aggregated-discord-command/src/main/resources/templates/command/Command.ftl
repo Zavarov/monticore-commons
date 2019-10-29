@@ -1,7 +1,7 @@
 ${signature("package", "existsHandwrittenClass", "className", "parentName")}
 <#assign symbol = ast.getCommandSymbol()>
 <#assign parameters = symbol.getParameters()>
-<#assign helper = getGlobalVar("helper")>
+<#assign Helper = getGlobalVar("Helper")>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
 <#assign Argument = "vartas.discord.argument._ast.ASTArgument">
@@ -15,7 +15,7 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${p
         ${Message} _source,
         ${Communicator} _communicator<#if (parameters?size > 0)>,</#if>
 <#list parameters as parameter>
-        ${helper.getType(parameter)} ${parameter.getName()}<#if parameter?has_next>,</#if>
+        ${Helper.getType(parameter)} ${parameter.getName()}<#if parameter?has_next>,</#if>
 </#list>
     )
     throws

@@ -1,4 +1,4 @@
-${signature("asts", "package")}
+${signature("commands", "package")}
 package ${package};
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Command = "vartas.discord.bot.AbstractCommand">
@@ -16,15 +16,18 @@ package ${package};
 <#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
 <#assign CallParser = "vartas.discord.call._parser.CallParser">
 <#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
+<#assign AbstractCommandBuilder = "vartas.discord.bot.AbstractCommandBuilder">
+<#assign Helper = getGlobalVar("Helper")>
+<#assign Ordinal = getGlobalVar("Ordinal")>
 
-public class CommandBuilder{
+public class CommandBuilder extends ${AbstractCommandBuilder}{
     protected ${Logger} log = ${JDALogger}.getLog("CommandBuilder");
     protected ${Map}<String, ${BiFunction}<${Message}, ${List}<${Argument}>, ${Command}>> commands = new ${HashMap}<>();
     protected ${CallParser} parser = new ${CallParser}();
 
     public CommandBuilder(${Communicator} communicator){
-<#list asts as ast>
-    <#assign commandPackage = helper.getPackage(ast)>
+<#list commands as ast>
+    <#assign commandPackage = Helper.getPackage(ast)>
     <#list ast.getCommandList() as command>
         <#assign symbol = command.getCommandSymbol()>
         <#assign name = symbol.getFullName()>
@@ -40,7 +43,7 @@ public class CommandBuilder{
             <#assign name = parameter.getName()>
             <#assign index = parameter?index>
                 ${GeneratorHelper}.resolve${class}("${name}", arguments.get(${index}), context)
-                    .orElseThrow(() -> new IllegalArgumentException("The ${helper.formatAsOrdinal(index+1)} argument ${name} couldn't be resolved."))<#if parameter?has_next>,</#if>
+                    .orElseThrow(() -> new IllegalArgumentException("The ${Ordinal.format(index+1)} argument ${name} couldn't be resolved."))<#if parameter?has_next>,</#if>
         </#list>
             );
         });
@@ -48,6 +51,7 @@ public class CommandBuilder{
 </#list>
     }
 
+    @Override
     public ${Command} build(String content, ${Message} source) {
         ${Preconditions}.checkNotNull(content);
         ${Preconditions}.checkNotNull(source);

@@ -17,11 +17,9 @@
 
 package vartas.discord.aggregated.generator;
 
-import com.ibm.icu.text.RuleBasedNumberFormat;
 import de.se_rwth.commons.Joiners;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.*;
-import org.atteo.evo.inflector.English;
 import vartas.chart.Interval;
 import vartas.discord.aggregated.argument.symboltable.*;
 import vartas.discord.aggregated.parameter.visitor.ParameterTypeVisitor;
@@ -34,7 +32,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Optional;
 
 public class CommandGeneratorHelper {
@@ -52,16 +49,6 @@ public class CommandGeneratorHelper {
     public static final String MONTICORE_EXPRESSION = BigDecimal.class.getCanonicalName();
 
     protected static ParameterTypeVisitor typeVisitor = new ParameterTypeVisitor();
-
-    protected RuleBasedNumberFormat ordinalFormatter = new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL);
-
-    public String formatAsOrdinal(Number number){
-        return ordinalFormatter.format(number);
-    }
-
-    public String pluralOf(String word, int count){
-        return English.plural(word, count);
-    }
 
     public static Path getQualifiedPath(String packageName, String fileName){
         return Paths.get(packageName.replaceAll("\\.", FileSystems.getDefault().getSeparator()), fileName + ".java");
