@@ -28,6 +28,8 @@ import org.atteo.evo.inflector.English;
 import vartas.discord.aggregated.generator.CommandBuilderGenerator;
 import vartas.discord.aggregated.generator.CommandGenerator;
 import vartas.discord.aggregated.generator.CommandGeneratorHelper;
+import vartas.discord.bot.CommunicatorInterface;
+import vartas.discord.bot.EnvironmentInterface;
 import vartas.discord.command.CommandHelper;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._cocos.CommandCoCoChecker;
@@ -58,6 +60,8 @@ public class Main {
         GLEX.defineGlobalVar("Helper", new CommandGeneratorHelper());
         GLEX.defineGlobalVar("English", new English());
         GLEX.defineGlobalVar("Ordinal", new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL));
+        GLEX.defineGlobalVar("Communicator", CommunicatorInterface.class.getCanonicalName());
+        GLEX.defineGlobalVar("Environment", EnvironmentInterface.class.getCanonicalName());
 
         SETUP.setGlex(GLEX);
     }
@@ -71,12 +75,16 @@ public class Main {
      *     <li>The directory of the handwritten sources</li>
      *     <li>The target directory of the generated sources</li>
      *     <li>The package name of the command builder</li>
+     *     <li>An external class for the communicator</li>
+     *     <li>An external class for the environment</li>
      * </ul>
+     * The argument for the communicator and environment are optional.
+     * By default, {@link CommunicatorInterface} and {@link EnvironmentInterface} are used.
      *
      * @param args the arguments for generating the commands.
      */
     public static void main(String[] args){
-        Preconditions.checkArgument(args.length >= 4, "Please provide at least 5 arguments.");
+        Preconditions.checkArgument(args.length >= 5, "Please provide at least 3 arguments.");
         Preconditions.checkArgument(new File(args[0]).exists(), args[0]+": Please make sure that the model file exists");
         Preconditions.checkArgument(new File(args[1]).exists(), args[1]+": Please make sure that the template file exists");
         Preconditions.checkArgument(new File(args[2]).exists(), args[2]+": Please make sure that the source file exists");
@@ -86,6 +94,11 @@ public class Main {
         File targetDirectory = new File(args[2]).getAbsoluteFile();
         File outputDirectory = new File(args[3]).getAbsoluteFile();
         String packageName = args[4];
+
+        if(args.length >= 6)
+            GLEX.changeGlobalVar("Communicator", args[5]);
+        if(args.length >= 7)
+            GLEX.changeGlobalVar("Environment", args[6]);
 
         IterablePath templatePath = IterablePath.from(templateFolder, TEMPLATE_EXTENSION);
         IterablePath targetPath = IterablePath.from(targetDirectory, TARGET_EXTENSION);

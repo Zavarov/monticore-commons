@@ -1,10 +1,10 @@
 ${signature("package", "existsHandwrittenClass", "className")}
+<#assign Communicator = getGlobalVar("Communicator")>
+<#assign Environment = getGlobalVar("Environment")>
 <#assign symbol = ast.getCommandSymbol()>
 <#assign parameters = symbol.getParameters()>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign User = "net.dv8tion.jda.api.entities.User">
-<#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
-<#assign Environment = "vartas.discord.bot.EnvironmentInterface">
 <#assign Argument = "vartas.discord.argument._ast.ASTArgument">
 <#assign List = "java.util.List">
 <#assign AbstractCommand = "vartas.discord.bot.AbstractCommand">
@@ -17,9 +17,7 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${A
     protected ${Message} source;
     protected ${Communicator} communicator;
     protected ${Environment} environment;
-
     protected ${User} author;
-
     ${includeArgs("command.AbstractVariableDeclaration", symbol)}
 
     public ${className}(

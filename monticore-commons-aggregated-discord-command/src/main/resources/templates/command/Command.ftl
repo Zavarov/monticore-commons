@@ -1,9 +1,9 @@
 ${signature("package", "existsHandwrittenClass", "className", "parentName")}
 <#assign symbol = ast.getCommandSymbol()>
 <#assign parameters = symbol.getParameters()>
+<#assign Communicator = getGlobalVar("Communicator")>
 <#assign Helper = getGlobalVar("Helper")>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
-<#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
 <#assign Argument = "vartas.discord.argument._ast.ASTArgument">
 <#assign List = "java.util.List">
 package ${package};

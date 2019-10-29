@@ -26,6 +26,8 @@ import de.monticore.io.paths.ModelPath;
 import org.atteo.evo.inflector.English;
 import org.junit.Before;
 import org.junit.Test;
+import vartas.discord.bot.CommunicatorInterface;
+import vartas.discord.bot.EnvironmentInterface;
 import vartas.discord.command.CommandHelper;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._symboltable.CommandGlobalScope;
@@ -80,6 +82,8 @@ public class CommandBuilderGeneratorTest extends CommandGeneratorTest{
         glex.defineGlobalVar("Helper", new CommandGeneratorHelper());
         glex.defineGlobalVar("English", new English());
         glex.defineGlobalVar("Ordinal", new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL));
+        glex.defineGlobalVar("Communicator", CommunicatorInterface.class.getCanonicalName());
+        glex.defineGlobalVar("Environment", EnvironmentInterface.class.getCanonicalName());
 
         setup = new GeneratorSetup();
         setup.setGlex(glex);

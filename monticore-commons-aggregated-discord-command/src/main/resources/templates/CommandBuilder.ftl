@@ -1,5 +1,8 @@
 ${signature("commands", "package")}
 package ${package};
+<#assign Communicator = getGlobalVar("Communicator")>
+<#assign Helper = getGlobalVar("Helper")>
+<#assign Ordinal = getGlobalVar("Ordinal")>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Command = "vartas.discord.bot.AbstractCommand">
 <#assign Call = "vartas.discord.call._ast.ASTCallArtifact">
@@ -13,12 +16,9 @@ package ${package};
 <#assign Preconditions = "com.google.common.base.Preconditions">
 <#assign Logger = "org.slf4j.Logger">
 <#assign JDALogger = "net.dv8tion.jda.internal.utils.JDALogger">
-<#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
 <#assign CallParser = "vartas.discord.call._parser.CallParser">
 <#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
 <#assign AbstractCommandBuilder = "vartas.discord.bot.AbstractCommandBuilder">
-<#assign Helper = getGlobalVar("Helper")>
-<#assign Ordinal = getGlobalVar("Ordinal")>
 
 public class CommandBuilder extends ${AbstractCommandBuilder}{
     protected ${Logger} log = ${JDALogger}.getLog("CommandBuilder");
