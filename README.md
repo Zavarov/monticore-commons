@@ -1,6 +1,6 @@
 # monticore-commons
 The main goal of this project is to integrate [MontiCore](http://monticore.org/) into other libraries,
-in order to add custom data structures into the model-based code generation.
+in order to introduce model-based code-generation.
 
 This project will then serve as a core module for further projects.
 
@@ -20,6 +20,13 @@ This project will then serve as a core module for further projects.
   * Primitive functions such as *sin(x)* and *log(x)*
   * Constants &#x2107; and &#x3C0; as e and pi, respectively
   * (semi-)random number generation via *rand(x,y)*
+  
+* An interface for custom [Discord](https://discordapp.com/) bots
+  * Custom commands
+  * Global and per-guild configuration files
+  * Internal permission structure
+  * Status messages
+  * Command generator
 
 ## Built With
 
@@ -32,28 +39,44 @@ This project will then serve as a core module for further projects.
 
 ## Dependencies:
 
-This project requires at least **Java 8**.
+This project requires at least **Java 8**.  
+Due to an internal dependency of [MontiCore](https://github.com/MontiCore/monticore), we can't use a newer version of [Guava](https://github.com/google/guava) than **23.0**.
  * **Apache Commons Text**
    * Version: **1.8**
    * [Github](https://github.com/apache/commons-text)
- * **Apache Maven JavaDoc Plugin**
-   * Version: **3.1.1**
-   * [Github](https://github.com/apache/maven-javadoc-plugin/)
- * **AssertJ**
-   * Version: **3.12.2**
-   * [Github](https://github.com/joel-costigliola/assertj-core)
  * **chart**
    * Version: **1.0**
    * [Github](https://github.com/Zavarov/chart)
+ * **Evo Inflector**
+   * Version: **1.2.2**
+   * [Github](https://github.com/atteo/evo-inflector)
  * **JDA**
    * Version: **4.0.0_53**
    * [Github](https://github.com/DV8FromTheWorld/JDA)
+ * **MontiCore**
+   * Version: **5.3.0**
+   * [Github](https://github.com/MontiCore/monticore)
+
+## Plugins:
+ * **Apache Maven Jar Plugin**
+   * Version: **3.1.2**
+   * [Github](https://github.com/apache/maven-jar-plugin)
+ * **Apache Maven JavaDoc Plugin**
+   * Version: **3.1.1**
+   * [Github](https://github.com/apache/maven-javadoc-plugin)
+ * **Apache Maven Source Plugin**
+   * Version: **3.1.0**
+   * [Github](https://github.com/apache/maven-source-plugin)
+ * **MontiCore Maven Plugin**
+   * Version: **5.3.0**
+   * [Github](https://github.com/MontiCore/monticore/tree/master/monticore-maven/monticore-maven-plugin)
+## Test Dependencies:
+ * **AssertJ**
+   * Version: **3.12.2**
+   * [Github](https://github.com/joel-costigliola/assertj-core)
  * **JUnit**
    * Version: **4.12**
    * [Github](https://github.com/junit-team/junit4)
- * **MontiCore**
-   * Version: **5.0.5**
-   * [Github](https://github.com/MontiCore/monticore)
 
 ## License
 

@@ -48,7 +48,6 @@ public class MessageArgumentSymbol extends ArgumentSymbol {
         visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
     }
 
-    @Override
     public Optional<Message> accept(Message context){
         message = null;
 

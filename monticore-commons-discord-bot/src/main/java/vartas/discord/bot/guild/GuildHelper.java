@@ -17,17 +17,31 @@
 
 package vartas.discord.bot.guild;
 
+import de.monticore.io.paths.ModelPath;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
 import vartas.discord.bot.guild._parser.GuildParser;
 import vartas.discord.bot.guild._symboltable.GuildArtifactScope;
 import vartas.discord.bot.guild._symboltable.GuildGlobalScope;
+import vartas.discord.bot.guild._symboltable.GuildLanguage;
 import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreatorDelegator;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 public abstract class GuildHelper {
+    private static GuildGlobalScope createGlobalScope(){
+        ModelPath modelPath = new ModelPath(Paths.get(""));
+        GuildLanguage language = new GuildLanguage();
+        return new GuildGlobalScope(modelPath, language);
+    }
+
+    public static GuildConfiguration parse(String filePath, File reference) throws IllegalArgumentException{
+        GuildGlobalScope scope = createGlobalScope();
+        return parse(scope, filePath, reference);
+    }
+
     public static GuildConfiguration parse(GuildGlobalScope scope, String filePath, File reference) throws IllegalArgumentException{
         ASTGuildArtifact ast = parseArtifact(filePath);
         buildSymbolTable(scope, ast);

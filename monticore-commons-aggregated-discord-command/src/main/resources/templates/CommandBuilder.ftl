@@ -1,26 +1,27 @@
 ${signature("asts", "package")}
 package ${package};
+<#assign Message = "net.dv8tion.jda.api.entities.Message">
+<#assign Command = "vartas.discord.bot.AbstractCommand">
+<#assign Call = "vartas.discord.call._ast.ASTCallArtifact">
+<#assign Argument = "vartas.discord.argument._ast.ASTArgument">
+<#assign IOException = "java.io.IOException">
+<#assign List = "java.util.List">
+<#assign Map = "java.util.Map">
+<#assign Optional = "java.util.Optional">
+<#assign HashMap = "java.util.HashMap">
+<#assign BiFunction = "java.util.function.BiFunction">
+<#assign Preconditions = "com.google.common.base.Preconditions">
+<#assign Logger = "org.slf4j.Logger">
+<#assign JDALogger = "net.dv8tion.jda.internal.utils.JDALogger">
+<#assign Communicator = "vartas.discord.bot.CommunicatorInterface">
+<#assign CallParser = "vartas.discord.call._parser.CallParser">
 
-import de.monticore.symboltable.*;
-import net.dv8tion.jda.core.entities.*;
-import vartas.discord.bot.api.command.*;
-import vartas.discord.bot.api.communicator.*;
-import vartas.discord.bot.command.*;
-import vartas.discord.bot.command.call.*;
-import vartas.discord.bot.command.call._ast.*;
-import vartas.discord.bot.command.command._symboltable.*;
-import vartas.discord.bot.command.entity._ast.*;
+public class CommandBuilder{
+    protected ${Logger} log = ${JDALogger}.getLog("CommandBuilder");
+    protected ${Map}<String, ${BiFunction}<${Message}, ${List}<${Argument}>, ${Command}>> commands = new ${HashMap}<>();
+    protected ${CallParser} parser = new ${CallParser}();
 
-import java.util.*;
-import java.util.function.*;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class CommandBuilder extends AbstractCommandBuilder{
-    protected Map<String, BiFunction<Message, List<ASTEntityType>, AbstractCommand>> commands = new HashMap<>();
-
-    public CommandBuilder(GlobalScope scope, CommunicatorInterface communicator){
-        super(scope, communicator);
+    public CommandBuilder(${Communicator} communicator){
 <#list asts as ast>
     <#assign commandPackage = helper.getPackage(ast)>
     <#list ast.getCommandList() as command>
@@ -32,13 +33,27 @@ public class CommandBuilder extends AbstractCommandBuilder{
 </#list>
     }
 
-    @Override
-    public AbstractCommand build(String content, Message source) {
-        checkNotNull(content);
-        checkNotNull(source);
+    public ${Command} build(String content, ${Message} source) {
+        ${Preconditions}.checkNotNull(content);
+        ${Preconditions}.checkNotNull(source);
 
-        ASTCallArtifact artifact = CallHelper.parse(scope, content);
+        ${Optional}<${Call}> artifactOpt;
 
-        return commands.get(artifact.getQualifiedName()).apply(source, artifact.getParameterList());
+        try {
+            artifactOpt = parser.parse_String(content);
+        }catch(${IOException} e){
+            log.error(e.getMessage());
+            artifactOpt = ${Optional}.empty();
+        }
+
+        ${Preconditions}.checkArgument(artifactOpt.isPresent());
+        ${Preconditions}.checkArgument(!parser.hasErrors());
+
+        ${Call} artifact = artifactOpt.get();
+        String name = artifact.getQualifiedName();
+
+        ${Preconditions}.checkArgument(commands.containsKey(name));
+
+        return commands.get(name).apply(source, artifact.getArgumentList());
     }
 }

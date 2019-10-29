@@ -28,6 +28,14 @@
 
     <artifactId>monticore-commons-discord-bot</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>vartas</groupId>
+            <artifactId>monticore-commons-reddit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <!-- == DEFAULT BUILD SETTINGS =========================================== -->
 
     <build>

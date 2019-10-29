@@ -29,17 +29,17 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import vartas.chart.Interval;
-import vartas.discord.aggregated.parameter.symboltable.*;
-import vartas.discord.argument._ast.ASTArgumentType;
+import vartas.discord.aggregated.argument.symboltable.*;
+import vartas.discord.argument._ast.ASTArgument;
 import vartas.discord.bot.rank.RankType;
 import vartas.discord.call._ast.ASTCallArtifact;
 import vartas.discord.call._parser.CallParser;
 import vartas.discord.command.CommandHelper;
+import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandLanguage;
 import vartas.discord.command._symboltable.CommandSymbol;
 import vartas.discord.parameter._ast.ASTDateParameter;
 import vartas.discord.parameter._ast.ASTGuildParameter;
-import vartas.discord.parameter._symboltable.MessageParameterSymbol;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -53,15 +53,15 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
-public class AggregatedCommandGlobalScopeTest{
-    static AggregatedCommandGlobalScope commandScope;
+public class CommandGlobalScopeTest {
+    static CommandGlobalScope commandScope;
     static Percentage precision = Percentage.withPercentage(10e-15);
 
     @BeforeClass
     public static void setUp(){
         ModelPath path = new ModelPath(Paths.get(""));
         CommandLanguage language = new CommandLanguage();
-        commandScope = new AggregatedCommandGlobalScope(path, language);
+        commandScope = new CommandGlobalScope(path, language);
 
         CommandHelper.parse(commandScope,"src/test/resources/Command.cmd");
     }
@@ -138,11 +138,12 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            DateParameter2ArgumentSymbol symbol = commandScope.resolveDateParameter(name, argument);
+            DateArgumentSymbol symbol =new DateArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
-            Date date = symbol.resolve(null).get();
+            Date date = symbol.accept().get();
             assertThat(new SimpleDateFormat("dd-MM-yyyy").format(date)).isEqualTo(expected);
         }
     }
@@ -169,11 +170,12 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            ExpressionParameter2ArgumentSymbol symbol = commandScope.resolveExpressionParameter(name, argument);
+            ExpressionArgumentSymbol symbol = new ExpressionArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
-            assertThat(symbol.resolve(null).get()).isCloseTo(expected, precision);
+            assertThat(symbol.accept().get()).isCloseTo(expected, precision);
         }
     }
 
@@ -197,9 +199,10 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            GuildParameter2ArgumentSymbol symbol = commandScope.resolveGuildParameter(name, argument);
+            GuildArgumentSymbol symbol = new GuildArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
             assertThat(symbol).isNotNull();
         }
@@ -227,9 +230,10 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            MemberParameter2ArgumentSymbol symbol = commandScope.resolveMemberParameter(name, argument);
+            MemberArgumentSymbol symbol = new MemberArgumentSymbol(name);
+            symbol.setAstNode(argument);
             assertThat(symbol).isNotNull();
         }
     }
@@ -258,11 +262,12 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            IntervalParameter2ArgumentSymbol symbol = commandScope.resolveIntervalParameter(name, argument);
+            IntervalArgumentSymbol symbol = new IntervalArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
-            Interval interval = symbol.resolve(null).get();
+            Interval interval = symbol.accept().get();
             assertThat(interval).isEqualTo(expected);
         }
     }
@@ -291,11 +296,12 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            OnlineStatusParameter2ArgumentSymbol symbol = commandScope.resolveOnlineStatusParameter(name, argument);
+            OnlineStatusArgumentSymbol symbol = new OnlineStatusArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
-            OnlineStatus onlineStatus = symbol.resolve(null).get();
+            OnlineStatus onlineStatus = symbol.accept().get();
             assertThat(onlineStatus).isEqualTo(expected);
         }
     }
@@ -322,11 +328,12 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            StringParameter2ArgumentSymbol symbol = commandScope.resolveStringParameter(name, argument);
+            StringArgumentSymbol symbol = new StringArgumentSymbol(name);
+            symbol.setAstNode(argument);
 
-            String value = symbol.resolve(null).get();
+            String value = symbol.accept().get();
             assertThat(value).isEqualTo(expected);
         }
     }
@@ -352,9 +359,11 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            UserParameter2ArgumentSymbol symbol = commandScope.resolveUserParameter(name, argument);
+            UserArgumentSymbol symbol = new UserArgumentSymbol(name);
+            symbol.setAstNode(argument);
+
             assertThat(symbol).isNotNull();
         }
     }
@@ -380,9 +389,11 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            TextChannelParameter2ArgumentSymbol symbol = commandScope.resolveTextChannelParameter(name, argument);
+            TextChannelArgumentSymbol symbol = new TextChannelArgumentSymbol(name);
+            symbol.setAstNode(argument);
+
             assertThat(symbol).isNotNull();
         }
     }
@@ -408,9 +419,11 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            RoleParameter2ArgumentSymbol symbol = commandScope.resolveRoleParameter(name, argument);
+            RoleArgumentSymbol symbol = new RoleArgumentSymbol(name);
+            symbol.setAstNode(argument);
+
             assertThat(symbol).isNotNull();
         }
     }
@@ -433,9 +446,11 @@ public class AggregatedCommandGlobalScopeTest{
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
             String name = command.getParameters().get(0).getName();
-            ASTArgumentType argument = call.getArgumentList().get(0);
+            ASTArgument argument = call.getArgumentList().get(0);
 
-            MessageParameterSymbol symbol = commandScope.resolveMessageParameter(name, argument);
+            MessageArgumentSymbol symbol = new MessageArgumentSymbol(name);
+            symbol.setAstNode(argument);
+
             assertThat(symbol).isNotNull();
         }
     }

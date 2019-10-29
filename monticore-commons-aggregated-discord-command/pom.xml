@@ -40,5 +40,11 @@
             <artifactId>monticore-commons-discord-command</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.atteo</groupId>
+            <artifactId>evo-inflector</artifactId>
+            <version>${evo.inflector.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,7 @@
 package vartas.discord.command.example;
+prefix example;
 
-command @ example{
+command {
     test @ guild{
              class : TestCommand
         permission : administrator, manage messages
