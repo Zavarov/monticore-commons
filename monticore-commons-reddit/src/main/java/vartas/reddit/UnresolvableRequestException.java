@@ -18,7 +18,7 @@
 package vartas.reddit;
 
 /**
- * This exception is thrown whenever a request was made that was impossible to resolve.
+ * This exception is thrown whenever a request was made that was impossible to resolve.<br>
  * E.g. when a subreddit was requested that doesn't exist or a submission the bot doesn't have access to.
  */
 public class UnresolvableRequestException extends RuntimeException{

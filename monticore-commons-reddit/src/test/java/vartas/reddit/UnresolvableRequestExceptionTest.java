@@ -15,15 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.reddit.comment._symboltable;
+package vartas.reddit;
 
-public class CommentLanguage extends CommentLanguageTOP{
-    public CommentLanguage(){
-        super("Comment Language", "com");
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class UnresolvableRequestExceptionTest {
+    UnresolvableRequestException exception;
+    @Before
+    public void setUp(){
+        exception = new UnresolvableRequestException(123);
     }
-
-    @Override
-    protected CommentModelLoader provideModelLoader() {
-        return new CommentModelLoader(this);
+    @Test
+    public void testErrorMessage(){
+        assertThat(exception.getMessage()).isEqualTo("The request failed with the following error code: 123");
     }
 }

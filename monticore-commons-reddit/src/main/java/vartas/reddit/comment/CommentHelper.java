@@ -17,29 +17,34 @@
 
 package vartas.reddit.comment;
 
-import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.se_rwth.commons.Files;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
 import vartas.reddit.comment._symboltable.CommentArtifactScope;
-import vartas.reddit.comment._symboltable.CommentGlobalScope;
-import vartas.reddit.comment._symboltable.CommentLanguage;
-import vartas.reddit.comment._symboltable.CommentSymbolTableCreatorDelegator;
+import vartas.reddit.comment._symboltable.CommentScope;
+import vartas.reddit.comment._symboltable.CommentSymbolTableCreator;
 import vartas.reddit.comment.prettyprint.CommentPrettyPrinter;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class provides utility functions for an easy transformation between text files
+ * and instances of {@link CommentInterface}.
+ */
 public abstract class CommentHelper {
-
+    /**
+     * Converts the comments into an by the grammar accepted format and stores them on the disk.
+     * @param comments A collection of all comments that are stored.
+     * @param target The target of the comment file.
+     */
     public static void store(Collection<CommentInterface> comments, File target){
         try {
             CommentPrettyPrinter printer = new CommentPrettyPrinter(new IndentPrinter());
@@ -57,10 +62,17 @@ public abstract class CommentHelper {
             throw new IllegalArgumentException(e);
         }
     }
-    public static List<CommentInterface> parse(String filePath) throws IllegalArgumentException{
+
+    /**
+     * @param filePath The path of the comment file.
+     * @return A list of all comment instances in the file.
+     */
+    public static List<CommentInterface> parse(String filePath){
         ASTCommentArtifact ast = parseArtifact(filePath);
-        CommentGlobalScope scope = createGlobalScope();
-        buildSymbolTable(scope, ast);
+
+        CommentScope scope = new CommentScope(true);
+        buildSymbolTable(ast);
+
         return new ArrayList<>(ast.getCommentList());
     }
 
@@ -68,10 +80,8 @@ public abstract class CommentHelper {
         try{
             CommentParser parser = new CommentParser();
             Optional<ASTCommentArtifact> comment = parser.parse(filePath);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
             if(!comment.isPresent())
-                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
+                throw new IllegalArgumentException("The comment file couldn't be parsed.");
 
             return comment.get();
         }catch(IOException e){
@@ -79,19 +89,9 @@ public abstract class CommentHelper {
         }
     }
 
-    private static void buildSymbolTable(CommentGlobalScope scope, ASTCommentArtifact ast){
-        CommentSymbolTableCreatorDelegator symbolTableCreator = createSymbolTableCreator(scope);
-        CommentArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
-        scope.addSubScope(artifactScope);
-    }
-
-    private static CommentSymbolTableCreatorDelegator createSymbolTableCreator(CommentGlobalScope scope){
-        return scope.getCommentLanguage().getSymbolTableCreator(scope);
-    }
-
-    private static CommentGlobalScope createGlobalScope(){
-        ModelPath modelPath = new ModelPath(Paths.get(""));
-        CommentLanguage language = new CommentLanguage();
-        return new CommentGlobalScope(modelPath, language);
+    private static CommentArtifactScope buildSymbolTable(ASTCommentArtifact ast){
+        CommentScope scope = new CommentScope(true);
+        CommentSymbolTableCreator symbolTableCreator = new CommentSymbolTableCreator(scope);
+        return symbolTableCreator.createFromAST(ast);
     }
 }

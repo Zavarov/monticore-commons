@@ -21,7 +21,10 @@ import de.monticore.prettyprint.IndentPrinter;
 import vartas.reddit.SubmissionInterface;
 
 import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
-
+/**
+ * This class transforms the {@link vartas.reddit.submission._ast.ASTSubmission} back
+ * into a String that is accepted by the submission language.
+ */
 public class SubmissionPrettyPrinter{
     IndentPrinter printer;
 

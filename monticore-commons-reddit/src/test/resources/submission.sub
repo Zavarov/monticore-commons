@@ -13,3 +13,16 @@ submission {
     url = "url"
     permalink = "permalink"
 }
+
+submission {
+    author = "author"
+    id = "id"
+    subreddit = "subreddit"
+    nsfw = true
+    spoiler = true
+    score = 1
+    title = "title"
+    created = 1L
+    url = "url"
+    permalink = "permalink"
+}

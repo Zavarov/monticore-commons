@@ -21,42 +21,61 @@ import org.junit.Before;
 import org.junit.Test;
 import vartas.reddit.CommentInterface;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommentTest {
-    CommentInterface comment;
+    List<CommentInterface> comments;
     @Before
     public void setUp(){
-        comment = CommentHelper.parse("src/test/resources/comment.com").get(0);
+        comments = CommentHelper.parse("src/test/resources/comment.com");
     }
 
     @Test
     public void testGetAuthor(){
-        assertThat(comment.getAuthor()).isEqualTo("author");
+        assertThat(comments.get(0).getAuthor()).isEqualTo("author");
     }
 
     @Test
     public void testgetId(){
-        assertThat(comment.getId()).isEqualTo("id");
+        assertThat(comments.get(0).getId()).isEqualTo("id");
     }
 
     @Test
     public void testGetSubreddit(){
-        assertThat(comment.getSubreddit()).isEqualTo("subreddit");
+        assertThat(comments.get(0).getSubreddit()).isEqualTo("subreddit");
     }
 
     @Test
     public void testGetScore(){
-        assertThat(comment.getScore()).isEqualTo(-1);
+        assertThat(comments.get(0).getScore()).isEqualTo(-1);
     }
 
     @Test
     public void testGetSubmission(){
-        assertThat(comment.getSubmission()).isEqualTo("submission");
+        assertThat(comments.get(0).getSubmission()).isEqualTo("submission");
     }
 
     @Test
     public void testGetSubmissionTitle(){
-        assertThat(comment.getSubmissionTitle()).isEqualTo("submissionTitle");
+        assertThat(comments.get(0).getSubmissionTitle()).isEqualTo("submissionTitle");
+        assertThat(comments.get(1).getSubmissionTitle()).isEqualTo("junk");
+    }
+
+    @Test
+    public void testEquals(){
+        assertThat(comments.get(0).equals(comments.get(1))).isTrue();
+        assertThat(comments.get(0).equals("junk")).isFalse();
+    }
+
+    @Test
+    public void testHashCode(){
+        assertThat(comments.get(0).hashCode()).isEqualTo(comments.get(1).hashCode());
+    }
+
+    @Test
+    public void testGetPermalink(){
+        assertThat(comments.get(0).getPermalink()).isEqualTo("https://www.reddit.com/r/subreddit/comments/submission/-/id");
     }
 }

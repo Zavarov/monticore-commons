@@ -22,6 +22,10 @@ import vartas.reddit.CommentInterface;
 
 import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
 
+/**
+ * This class transforms the {@link vartas.reddit.comment._ast.ASTComment} back
+ * into a String that is accepted by the comment language.
+ */
 public class CommentPrettyPrinter {
     IndentPrinter printer;
 

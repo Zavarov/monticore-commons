@@ -28,8 +28,11 @@ import java.util.Map;
 import static org.apache.commons.text.StringEscapeUtils.ESCAPE_HTML4;
 import static org.apache.commons.text.StringEscapeUtils.UNESCAPE_HTML4;
 
+/**
+ * This class provides utility functions to escape all MontiCore keywords.
+ */
 public abstract class MonticoreEscapeUtils {
-    protected static final CharSequenceTranslator ESCAPE_MONTICORE;
+    private static final CharSequenceTranslator ESCAPE_MONTICORE;
     static {
         final Map<CharSequence, CharSequence> escapeMonticoreMap = new HashMap<>();
         escapeMonticoreMap.put("\"", "\\\"");
@@ -40,7 +43,7 @@ public abstract class MonticoreEscapeUtils {
         );
     }
 
-    protected static final CharSequenceTranslator MONTICORE_UNESCAPE;
+    private static final CharSequenceTranslator MONTICORE_UNESCAPE;
     static {
         final Map<CharSequence, CharSequence> unescapeMonticoreMap = new HashMap<>();
         unescapeMonticoreMap.put("\\\"", "\"");
@@ -51,11 +54,18 @@ public abstract class MonticoreEscapeUtils {
         );
     }
 
-
+    /**
+     * @param input The string to escape.
+     * @return A new escaped string.
+     */
     public static String escapeMonticore(final String input){
         return ESCAPE_MONTICORE.translate(input);
     }
 
+    /**
+     * @param input The string to unescape.
+     * @return A new unescaped string.
+     */
     public static String unescapeMonticore(final String input){
         return MONTICORE_UNESCAPE.translate(input);
     }

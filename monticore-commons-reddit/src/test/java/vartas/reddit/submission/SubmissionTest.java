@@ -28,75 +28,78 @@ import java.util.TreeSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubmissionTest{
-    SubmissionInterface submission;
+    List<SubmissionInterface> submissions;
     @Before
     public void setUp(){
-        submission = SubmissionHelper.parse("src/test/resources/submission.sub").get(0);
+        submissions = SubmissionHelper.parse("src/test/resources/submission.sub");
     }
 
     @Test
     public void testGetAuthor(){
-        assertThat(submission.getAuthor()).isEqualTo("author");
+        assertThat(submissions.get(0).getAuthor()).isEqualTo("author");
     }
 
     @Test
     public void testgetId(){
-        assertThat(submission.getId()).isEqualTo("id");
+        assertThat(submissions.get(0).getId()).isEqualTo("id");
     }
 
     @Test
     public void testGetLinkFlairText(){
-        assertThat(submission.getLinkFlairText()).contains("linkFlairText");
+        assertThat(submissions.get(0).getLinkFlairText()).contains("linkFlairText");
+        assertThat(submissions.get(1).getLinkFlairText()).isNotPresent();
     }
 
     @Test
     public void testGetSubreddit(){
-        assertThat(submission.getSubreddit()).isEqualTo("subreddit");
+        assertThat(submissions.get(0).getSubreddit()).isEqualTo("subreddit");
     }
 
     @Test
     public void testIsNsfw(){
-        assertThat(submission.isNsfw()).isTrue();
+        assertThat(submissions.get(0).isNsfw()).isTrue();
     }
 
     @Test
     public void testIsSpoiler(){
-        assertThat(submission.isSpoiler()).isTrue();
+        assertThat(submissions.get(0).isSpoiler()).isTrue();
     }
 
     @Test
     public void testGetScore(){
-        assertThat(submission.getScore()).isEqualTo(1);
+        assertThat(submissions.get(0).getScore()).isEqualTo(1);
     }
 
     @Test
     public void testGetTitle(){
-        assertThat(submission.getTitle()).isEqualTo("title");
+        assertThat(submissions.get(0).getTitle()).isEqualTo("title");
     }
 
     @Test
     public void testGetCreated(){
-        assertThat(submission.getCreated().getTime()).isEqualTo(1L);
+        assertThat(submissions.get(0).getCreated().getTime()).isEqualTo(1L);
     }
 
     @Test
     public void testGetSelfText(){
-        assertThat(submission.getSelfText()).contains("selfText");
+        assertThat(submissions.get(0).getSelfText()).contains("selfText");
+        assertThat(submissions.get(1).getSelfText()).isNotPresent();
     }
 
     @Test
     public void testGetThumbnail(){
-        assertThat(submission.getThumbnail()).contains("thumbnail");
+        assertThat(submissions.get(0).getThumbnail()).contains("thumbnail");
+        assertThat(submissions.get(1).getThumbnail()).isNotPresent();
     }
 
     @Test
     public void testGetUrl(){
-        assertThat(submission.getUrl()).isEqualTo("url");
+        assertThat(submissions.get(0).getUrl()).isEqualTo("url");
     }
 
     @Test
     public void testGetPermalink(){
-        assertThat(submission.getPermalink()).isEqualTo("permalink");
+        assertThat(submissions.get(0).getPermalink()).isEqualTo("permalink");
     }
 
     @Test
@@ -108,5 +111,21 @@ public class SubmissionTest{
         assertThat(iterator.next().getCreated().getTime()).isEqualTo(1L);
         assertThat(iterator.next().getCreated().getTime()).isEqualTo(2L);
         assertThat(iterator.next().getCreated().getTime()).isEqualTo(3L);
+    }
+
+    @Test
+    public void testEquals(){
+        assertThat(submissions.get(0).equals(submissions.get(1))).isTrue();
+        assertThat(submissions.get(0).equals("junk")).isFalse();
+    }
+
+    @Test
+    public void testHashCode(){
+        assertThat(submissions.get(0).hashCode()).isEqualTo(submissions.get(1).hashCode());
+    }
+
+    @Test
+    public void testGetShortLink(){
+        assertThat(submissions.get(0).getShortLink()).isEqualTo("https://redd.it/id");
     }
 }
