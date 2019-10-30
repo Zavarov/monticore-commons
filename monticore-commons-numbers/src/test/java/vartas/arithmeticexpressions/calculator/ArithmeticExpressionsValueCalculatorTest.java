@@ -17,72 +17,46 @@
 
 package vartas.arithmeticexpressions.calculator;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
 import vartas.AbstractTest;
-import vartas.arithmeticexpressions._parser.ArithmeticExpressionsParser;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
     private Percentage precision = Percentage.withPercentage(10e-15);
 
-    private ASTExpression parse(String expression){
-        try{
-            ArithmeticExpressionsParser parser = new ArithmeticExpressionsParser();
-
-            Optional<ASTExpression> optional = parser.parse_String(expression);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException();
-                //fail("The parser encountered errors while parsing "+expression);
-            if(!optional.isPresent())
-                throw new IllegalArgumentException();
-                //fail("The expression couldn't be parsed");
-
-            return optional.get();
-        }catch(IOException e){
-            //fail(e.getMessage());
-            //return null;
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private BigDecimal valueOf(String expression){
-        return ArithmeticExpressionsValueCalculator.valueOf(parse(expression));
-    }
-
     //***------------------------------------------------------------------------------------------------------------***
     //***---------------------------------------------  Literals  ---------------------------------------------------***
     //***------------------------------------------------------------------------------------------------------------***
 
     @Test
-    public void testDecimal(){
+    public void testSignedNatLiteral(){
         assertThat(valueOf("1").doubleValue()).isCloseTo(1.0, precision);
-    }
-
-    @Test
-    public void testSignedDecimal(){
         assertThat(valueOf("-1").doubleValue()).isCloseTo(-1.0, precision);
     }
 
     @Test
-    public void testFloatingPoint(){
-        assertThat(valueOf("1.0").doubleValue()).isCloseTo(1.0, precision);
+    public void testSignedLongLiteral(){
+        assertThat(valueOf("1L").doubleValue()).isCloseTo(1.0, precision);
+        assertThat(valueOf("-1L").doubleValue()).isCloseTo(-1.0, precision);
     }
 
     @Test
-    public void testSignedFloatingPoint(){
+    public void testSignedDoubleLiteral(){
+        assertThat(valueOf("1.0").doubleValue()).isCloseTo(1.0, precision);
         assertThat(valueOf("-1.0").doubleValue()).isCloseTo(-1.0, precision);
     }
+
+    @Test
+    public void testSignedFloat(){
+        assertThat(valueOf("1.0F").doubleValue()).isCloseTo(1.0, precision);
+        assertThat(valueOf("-1.0F").doubleValue()).isCloseTo(-1.0, precision);
+    }
+
     //***------------------------------------------------------------------------------------------------------------***
     //***------------------------------------------  Expressions-----------------------------------------------------***
     //***------------------------------------------------------------------------------------------------------------***
-
     @Test
     public void testPi(){
         assertThat(valueOf("pi").doubleValue()).isCloseTo(Math.PI, precision);
@@ -198,5 +172,89 @@ public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
     @Test
     public void testTan(){
         assertThat(valueOf("tan@1.5").doubleValue()).isCloseTo(Math.tan(1.5), precision);
+    }
+
+    @Test
+    public void testArgumentViaAt(){
+        assertThat(valueOf("tan@1.5").doubleValue()).isCloseTo(Math.tan(1.5), precision);
+    }
+
+    @Test
+    public void testArgumentViaBracket(){
+        assertThat(valueOf("tan(1.5)").doubleValue()).isCloseTo(Math.tan(1.5), precision);
+    }
+
+    //***------------------------------------------------------------------------------------------------------------***
+    //***--------------------------------------  Invalid Expressions  -----------------------------------------------***
+    //***------------------------------------------------------------------------------------------------------------***
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUnknownLiteral(){
+        valueOf("junk");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testUnknownFunction(){
+        valueOf("foo()");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testFieldAccess(){
+        valueOf("B.a");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBooleanNot(){
+        valueOf("!true");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testLogicalNot(){
+        valueOf("~0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testLessEqual(){
+        valueOf("1 <= 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testGreaterEqual(){
+        valueOf("1 >= 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testLessThan(){
+        valueOf("1 < 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testGreaterThan(){
+        valueOf("1 > 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testEquals(){
+        valueOf("1 == 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testNotEquals(){
+        valueOf("1 != 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBooleanAnd(){
+        valueOf("1 && 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBooleanOr(){
+        valueOf("1 || 0");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testConditional(){
+        valueOf("1 > 0 ? 2 : 3");
     }
 }

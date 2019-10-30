@@ -17,13 +17,44 @@
 
 package vartas;
 
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.se_rwth.commons.logging.Log;
 import org.junit.BeforeClass;
+import vartas.arithmeticexpressions._parser.ArithmeticExpressionsParser;
+import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 public abstract class AbstractTest {
     @BeforeClass
     public static void setUpClass(){
         Log.initWARN();
         Log.enableFailQuick(false);
+    }
+
+    public static ASTExpression parse(String expression){
+        try{
+            ArithmeticExpressionsParser parser = new ArithmeticExpressionsParser();
+
+            Optional<ASTExpression> optional = parser.parse_String(expression);
+            if(parser.hasErrors())
+                throw new IllegalArgumentException();
+            //fail("The parser encountered errors while parsing "+expression);
+            if(!optional.isPresent())
+                throw new IllegalArgumentException();
+            //fail("The expression couldn't be parsed");
+
+            return optional.get();
+        }catch(IOException e){
+            //fail(e.getMessage());
+            //return null;
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static BigDecimal valueOf(String expression){
+        return ArithmeticExpressionsValueCalculator.valueOf(parse(expression));
     }
 }

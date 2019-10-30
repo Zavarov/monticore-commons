@@ -49,6 +49,13 @@ public class CommonExpressionsValueCalculator implements CommonExpressionsVisito
     }
 
     @Override
+    public void endVisit(ASTBracketExpression node){
+        checkArgument(values.containsKey(node.getExpression()));
+
+        values.put(node, values.get(node.getExpression()));
+    }
+
+    @Override
     public void visit(ASTCallExpression node) {
         ArithmeticExpressionsPrettyPrinter prettyPrinter = new ArithmeticExpressionsPrettyPrinter(new IndentPrinter());
 

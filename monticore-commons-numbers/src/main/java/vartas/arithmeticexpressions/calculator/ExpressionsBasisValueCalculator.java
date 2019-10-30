@@ -18,15 +18,12 @@
 package vartas.arithmeticexpressions.calculator;
 
 import de.monticore.ast.ASTNode;
-import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor;
 
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 public class ExpressionsBasisValueCalculator implements ExpressionsBasisVisitor {
     public static final String E = "e";
@@ -64,12 +61,5 @@ public class ExpressionsBasisValueCalculator implements ExpressionsBasisVisitor 
                 throw new IllegalArgumentException("There is no variable with name " + name.getName());
             }
         }
-    }
-
-    @Override
-    public void endVisit(ASTLiteralExpression node) {
-        checkArgument(values.containsKey(node.getLiteral()));
-
-        values.put(node, values.get(node.getLiteral()));
     }
 }

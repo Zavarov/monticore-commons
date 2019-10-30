@@ -17,15 +17,16 @@
 
 package vartas.arithmeticexpressions.prettyprinter;
 
-import de.monticore.MCCommonLiteralsPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint2.CommonExpressionsPrettyPrinter;
+import de.monticore.expressions.prettyprint2.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
-import vartas.arithmeticexpressions._ast.ASTArithmeticExpressionsNode;
-import vartas.arithmeticexpressions._ast.ASTAtArgument;
-import vartas.arithmeticexpressions._ast.ASTBracketArgument;
+import vartas.arithmeticexpressions._ast.ASTAtExpression;
+import vartas.arithmeticexpressions._ast.ASTMethodExpression;
+import vartas.arithmeticexpressions._ast.ASTPowExpression;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsDelegatorVisitor;
+import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
 import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 
 public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDelegatorVisitor {
@@ -35,15 +36,9 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
 
         setArithmeticExpressionsVisitor(new ArithmeticExpressionSublanguagePrettyPrinter(printer));
         setCommonExpressionsVisitor(new CommonExpressionsPrettyPrinter(printer));
+        setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
         setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-        setMCCommonLiteralsVisitor(new MCCommonLiteralsPrettyPrinter(printer));
-    }
-
-    public String prettyprint(ASTArithmeticExpressionsNode node){
-        node.accept(getRealThis());
-        String content = printer.getContent();
-        printer.clearBuffer();
-        return content;
+        setMCCommonLiteralsVisitor(new TemporaryMCCommonLiteralsPrettyPrinter(printer));
     }
 
     public String prettyprint(ASTExpressionsBasisNode node){
@@ -53,7 +48,7 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
         return content;
     }
 
-    private static class ArithmeticExpressionSublanguagePrettyPrinter implements ArithmeticExpressionsVisitor {
+    private static class ArithmeticExpressionSublanguagePrettyPrinter implements ArithmeticExpressionsInheritanceVisitor {
         private ArithmeticExpressionsVisitor realThis;
         private IndentPrinter printer;
 
@@ -73,18 +68,20 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
         }
 
         @Override
-        public void visit(ASTAtArgument node){
+        public void visit(ASTAtExpression node){
             printer.print("@");
         }
 
         @Override
-        public void visit(ASTBracketArgument node){
-            printer.print("(");
+        public void handle(ASTPowExpression node){
+            node.getLeft().accept(getRealThis());
+            printer.print(" ^ ");
+            node.getRight().accept(getRealThis());
         }
 
         @Override
-        public void endVisit(ASTBracketArgument node){
-            printer.print(")");
+        public void visit(ASTMethodExpression node){
+            printer.print(node.getName());
         }
     }
 }

@@ -18,7 +18,10 @@
 package vartas.arithmeticexpressions.calculator;
 
 import de.monticore.ast.ASTNode;
-import de.monticore.literals.mccommonliterals._ast.*;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicDoubleLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicFloatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicLongLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 
 import java.math.BigDecimal;
@@ -44,52 +47,23 @@ public class MCCommonLiteralsValueCalculator implements MCCommonLiteralsVisitor 
     }
 
     @Override
-    public void visit(ASTNatLiteral node){
-        values.put(node, new BigDecimal(node.getSource()));
-    }
-
-    @Override
     public void visit(ASTSignedNatLiteral node){
-        //getSource() is bugged in 5.3.0 for negative numbers
+        //#TODO getSource() is bugged in 5.3.0 for negative numbers
         String source = (node.isNegative() ? "-" : "") + node.getDigits();
-        values.put(node, new BigDecimal(source));
-    }
-
-    @Override
-    public void visit(ASTBasicLongLiteral node){
-        //BigDecimal doesn't like the L at the end
-        String source = node.getDigits();
-
         values.put(node, new BigDecimal(source));
     }
 
     @Override
     public void visit(ASTSignedBasicLongLiteral node){
-        //getSource() is bugged in 5.3.0 for negative numbers
+        //#TODO getSource() is bugged in 5.3.0 for negative numbers
         String source = (node.isNegative() ? "-" : "") + node.getDigits();
         values.put(node, new BigDecimal(source));
     }
 
     @Override
-    public void visit(ASTBasicFloatLiteral node){
-        //BigDecimal doesn't like the F at the end
-        String source = node.getPre() + "." + node.getPost();
-
-        values.put(node, new BigDecimal(source));
-    }
-
-    @Override
     public void visit(ASTSignedBasicFloatLiteral node){
-        //getSource() is bugged in 5.3.0 for negative numbers
+        //#TODO getSource() is bugged in 5.3.0 for negative numbers
         String source = (node.isNegative() ? "-" : "") + node.getPre() + "." + node.getPost();
-        values.put(node, new BigDecimal(source));
-    }
-
-    @Override
-    public void visit(ASTBasicDoubleLiteral node){
-        //BigDecimal doesn't like the D at the end
-        String source = node.getPre() + "." + node.getPost();
-
         values.put(node, new BigDecimal(source));
     }
 

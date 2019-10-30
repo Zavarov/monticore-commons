@@ -49,7 +49,12 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
      */
     private Map<ASTNode, BigDecimal> values = new HashMap<>();
 
-    public static BigDecimal valueOf(ASTExpression expression){
+    /**
+     * @param expression the arithmetic expression that is going to be evaluated.
+     * @return the value of the expression.
+     * @throws IllegalStateException if the expression couldn't be evaluated.
+     */
+    public static BigDecimal valueOf(ASTExpression expression) throws IllegalStateException{
         ArithmeticExpressionsValueCalculator calculator = new ArithmeticExpressionsValueCalculator();
         expression.accept(calculator);
 
@@ -87,10 +92,17 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
         }
 
         @Override
-        public void endVisit(ASTSignedLiteralExpression node){
+        public void endVisit(ASTLiteralExpression node){
             checkArgument(values.containsKey(node.getSignedLiteral()));
 
             values.put(node, values.get(node.getSignedLiteral()));
+        }
+
+        @Override
+        public void endVisit(ASTAtExpression node){
+            checkArgument(values.containsKey(node.getExpression()));
+
+            values.put(node, values.get(node.getExpression()));
         }
 
         @Override
@@ -127,81 +139,81 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
 
         @Override
         public void endVisit(ASTAbsExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, value.abs());
         }
 
         @Override
         public void endVisit(ASTACosExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.acos(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTASinExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.asin(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTATanExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.atan(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTCeilExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.ceil(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTCosExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.cos(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTFloorExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.floor(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTLogExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.log10(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTLnExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.log(value.doubleValue())));
         }
@@ -230,27 +242,27 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
 
         @Override
         public void endVisit(ASTSinExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.sin(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTSqrtExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.sqrt(value.doubleValue())));
         }
 
         @Override
         public void endVisit(ASTTanExpression node) {
-            checkArgument(values.containsKey(node.getArgument().getExpression()));
+            checkArgument(values.containsKey(node.getArgument()));
 
-            BigDecimal value = values.get(node.getArgument().getExpression());
+            BigDecimal value = values.get(node.getArgument());
 
             values.put(node, BigDecimal.valueOf(Math.tan(value.doubleValue())));
         }

@@ -7,88 +7,94 @@ grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions
                                       de.monticore.literals.MCCommonLiterals{
     start Expression;
 
-    SignedLiteralExpression implements Expression<340>
-        = SignedLiteral;
+    //Simple literals only allow non-negative numeric literals
+    LiteralExpression implements Expression <340> =
+        SignedLiteral
+    ;
 
     /*================================================================================================================*/
     /*==  Arguments  =================================================================================================*/
     /*================================================================================================================*/
 
-    interface SingleArgument = Expression;
-
-    AtArgument implements SingleArgument =
+    AtExpression implements Expression =
         "@" Expression
     ;
 
-    BracketArgument implements SingleArgument =
-        "(" Expression ")"
-    ;
-
     /*================================================================================================================*/
-    /*==  Methods  ===================================================================================================*/
+    /*==  Operators  =================================================================================================*/
     /*================================================================================================================*/
 
     PowExpression implements Expression <185> =
         left:Expression operator:"^" right:Expression
     ;
 
-    RandomNumberExpression implements Expression <250> =
-        "random" "(" dice:Expression "," eyes:Expression ")"
+    /*================================================================================================================*/
+    /*==  Methods  ===================================================================================================*/
+    /*================================================================================================================*/
+
+    interface MethodExpression extends Expression;
+
+    astrule MethodExpression =
+        name:String
     ;
 
-    AbsExpression implements Expression <250> =
-        "abs" argument:SingleArgument
+    RandomNumberExpression implements MethodExpression <250> =
+        name:"random" "(" dice:Expression "," eyes:Expression ")"
     ;
 
-    ACosExpression implements Expression <250> =
-        "acos" argument:SingleArgument
+    AbsExpression implements MethodExpression <250> =
+        name:"abs" argument:Expression
     ;
 
-    ASinExpression implements Expression <250> =
-        "asin" argument:SingleArgument
+    ACosExpression implements MethodExpression <250> =
+        name:"acos" argument:Expression
     ;
 
-    ATanExpression implements Expression <250> =
-        "atan" argument:SingleArgument
+    ASinExpression implements MethodExpression <250> =
+        name:"asin" argument:Expression
     ;
 
-    CeilExpression implements Expression <250> =
-        "ceil" argument:SingleArgument
+    ATanExpression implements MethodExpression <250> =
+        name:"atan" argument:Expression
     ;
 
-    CosExpression implements Expression <250> =
-        "cos" argument:SingleArgument
+    CeilExpression implements MethodExpression <250> =
+        name:"ceil" argument:Expression
     ;
 
-    FloorExpression implements Expression <250> =
-        "floor" argument:SingleArgument
+    CosExpression implements MethodExpression <250> =
+        name:"cos" argument:Expression
     ;
 
-    LogExpression implements Expression <250> =
-        "log" argument:SingleArgument
+    FloorExpression implements MethodExpression <250> =
+        name:"floor" argument:Expression
     ;
 
-    LnExpression implements Expression <250> =
-        "ln" argument:SingleArgument
+    LogExpression implements MethodExpression <250> =
+        name:"log" argument:Expression
     ;
 
-    MaxExpression implements Expression <250> =
-        "max" "(" left:Expression "," right:Expression ")"
+    LnExpression implements MethodExpression <250> =
+        name:"ln" argument:Expression
     ;
 
-    MinExpression implements Expression <250> =
-        "min" "(" left:Expression "," right:Expression ")"
+    MaxExpression implements MethodExpression <250> =
+        name:"max" "(" left:Expression "," right:Expression ")"
     ;
 
-    SinExpression implements Expression <250> =
-        "sin" argument:SingleArgument
+    MinExpression implements MethodExpression <250> =
+        name:"min" "(" left:Expression "," right:Expression ")"
     ;
 
-    SqrtExpression implements Expression <250> =
-        "sqrt" argument:SingleArgument
+    SinExpression implements MethodExpression <250> =
+        name:"sin" argument:Expression
     ;
 
-    TanExpression implements Expression <250> =
-        "tan" argument:SingleArgument
+    SqrtExpression implements MethodExpression <250> =
+        name:"sqrt" argument:Expression
+    ;
+
+    TanExpression implements MethodExpression <250> =
+        name:"tan" argument:Expression
     ;
 }
