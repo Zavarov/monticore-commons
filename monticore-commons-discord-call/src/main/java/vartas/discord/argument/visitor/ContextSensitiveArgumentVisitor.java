@@ -28,7 +28,11 @@ import vartas.arithmeticexpressions.calculator.ExpressionsBasisValueCalculator;
 import vartas.discord.argument._ast.*;
 import vartas.discord.argument._visitor.ArgumentVisitor;
 
-
+/**
+ * This class solves the conflict of ambiguous calls.<br>
+ * For example, a date could both be treated as a date and an arithmetic expression
+ * in which case, both branches are visited.
+ */
 public class ContextSensitiveArgumentVisitor implements ArgumentVisitor {
     protected ArgumentVisitor realThis = this;
 
@@ -61,20 +65,6 @@ public class ContextSensitiveArgumentVisitor implements ArgumentVisitor {
         m2.setRight(year);
         argument.setExpression(m2);
         ArgumentVisitor.super.handle(argument);
-    }
-
-    @Override
-    public void handle(ASTOnlineStatusArgument ast){
-        //the name of the online status is also an English word
-        ArgumentVisitor.super.handle(ast);
-        handle(ast.getOnlineStatus().getName());
-    }
-
-    @Override
-    public void handle(ASTIntervalArgument ast){
-        //the name of the interval is also an English word
-        ArgumentVisitor.super.handle(ast);
-        handle(ast.getInterval().getName());
     }
 
     public void handle(String value){
