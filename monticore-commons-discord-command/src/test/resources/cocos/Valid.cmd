@@ -1,6 +1,3 @@
-package vartas.discord.bot.exec.example;
-prefix example;
-
 command {
     test @ guild, attachment{
              class : TestCommand

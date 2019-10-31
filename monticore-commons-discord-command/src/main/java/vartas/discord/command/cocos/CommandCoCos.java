@@ -20,18 +20,17 @@ package vartas.discord.command.cocos;
 import vartas.discord.command._cocos.CommandCoCoChecker;
 
 public abstract class CommandCoCos {
-    protected CommandCoCos(){}
 
     public static CommandCoCoChecker getCheckerForAllCoCos(){
         CommandCoCoChecker checker = new CommandCoCoChecker();
 
-        checker.addCoCo(new AtMostOneGuildRequirementCoCo());
-        checker.addCoCo(new AtMostOneAttachmentRequirementCoCo());
+        checker.addCoCo(new AtMostOneGuildCoCo());
+        checker.addCoCo(new AtMostOneAttachmentCoCo());
         checker.addCoCo(new AtMostOneParameterAttributeCoCo());
         checker.addCoCo(new AtMostOnePermissionAttributeCoCo());
         checker.addCoCo(new AtMostOneRankAttributeCoCo());
         checker.addCoCo(new ClassNameStartsWithCapitalLetterCoCo());
-        checker.addCoCo(new ExactlyOneClassNameAttributeCoCo());
+        checker.addCoCo(new ExactlyOneClassNameCoCo());
         checker.addCoCo(new PermissionOnlyInGuildCoCo());
         checker.addCoCo(new RoleParameterRequiresGuildCoCo());
         checker.addCoCo(new TextChannelParameterRequiresGuildCoCo());

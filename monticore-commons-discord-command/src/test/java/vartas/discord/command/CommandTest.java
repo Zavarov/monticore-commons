@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command.command;
+package vartas.discord.command;
 
 import net.dv8tion.jda.api.Permission;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.rank.RankType;
-import vartas.discord.command.AbstractTest;
-import vartas.discord.command.CommandHelper;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandSymbol;
@@ -46,7 +44,12 @@ public class CommandTest extends AbstractTest {
     }
 
     @Test
-    public void testIsInGuild(){
+    public void testRequiresAttachment(){
+        assertThat(command.requiresAttachment()).isTrue();
+    }
+
+    @Test
+    public void testRequiresGuild(){
         assertThat(command.requiresGuild()).isTrue();
     }
 

@@ -38,10 +38,8 @@ public abstract class CommandHelper {
         try{
             CommandParser parser = new CommandParser();
             Optional<ASTCommandArtifact> commands = parser.parse(filePath);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
             if(!commands.isPresent())
-                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
+                throw new IllegalArgumentException("The command file couldn't be parsed");
 
             return commands.get();
         }catch(IOException e){

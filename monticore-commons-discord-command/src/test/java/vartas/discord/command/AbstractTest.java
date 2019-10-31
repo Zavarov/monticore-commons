@@ -29,6 +29,7 @@ public abstract class AbstractTest {
     @BeforeClass
     public static void setUpClass(){
         Log.initWARN();
+        Log.enableFailQuick(false);
     }
 
     protected CommandGlobalScope createGlobalScope(){

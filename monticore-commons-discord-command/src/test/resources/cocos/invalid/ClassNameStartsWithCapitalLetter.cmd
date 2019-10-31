@@ -1,0 +1,5 @@
+command {
+    test{
+             class : testCommand
+    }
+}

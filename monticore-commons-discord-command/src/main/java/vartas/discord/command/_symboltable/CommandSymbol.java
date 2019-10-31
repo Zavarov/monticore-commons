@@ -22,10 +22,12 @@ import vartas.discord.bot.rank.RankType;
 import vartas.discord.bot.rank._ast.ASTRankType;
 import vartas.discord.command._ast.ASTClassNameAttribute;
 import vartas.discord.command._ast.ASTParameterAttribute;
+import vartas.discord.command._ast.ASTPermissionAttribute;
+import vartas.discord.command._ast.ASTRankAttribute;
 import vartas.discord.parameter._ast.ASTParameter;
 import vartas.discord.permission._ast.ASTPermission;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,49 +39,56 @@ CommandSymbol extends CommandSymbolTOP{
     }
 
     public String getClassName(){
-        Optional<ClassNameAttributeSymbol> symbol = getSpannedScope().resolveClassNameAttributeLocally("class");
-        return symbol
-                .flatMap(ClassNameAttributeSymbol::getAstNode)
+        return getSpannedScope().getLocalClassNameAttributeSymbols()
+                .stream()
+                .map(ClassNameAttributeSymbol::getAstNode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(ASTClassNameAttribute::getValue)
+                .findAny()
                 .orElseThrow(() -> new IllegalStateException("This command doesn't have a class name specified."));
     }
 
     public List<RankType> getValidRanks(){
-        Optional<RankAttributeSymbol> symbol = getSpannedScope().resolveRankAttributeLocally("rank");
-
-        return symbol
-                .flatMap(RankAttributeSymbol::getAstNode)
-                .map(s -> s.getRankTypeList()
-                        .stream()
-                        .map(ASTRankType::getRankType)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        return getSpannedScope().getLocalRankAttributeSymbols()
+                .stream()
+                .map(RankAttributeSymbol::getAstNode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(ASTRankAttribute::getRankTypeList)
+                .flatMap(Collection::stream)
+                .map(ASTRankType::getRankType)
+                .collect(Collectors.toList());
     }
 
     public List<Permission> getRequiredPermissions(){
-        Optional<PermissionAttributeSymbol> symbol = getSpannedScope().resolvePermissionAttributeLocally("permission");
-        return symbol
-                .flatMap(PermissionAttributeSymbol::getAstNode)
-                .map(s -> s.getPermissionList()
-                        .stream()
-                        .map(ASTPermission::getPermissionType)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        return getSpannedScope().getLocalPermissionAttributeSymbols()
+                .stream()
+                .map(PermissionAttributeSymbol::getAstNode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(ASTPermissionAttribute::getPermissionList)
+                .flatMap(Collection::stream)
+                .map(ASTPermission::getPermissionType)
+                .collect(Collectors.toList());
     }
 
     public List<ASTParameter> getParameters(){
-        Optional<ParameterAttributeSymbol> symbol = getSpannedScope().resolveParameterAttributeLocally("parameter");
-        return symbol
-                .flatMap(ParameterAttributeSymbol::getAstNode)
+        return getSpannedScope().getLocalParameterAttributeSymbols()
+                .stream()
+                .map(ParameterAttributeSymbol::getAstNode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(ASTParameterAttribute::getParameterList)
-                .orElse(Collections.emptyList());
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public boolean requiresGuild(){
-        return getSpannedScope().resolveGuildRestrictionLocally("guild").isPresent();
+        return !getSpannedScope().getLocalGuildRestrictionSymbols().isEmpty();
     }
 
     public boolean requiresAttachment(){
-        return getSpannedScope().resolveAttachmentRestrictionLocally("attachment").isPresent();
+        return !getSpannedScope().getLocalAttachmentRestrictionSymbols().isEmpty();
     }
 }
