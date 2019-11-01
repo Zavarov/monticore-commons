@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandLanguage;
 import vartas.discord.command.cocos.*;
@@ -41,8 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class CoCoTest extends AbstractTest {
     protected static String baseDir = "src/test/resources/cocos/";
-    private ASTCommandArtifact valid;
-    private ASTCommandArtifact invalid;
+    private CommandGlobalScope scope;
 
     @Parameters
     public static Collection<Object[]> data(){
@@ -131,10 +129,7 @@ public class CoCoTest extends AbstractTest {
     public void setUp(){
         ModelPath modelPath = new ModelPath(Paths.get(baseDir));
         CommandLanguage language = new CommandLanguage();
-        CommandGlobalScope scope = new CommandGlobalScope(modelPath, language);
-
-        valid = CommandHelper.parse(scope, baseDir+"Valid.cmd");
-        invalid = CommandHelper.parse(scope, baseDir+"invalid/"+fileName);
+        scope = new CommandGlobalScope(modelPath, language);
     }
 
     @After
@@ -144,13 +139,13 @@ public class CoCoTest extends AbstractTest {
 
     @Test
     public void testValid(){
-        CommandCoCos.getCheckerForAllCoCos().checkAll(valid);
+        CommandHelper.parse(scope, baseDir+"Valid.cmd");
         checkValid();
     }
 
     @Test
     public void testInvalid(){
-        CommandCoCos.getCheckerForAllCoCos().checkAll(invalid);
+        CommandHelper.parse(scope, baseDir+"invalid/"+fileName);
         checkInvalid();
     }
 

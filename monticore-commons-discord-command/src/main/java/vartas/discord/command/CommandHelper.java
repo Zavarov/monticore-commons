@@ -23,6 +23,7 @@ import vartas.discord.command._parser.CommandParser;
 import vartas.discord.command._symboltable.CommandArtifactScope;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandSymbolTableCreatorDelegator;
+import vartas.discord.command.cocos.CommandCoCos;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -31,7 +32,12 @@ public abstract class CommandHelper {
     public static ASTCommandArtifact parse(CommandGlobalScope scope, String filePath) throws IllegalArgumentException{
         ASTCommandArtifact ast = parseArtifact(filePath);
         buildSymbolTable(scope, ast);
+        checkCoCos(ast);
         return ast;
+    }
+
+    private static void checkCoCos(ASTCommandArtifact ast){
+        CommandCoCos.getCheckerForAllCoCos().checkAll(ast);
     }
 
     private static ASTCommandArtifact parseArtifact(String filePath){
