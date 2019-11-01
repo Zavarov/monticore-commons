@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.arithmeticexpressions.prettyprinter;
+package vartas.arithmeticexpressions.prettyprint;
 
 import de.monticore.MCCommonLiteralsPrettyPrinter;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicDoubleLiteral;
