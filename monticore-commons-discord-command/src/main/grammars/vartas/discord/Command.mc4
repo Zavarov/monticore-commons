@@ -12,24 +12,34 @@ grammar Command extends vartas.discord.Permission,
         ("prefix" prefix:(Name& || ".")+ ";")?
         "command" "{"
             Command*
-        "}";
+        "}"
+    ;
 
     symbol scope Command =
-        Name& ("@" (Restriction || ",")+ )? "{"
+        Name& ("@" (RestrictionName || ",")+ )? "{"
             Attribute*
-        "}";
+        "}"
+    ;
+
+    /*=========================================================*/
+    /*=== Restriction                                       ===*/
+    /*=========================================================*/
+
 
     /**
      * A restriction imposes a condition on a command.
-     * The command will then be executed if and only if this condition is satisfied.
+     * The command will be executed if and only if this condition is satisfied.
      */
-    interface Restriction;
+    symbol RestrictionName = Restriction;
 
-    symbol GuildRestriction implements Restriction =
-        name:"guild";
+    enum Restriction =
+        GUILD      : "guild"      |
+        ATTACHMENT : "attachment"
+    ;
 
-    symbol AttachmentRestriction implements Restriction =
-        name:"attachment";
+    /*=========================================================*/
+    /*=== Attribute                                         ===*/
+    /*=========================================================*/
 
     /**
      * An attribute of a command provides are more specific description of the command.
@@ -37,15 +47,29 @@ grammar Command extends vartas.discord.Permission,
      */
     interface Attribute;
 
-    symbol ClassNameAttribute implements Attribute =
-        name:"class" ":" value:Name;
+    symbol ClassAttribute implements Attribute =
+        "class" ":" Name&
+    ;
 
-    symbol PermissionAttribute implements Attribute =
-        name:"permission" ":" (Permission || ",")+;
+    PermissionAttributeAdapter implements Attribute =
+        "permission" ":" (PermissionName || ",")+
+    ;
 
-    symbol ParameterAttribute implements Attribute =
-         name:"parameter" ":" (Parameter || ",")+;
+    ParameterAttributeAdapter implements Attribute =
+        "parameter" ":" (ParameterVariable || ",")+
+    ;
 
-    symbol RankAttribute implements Attribute =
-         name:"rank" ":" (RankType || ",")+;
+    RankAttributeAdapter implements Attribute =
+        "rank" ":" (RankName || ",")+
+    ;
+
+    /*=========================================================*/
+    /*=== AST Rules                                         ===*/
+    /*=========================================================*/
+
+    astrule RestrictionName =
+        method public String getName(){
+            return getRestriction().name();
+        }
+    ;
 }

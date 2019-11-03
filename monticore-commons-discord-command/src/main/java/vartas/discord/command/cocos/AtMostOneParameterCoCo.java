@@ -19,24 +19,25 @@ package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
-import vartas.discord.command._ast.ASTPermissionAttribute;
+import vartas.discord.command._ast.ASTParameterAttributeAdapter;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
-import vartas.discord.command._visitor.CommandVisitor;
+import vartas.discord.command._visitor.CommandInheritanceVisitor;
 
-public class AtMostOnePermissionAttributeCoCo implements CommandASTCommandCoCo, CommandVisitor {
+public class AtMostOneParameterCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
     private int counter;
-    public static final String ERROR_MESSAGE = "%s: The command can have at most one permission attribute.";
+    public static final String ERROR_MESSAGE = "A command can have at most one parameter attribute.";
     @Override
     public void check(ASTCommand node) {
         counter = 0;
+
         node.accept(getRealThis());
 
         if(counter > 1)
-            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
+            Log.error(ERROR_MESSAGE);
     }
 
     @Override
-    public void visit(ASTPermissionAttribute node){
-        counter++;
+    public void visit(ASTParameterAttributeAdapter node){
+            ++counter;
     }
 }

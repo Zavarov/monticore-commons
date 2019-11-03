@@ -17,29 +17,20 @@
 
 package vartas.discord.command;
 
-import de.monticore.io.paths.ModelPath;
-import de.se_rwth.commons.logging.Log;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.command._symboltable.CommandGlobalScope;
-import vartas.discord.command._symboltable.CommandLanguage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
-public class CommandHelperTest {
+public class CommandHelperTest extends AbstractTest{
     CommandGlobalScope scope;
     File target;
     @Before
     public void setUp() throws IOException {
-        Log.enableFailQuick(false);
-        ModelPath modelPath = new ModelPath(Paths.get("baseDir"));
-        CommandLanguage language = new CommandLanguage();
-
-        scope = new CommandGlobalScope(modelPath, language);
         target = new File("target/test/resources/directory/junk.com");
         FileUtils.deleteDirectory(target.getParentFile());
     }

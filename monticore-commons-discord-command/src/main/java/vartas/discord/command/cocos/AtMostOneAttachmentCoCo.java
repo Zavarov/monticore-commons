@@ -18,25 +18,29 @@
 package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.command._ast.ASTAttachmentRestriction;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._ast.ASTRestriction;
+import vartas.discord.command._ast.ASTRestrictionName;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
-import vartas.discord.command._visitor.CommandVisitor;
+import vartas.discord.command._visitor.CommandInheritanceVisitor;
 
-public class AtMostOneAttachmentCoCo implements CommandASTCommandCoCo, CommandVisitor {
+public class AtMostOneAttachmentCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
     protected int counter;
-    public static final String ERROR_MESSAGE = "%s: The command can have at most one attachment restriction.";
+    public static final String ERROR_MESSAGE = "A command can have at most one attachment restriction.";
     @Override
     public void check(ASTCommand node) {
         counter = 0;
+
         node.accept(getRealThis());
+
         if(counter > 1)
-            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
+            Log.error(ERROR_MESSAGE);
 
     }
 
     @Override
-    public void visit(ASTAttachmentRestriction node){
-        counter++;
+    public void visit(ASTRestrictionName node){
+        if(node.getRestriction() == ASTRestriction.ATTACHMENT)
+            ++counter;
     }
 }

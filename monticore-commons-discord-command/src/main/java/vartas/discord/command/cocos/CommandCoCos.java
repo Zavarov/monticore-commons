@@ -26,9 +26,9 @@ public abstract class CommandCoCos {
 
         checker.addCoCo(new AtMostOneGuildCoCo());
         checker.addCoCo(new AtMostOneAttachmentCoCo());
-        checker.addCoCo(new AtMostOneParameterAttributeCoCo());
-        checker.addCoCo(new AtMostOnePermissionAttributeCoCo());
-        checker.addCoCo(new AtMostOneRankAttributeCoCo());
+        checker.addCoCo(new AtMostOneParameterCoCo());
+        checker.addCoCo(new AtMostOnePermissionCoCo());
+        checker.addCoCo(new AtMostOneRankCoCo());
         checker.addCoCo(new ClassNameStartsWithCapitalLetterCoCo());
         checker.addCoCo(new ExactlyOneClassNameCoCo());
         checker.addCoCo(new PermissionOnlyInGuildCoCo());

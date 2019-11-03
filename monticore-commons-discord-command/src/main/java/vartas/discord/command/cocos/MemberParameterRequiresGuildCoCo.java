@@ -19,26 +19,39 @@ package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._ast.ASTRestriction;
+import vartas.discord.command._ast.ASTRestrictionName;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
-import vartas.discord.command._visitor.CommandVisitor;
-import vartas.discord.parameter._ast.ASTMemberParameter;
+import vartas.discord.command._visitor.CommandInheritanceVisitor;
+import vartas.discord.parameter._ast.ASTParameter;
+import vartas.discord.parameter._ast.ASTParameterVariable;
 
-public class MemberParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a member as a parameter.";
+public class MemberParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
+    public static final String ERROR_MESSAGE = "Only guild commands can have member parameters.";
+
     protected boolean inGuild;
-    protected String name;
+    protected boolean hasMember;
 
     @Override
     public void check(ASTCommand node) {
-        inGuild = node.getCommandSymbol().requiresGuild();
-        name = node.getCommandSymbol().getClassName();
+        inGuild = false;
+        hasMember = false;
 
         node.accept(getRealThis());
+
+        if(hasMember && !inGuild)
+            Log.error(ERROR_MESSAGE);
     }
 
     @Override
-    public void visit(ASTMemberParameter node){
-        if(!inGuild)
-            Log.error(String.format(ERROR_MESSAGE, name));
+    public void visit(ASTRestrictionName node){
+        if(node.getRestriction() == ASTRestriction.GUILD)
+            inGuild = true;
+    }
+
+    @Override
+    public void visit(ASTParameterVariable node){
+        if(node.getParameter() == ASTParameter.MEMBER)
+            hasMember = true;
     }
 }

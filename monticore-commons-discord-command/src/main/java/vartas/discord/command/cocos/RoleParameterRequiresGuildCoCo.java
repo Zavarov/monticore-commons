@@ -19,26 +19,39 @@ package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._ast.ASTRestriction;
+import vartas.discord.command._ast.ASTRestrictionName;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
-import vartas.discord.command._visitor.CommandVisitor;
-import vartas.discord.parameter._ast.ASTRoleParameter;
+import vartas.discord.command._visitor.CommandInheritanceVisitor;
+import vartas.discord.parameter._ast.ASTParameter;
+import vartas.discord.parameter._ast.ASTParameterVariable;
 
-public class RoleParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandVisitor {
-    public static final String ERROR_MESSAGE = "%s: The command must be restricted to a guild if it has a role as a parameter.";
+public class RoleParameterRequiresGuildCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
+    public static final String ERROR_MESSAGE = "Only guild commands can have role parameters.";
+
     protected boolean inGuild;
-    protected String name;
+    protected boolean hasRole;
 
     @Override
     public void check(ASTCommand node) {
-        inGuild = node.getCommandSymbol().requiresGuild();
-        name = node.getCommandSymbol().getClassName();
+        inGuild = false;
+        hasRole = false;
 
         node.accept(getRealThis());
+
+        if(hasRole && !inGuild)
+            Log.error(ERROR_MESSAGE);
     }
 
     @Override
-    public void visit(ASTRoleParameter node){
-        if(!inGuild)
-            Log.error(String.format(ERROR_MESSAGE, name));
+    public void visit(ASTRestrictionName node){
+        if(node.getRestriction() == ASTRestriction.GUILD)
+            inGuild = true;
+    }
+
+    @Override
+    public void visit(ASTParameterVariable node){
+        if(node.getParameter() == ASTParameter.ROLE)
+            hasRole = true;
     }
 }

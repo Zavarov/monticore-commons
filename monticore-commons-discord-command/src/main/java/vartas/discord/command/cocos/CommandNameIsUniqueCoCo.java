@@ -17,23 +17,30 @@
 
 package vartas.discord.command.cocos;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._cocos.CommandASTCommandArtifactCoCo;
-import vartas.discord.command._symboltable.CommandSymbol;
+import vartas.discord.command._visitor.CommandVisitor;
 
-public class CommandNameIsUniqueCoCo implements CommandASTCommandArtifactCoCo {
-    public static final String ERROR_MESSAGE = "All command names have to be unique.";
+public class CommandNameIsUniqueCoCo implements CommandASTCommandArtifactCoCo, CommandVisitor {
+    public static final String ERROR_MESSAGE = "The command name '%s' appears more than once.";
+    protected Multiset<String> commandNames;
     @Override
     public void check(ASTCommandArtifact node) {
-        long count = node.getCommandList()
-                .stream()
-                .map(ASTCommand::getCommandSymbol)
-                .map(CommandSymbol::getName)
-                .distinct()
-                .count();
-        if(count != node.getCommandList().size())
-            Log.error(ERROR_MESSAGE);
+        commandNames = HashMultiset.create();
+
+        node.accept(getRealThis());
+
+        for(Multiset.Entry<String> entry : commandNames.entrySet())
+            if(entry.getCount() > 1)
+                Log.error(String.format(ERROR_MESSAGE, entry.getElement()));
+    }
+
+    @Override
+    public void visit(ASTCommand node){
+        commandNames.add(node.getName());
     }
 }

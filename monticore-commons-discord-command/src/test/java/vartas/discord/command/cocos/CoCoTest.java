@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.discord.command;
+package vartas.discord.command.cocos;
 
 import de.monticore.io.paths.ModelPath;
 import de.se_rwth.commons.logging.Finding;
@@ -27,9 +27,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import vartas.discord.command.AbstractTest;
+import vartas.discord.command.CommandHelper;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandLanguage;
-import vartas.discord.command.cocos.*;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -48,27 +49,27 @@ public class CoCoTest extends AbstractTest {
             {
                 "AtMostOneAttachment.cmd",
                 AtMostOneAttachmentCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "AtMostOneGuild.cmd",
                 AtMostOneGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
-                "AtMostOneParameterAttribute.cmd",
-                AtMostOneParameterAttributeCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                "AtMostOneParameter.cmd",
+                AtMostOneParameterCoCo.ERROR_MESSAGE,
+                ""
             },
             {
-                "AtMostOnePermissionAttribute.cmd",
-                AtMostOnePermissionAttributeCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                "AtMostOnePermission.cmd",
+                AtMostOnePermissionCoCo.ERROR_MESSAGE,
+                ""
             },
             {
-                "AtMostOneRankAttribute.cmd",
-                AtMostOneRankAttributeCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                "AtMostOneRank.cmd",
+                AtMostOneRankCoCo.ERROR_MESSAGE,
+                ""
             },
             {
                 "ClassNameIsUnique.cmd",
@@ -83,37 +84,37 @@ public class CoCoTest extends AbstractTest {
             {
                 "CommandNameIsUnique.cmd",
                 CommandNameIsUniqueCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                "test"
             },
             {
                 "ExactlyOneClassName.cmd",
                 ExactlyOneClassNameCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "MemberParameterRequiresGuild.cmd",
                 MemberParameterRequiresGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "MessageParameterRequiresGuild.cmd",
                 MessageParameterRequiresGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "PermissionOnlyInGuild.cmd",
                 PermissionOnlyInGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "RoleParameterRequiresGuild.cmd",
                 RoleParameterRequiresGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             },
             {
                 "TextChannelParameterRequiresGuild.cmd",
                 TextChannelParameterRequiresGuildCoCo.ERROR_MESSAGE,
-                "TestCommand"
+                ""
             }
         });
     }

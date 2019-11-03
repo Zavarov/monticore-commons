@@ -19,6 +19,7 @@ package vartas.discord.command;
 
 import de.monticore.io.paths.ModelPath;
 import de.se_rwth.commons.logging.Log;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandLanguage;
@@ -26,15 +27,17 @@ import vartas.discord.command._symboltable.CommandLanguage;
 import java.nio.file.Paths;
 
 public abstract class AbstractTest {
+    protected CommandGlobalScope scope;
     @BeforeClass
     public static void setUpClass(){
         Log.initWARN();
         Log.enableFailQuick(false);
     }
 
-    protected CommandGlobalScope createGlobalScope(){
-        ModelPath path = new ModelPath(Paths.get(""));
+    @Before
+    public void initScope(){
+        ModelPath modelPath = new ModelPath(Paths.get("baseDir"));
         CommandLanguage language = new CommandLanguage();
-        return new CommandGlobalScope(path, language);
+        scope = new CommandGlobalScope(modelPath, language);
     }
 }

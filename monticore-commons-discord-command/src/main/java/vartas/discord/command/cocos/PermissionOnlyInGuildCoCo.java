@@ -19,15 +19,37 @@ package vartas.discord.command.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
+import vartas.discord.command._ast.ASTRestriction;
+import vartas.discord.command._ast.ASTRestrictionName;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
-import vartas.discord.command._symboltable.CommandSymbol;
+import vartas.discord.command._visitor.CommandInheritanceVisitor;
+import vartas.discord.permission._ast.ASTPermission;
 
-public class PermissionOnlyInGuildCoCo implements CommandASTCommandCoCo {
-    public static final String ERROR_MESSAGE = "%s: The command that requires permissions must be restricted to a guild";
+public class PermissionOnlyInGuildCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
+    public static final String ERROR_MESSAGE = "Only guild commands can have permissions.";
+
+    protected boolean inGuild;
+    protected boolean hasPermission;
+
     @Override
     public void check(ASTCommand node) {
-        CommandSymbol symbol = node.getCommandSymbol();
-        if(!symbol.requiresGuild() && symbol.getRequiredPermissions().size() > 0)
-            Log.error(String.format(ERROR_MESSAGE, node.getCommandSymbol().getClassName()));
+        inGuild = false;
+        hasPermission = false;
+
+        node.accept(getRealThis());
+
+        if(hasPermission && !inGuild)
+            Log.error(ERROR_MESSAGE);
+    }
+
+    @Override
+    public void visit(ASTRestrictionName node){
+        if(node.getRestriction() == ASTRestriction.GUILD)
+            inGuild = true;
+    }
+
+    @Override
+    public void visit(ASTPermission node){
+        hasPermission = true;
     }
 }
