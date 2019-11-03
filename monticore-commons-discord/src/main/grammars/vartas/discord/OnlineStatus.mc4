@@ -4,59 +4,35 @@ package vartas.discord;
  * This grammar defines the syntax of the different online statuses of the bot.
  */
 component grammar OnlineStatus{
-    abstract OnlineStatus;
+    symbol OnlineStatusName =
+        OnlineStatus
+    ;
 
     /*=========================================================*/
-    /*=======================  Symbols  =======================*/
+    /*========================  Enum  =========================*/
     /*=========================================================*/
 
-    symbol Online extends OnlineStatus =
-        name:"online";
-
-    symbol Invisible extends OnlineStatus =
-        name:"invisible";
-
-    symbol Busy extends OnlineStatus =
-        name:"busy";
-
-    symbol Idle extends OnlineStatus =
-        name:"idle";
-
+    enum OnlineStatus =
+        ONLINE         : "online"    |
+        IDLE           : "idle"      |
+        DO_NOT_DISTURB : "busy"      |
+        INVISIBLE      : "invisible" |
+        OFFLINE        : "offline"
+    ;
 
     /*=========================================================*/
     /*======================= AST RULES =======================*/
     /*=========================================================*/
 
-    astrule OnlineStatus =
-        method public net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
-            throw new UnsupportedOperationException("Please specify an online status corresponding to this type in the grammar.");
-        }
+    astrule OnlineStatusName =
         method public String getName(){
-            throw new UnsupportedOperationException("Please specify a name for this online status.");
+            return getOnlineStatus().name();
         }
     ;
 
-    astrule Online =
-        method public net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.api.OnlineStatus.ONLINE;
-        }
-    ;
-
-    astrule Invisible =
-        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.api.OnlineStatus.INVISIBLE;
-        }
-    ;
-
-    astrule Busy =
-        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.api.OnlineStatus.DO_NOT_DISTURB;
-        }
-    ;
-
-    astrule Idle =
-        method net.dv8tion.jda.api.OnlineStatus getOnlineStatusType(){
-            return net.dv8tion.jda.api.OnlineStatus.IDLE;
+    symbolrule OnlineStatusName =
+        method public net.dv8tion.jda.api.OnlineStatus getOnlineStatus(){
+            return net.dv8tion.jda.api.OnlineStatus.valueOf(getName());
         }
     ;
 }

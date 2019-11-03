@@ -5,315 +5,67 @@ package vartas.discord;
  * For each symbol, there is also a method that returns the type in JDA.
  */
 component grammar Permission{
-    interface Permission;
+    symbol PermissionName =
+        Permission
+    ;
 
-    astrule Permission =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            throw new UnsupportedOperationException("Please specify a permission corresponding to this type in the grammar.");
-        }
+    /*=========================================================*/
+    /*=== Enum                                              ===*/
+    /*=========================================================*/
 
+    enum Permission =
+        CREATE_INSTANT_INVITE       : "create instant invite"           |
+        KICK_MEMBERS                : "kick members"                    |
+        BAN_MEMBERS                 : "ban members"                     |
+        ADMINISTRATOR               : "administrator"                   |
+        MANAGE_CHANNEL              : "manage channels"                 |
+        MANAGE_SERVER               : "manage server"                   |
+        MESSAGE_ADD_REACTION        : "add reactions"                   |
+        VIEW_AUDIT_LOGS             : "view audit logs"                 |
+        PRIORITY_SPEAKER            : "priority speaker"                |
+
+        VIEW_CHANNEL                : "view channels"                   |
+
+        MESSAGE_READ                : "read messages"                   |
+        MESSAGE_WRITE               : "send messages"                   |
+        MESSAGE_TTS                 : "text to speech"                  |
+        MESSAGE_MANAGE              : "manage messages"                 |
+        MESSAGE_EMBED_LINKS         : "embed links"                     |
+        MESSAGE_ATTACH_FILES        : "attach files"                    |
+        MESSAGE_HISTORY             : "read history"                    |
+        MESSAGE_MENTION_EVERYONE    : "mention everyone"                |
+        MESSAGE_EXT_EMOJI           : "external emojis"                 |
+
+        VOICE_STREAM                : "voice stream"                    |
+        VOICE_CONNECT               : "voice connect"                   |
+        VOICE_SPEAK                 : "voice speak"                     |
+        VOICE_MUTE_OTHERS           : "voice mute others"               |
+        VOICE_DEAF_OTHERS           : "voice deaf others"               |
+        VOICE_MOVE_OTHERS           : "voice move others"               |
+        VOICE_USE_VAD               : "use voice activity detection"    |
+
+        NICKNAME_CHANGE             : "change nickname"                 |
+        NICKNAME_MANAGE             : "manage nicknames"                |
+
+        MANAGE_ROLES                : "manage roles"                    |
+        MANAGE_PERMISSIONS          : "manage permissions"              |
+        MANAGE_WEBHOOKS             : "manage webhooks"                 |
+        MANAGE_EMOTES               : "manage emotes"
+    ;
+
+    /*=========================================================*/
+    /*=== AST Rules                                         ===*/
+    /*=========================================================*/
+
+    astrule PermissionName =
         method public String getName(){
-            throw new UnsupportedOperationException("Please specify a name for this online status.");
+            return getPermission().name();
         }
     ;
 
-    /*================================================================================================================*/
-    /*==  Symbols  ===================================================================================================*/
-    /*================================================================================================================*/
-
-    symbol CreateInstantInvite implements Permission =
-        name:"create instant invite";
-
-    astrule CreateInstantInvite =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.CREATE_INSTANT_INVITE;
-        }
-    ;
-
-    symbol KickMembers implements Permission =
-        name:"kick members";
-
-    astrule KickMembers =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.KICK_MEMBERS;
-        }
-    ;
-
-    symbol BanMembers implements Permission =
-        name:"ban members";
-
-    astrule BanMembers =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.BAN_MEMBERS;
-        }
-    ;
-
-    symbol Administrator implements Permission =
-        name:"administrator";
-
-    astrule Administrator =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.ADMINISTRATOR;
-        }
-    ;
-
-    symbol ManageChannels implements Permission =
-        name:"manage channels";
-
-    astrule ManageChannels =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_CHANNEL;
-        }
-    ;
-
-    symbol ManageServer implements Permission =
-        name:"manage server";
-
-    astrule ManageServer =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_SERVER;
-        }
-    ;
-
-    symbol AddReactions implements Permission =
-        name:"add reactions";
-
-    astrule AddReactions =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_ADD_REACTION;
-        }
-    ;
-
-    symbol ViewAuditLogs implements Permission =
-        name:"view audit logs";
-
-    astrule ViewAuditLogs =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VIEW_AUDIT_LOGS;
-        }
-    ;
-
-    symbol PrioritySpeaker implements Permission =
-        name:"priority speaker";
-
-    astrule PrioritySpeaker =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.PRIORITY_SPEAKER;
-        }
-    ;
-
-    /*================================================================================================================*/
-    /*==  Channels  ==================================================================================================*/
-    /*================================================================================================================*/
-
-    symbol ViewChannels implements Permission =
-        name:"view channels";
-
-    astrule ViewChannels =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VIEW_CHANNEL;
-        }
-    ;
-
-    /*================================================================================================================*/
-    /*==  Text Permissions  ==========================================================================================*/
-    /*================================================================================================================*/
-
-    symbol ReadMessages implements Permission =
-        name:"read messages";
-
-    astrule ReadMessages =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_READ;
-        }
-    ;
-
-    symbol SendMessages implements Permission =
-        name:"send messages";
-
-    astrule SendMessages =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_WRITE;
-        }
-    ;
-
-    symbol TextToSpeech implements Permission =
-        name:"text to speech";
-
-    astrule TextToSpeech =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_TTS;
-        }
-    ;
-
-    symbol ManageMessages implements Permission =
-        name:"manage messages";
-
-    astrule ManageMessages =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_MANAGE;
-        }
-    ;
-
-    symbol EmbedLinks implements Permission =
-        name:"embed links";
-
-    astrule EmbedLinks =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS;
-        }
-    ;
-
-    symbol AttachFiles implements Permission =
-        name:"attach files";
-
-    astrule AttachFiles =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_ATTACH_FILES;
-        }
-    ;
-
-    symbol ReadHistory implements Permission =
-        name:"read history";
-
-    astrule ReadHistory =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_HISTORY;
-        }
-    ;
-
-    symbol MentionEveryone implements Permission =
-        name:"mention everyone";
-
-    astrule MentionEveryone =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_MENTION_EVERYONE;
-        }
-    ;
-
-    symbol ExternalEmojis implements Permission =
-        name:"external emojis";
-
-    astrule ExternalEmojis =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MESSAGE_EXT_EMOJI;
-        }
-    ;
-
-    /*================================================================================================================*/
-    /*==  Voice Permissions  =========================================================================================*/
-    /*================================================================================================================*/
-
-    symbol Connect implements Permission =
-        name:"connect";
-
-    astrule Connect =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_CONNECT;
-        }
-    ;
-
-    symbol Speak implements Permission =
-        name:"speak";
-
-    astrule Speak =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_SPEAK;
-        }
-    ;
-
-    symbol MuteOthers implements Permission =
-        name:"mute others";
-
-    astrule MuteOthers =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_MUTE_OTHERS;
-        }
-    ;
-
-    symbol DeafOthers implements Permission =
-        name:"deaf others";
-
-    astrule DeafOthers =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_DEAF_OTHERS;
-        }
-    ;
-
-    symbol MoveOthers implements Permission =
-        name:"move others";
-
-    astrule MoveOthers =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_MOVE_OTHERS;
-        }
-    ;
-
-    symbol UseVoiceActivity implements Permission =
-        name:"use voice activity";
-
-    astrule UseVoiceActivity =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.VOICE_USE_VAD;
-        }
-    ;
-
-    /*================================================================================================================*/
-    /*==  Misc  ======================================================================================================*/
-    /*================================================================================================================*/
-
-
-    symbol ChangeNickname implements Permission =
-        name:"change nickname";
-
-    astrule ChangeNickname =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.NICKNAME_CHANGE;
-        }
-    ;
-
-    symbol ManageNicknames implements Permission =
-        name:"manage nicknames";
-
-    astrule ManageNicknames =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.NICKNAME_MANAGE;
-        }
-    ;
-
-    symbol ManageRoles implements Permission =
-        name:"manage roles";
-
-    astrule ManageRoles =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_ROLES;
-        }
-    ;
-
-    symbol ManagePermissions implements Permission =
-        name:"manage permissions";
-
-    astrule ManagePermissions =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_PERMISSIONS;
-        }
-    ;
-
-    symbol ManageWebhooks implements Permission =
-        name:"manage webhooks";
-
-    astrule ManageWebhooks =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_WEBHOOKS;
-        }
-    ;
-
-    symbol ManageEmotes implements Permission =
-        name:"manage emotes";
-
-    astrule ManageEmotes =
-        method public net.dv8tion.jda.api.Permission getPermissionType(){
-            return net.dv8tion.jda.api.Permission.MANAGE_EMOTES;
+    symbolrule PermissionName =
+        method public net.dv8tion.jda.api.Permission getPermission(){
+            return net.dv8tion.jda.api.Permission.valueOf(getName());
         }
     ;
 }
