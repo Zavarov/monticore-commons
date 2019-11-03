@@ -19,40 +19,26 @@ package vartas.discord.bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.utils.JDALogger;
 import org.slf4j.Logger;
-import vartas.discord.bot.guild.GuildConfiguration;
-import vartas.discord.bot.guild.GuildHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public interface CommunicatorInterface {
     /**
-     * A map of all guilds and their respective server files.
-     */
-    Map<Guild, GuildConfiguration> configs = new HashMap<>();
-
-    /**
      * The logger for the communicator.
      */
     Logger log = JDALogger.getLog(CommunicatorInterface.class.getSimpleName());
-
-    /**
-     * The executor that deals with all asynchronous processes.
-     */
-    ExecutorService executor = Executors.newCachedThreadPool();
-
     /**
      * Returns the environment that connects the communicator of this shard with the communicators of all the other
      * shards.
@@ -75,9 +61,7 @@ public interface CommunicatorInterface {
      * Schedules a runnable to be executed and some unspecific point in time.
      * @param runnable the runnable that is going to be executed.
      */
-    default void execute(Runnable runnable){
-        executor.execute(runnable);
-    }
+    void schedule(Runnable runnable);
 
     /**
      * @param user the user the self user instance is compared with.
@@ -126,7 +110,7 @@ public interface CommunicatorInterface {
      * @param failure  the consumer that is called when the action couldn't be executed.
      */
     default <T> void send(RestAction<T> action, Consumer<T> success, Consumer<Throwable> failure){
-        execute(() -> action.queue(success, failure));
+        schedule(() -> action.queue(success, failure));
     }
 
     /**
@@ -196,55 +180,5 @@ public interface CommunicatorInterface {
      */
     default void send(MessageChannel channel, File file){
         send(channel.sendFile(file));
-    }
-
-    /**
-     * @param guild the guild we want the server file from.
-     * @return the server file that is connected to the guild.
-     */
-    default GuildConfiguration config(Guild guild){
-        if(configs.containsKey(guild)){
-            return configs.get(guild);
-        }else{
-            String filePath = String.format("guilds/%s.gld", guild.getId());
-            File target = new File(filePath);
-
-            GuildConfiguration config;
-            if(target.exists())
-                config = GuildHelper.parse(filePath, target);
-            else
-                config = new GuildConfiguration(target);
-            configs.put(guild, config);
-            return config;
-        }
-    }
-
-    /**
-     * A wrapper that requests the server of the guild the channel is in.
-     * @param channel the text channel of a guild.
-     * @return the server file that is connected to the guild of the text channel.
-     */
-    default GuildConfiguration config(TextChannel channel){
-        return config(channel.getGuild());
-    }
-
-    /**
-     * A wrapper that requests the server of the guild the role is in.
-     * @param role the role of a guild.
-     * @return the server file that is connected to the guild of the text channel.
-     */
-    default GuildConfiguration config(Role role){
-        return config(role.getGuild());
-    }
-
-    /**
-     * Deletes the configuration file associated with the guild.
-     * @param guild the guild whose XML file is deleted.
-     */
-    default void delete(Guild guild){
-        configs.remove(guild);
-        File file = new File(String.format("guilds/%s.gld",guild.getId()));
-        if(file.exists())
-            file.delete();
     }
 }

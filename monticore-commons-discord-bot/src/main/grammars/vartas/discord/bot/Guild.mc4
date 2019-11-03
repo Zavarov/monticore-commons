@@ -1,28 +1,85 @@
 package vartas.discord.bot;
 
 grammar Guild extends de.monticore.literals.MCCommonLiterals{
-    scope GuildArtifact =
-        "guild" "{"
+    symbol scope GuildArtifact =
+        "guild" id:BasicLongLiteral "{"
             Entry*
         "}";
 
-    interface Entry;
+    interface Entry = Identifier;
 
-    symbol Prefix implements Entry =
-        name:"prefix" "=" prefix:StringLiteral;
+    symbol scope StringEntry implements Entry =
+        Identifier StringValue
+    ;
 
-    symbol Subreddit implements Entry =
-        name:"subreddit" subreddit:StringLiteral "{"
-            ("channel" ":" textchannel:BasicLongLiteral)+
-        "}";
+    symbol StringValue =
+        value:StringLiteral
+    ;
 
-    symbol Filter implements Entry =
-        name:"filter" "{"
-            expression:StringLiteral+
-        "}";
+    symbol scope LongGroupEntry implements Entry =
+        Identifier LongGroupArtifact
+    ;
 
-    symbol Tag implements Entry =
-        name:"tag" tag:StringLiteral "{"
-            ("role" ":" role:BasicLongLiteral)+
-        "}";
+    symbol scope LongGroupArtifact =
+        group:StringLiteral "{"
+            LongGroupValue+
+        "}"
+    ;
+
+    symbol LongGroupValue =
+        (type:Name ":")? value:BasicLongLiteral
+    ;
+
+    /*=========================================================*/
+    /*=== Enum                                              ===*/
+    /*=========================================================*/
+
+    enum Identifier =
+        PREFIX    : "prefix"    |
+        BLACKLIST : "blacklist" |
+        ROLEGROUP : "rolegroup" |
+        SUBREDDIT : "subreddit"
+    ;
+
+    /*=========================================================*/
+    /*=== AST Rules                                         ===*/
+    /*=========================================================*/
+
+    astrule Entry =
+        method public String getName(){
+            return getIdentifier().name();
+        }
+    ;
+
+    astrule StringValue =
+        method public String getName(){
+            return getValue().getSource();
+        }
+    ;
+
+    astrule LongGroupArtifact =
+        method public String getName(){
+            return getGroup().getValue();
+        }
+    ;
+
+    astrule LongGroupValue =
+        method public String getName(){
+            return getValue().getDigits();
+        }
+    ;
+
+    astrule GuildArtifact =
+        method public String getName(){
+            return getId().getDigits();
+        }
+    ;
+
+    /*=========================================================*/
+    /*=== Symbol Rules                                      ===*/
+    /*=========================================================*/
+
+    symbolrule GuildArtifact =
+        reference : java.nio.file.Path
+    ;
 }

@@ -1,0 +1,11 @@
+guild 12345L {
+    prefix "prefix"
+    prefix "prefix"
+    blacklist "expression"
+    subreddit "x" {
+        channel : 0L
+    }
+    rolegroup "c" {
+        role : 9L
+    }
+}

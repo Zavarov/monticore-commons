@@ -1,11 +1,11 @@
 package vartas.discord.bot;
 
 grammar Status extends de.monticore.literals.MCCommonLiterals{
-    scope StatusArtifact =
+    StatusArtifact =
         "status" "{"
             Status*
         "}";
 
-    scope Status =
+    Status =
         StringLiteral;
 }

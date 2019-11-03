@@ -20,13 +20,14 @@ package vartas.discord.bot.status;
 import org.assertj.core.data.Index;
 import org.junit.Before;
 import org.junit.Test;
+import vartas.discord.bot.AbstractTest;
 import vartas.discord.bot.status._ast.ASTStatusArtifact;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StatusTest {
+public class StatusTest extends AbstractTest {
     ASTStatusArtifact ast;
 
     @Before
@@ -44,5 +45,14 @@ public class StatusTest {
         assertThat(list).contains("Status2", Index.atIndex(2));
         assertThat(list).contains("Status3", Index.atIndex(3));
         assertThat(list).contains("Status4", Index.atIndex(4));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testParseArtifactFileNotFound(){
+        StatusHelper.parse("#");
+    }
+    @Test(expected=IllegalArgumentException.class)
+    public void testParseArtifactInvalidFile(){
+        StatusHelper.parse("src/test/resources/junk.txt");
     }
 }

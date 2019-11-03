@@ -18,9 +18,10 @@
 package vartas.discord.bot.guild._symboltable;
 
 public class GuildLanguage extends GuildLanguageTOP{
-    public static final String GUILD_FILE_ENDING = "gld";
-    public GuildLanguage(){
-        super("Guild Language", GUILD_FILE_ENDING);
+    public static String GUILD_PREFIX = "gld";
+
+    public GuildLanguage() {
+        super("Discord Guild Configuration Language", GUILD_PREFIX);
     }
 
     @Override

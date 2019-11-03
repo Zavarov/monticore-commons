@@ -25,8 +25,9 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.internal.utils.JDALogger;
 import org.slf4j.Logger;
-import vartas.discord.bot.config._ast.ASTConfigArtifact;
-import vartas.discord.bot.rank.RankConfiguration;
+import vartas.discord.bot.config._symboltable.IConfigScope;
+import vartas.discord.bot.guild._symboltable.IGuildScope;
+import vartas.discord.bot.rank._symboltable.IRankScope;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.SubredditInterface;
@@ -40,6 +41,9 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -54,13 +58,9 @@ public interface EnvironmentInterface {
      */
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /**
-     * @return the configuration file.
+     * @return the symbol table of the configuration file.
      */
-    ASTConfigArtifact config();
-    /**
-     * @return rank file.
-     */
-    RankConfiguration rank();
+    IConfigScope config();
     /**
      * @param id the id of the guild.
      * @return the bot that this guild belongs to.
@@ -80,6 +80,49 @@ public interface EnvironmentInterface {
      * @return the subreddit instance with that name.
      */
     Optional<SubredditInterface> subreddit(String subreddit);
+
+    /**
+     *
+     * To avoid multiple threads modifying the rank symbol table
+     * at the same time, it is necessary to synchronize each access.
+     * @param operation the operation that is to be scheduled.
+     * @param <T> the return type after the operation completes.
+     * @return a {@link Future} instance for the operation.
+     */
+    <T> Future<T> accessRank(Function<IRankScope,T> operation);
+    /**
+     * To avoid multiple threads modifying the guild symbol table
+     * at the same time, it is necessary to synchronize each access.
+     * @param operation the operation that is to be scheduled.
+     */
+    default Future<Void> modifyRank(Consumer<IRankScope> operation){
+        Function<IRankScope, Void> dummy = (scope) -> {
+            operation.accept(scope);
+            return null;
+        };
+        return accessRank(dummy);
+    }
+    /**
+     * To avoid multiple threads modifying the guild symbol table
+     * at the same time, it is necessary to synchronize each access.
+     * @param operation the operation that is to be scheduled.
+     * @param <T> the return type after the operation completes.
+     * @return a {@link Future} instance for the operation.
+     */
+    <T> Future<T> accessGuild(Function<IGuildScope,T> operation);
+    /**
+     * To avoid multiple threads modifying the guild symbol table
+     * at the same time, it is necessary to synchronize each access.
+     * @param operation the operation that is to be scheduled.
+     * @return a {@link Future} instance for the operation.
+     */
+    default Future<Void> modifyGuild(Consumer<IGuildScope> operation){
+        Function<IGuildScope, Void> dummy = (scope) -> {
+            operation.accept(scope);
+            return null;
+        };
+        return accessGuild(dummy);
+    }
     /**
      * Makes the program post submissions from the subreddit in the specified channel.
      * In addition, it will also update the guild configuration file to memorize the change.

@@ -3,50 +3,48 @@ package vartas.discord.bot;
 grammar Config extends de.monticore.literals.MCCommonLiterals{
     scope ConfigArtifact =
         "config" "{"
-            Entry*
+            ConfigName*
         "}";
 
-    interface Entry;
+    interface ConfigName = Config;
 
-    symbol StatusMessageUpdateInterval implements Entry =
-        name:"statusMessageUpdateInterval" "=" NatLiteral "min";
+    symbol IntegerConfig implements ConfigName =
+        Config "=" NatLiteral type:Name?
+    ;
 
-    symbol DiscordShards implements Entry =
-        name:"discordShards" "=" NatLiteral;
+    symbol StringConfig implements ConfigName =
+        Config "=" StringLiteral type:Name?
+    ;
 
-    symbol InteractiveMessageLifetime implements Entry =
-        name:"interactiveMessageLifetime" "=" NatLiteral "min";
+    /*=========================================================*/
+    /*=== Enum                                              ===*/
+    /*=========================================================*/
 
-    symbol ActivityUpdateInterval implements Entry =
-        name:"activityUpdateInterval" "=" NatLiteral "min";
+    enum Config =
+        STATUS_MESSAGE_UPDATE_INTERVAL  : "statusMessageUpdateInterval" |
+        INTERACTIVE_MESSAGE_LIFETIME    : "interactiveMessageLifetime"  |
+        DISCORD_SHARDS                  : "discordShards"               |
+        ACTIVITY_UPDATE_INTERVAL        : "activityUpdateInterval"      |
+        INVITE_SUPPORT_SERVER           : "inviteSupportServer"         |
+        BOT_NAME                        : "botName"                     |
+        GLOBAL_PREFIX                   : "globalPrefix"                |
+        WIKI_LINK                       : "wikiLink"                    |
+        IMAGE_WIDTH                     : "imageWidth"                  |
+        IMAGE_HEIGHT                    : "imageHeight"                 |
+        DISCORD_TOKEN                   : "discordToken"                |
+        REDDIT_ACCOUNT                  : "redditAccount"               |
+        REDDIT_ID                       : "redditId"                    |
+        REDDIT_SECRET                   : "redditSecret"
+    ;
 
-    symbol InviteSupportServer implements Entry =
-        name:"inviteSupportServer" "=" StringLiteral;
+    /*=========================================================*/
+    /*=== AST Rules                                         ===*/
+    /*=========================================================*/
 
-    symbol BotName implements Entry =
-        name:"botName" "=" StringLiteral;
-
-    symbol GlobalPrefix implements Entry =
-        name:"globalPrefix" "=" StringLiteral;
-
-    symbol WikiLink implements Entry =
-        name:"wikiLink" "=" StringLiteral;
-
-    symbol ImageWidth implements Entry =
-        name:"imageWidth" "=" NatLiteral "px";
-
-    symbol ImageHeight implements Entry =
-        name:"imageHeight" "=" NatLiteral "px";
-
-    symbol DiscordToken implements Entry =
-        name:"discordToken" "=" StringLiteral;
-
-    symbol RedditAccount implements Entry =
-        name:"redditAccount" "=" StringLiteral;
-
-    symbol RedditId implements Entry =
-        name:"redditId" "=" StringLiteral;
-
-    symbol RedditSecret implements Entry =
-        name:"redditSecret" "=" StringLiteral;
+    //Use the enum name as a symbol name
+    astrule ConfigName =
+        method public String getName(){
+            return getConfig().name();
+        }
+    ;
 }

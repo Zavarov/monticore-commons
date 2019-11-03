@@ -3,52 +3,44 @@ package vartas.discord.bot;
 grammar Rank extends de.monticore.literals.MCCommonLiterals{
     scope RankArtifact =
         "rank" "{"
-            Rank*
+            UserWithRank*
         "}";
 
-    scope Rank =
-        "user" ":" BasicLongLiteral "has" "rank" (RankType || ",")+ ;
+    symbol scope UserWithRank =
+        "user" ":" id:BasicLongLiteral "has" "rank" (RankName || ",")+ ;
 
-    abstract RankType;
-
-    /*=========================================================*/
-    /*=======================  Symbols  =======================*/
-    /*=========================================================*/
-
-    symbol Root extends RankType =
-        name:"root";
-
-    symbol Reddit extends RankType =
-        name:"reddit";
-
-    symbol Developer extends RankType =
-        name:"dev";
+    symbol RankName = Rank;
 
     /*=========================================================*/
-    /*======================= AST RULES =======================*/
+    /*=== Enum                                              ===*/
     /*=========================================================*/
 
-    astrule RankType =
-        method public vartas.discord.bot.rank.RankType getRankType(){
-            throw new UnsupportedOperationException("Please specify a rank corresponding to this type in the grammar.");
+    enum Rank =
+        ROOT      : "root"      |
+        REDDIT    : "reddit"    |
+        DEVELOPER : "developer" | "dev"
+    ;
+
+    /*=========================================================*/
+    /*=== AST Rules                                         ===*/
+    /*=========================================================*/
+
+    //The reference file any changes are printed to.
+    astrule RankArtifact =
+        reference : java.nio.file.Path
+    ;
+
+    //Use the enum name as a symbol name
+    astrule RankName =
+        method public String getName(){
+            return getRank().name().toLowerCase(java.util.Locale.ENGLISH);
         }
     ;
 
-    astrule Root =
-        method public vartas.discord.bot.rank.RankType getRankType(){
-            return vartas.discord.bot.rank.RankType.ROOT;
-        }
-    ;
-
-    astrule Reddit =
-        method public vartas.discord.bot.rank.RankType getRankType(){
-            return vartas.discord.bot.rank.RankType.REDDIT;
-        }
-    ;
-
-    astrule Developer =
-        method public vartas.discord.bot.rank.RankType getRankType(){
-            return vartas.discord.bot.rank.RankType.DEVELOPER;
+    //Use the user id as a symbol name
+    astrule UserWithRank =
+        method public String getName(){
+            return getId().getDigits();
         }
     ;
 }

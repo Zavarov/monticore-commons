@@ -20,25 +20,30 @@ package vartas.discord.bot.config;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
 import vartas.discord.bot.config._parser.ConfigParser;
 import vartas.discord.bot.config._symboltable.ConfigArtifactScope;
-import vartas.discord.bot.config._symboltable.ConfigScope;
 import vartas.discord.bot.config._symboltable.ConfigSymbolTableCreator;
+import vartas.discord.bot.config.cocos.ConfigCoCos;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Optional;
 
 public abstract class ConfigHelper {
     public static ASTConfigArtifact parse(String filePath) throws IllegalArgumentException{
         ASTConfigArtifact ast = parseArtifact(filePath);
         buildSymbolTable(ast);
+        checkCoCos(ast);
         return ast;
     }
+
+    private static void checkCoCos(ASTConfigArtifact ast){
+        ConfigCoCos.getCheckerForAllCoCos().checkAll(ast);
+    }
+
 
     private static ASTConfigArtifact parseArtifact(String filePath){
         try{
             ConfigParser parser = new ConfigParser();
             Optional<ASTConfigArtifact> config = parser.parse(filePath);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
             if(!config.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
@@ -49,8 +54,7 @@ public abstract class ConfigHelper {
     }
 
     private static ConfigArtifactScope buildSymbolTable(ASTConfigArtifact ast){
-        ConfigScope scope = new ConfigScope(true);
-        ConfigSymbolTableCreator symbolTableCreator = new ConfigSymbolTableCreator(scope);
+        ConfigSymbolTableCreator symbolTableCreator = new ConfigSymbolTableCreator(new LinkedList<>());
 
         return symbolTableCreator.createFromAST(ast);
     }

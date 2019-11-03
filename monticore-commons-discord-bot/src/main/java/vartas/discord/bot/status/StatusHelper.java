@@ -29,8 +29,6 @@ public abstract class StatusHelper {
         try{
             StatusParser parser = new StatusParser();
             Optional<ASTStatusArtifact> status = parser.parse(filePath);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
             if(!status.isPresent())
                 throw new IllegalArgumentException("The status file couldn't be parsed");
 

@@ -17,29 +17,52 @@
 
 package vartas.discord.bot.rank;
 
+import de.monticore.prettyprint.IndentPrinter;
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 import vartas.discord.bot.rank._parser.RankParser;
 import vartas.discord.bot.rank._symboltable.RankArtifactScope;
-import vartas.discord.bot.rank._symboltable.RankScope;
 import vartas.discord.bot.rank._symboltable.RankSymbolTableCreator;
+import vartas.discord.bot.rank.cocos.RankCoCos;
+import vartas.discord.bot.rank.prettyprint.RankScopePrettyPrinter;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Optional;
 
 public abstract class RankHelper {
-    public static RankConfiguration parse(String filePath, File reference) throws IllegalArgumentException{
+    public static void store(ASTRankArtifact ast) throws IOException {
+        Path reference = ast.getReference();
+        if(!reference.toFile().exists())
+            Files.createDirectories(reference.getParent().toFile().toPath());
+        if(!reference.toFile().exists())
+            Files.createFile(reference);
+        String content = new RankScopePrettyPrinter(new IndentPrinter()).prettyPrint(ast.getEnclosingScope());
+        Files.write(reference, Collections.singletonList(content));
+    }
+
+    public static ASTRankArtifact parse(String filePath, Path reference) throws IllegalArgumentException{
         ASTRankArtifact ast = parseArtifact(filePath);
         buildSymbolTable(ast);
-        return new RankConfiguration(ast, reference);
+        setReference(ast, reference);
+        checkCoCos(ast);
+        return ast;
+    }
+
+    private static void checkCoCos(ASTRankArtifact ast){
+        RankCoCos.getCheckerForAllCoCos().checkAll(ast);
+    }
+
+    private static void setReference(ASTRankArtifact ast, Path reference){
+        ast.setReference(reference);
     }
 
     private static ASTRankArtifact parseArtifact(String filePath){
         try{
             RankParser parser = new RankParser();
             Optional<ASTRankArtifact> Ranks = parser.parse(filePath);
-            if(parser.hasErrors())
-                throw new IllegalArgumentException("The parser encountered errors while parsing "+filePath);
             if(!Ranks.isPresent())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
@@ -50,8 +73,7 @@ public abstract class RankHelper {
     }
 
     private static RankArtifactScope buildSymbolTable(ASTRankArtifact ast){
-        RankScope scope = new RankScope(true);
-        RankSymbolTableCreator symbolTableCreator = new RankSymbolTableCreator(scope);
+        RankSymbolTableCreator symbolTableCreator = new RankSymbolTableCreator(new LinkedList<>());
         return symbolTableCreator.createFromAST(ast);
     }
 }
