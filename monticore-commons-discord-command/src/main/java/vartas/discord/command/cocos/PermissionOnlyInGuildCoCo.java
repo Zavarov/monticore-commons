@@ -23,7 +23,7 @@ import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.command._ast.ASTRestrictionName;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandInheritanceVisitor;
-import vartas.discord.permission._ast.ASTPermission;
+import vartas.discord.permission._ast.ASTPermissionName;
 
 public class PermissionOnlyInGuildCoCo implements CommandASTCommandCoCo, CommandInheritanceVisitor {
     public static final String ERROR_MESSAGE = "Only guild commands can have permissions.";
@@ -49,7 +49,7 @@ public class PermissionOnlyInGuildCoCo implements CommandASTCommandCoCo, Command
     }
 
     @Override
-    public void visit(ASTPermission node){
+    public void visit(ASTPermissionName node){
         hasPermission = true;
     }
 }
