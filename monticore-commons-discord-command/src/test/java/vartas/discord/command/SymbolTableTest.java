@@ -22,6 +22,7 @@ import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.Joiners;
 import org.junit.Before;
 import org.junit.Test;
+import vartas.discord.bot.rank._ast.ASTRank;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.permission._ast.ASTPermission;
 
@@ -132,10 +133,10 @@ public class SymbolTableTest extends AbstractTest{
         Optional<? extends ISymbol> symbolOpt;
         ISymbol symbol;
 
-        symbolOpt = scope.resolveRankName(joiner.join(prefix, command, "root"));
+        symbolOpt = scope.resolveRankName(joiner.join(prefix, command, ASTRank.ROOT.name()));
         assertThat(symbolOpt).isPresent();
         symbol = symbolOpt.get();
-        assertThat(symbol.getName()).isEqualTo("root");
+        assertThat(symbol.getName()).isEqualTo(ASTRank.ROOT.name());
     }
 
     @Test
@@ -143,9 +144,9 @@ public class SymbolTableTest extends AbstractTest{
         Optional<? extends ISymbol> symbolOpt;
         ISymbol symbol;
 
-        symbolOpt = scope.resolveRankName(joiner.join(prefix, command, "dev"));
+        symbolOpt = scope.resolveRankName(joiner.join(prefix, command, ASTRank.DEVELOPER.name()));
         assertThat(symbolOpt).isPresent();
         symbol = symbolOpt.get();
-        assertThat(symbol.getName()).isEqualTo("dev");
+        assertThat(symbol.getName()).isEqualTo(ASTRank.DEVELOPER.name());
     }
 }
