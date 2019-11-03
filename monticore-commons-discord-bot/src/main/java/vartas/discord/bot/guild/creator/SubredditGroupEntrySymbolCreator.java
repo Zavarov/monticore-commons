@@ -17,15 +17,17 @@
 
 package vartas.discord.bot.guild.creator;
 
-import vartas.discord.bot.guild._ast.ASTIdentifier;
+import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
+import de.monticore.literals.mccommonliterals._ast.MCCommonLiteralsNodeFactory;
+import vartas.discord.bot.guild._ast.ASTSubredditGroupEntry;
+import vartas.discord.bot.guild._ast.GuildNodeFactory;
 import vartas.discord.bot.guild._symboltable.GuildScope;
 import vartas.discord.bot.guild._symboltable.IGuildScope;
-import vartas.discord.bot.guild._symboltable.StringEntrySymbol;
-import vartas.discord.bot.guild._symboltable.StringValueSymbol;
+import vartas.discord.bot.guild._symboltable.SubredditGroupEntrySymbol;
 
-public class StringEntrySymbolCreator {
-    public static StringEntrySymbol create(IGuildScope enclosingScope, ASTIdentifier identifier, String value){
-        StringEntrySymbol result = new StringEntrySymbol(identifier.name());
+public abstract class SubredditGroupEntrySymbolCreator {
+    public static SubredditGroupEntrySymbol create(IGuildScope enclosingScope, String group){
+        SubredditGroupEntrySymbol result = new SubredditGroupEntrySymbol(group);
 
         //Set the scopes for the symbol
         IGuildScope spannedScope = new GuildScope();
@@ -36,10 +38,25 @@ public class StringEntrySymbolCreator {
         enclosingScope.add(result);
         enclosingScope.addSubScope(spannedScope);
 
-        //Create sub symbols
-        StringValueSymbol symbol = StringValueSymbolCreator.create(spannedScope, value);
-        spannedScope.add(symbol);
-
+        //Set the AST of this symbol
+        ASTSubredditGroupEntry ast = createAst(group);
+        result.setAstNode(ast);
         return result;
+    }
+
+    protected static ASTSubredditGroupEntry createAst(String group){
+        ASTSubredditGroupEntry ast = GuildNodeFactory.createASTSubredditGroupEntry();
+
+        ast.setStringLiteral(createGroup(group));
+
+        return ast;
+    }
+
+    protected static ASTStringLiteral createGroup(String value){
+        ASTStringLiteral ast = MCCommonLiteralsNodeFactory.createASTStringLiteral();
+
+        ast.setSource(value);
+
+        return ast;
     }
 }

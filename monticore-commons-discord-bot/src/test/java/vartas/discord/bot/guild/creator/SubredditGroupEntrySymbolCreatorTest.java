@@ -20,32 +20,37 @@ package vartas.discord.bot.guild.creator;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.guild.AbstractGuildTest;
+import vartas.discord.bot.guild._ast.ASTSubredditGroupEntry;
 import vartas.discord.bot.guild._symboltable.GuildScope;
-import vartas.discord.bot.guild._symboltable.StringValueSymbol;
+import vartas.discord.bot.guild._symboltable.SubredditGroupEntrySymbol;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StringValueSymbolCreatorTest extends AbstractGuildTest {
-    protected String stringValueName;
-    protected String value = "expression";
+public class SubredditGroupEntrySymbolCreatorTest extends AbstractGuildTest {
+    protected String group = "group";
     @Before
     public void setUp(){
         guildScope = new GuildScope();
-        StringValueSymbolCreator.create(guildScope, value);
-
-        stringValueName = value;
+        SubredditGroupEntrySymbolCreator.create(guildScope, group);
     }
     @Test
-    public void testStringValueSymbol(){
-        Optional<StringValueSymbol> symbolOpt = guildScope.resolveStringValueDown(stringValueName);
-        StringValueSymbol symbol;
+    public void testLongGroupEntrySymbol(){
+        Optional<SubredditGroupEntrySymbol> symbolOpt = guildScope.resolveSubredditGroupEntry(group);
+        SubredditGroupEntrySymbol symbol;
+        Optional<ASTSubredditGroupEntry> astOpt;
+        ASTSubredditGroupEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
+        astOpt = symbol.getAstNode();
 
-        assertThat(symbol.getName()).isEqualTo(value);
+        assertThat(symbol.getName()).isEqualTo(group);
+        assertThat(astOpt).isPresent();
+
+        ast = astOpt.get();
+        assertThat(ast.getName()).isEqualTo(group);
     }
 }

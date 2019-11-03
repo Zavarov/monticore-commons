@@ -17,42 +17,31 @@
 
 package vartas.discord.bot.guild.cocos;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
-import vartas.discord.bot.guild._ast.ASTLongGroupArtifact;
-import vartas.discord.bot.guild._ast.ASTLongGroupEntry;
+import vartas.discord.bot.guild._ast.ASTSubredditGroupEntry;
 import vartas.discord.bot.guild._cocos.GuildASTGuildArtifactCoCo;
 import vartas.discord.bot.guild._visitor.GuildVisitor;
 
-import java.util.Collection;
-import java.util.Map;
-
 public class SubredditNameIsUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
     public static final String ERROR_MESSAGE = "The subreddit '%s' appears more than once.";
-    Multimap<String, ASTLongGroupArtifact> map;
+    Multiset<String> group;
 
     @Override
     public void check(ASTGuildArtifact node) {
-        map = LinkedListMultimap.create();
+        group = HashMultiset.create();
 
         node.accept(getRealThis());
 
-        for(Map.Entry<String, Collection<ASTLongGroupArtifact>> entry : map.asMap().entrySet())
-            if(entry.getValue().size() > 1)
-                Log.error(String.format(ERROR_MESSAGE, entry.getKey()));
+        for(Multiset.Entry<String> entry : group.entrySet())
+            if(entry.getCount() > 1)
+                Log.error(String.format(ERROR_MESSAGE, entry.getElement()));
     }
 
     @Override
-    public void handle(ASTLongGroupEntry node){
-        if(node.getIdentifier() == ASTIdentifier.SUBREDDIT)
-            node.getLongGroupArtifact().accept(getRealThis());
-    }
-
-    @Override
-    public void visit(ASTLongGroupArtifact node){
-        map.put(node.getName(), node);
+    public void handle(ASTSubredditGroupEntry node){
+        group.add(node.getName());
     }
 }

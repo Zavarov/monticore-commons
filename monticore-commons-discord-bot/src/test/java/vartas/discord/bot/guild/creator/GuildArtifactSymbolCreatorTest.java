@@ -21,6 +21,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.guild.AbstractGuildTest;
+import vartas.discord.bot.guild._ast.ASTGuildArtifact;
 import vartas.discord.bot.guild._symboltable.GuildArtifactSymbol;
 import vartas.discord.bot.guild._symboltable.GuildScope;
 
@@ -52,15 +53,23 @@ public class GuildArtifactSymbolCreatorTest extends AbstractGuildTest {
         GuildArtifactSymbolCreator.create(guildScope, guild, target);
         Optional<GuildArtifactSymbol> symbolOpt = guildScope.resolveGuildArtifactDown(guildArtifact);
         GuildArtifactSymbol symbol;
+        Optional<ASTGuildArtifact> astOpt;
+        ASTGuildArtifact ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
+        astOpt = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(value);
         assertThat(symbol.getReference()).isEqualTo(target);
         assertThat(symbol.getReference()).exists();
+        assertThat(astOpt).isPresent();
+
+        ast = astOpt.get();
+        assertThat(ast.getName()).isEqualTo(guild.getId());
     }
+
     @Test(expected=IllegalStateException.class)
     public void testGuildArtifactWriteToFileFailure() throws IOException {
         Files.createFile(target);

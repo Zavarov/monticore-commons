@@ -24,6 +24,7 @@ import vartas.discord.bot.rank._symboltable.UserWithRankSymbol;
 import vartas.discord.bot.rank._visitor.RankSymbolVisitor;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 public class RankSymbolPrettyPrinter implements RankSymbolVisitor {
     protected RankSymbolVisitor realThis = this;
@@ -72,6 +73,6 @@ public class RankSymbolPrettyPrinter implements RankSymbolVisitor {
 
     @Override
     public void visit(RankNameSymbol symbol){
-        printer.print(symbol.getName());
+        printer.print(symbol.getName().toLowerCase(Locale.ENGLISH));
     }
 }

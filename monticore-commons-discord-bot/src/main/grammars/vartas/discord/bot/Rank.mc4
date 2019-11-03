@@ -18,7 +18,8 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     enum Rank =
         ROOT      : "root"      |
         REDDIT    : "reddit"    |
-        DEVELOPER : "developer" | "dev"
+        DEVELOPER : "developer" |
+        DEVELOPER : "dev"
     ;
 
     /*=========================================================*/
@@ -33,7 +34,7 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     //Use the enum name as a symbol name
     astrule RankName =
         method public String getName(){
-            return getRank().name().toLowerCase(java.util.Locale.ENGLISH);
+            return getRank().name();
         }
     ;
 

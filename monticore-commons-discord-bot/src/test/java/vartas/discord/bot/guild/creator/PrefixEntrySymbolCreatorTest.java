@@ -20,31 +20,28 @@ package vartas.discord.bot.guild.creator;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.guild.AbstractGuildTest;
-import vartas.discord.bot.guild._ast.ASTLongGroupValue;
+import vartas.discord.bot.guild._ast.ASTPrefixEntry;
 import vartas.discord.bot.guild._symboltable.GuildScope;
-import vartas.discord.bot.guild._symboltable.LongGroupValueSymbol;
+import vartas.discord.bot.guild._symboltable.PrefixEntrySymbol;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongGroupValueSymbolCreatorTest extends AbstractGuildTest {
-    protected String longGroupValue;
-    protected String type = "role";
-    protected String value = "12345";
+public class PrefixEntrySymbolCreatorTest extends AbstractGuildTest {
+    protected String value = "value";
     @Before
     public void setUp(){
         guildScope = new GuildScope();
-        LongGroupValueSymbolCreator.create(guildScope, type, value);
 
-        longGroupValue = value;
+        PrefixEntrySymbolCreator.create(guildScope, value);
     }
     @Test
-    public void testCreate(){
-        Optional<LongGroupValueSymbol> symbolOpt = guildScope.resolveLongGroupValueDown(longGroupValue);
-        LongGroupValueSymbol symbol;
-        Optional<ASTLongGroupValue> astOpt;
-        ASTLongGroupValue ast;
+    public void testStringEntrySymbol(){
+        Optional<PrefixEntrySymbol> symbolOpt = guildScope.resolvePrefixEntry(value);
+        PrefixEntrySymbol symbol;
+        Optional<ASTPrefixEntry> astOpt;
+        ASTPrefixEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
@@ -56,7 +53,6 @@ public class LongGroupValueSymbolCreatorTest extends AbstractGuildTest {
 
         ast = astOpt.get();
 
-        assertThat(ast.getType()).isEqualTo(type);
-        assertThat(ast.getValue().getDigits()).isEqualTo(value);
+        assertThat(ast.getName()).isEqualTo(value);
     }
 }

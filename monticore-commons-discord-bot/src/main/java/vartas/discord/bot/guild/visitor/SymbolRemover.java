@@ -52,30 +52,29 @@ public class SymbolRemover implements GuildSymbolVisitor {
     }
 
     @Override
-    public void handle(StringEntrySymbol symbol){
+    public void handle(BlacklistEntrySymbol symbol){
+        symbol.getEnclosingScope().remove(symbol);
+    }
+
+    @Override
+    public void handle(PrefixEntrySymbol symbol){
+        symbol.getEnclosingScope().remove(symbol);
+    }
+
+    @Override
+    public void handle(RoleGroupEntrySymbol symbol){
         symbol.getEnclosingScope().remove(symbol);
         symbol.getEnclosingScope().removeSubScope(symbol.getSpannedScope());
     }
 
     @Override
-    public void handle(StringValueSymbol symbol){
-        symbol.getEnclosingScope().remove(symbol);
-    }
-
-    @Override
-    public void handle(LongGroupEntrySymbol symbol){
+    public void handle(SubredditGroupEntrySymbol symbol){
         symbol.getEnclosingScope().remove(symbol);
         symbol.getEnclosingScope().removeSubScope(symbol.getSpannedScope());
     }
 
     @Override
-    public void handle(LongGroupArtifactSymbol symbol){
-        symbol.getEnclosingScope().remove(symbol);
-        symbol.getEnclosingScope().removeSubScope(symbol.getSpannedScope());
-    }
-
-    @Override
-    public void handle(LongGroupValueSymbol symbol){
+    public void handle(LongGroupElementSymbol symbol){
         symbol.getEnclosingScope().remove(symbol);
     }
 }

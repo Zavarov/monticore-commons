@@ -17,14 +17,17 @@
 
 package vartas.discord.bot.guild.creator;
 
+import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
+import de.monticore.literals.mccommonliterals._ast.MCCommonLiteralsNodeFactory;
+import vartas.discord.bot.guild._ast.ASTRoleGroupEntry;
+import vartas.discord.bot.guild._ast.GuildNodeFactory;
 import vartas.discord.bot.guild._symboltable.GuildScope;
 import vartas.discord.bot.guild._symboltable.IGuildScope;
-import vartas.discord.bot.guild._symboltable.LongGroupArtifactSymbol;
-import vartas.discord.bot.guild._symboltable.LongGroupValueSymbol;
+import vartas.discord.bot.guild._symboltable.RoleGroupEntrySymbol;
 
-public abstract class LongGroupArtifactSymbolCreator {
-    public static LongGroupArtifactSymbol create(IGuildScope enclosingScope, String group, String type, String value){
-        LongGroupArtifactSymbol result = new LongGroupArtifactSymbol(group);
+public abstract class RoleGroupEntrySymbolCreator {
+    public static RoleGroupEntrySymbol create(IGuildScope enclosingScope, String group){
+        RoleGroupEntrySymbol result = new RoleGroupEntrySymbol(group);
 
         //Set the scopes for the symbol
         IGuildScope spannedScope = new GuildScope();
@@ -35,10 +38,25 @@ public abstract class LongGroupArtifactSymbolCreator {
         enclosingScope.add(result);
         enclosingScope.addSubScope(spannedScope);
 
-        //Create sub symbols
-        LongGroupValueSymbol symbol = LongGroupValueSymbolCreator.create(spannedScope, type, value);
-        spannedScope.add(symbol);
-
+        //Set the AST of this symbol
+        ASTRoleGroupEntry ast = createAst(group);
+        result.setAstNode(ast);
         return result;
+    }
+
+    protected static ASTRoleGroupEntry createAst(String group){
+        ASTRoleGroupEntry ast = GuildNodeFactory.createASTRoleGroupEntry();
+
+        ast.setStringLiteral(createGroup(group));
+
+        return ast;
+    }
+
+    protected static ASTStringLiteral createGroup(String value){
+        ASTStringLiteral ast = MCCommonLiteralsNodeFactory.createASTStringLiteral();
+
+        ast.setSource(value);
+
+        return ast;
     }
 }

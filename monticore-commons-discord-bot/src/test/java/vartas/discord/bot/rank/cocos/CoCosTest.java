@@ -29,7 +29,6 @@ import vartas.discord.bot.rank._ast.ASTRank;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,12 +43,12 @@ public class CoCosTest extends AbstractTest {
                         "UserIsUnique.rnk",
                         UserIsUniqueCoCo.ERROR_MESSAGE,
                         "1",
-                        ASTRank.ROOT.name().toLowerCase(Locale.ENGLISH)
+                        ASTRank.ROOT.name()
                 },
                 {
                         "UserRanksAreUnique.rnk",
                         UserRanksAreUniqueCoCo.ERROR_MESSAGE,
-                        ASTRank.ROOT.name().toLowerCase(Locale.ENGLISH),
+                        ASTRank.ROOT.name(),
                         "1"
                 }
         });

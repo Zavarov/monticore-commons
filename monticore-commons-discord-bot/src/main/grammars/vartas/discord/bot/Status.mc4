@@ -4,8 +4,10 @@ grammar Status extends de.monticore.literals.MCCommonLiterals{
     StatusArtifact =
         "status" "{"
             Status*
-        "}";
+        "}"
+    ;
 
     Status =
-        StringLiteral;
+        StringLiteral
+    ;
 }

@@ -17,49 +17,33 @@
 
 package vartas.discord.bot.guild.cocos;
 
-import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
-import vartas.discord.bot.guild._ast.ASTLongGroupEntry;
-import vartas.discord.bot.guild._ast.ASTLongGroupValue;
+import vartas.discord.bot.guild._ast.ASTLongGroupElement;
+import vartas.discord.bot.guild._ast.ASTRoleGroupEntry;
 import vartas.discord.bot.guild._cocos.GuildASTGuildArtifactCoCo;
 import vartas.discord.bot.guild._visitor.GuildVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 public class RoleGroupEntriesAreUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
-    public static final String ERROR_MESSAGE = "The role with id '%s' appears more than one group.";
-    List<ASTBasicLongLiteral> list;
+    public static final String ERROR_MESSAGE = "The role with id '%s' appears in multiple groups.";
+    Multiset<String> roles;
 
     @Override
     public void check(ASTGuildArtifact node) {
-        list = new ArrayList<>();
+        roles = HashMultiset.create();
 
         node.accept(getRealThis());
 
-        Map<String, Long> frequency = list
-                .stream()
-                .map(ASTBasicLongLiteral::getDigits)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-        for(Map.Entry<String, Long> entry : frequency.entrySet())
-            if(entry.getValue() > 1)
-                Log.error(String.format(ERROR_MESSAGE, entry.getKey()));
+        for(Multiset.Entry<String> entry : roles.entrySet())
+            if(entry.getCount() > 1)
+                Log.error(String.format(ERROR_MESSAGE, entry.getElement()));
     }
 
     @Override
-    public void handle(ASTLongGroupEntry node){
-        if(node.getIdentifier() == ASTIdentifier.ROLEGROUP)
-            node.getLongGroupArtifact().accept(getRealThis());
-    }
-
-    @Override
-    public void visit(ASTLongGroupValue node){
-        list.add(node.getValue());
+    public void handle(ASTRoleGroupEntry node){
+        for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList())
+            roles.add(element.getName());
     }
 }

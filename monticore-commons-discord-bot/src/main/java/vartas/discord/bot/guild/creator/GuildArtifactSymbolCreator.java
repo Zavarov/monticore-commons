@@ -17,9 +17,13 @@
 
 package vartas.discord.bot.guild.creator;
 
+import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
+import de.monticore.literals.mccommonliterals._ast.MCCommonLiteralsNodeFactory;
 import net.dv8tion.jda.api.entities.Guild;
 import net.sourceforge.plantuml.Log;
 import vartas.discord.bot.guild.GuildHelper;
+import vartas.discord.bot.guild._ast.ASTGuildArtifact;
+import vartas.discord.bot.guild._ast.GuildNodeFactory;
 import vartas.discord.bot.guild._symboltable.GuildArtifactSymbol;
 import vartas.discord.bot.guild._symboltable.GuildScope;
 import vartas.discord.bot.guild._symboltable.IGuildScope;
@@ -43,6 +47,10 @@ public abstract class GuildArtifactSymbolCreator{
         //Create the symbol file
         result.setReference(reference);
 
+        //Set the AST of this symbol
+        ASTGuildArtifact ast = createAst(guild);
+        result.setAstNode(ast);
+
         try {
             GuildHelper.store(result);
         } catch(IOException e) {
@@ -51,5 +59,21 @@ public abstract class GuildArtifactSymbolCreator{
         }
 
         return result;
+    }
+
+    protected static ASTGuildArtifact createAst(Guild guild){
+        ASTGuildArtifact ast = GuildNodeFactory.createASTGuildArtifact();
+
+        ast.setId(createValue(guild));
+
+        return ast;
+    }
+
+    protected static ASTBasicLongLiteral createValue(Guild guild){
+        ASTBasicLongLiteral ast = MCCommonLiteralsNodeFactory.createASTBasicLongLiteral();
+
+        ast.setDigits(guild.getId());
+
+        return ast;
     }
 }

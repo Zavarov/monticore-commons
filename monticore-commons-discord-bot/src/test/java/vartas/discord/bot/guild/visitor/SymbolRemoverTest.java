@@ -17,30 +17,43 @@
 
 package vartas.discord.bot.guild.visitor;
 
-import de.se_rwth.commons.Joiners;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.guild.AbstractGuildTest;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
 import vartas.discord.bot.guild._symboltable.*;
+import vartas.discord.bot.guild.creator.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SymbolRemoverTest extends AbstractGuildTest {
     Path target = Paths.get("src/test/resources/directory/junk.gld");
 
+    GuildArtifactSymbol guildSymbol;
+    PrefixEntrySymbol prefixSymbol;
+    BlacklistEntrySymbol blacklistSymbol;
+    SubredditGroupEntrySymbol subredditSymbol;
+    RoleGroupEntrySymbol roleSymbol;
+    LongGroupElementSymbol longSymbol;
+
     @Before
     public void setUp() throws IOException {
         Files.createDirectory(target.getParent());
         Files.createFile(target);
+
+        guildScope = new GuildScope();
+
+        guildSymbol = GuildArtifactSymbolCreator.create(guildScope, guild, target);
+        prefixSymbol = PrefixEntrySymbolCreator.create(guildScope, "prefix");
+        blacklistSymbol = BlacklistEntrySymbolCreator.create(guildScope, "blacklist");
+        roleSymbol = RoleGroupEntrySymbolCreator.create(guildScope, "role");
+        subredditSymbol = SubredditGroupEntrySymbolCreator.create(guildScope, "subreddit");
+        longSymbol = LongGroupElementSymbolCreator.create(guildScope, "type", "12345");
     }
 
     @After
@@ -52,106 +65,66 @@ public class SymbolRemoverTest extends AbstractGuildTest {
     @Test
     public void testRemoveGuildArtifactSymbol() {
         assertThat(target).exists();
+        assertThat(guildScope.getLocalGuildArtifactSymbols()).contains(guildSymbol);
 
-        String name = guild.getId();
+        SymbolRemover.remove(guildSymbol);
 
-        Optional<GuildArtifactSymbol> symbolOpt = globalScope.resolveGuildArtifactDown(name);
-
-        assertThat(symbolOpt).isPresent();
-
-        GuildArtifactSymbol symbol = symbolOpt.get();
-        symbol.setReference(target);
-
-        SymbolRemover.remove(symbol);
-
-        assertThat(globalScope.resolveGuildArtifactDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalGuildArtifactSymbols()).doesNotContain(guildSymbol);
         assertThat(target).doesNotExist();
     }
 
     @Test(expected=IllegalStateException.class)
     public void testRemoveGuildDeleteFileFailure(){
-        String name = guild.getId();
+        assertThat(target).exists();
+        assertThat(guildScope.getLocalGuildArtifactSymbols()).contains(guildSymbol);
 
-        Optional<GuildArtifactSymbol> symbolOpt = globalScope.resolveGuildArtifactDown(name);
-
-        assertThat(symbolOpt).isPresent();
-
-        GuildArtifactSymbol symbol = symbolOpt.get();
-        symbol.setReference(target.getParent());
-
-        SymbolRemover.remove(symbol);
+        guildSymbol.setReference(target.getParent());
+        SymbolRemover.remove(guildSymbol);
     }
 
     @Test
-    public void removeStringEntrySymbol(){
-        String name = Joiners.DOT.join(guild.getId(), ASTIdentifier.BLACKLIST.name());
+    public void removePrefixEntrySymbol(){
+        assertThat(guildScope.getLocalPrefixEntrySymbols()).contains(prefixSymbol);
 
-        Optional<StringEntrySymbol> symbolOpt = globalScope.resolveStringEntryDown(name);
+        SymbolRemover.remove(prefixSymbol);
 
-        assertThat(symbolOpt).isPresent();
-
-        SymbolRemover.remove(symbolOpt.get());
-
-        assertThat(globalScope.resolveStringEntryDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalPrefixEntrySymbols()).doesNotContain(prefixSymbol);
     }
 
     @Test
-    public void removeStringValueSymbol(){
-        String name = Joiners.DOT.join(guild.getId(), ASTIdentifier.BLACKLIST.name(), "expression");
+    public void removeBlacklistEntrySymbol(){
+        assertThat(guildScope.getLocalBlacklistEntrySymbols()).contains(blacklistSymbol);
 
-        Optional<StringValueSymbol> symbolOpt = globalScope.resolveStringValueDown(name);
+        SymbolRemover.remove(blacklistSymbol);
 
-        assertThat(symbolOpt).isPresent();
-
-        SymbolRemover.remove(symbolOpt.get());
-
-        assertThat(globalScope.resolveStringValueDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalBlacklistEntrySymbols()).doesNotContain(blacklistSymbol);
     }
 
     @Test
-    public void removeLongGroupValueSymbol(){
-        String name = Joiners.DOT.join(guild.getId(), ASTIdentifier.ROLEGROUP.name(), "a","5");
+    public void removeRoleGroupValueSymbol(){
+        assertThat(guildScope.getLocalRoleGroupEntrySymbols()).contains(roleSymbol);
 
-        Optional<LongGroupValueSymbol> symbolOpt = globalScope.resolveLongGroupValueDown(name);
+        SymbolRemover.remove(roleSymbol);
 
-        assertThat(symbolOpt).isPresent();
-
-        SymbolRemover.remove(symbolOpt.get());
-
-        assertThat(globalScope.resolveLongGroupValueDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalRoleGroupEntrySymbols()).doesNotContain(roleSymbol);
     }
 
     @Test
-    public void removeLongGroupArtifactSymbol(){
-        String name = Joiners.DOT.join(guild.getId(), ASTIdentifier.ROLEGROUP.name(), "a");
+    public void removeSubredditGroupValueSymbol(){
+        assertThat(guildScope.getLocalSubredditGroupEntrySymbols()).contains(subredditSymbol);
 
-        Optional<LongGroupArtifactSymbol> symbolOpt = globalScope.resolveLongGroupArtifactDown(name);
+        SymbolRemover.remove(subredditSymbol);
 
-        assertThat(symbolOpt).isPresent();
-
-        SymbolRemover.remove(symbolOpt.get());
-
-        assertThat(globalScope.resolveLongGroupArtifactDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalSubredditGroupEntrySymbols()).doesNotContain(subredditSymbol);
     }
 
     @Test
-    public void removeLongGroupEntrySymbol(){
-        String name = Joiners.DOT.join(guild.getId(), ASTIdentifier.ROLEGROUP.name());
+    public void removeLongGroupElementSymbol(){
+        assertThat(guildScope.getLocalLongGroupElementSymbols()).contains(longSymbol);
 
-        Collection<LongGroupEntrySymbol> symbols = globalScope.resolveLongGroupEntryDownMany(name);
-        int expected = symbols.size();
+        SymbolRemover.remove(longSymbol);
 
-        do{
-            symbols = globalScope.resolveLongGroupEntryDownMany(name);
-
-            SymbolRemover.remove(symbols.iterator().next());
-            --expected;
-
-            assertThat(globalScope.resolveLongGroupEntryDownMany(name)).hasSize(expected);
-        //The last symbol was removed in this operation
-        }while(symbols.size() == 1);
-
-        assertThat(globalScope.resolveLongGroupArtifactDown(name)).isNotPresent();
+        assertThat(guildScope.getLocalLongGroupElementSymbols()).doesNotContain(longSymbol);
     }
 
     @Test

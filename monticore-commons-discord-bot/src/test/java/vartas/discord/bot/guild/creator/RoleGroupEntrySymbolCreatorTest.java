@@ -17,36 +17,40 @@
 
 package vartas.discord.bot.guild.creator;
 
-import de.se_rwth.commons.Joiners;
 import org.junit.Before;
 import org.junit.Test;
+import vartas.discord.bot.guild.AbstractGuildTest;
+import vartas.discord.bot.guild._ast.ASTRoleGroupEntry;
 import vartas.discord.bot.guild._symboltable.GuildScope;
-import vartas.discord.bot.guild._symboltable.LongGroupArtifactSymbol;
+import vartas.discord.bot.guild._symboltable.RoleGroupEntrySymbol;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongGroupArtifactSymbolCreatorTest extends LongGroupValueSymbolCreatorTest {
-    protected String longGroupArtifact;
-    protected String group = "role";
+public class RoleGroupEntrySymbolCreatorTest extends AbstractGuildTest {
+    protected String group = "group";
     @Before
     public void setUp(){
         guildScope = new GuildScope();
-        LongGroupArtifactSymbolCreator.create(guildScope, group, type, value);
-
-        longGroupArtifact = group;
-        longGroupValue = Joiners.DOT.join(group, value);
+        RoleGroupEntrySymbolCreator.create(guildScope, group);
     }
     @Test
-    public void testLongGroupArtifactSymbol(){
-        Optional<LongGroupArtifactSymbol> symbolOpt = guildScope.resolveLongGroupArtifactDown(longGroupArtifact);
-        LongGroupArtifactSymbol symbol;
+    public void testLongGroupEntrySymbol(){
+        Optional<RoleGroupEntrySymbol> symbolOpt = guildScope.resolveRoleGroupEntry(group);
+        RoleGroupEntrySymbol symbol;
+        Optional<ASTRoleGroupEntry> astOpt;
+        ASTRoleGroupEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
+        astOpt = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(group);
+        assertThat(astOpt).isPresent();
+
+        ast = astOpt.get();
+        assertThat(ast.getName()).isEqualTo(group);
     }
 }

@@ -17,31 +17,28 @@
 
 package vartas.discord.bot.guild.cocos;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import de.se_rwth.commons.logging.Log;
+import vartas.discord.bot.guild._ast.ASTBlacklistEntry;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
-import vartas.discord.bot.guild._ast.ASTStringEntry;
 import vartas.discord.bot.guild._cocos.GuildASTGuildArtifactCoCo;
 import vartas.discord.bot.guild._visitor.GuildVisitor;
 
 public class BlackListIsUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
     public static final String ERROR_MESSAGE = "The blacklist identifier appears more than once.";
-    Multimap<ASTIdentifier, ASTStringEntry> map;
+    protected int counter;
 
     @Override
     public void check(ASTGuildArtifact node) {
-        map = LinkedListMultimap.create();
+        counter = 0;
 
         node.accept(this);
 
-        if(map.get(ASTIdentifier.BLACKLIST).size() > 1)
+        if(counter > 1)
             Log.error(ERROR_MESSAGE);
     }
 
     @Override
-    public void visit(ASTStringEntry node){
-        map.put(node.getIdentifier(), node);
+    public void visit(ASTBlacklistEntry node){
+        ++counter;
     }
 }

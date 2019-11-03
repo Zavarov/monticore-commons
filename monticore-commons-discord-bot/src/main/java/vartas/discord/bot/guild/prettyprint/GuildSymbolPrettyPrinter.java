@@ -22,8 +22,6 @@ import de.monticore.prettyprint.IndentPrinter;
 import vartas.discord.bot.guild._symboltable.*;
 import vartas.discord.bot.guild._visitor.GuildSymbolVisitor;
 
-import java.util.Locale;
-
 public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
     protected GuildSymbolVisitor realThis = this;
     protected IndentPrinter printer;
@@ -54,17 +52,22 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
 
     @Override
     public void visit(GuildArtifactSymbol symbol){
-        printer.print("guild ");
-        printer.print(symbol.getName());
-        printer.print("L");
-        printer.addLine(" {");
+        printer.print("guild");
+        printer.print(" ");
+        symbol.getAstNode().ifPresent(ast -> ast.getId().accept(prettyPrinter));
+        printer.print(" ");
+        printer.addLine("{");
     }
 
     @Override
     public void traverse(GuildArtifactSymbol symbol){
-        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalStringEntrySymbols())
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalPrefixEntrySymbols())
             entry.accept(getRealThis());
-        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalLongGroupEntrySymbols())
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalBlacklistEntrySymbols())
+            entry.accept(getRealThis());
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalSubredditGroupEntrySymbols())
+            entry.accept(getRealThis());
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalRoleGroupEntrySymbols())
             entry.accept(getRealThis());
     }
 
@@ -74,74 +77,79 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
     }
 
     @Override
-    public void visit(StringEntrySymbol symbol){
-        //Print identifier
-        printer.print(symbol.getName().toLowerCase(Locale.ENGLISH));
-        printer.print(" ");
+    public void handle(BlacklistEntrySymbol symbol){
+        symbol.getAstNode().ifPresent(ast -> {
+            printer.print("blacklist");
+            printer.print(" ");
+            ast.getStringLiteral().accept(prettyPrinter);
+            printer.println();
+        });
     }
 
     @Override
-    public void traverse(StringEntrySymbol symbol){
-        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalStringValueSymbols())
+    public void handle(PrefixEntrySymbol symbol){
+        symbol.getAstNode().ifPresent(ast -> {
+            printer.print("prefix");
+            printer.print(" ");
+            ast.getStringLiteral().accept(prettyPrinter);
+            printer.println();
+        });
+    }
+
+    @Override
+    public void visit(RoleGroupEntrySymbol symbol){
+        symbol.getAstNode().ifPresent(ast -> {
+            printer.print("rolegroup");
+            printer.print(" ");
+            ast.getStringLiteral().accept(prettyPrinter);
+            printer.print(" ");
+            printer.addLine("{");
+        });
+    }
+
+    @Override
+    public void traverse(RoleGroupEntrySymbol symbol){
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalLongGroupElementSymbols())
             entry.accept(getRealThis());
     }
 
     @Override
-    public void endVisit(StringEntrySymbol symbol){
-        printer.println();
-    }
-
-    @Override
-    public void handle(StringValueSymbol symbol){
-        printer.print("\"");
-        printer.print(symbol.getName());
-        printer.print("\"");
-
-    }
-
-    @Override
-    public void visit(LongGroupEntrySymbol symbol){
-        //Print identifier
-        printer.print(symbol.getName().toLowerCase(Locale.ENGLISH));
-        printer.print(" ");
-    }
-
-    @Override
-    public void traverse(LongGroupEntrySymbol symbol){
-        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalLongGroupArtifactSymbols())
-            entry.accept(getRealThis());
-    }
-
-    @Override
-    public void visit(LongGroupArtifactSymbol symbol){
-        //Print group name
-        printer.print("\"");
-        printer.print(symbol.getName());
-        printer.print("\"");
-        printer.addLine(" {");
-    }
-
-    @Override
-    public void traverse(LongGroupArtifactSymbol symbol){
-        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalLongGroupValueSymbols())
-            entry.accept(getRealThis());
-    }
-
-    @Override
-    public void endVisit(LongGroupArtifactSymbol symbol){
+    public void endVisit(RoleGroupEntrySymbol symbol){
         printer.addLine("}");
     }
 
     @Override
-    public void handle(LongGroupValueSymbol symbol){
+    public void visit(SubredditGroupEntrySymbol symbol){
+        symbol.getAstNode().ifPresent(ast -> {
+            printer.print("subreddit");
+            printer.print(" ");
+            ast.getStringLiteral().accept(prettyPrinter);
+            printer.print(" ");
+            printer.addLine("{");
+        });
+    }
+
+    @Override
+    public void traverse(SubredditGroupEntrySymbol symbol){
+        for(ICommonGuildSymbol entry : symbol.getSpannedScope().getLocalLongGroupElementSymbols())
+            entry.accept(getRealThis());
+    }
+
+    @Override
+    public void endVisit(SubredditGroupEntrySymbol symbol){
+        printer.addLine("}");
+    }
+
+    @Override
+    public void handle(LongGroupElementSymbol symbol){
         symbol.getAstNode().ifPresent(ast -> {
             //Print type
             if(ast.isPresentType()) {
                 printer.print(ast.getType());
                 printer.print(" : ");
             }
-            //Print value
-            ast.getValue().accept(prettyPrinter);
+            //Print element
+            ast.getElement().accept(prettyPrinter);
             printer.println();
         });
     }

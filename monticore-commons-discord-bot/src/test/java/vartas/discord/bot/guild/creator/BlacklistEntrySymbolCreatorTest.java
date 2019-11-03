@@ -17,38 +17,42 @@
 
 package vartas.discord.bot.guild.creator;
 
-import de.se_rwth.commons.Joiners;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
+import vartas.discord.bot.guild.AbstractGuildTest;
+import vartas.discord.bot.guild._ast.ASTBlacklistEntry;
+import vartas.discord.bot.guild._symboltable.BlacklistEntrySymbol;
 import vartas.discord.bot.guild._symboltable.GuildScope;
-import vartas.discord.bot.guild._symboltable.LongGroupEntrySymbol;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongGroupEntrySymbolCreatorTest extends LongGroupArtifactSymbolCreatorTest{
-    protected String longGroupEntry;
-    protected String identifier = ASTIdentifier.ROLEGROUP.name();
+public class BlacklistEntrySymbolCreatorTest extends AbstractGuildTest {
+    protected String value = "value";
     @Before
     public void setUp(){
         guildScope = new GuildScope();
-        LongGroupEntrySymbolCreator.create(guildScope, ASTIdentifier.ROLEGROUP, group, type, value);
 
-        longGroupEntry = identifier;
-        longGroupArtifact = Joiners.DOT.join(identifier, group);
-        longGroupValue = Joiners.DOT.join(identifier, group, value);
+        BlacklistEntrySymbolCreator.create(guildScope, value);
     }
     @Test
-    public void testLongGroupEntrySymbol(){
-        Optional<LongGroupEntrySymbol> symbolOpt = guildScope.resolveLongGroupEntryDown(longGroupEntry);
-        LongGroupEntrySymbol symbol;
+    public void testStringEntrySymbol(){
+        Optional<BlacklistEntrySymbol> symbolOpt = guildScope.resolveBlacklistEntry(value);
+        BlacklistEntrySymbol symbol;
+        Optional<ASTBlacklistEntry> astOpt;
+        ASTBlacklistEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
+        astOpt = symbol.getAstNode();
 
-        assertThat(symbol.getName()).isEqualTo(identifier);
+        assertThat(symbol.getName()).isEqualTo(value);
+        assertThat(astOpt).isPresent();
+
+        ast = astOpt.get();
+
+        assertThat(ast.getName()).isEqualTo(value);
     }
 }

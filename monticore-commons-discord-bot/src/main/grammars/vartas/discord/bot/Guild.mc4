@@ -6,39 +6,34 @@ grammar Guild extends de.monticore.literals.MCCommonLiterals{
             Entry*
         "}";
 
-    interface Entry = Identifier;
-
-    symbol scope StringEntry implements Entry =
-        Identifier StringValue
+    interface Entry =
+        StringLiteral
     ;
 
-    symbol StringValue =
-        value:StringLiteral
-    ;
-
-    symbol scope LongGroupEntry implements Entry =
-        Identifier LongGroupArtifact
-    ;
-
-    symbol scope LongGroupArtifact =
-        group:StringLiteral "{"
-            LongGroupValue+
+    LongGroup =
+        "{"
+            LongGroupElement+
         "}"
     ;
 
-    symbol LongGroupValue =
-        (type:Name ":")? value:BasicLongLiteral
+    symbol LongGroupElement =
+        (type:Name ":")? element:BasicLongLiteral
     ;
 
-    /*=========================================================*/
-    /*=== Enum                                              ===*/
-    /*=========================================================*/
+    symbol BlacklistEntry implements Entry =
+        "blacklist" StringLiteral
+    ;
 
-    enum Identifier =
-        PREFIX    : "prefix"    |
-        BLACKLIST : "blacklist" |
-        ROLEGROUP : "rolegroup" |
-        SUBREDDIT : "subreddit"
+    symbol PrefixEntry implements Entry =
+        "prefix" StringLiteral
+    ;
+
+    symbol scope RoleGroupEntry implements Entry =
+        "rolegroup" StringLiteral LongGroup
+    ;
+
+    symbol scope SubredditGroupEntry implements Entry =
+        "subreddit" StringLiteral LongGroup
     ;
 
     /*=========================================================*/
@@ -47,25 +42,13 @@ grammar Guild extends de.monticore.literals.MCCommonLiterals{
 
     astrule Entry =
         method public String getName(){
-            return getIdentifier().name();
+            return getStringLiteral().getValue();
         }
     ;
 
-    astrule StringValue =
+    astrule LongGroupElement =
         method public String getName(){
-            return getValue().getSource();
-        }
-    ;
-
-    astrule LongGroupArtifact =
-        method public String getName(){
-            return getGroup().getValue();
-        }
-    ;
-
-    astrule LongGroupValue =
-        method public String getName(){
-            return getValue().getDigits();
+            return getElement().getDigits();
         }
     ;
 
@@ -81,5 +64,9 @@ grammar Guild extends de.monticore.literals.MCCommonLiterals{
 
     symbolrule GuildArtifact =
         reference : java.nio.file.Path
+    ;
+
+    symbolrule BlacklistEntry =
+        pattern : java.util.regex.Pattern
     ;
 }

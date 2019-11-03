@@ -19,38 +19,36 @@ package vartas.discord.bot.guild.creator;
 
 import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
 import de.monticore.literals.mccommonliterals._ast.MCCommonLiteralsNodeFactory;
-import vartas.discord.bot.guild._ast.ASTLongGroupValue;
+import vartas.discord.bot.guild._ast.ASTLongGroupElement;
 import vartas.discord.bot.guild._ast.GuildNodeFactory;
 import vartas.discord.bot.guild._symboltable.IGuildScope;
-import vartas.discord.bot.guild._symboltable.LongGroupValueSymbol;
+import vartas.discord.bot.guild._symboltable.LongGroupElementSymbol;
 
-public abstract class LongGroupValueSymbolCreator {
-    public static LongGroupValueSymbol create(IGuildScope enclosingScope, String type, String value){
-        LongGroupValueSymbol result = new LongGroupValueSymbol(value);
-
-        //Set the scopes for the symbol
-        result.setEnclosingScope(enclosingScope);
+public abstract class LongGroupElementSymbolCreator {
+    public static LongGroupElementSymbol create(IGuildScope enclosingScope, String type, String value){
+        LongGroupElementSymbol result = new LongGroupElementSymbol(value);
 
         //Register result in the enclosing scope
+        result.setEnclosingScope(enclosingScope);
         enclosingScope.add(result);
 
-        //Set the AST of the symbol
-        ASTLongGroupValue ast = createAst(type, value);
+        //Set the AST of this symbol
+        ASTLongGroupElement ast = createAst(type, value);
         result.setAstNode(ast);
 
         return result;
     }
 
-    protected static ASTLongGroupValue createAst(String type, String value){
-        ASTLongGroupValue ast = GuildNodeFactory.createASTLongGroupValue();
+    protected static ASTLongGroupElement createAst(String type, String value){
+        ASTLongGroupElement ast = GuildNodeFactory.createASTLongGroupElement();
 
         ast.setType(type);
-        ast.setValue(createValue(value));
+        ast.setElement(createElement(value));
 
         return ast;
     }
 
-    protected static ASTBasicLongLiteral createValue(String value){
+    protected static ASTBasicLongLiteral createElement(String value){
         ASTBasicLongLiteral ast = MCCommonLiteralsNodeFactory.createASTBasicLongLiteral();
 
         ast.setDigits(value);

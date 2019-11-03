@@ -17,39 +17,42 @@
 
 package vartas.discord.bot.guild.creator;
 
-import de.se_rwth.commons.Joiners;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.guild._ast.ASTIdentifier;
+import vartas.discord.bot.guild.AbstractGuildTest;
+import vartas.discord.bot.guild._ast.ASTLongGroupElement;
 import vartas.discord.bot.guild._symboltable.GuildScope;
-import vartas.discord.bot.guild._symboltable.StringEntrySymbol;
+import vartas.discord.bot.guild._symboltable.LongGroupElementSymbol;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StringEntrySymbolTableCreatorTest extends StringValueSymbolCreatorTest{
-    protected String stringEntryName;
-    protected String identifier = ASTIdentifier.BLACKLIST.name();
+public class LongGroupElementSymbolCreatorTest extends AbstractGuildTest {
+    protected String type = "role";
+    protected String value = "12345";
     @Before
     public void setUp(){
         guildScope = new GuildScope();
-
-        StringEntrySymbolCreator.create(guildScope, ASTIdentifier.BLACKLIST, value);
-
-        stringEntryName = identifier;
-        stringValueName = Joiners.DOT.join(identifier, value);
+        LongGroupElementSymbolCreator.create(guildScope, type, value);
     }
     @Test
-    public void testStringEntrySymbol(){
-        Optional<StringEntrySymbol> symbolOpt = guildScope.resolveStringEntryDown(stringEntryName);
-        StringEntrySymbol symbol;
+    public void testCreate(){
+        Optional<LongGroupElementSymbol> symbolOpt = guildScope.resolveLongGroupElement(value);
+        LongGroupElementSymbol symbol;
+        Optional<ASTLongGroupElement> astOpt;
+        ASTLongGroupElement ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
+        astOpt = symbol.getAstNode();
 
-        assertThat(symbol.getName()).isEqualTo(identifier);
+        assertThat(symbol.getName()).isEqualTo(value);
+        assertThat(astOpt).isPresent();
 
+        ast = astOpt.get();
+        assertThat(ast.getType()).isEqualTo(type);
+        assertThat(ast.getName()).isEqualTo(value);
     }
 }

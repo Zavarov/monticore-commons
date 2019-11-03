@@ -39,7 +39,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
-public class RankSymbolPrettyPrinterTest extends AbstractTest {
+public class RankSymbolPrettyPrinterTest{
     static RankSymbolPrettyPrinter prettyPrinter;
     static ASTRankArtifact artifact;
 
@@ -57,14 +57,14 @@ public class RankSymbolPrettyPrinterTest extends AbstractTest {
     }
 
     @RunWith(Parameterized.class)
-    public static class RankPrettyPrinterTest{
+    public static class RankPrettyPrinterTest extends AbstractTest{
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    { "1.root", "root" },
-                    { "1.reddit", "reddit" },
-                    { "2.dev", "dev" },
-                    { "2.reddit", "reddit" }
+                    { "1.ROOT", "root" },
+                    { "1.REDDIT", "reddit" },
+                    { "2.DEVELOPER", "developer" },
+                    { "2.REDDIT", "reddit" }
             });
         }
         @Parameter
@@ -84,12 +84,12 @@ public class RankSymbolPrettyPrinterTest extends AbstractTest {
     }
 
     @RunWith(Parameterized.class)
-    public static class UserWithRankPrettyPrinterTest{
+    public static class UserWithRankPrettyPrinterTest extends AbstractTest{
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
                     { "1", "user : 1L has rank root, reddit\n" },
-                    { "2", "user : 2L has rank dev, reddit\n" },
+                    { "2", "user : 2L has rank developer, reddit\n" },
             });
         }
         @Parameter
@@ -107,7 +107,7 @@ public class RankSymbolPrettyPrinterTest extends AbstractTest {
         }
     }
 
-    public static class RankSymbolPrettyPrinterMethodsTest{
+    public static class RankSymbolPrettyPrinterMethodsTest extends AbstractTest{
         RankSymbolPrettyPrinter prettyPrinter = new RankSymbolPrettyPrinter(new IndentPrinter());
         @Test
         public void testSetRealThis(){
