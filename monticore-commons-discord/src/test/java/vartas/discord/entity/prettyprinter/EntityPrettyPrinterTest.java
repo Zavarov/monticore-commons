@@ -68,4 +68,11 @@ public class EntityPrettyPrinterTest {
 
         assertThat(prettyPrinter.prettyprint(channel)).isEqualTo("<#12345>");
     }
+
+    @Test
+    public void testSetRealThis(){
+        assertThat(prettyPrinter.getRealThis()).isEqualTo(prettyPrinter);
+        prettyPrinter.setRealThis(null);
+        assertThat(prettyPrinter.getRealThis()).isNull();
+    }
 }
