@@ -1,5 +1,5 @@
 command {
-    "test" @ guild, guild{
+    test @ Guild, Guild{
              class : "TestCommand"
     }
 }

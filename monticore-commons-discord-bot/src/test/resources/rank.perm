@@ -1,4 +1,4 @@
 rank {
-    user : 1L has rank root, reddit
-    user : 2L has rank developer, reddit
+    user : 1L has rank Root, Reddit
+    user : 2L has rank Developer, Reddit
 }

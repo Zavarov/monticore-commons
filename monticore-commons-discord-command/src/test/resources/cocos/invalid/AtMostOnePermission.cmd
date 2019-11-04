@@ -1,7 +1,7 @@
 command {
-    "test" @ guild{
+    test @ Guild{
              class : "TestCommand"
-        permission : administrator
-        permission : administrator
+        permission : Administrator
+        permission : Administrator
     }
 }

@@ -119,7 +119,7 @@ public class CoCoTest extends AbstractTest {
             {
                 "NamesHaveNoWhitespaces.cmd",
                 NamesHaveNoWhitespacesCoCo.ERROR_MESSAGE,
-                "te st"
+                "Test Command"
             }
         });
     }

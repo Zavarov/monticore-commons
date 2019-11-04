@@ -4,59 +4,34 @@ package vartas.chart;
  * This grammar defines the syntax of the different intervals for the charts.
  */
 component grammar Interval{
-    abstract Interval;
+    symbol IntervalName =
+        Interval
+    ;
 
     /*=========================================================*/
-    /*=======================  Symbols  =======================*/
+    /*========================  Enum  =========================*/
     /*=========================================================*/
 
-    symbol Day extends Interval =
-        name:"day";
-
-    symbol Week extends Interval =
-        name:"week";
-
-    symbol Month extends Interval =
-        name:"month";
-
-    symbol Year extends Interval =
-        name:"year";
-
+    enum Interval =
+        DAY   : "Day"   |
+        WEEK  : "Week"  |
+        MONTH : "Month" |
+        YEAR  : "Year"
+    ;
 
     /*=========================================================*/
     /*======================= AST RULES =======================*/
     /*=========================================================*/
 
-    astrule Interval =
-        method public vartas.chart.Interval getIntervalType(){
-            throw new UnsupportedOperationException("Please specify a interval corresponding to this type in the grammar.");
-        }
+    astrule IntervalName =
         method public String getName(){
-            throw new UnsupportedOperationException("Please specify a name for this online status.");
+            return getInterval().name();
         }
     ;
 
-    astrule Day =
-        method public vartas.chart.Interval getIntervalType(){
-            return vartas.chart.Interval.DAY;
-        }
-    ;
-
-    astrule Week =
-        method vartas.chart.Interval getIntervalType(){
-            return vartas.chart.Interval.WEEK;
-        }
-    ;
-
-    astrule Month =
-        method vartas.chart.Interval getIntervalType(){
-            return vartas.chart.Interval.MONTH;
-        }
-    ;
-
-    astrule Year =
-        method vartas.chart.Interval getIntervalType(){
-            return vartas.chart.Interval.YEAR;
+    symbolrule IntervalName =
+        method public vartas.chart.Interval getInterval(){
+            return vartas.chart.Interval.valueOf(getName());
         }
     ;
 }

@@ -1,5 +1,5 @@
 command {
-    "test"{
+    test{
              class : "testCommand"
     }
 }

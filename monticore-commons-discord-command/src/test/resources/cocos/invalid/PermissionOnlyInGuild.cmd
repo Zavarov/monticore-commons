@@ -1,6 +1,6 @@
 command {
-    "test" {
+    test {
              class : "TestCommand"
-        permission : administrator
+        permission : Administrator
     }
 }

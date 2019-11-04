@@ -1,6 +1,6 @@
 command {
-    "test" {
+    test {
              class : "TestCommand"
-         parameter : m:message
+         parameter : m:Message
     }
 }

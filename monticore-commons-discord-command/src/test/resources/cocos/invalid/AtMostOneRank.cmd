@@ -1,7 +1,7 @@
 command {
-    "test" {
+    test {
              class : "TestCommand"
-              rank : root
-              rank : root
+              rank : Root
+              rank : Root
     }
 }

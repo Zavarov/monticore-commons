@@ -14,43 +14,43 @@ component grammar Permission{
     /*=========================================================*/
 
     enum Permission =
-        CREATE_INSTANT_INVITE       : "create instant invite"           |
-        KICK_MEMBERS                : "kick members"                    |
-        BAN_MEMBERS                 : "ban members"                     |
-        ADMINISTRATOR               : "administrator"                   |
-        MANAGE_CHANNEL              : "manage channels"                 |
-        MANAGE_SERVER               : "manage server"                   |
-        MESSAGE_ADD_REACTION        : "add reactions"                   |
-        VIEW_AUDIT_LOGS             : "view audit logs"                 |
-        PRIORITY_SPEAKER            : "priority speaker"                |
+        CREATE_INSTANT_INVITE       : "Create Instant Invite"           |
+        KICK_MEMBERS                : "Kick Members"                    |
+        BAN_MEMBERS                 : "Ban Members"                     |
+        ADMINISTRATOR               : "Administrator"                   |
+        MANAGE_CHANNEL              : "Manage Channels"                 |
+        MANAGE_SERVER               : "Manage Server"                   |
+        MESSAGE_ADD_REACTION        : "Add Reactions"                   |
+        VIEW_AUDIT_LOGS             : "View Audit Logs"                 |
+        PRIORITY_SPEAKER            : "Priority Speaker"                |
 
-        VIEW_CHANNEL                : "view channels"                   |
+        VIEW_CHANNEL                : "View Channels"                   |
 
-        MESSAGE_READ                : "read messages"                   |
-        MESSAGE_WRITE               : "send messages"                   |
-        MESSAGE_TTS                 : "text to speech"                  |
-        MESSAGE_MANAGE              : "manage messages"                 |
-        MESSAGE_EMBED_LINKS         : "embed links"                     |
-        MESSAGE_ATTACH_FILES        : "attach files"                    |
-        MESSAGE_HISTORY             : "read history"                    |
-        MESSAGE_MENTION_EVERYONE    : "mention everyone"                |
-        MESSAGE_EXT_EMOJI           : "external emojis"                 |
+        MESSAGE_READ                : "Read Messages"                   |
+        MESSAGE_WRITE               : "Send Messages"                   |
+        MESSAGE_TTS                 : "Text To Speech"                  |
+        MESSAGE_MANAGE              : "Manage Messages"                 |
+        MESSAGE_EMBED_LINKS         : "Embed Links"                     |
+        MESSAGE_ATTACH_FILES        : "Attach Files"                    |
+        MESSAGE_HISTORY             : "Read History"                    |
+        MESSAGE_MENTION_EVERYONE    : "Mention Everyone"                |
+        MESSAGE_EXT_EMOJI           : "External Emojis"                 |
 
-        VOICE_STREAM                : "voice stream"                    |
-        VOICE_CONNECT               : "voice connect"                   |
-        VOICE_SPEAK                 : "voice speak"                     |
-        VOICE_MUTE_OTHERS           : "voice mute others"               |
-        VOICE_DEAF_OTHERS           : "voice deaf others"               |
-        VOICE_MOVE_OTHERS           : "voice move others"               |
-        VOICE_USE_VAD               : "use voice activity detection"    |
+        VOICE_STREAM                : "Voice Stream"                    |
+        VOICE_CONNECT               : "Voice Connect"                   |
+        VOICE_SPEAK                 : "Voice Speak"                     |
+        VOICE_MUTE_OTHERS           : "Voice Mute Others"               |
+        VOICE_DEAF_OTHERS           : "Voice Deaf Others"               |
+        VOICE_MOVE_OTHERS           : "Voice Move Others"               |
+        VOICE_USE_VAD               : "Use Voice Activity Detection"    |
 
-        NICKNAME_CHANGE             : "change nickname"                 |
-        NICKNAME_MANAGE             : "manage nicknames"                |
+        NICKNAME_CHANGE             : "Change nickname"                 |
+        NICKNAME_MANAGE             : "Manage nicknames"                |
 
-        MANAGE_ROLES                : "manage roles"                    |
-        MANAGE_PERMISSIONS          : "manage permissions"              |
-        MANAGE_WEBHOOKS             : "manage webhooks"                 |
-        MANAGE_EMOTES               : "manage emotes"
+        MANAGE_ROLES                : "Manage Roles"                    |
+        MANAGE_PERMISSIONS          : "Manage Permissions"              |
+        MANAGE_WEBHOOKS             : "Manage Webhooks"                 |
+        MANAGE_EMOTES               : "Manage Emotes"
     ;
 
     /*=========================================================*/

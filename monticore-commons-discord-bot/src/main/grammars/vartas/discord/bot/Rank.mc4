@@ -16,10 +16,10 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     /*=========================================================*/
 
     enum Rank =
-        ROOT      : "root"      |
-        REDDIT    : "reddit"    |
-        DEVELOPER : "developer" |
-        DEVELOPER : "dev"
+        ROOT      : "Root"      |
+        REDDIT    : "Reddit"    |
+        DEVELOPER : "Developer" |
+        DEVELOPER : "Dev"
     ;
 
     /*=========================================================*/
@@ -42,6 +42,16 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     astrule UserWithRank =
         method public String getName(){
             return getId().getDigits();
+        }
+    ;
+
+    /*=========================================================*/
+    /*=== Symbol Rules                                      ===*/
+    /*=========================================================*/
+
+    symbolrule RankName =
+        method public ASTRank getRank(){
+            return ASTRank.valueOf(getName());
         }
     ;
 }

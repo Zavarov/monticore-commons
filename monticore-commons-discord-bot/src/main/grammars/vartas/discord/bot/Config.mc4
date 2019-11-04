@@ -21,20 +21,20 @@ grammar Config extends de.monticore.literals.MCCommonLiterals{
     /*=========================================================*/
 
     enum Config =
-        STATUS_MESSAGE_UPDATE_INTERVAL  : "statusMessageUpdateInterval" |
-        INTERACTIVE_MESSAGE_LIFETIME    : "interactiveMessageLifetime"  |
-        DISCORD_SHARDS                  : "discordShards"               |
-        ACTIVITY_UPDATE_INTERVAL        : "activityUpdateInterval"      |
-        INVITE_SUPPORT_SERVER           : "inviteSupportServer"         |
-        BOT_NAME                        : "botName"                     |
-        GLOBAL_PREFIX                   : "globalPrefix"                |
-        WIKI_LINK                       : "wikiLink"                    |
-        IMAGE_WIDTH                     : "imageWidth"                  |
-        IMAGE_HEIGHT                    : "imageHeight"                 |
-        DISCORD_TOKEN                   : "discordToken"                |
-        REDDIT_ACCOUNT                  : "redditAccount"               |
-        REDDIT_ID                       : "redditId"                    |
-        REDDIT_SECRET                   : "redditSecret"
+        STATUS_MESSAGE_UPDATE_INTERVAL  : "StatusMessageUpdateInterval" |
+        INTERACTIVE_MESSAGE_LIFETIME    : "InteractiveMessageLifetime"  |
+        DISCORD_SHARDS                  : "DiscordShards"               |
+        ACTIVITY_UPDATE_INTERVAL        : "ActivityUpdateInterval"      |
+        INVITE_SUPPORT_SERVER           : "InviteSupportServer"         |
+        BOT_NAME                        : "BotName"                     |
+        GLOBAL_PREFIX                   : "GlobalPrefix"                |
+        WIKI_LINK                       : "WikiLink"                    |
+        IMAGE_WIDTH                     : "ImageWidth"                  |
+        IMAGE_HEIGHT                    : "ImageHeight"                 |
+        DISCORD_TOKEN                   : "DiscordToken"                |
+        REDDIT_ACCOUNT                  : "RedditAccount"               |
+        REDDIT_ID                       : "RedditId"                    |
+        REDDIT_SECRET                   : "RedditSecret"
     ;
 
     /*=========================================================*/

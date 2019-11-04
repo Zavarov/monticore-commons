@@ -10,16 +10,16 @@ component grammar Parameter extends de.monticore.MCBasics{
     ;
 
     enum Parameter =
-        INTERVAL      : "interval"     |
-        ONLINE_STATUS : "onlinestatus" |
-        STRING        : "string"       |
-        DATE          : "date"         |
-        MESSAGE       : "message"      |
-        GUILD         : "guild"        |
-        MEMBER        : "member"       |
-        USER          : "user"         |
-        TEXT_CHANNEL  : "textchannel"  |
-        ROLE          : "role"         |
-        EXPRESSION    : "expression"
+        INTERVAL      : "Interval"     |
+        ONLINE_STATUS : "Onlinestatus" |
+        STRING        : "String"       |
+        DATE          : "Date"         |
+        MESSAGE       : "Message"      |
+        GUILD         : "Guild"        |
+        MEMBER        : "Member"       |
+        USER          : "User"         |
+        TEXT_CHANNEL  : "Textchannel"  |
+        ROLE          : "Role"         |
+        EXPRESSION    : "Expression"
     ;
 }

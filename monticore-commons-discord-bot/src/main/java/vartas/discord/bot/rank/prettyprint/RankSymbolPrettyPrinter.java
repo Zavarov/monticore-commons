@@ -18,6 +18,7 @@
 package vartas.discord.bot.rank.prettyprint;
 
 import de.monticore.prettyprint.IndentPrinter;
+import net.sourceforge.plantuml.StringUtils;
 import vartas.discord.bot.rank._symboltable.ICommonRankSymbol;
 import vartas.discord.bot.rank._symboltable.RankNameSymbol;
 import vartas.discord.bot.rank._symboltable.UserWithRankSymbol;
@@ -73,6 +74,6 @@ public class RankSymbolPrettyPrinter implements RankSymbolVisitor {
 
     @Override
     public void visit(RankNameSymbol symbol){
-        printer.print(symbol.getName().toLowerCase(Locale.ENGLISH));
+        printer.print(StringUtils.capitalize(symbol.getName().toLowerCase(Locale.ENGLISH)));
     }
 }

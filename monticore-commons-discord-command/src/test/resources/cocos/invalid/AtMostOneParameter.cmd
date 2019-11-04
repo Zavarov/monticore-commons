@@ -1,7 +1,7 @@
 command {
-    "test" {
+    test {
              class : "TestCommand"
-         parameter : s:string
-         parameter : s:string
+         parameter : s:String
+         parameter : s:String
     }
 }

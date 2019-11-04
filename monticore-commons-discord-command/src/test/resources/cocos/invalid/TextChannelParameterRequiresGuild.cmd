@@ -1,6 +1,6 @@
 command {
-    "test" {
+    test {
              class : "TestCommand"
-         parameter : t:textchannel
+         parameter : t:Textchannel
     }
 }

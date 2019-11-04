@@ -9,15 +9,15 @@ grammar Command extends de.monticore.literals.MCCommonLiterals,
                         vartas.discord.Parameter,
                         vartas.discord.bot.Rank{
     CommandArtifact =
-        ("package" package:StringLiteral)?
-        ("prefix" prefix:StringLiteral)?
+        ("package" package:(Name& || ".")+ ";" )?
+        ("prefix" prefix:(Name& || ".")+ ";" )?
         "command" "{"
             Command*
         "}"
     ;
 
     symbol scope Command =
-        StringLiteral ("@" (RestrictionName || ",")+ )? "{"
+        Name& ("@" (RestrictionName || ",")+ )? "{"
             Attribute*
         "}"
     ;
@@ -33,8 +33,8 @@ grammar Command extends de.monticore.literals.MCCommonLiterals,
     symbol RestrictionName = Restriction;
 
     enum Restriction =
-        GUILD      : "guild"      |
-        ATTACHMENT : "attachment"
+        GUILD      : "Guild"      |
+        ATTACHMENT : "Attachment"
     ;
 
     /*=========================================================*/
@@ -70,12 +70,6 @@ grammar Command extends de.monticore.literals.MCCommonLiterals,
     astrule RestrictionName =
         method public String getName(){
             return getRestriction().name();
-        }
-    ;
-
-    astrule Command =
-        method public String getName(){
-            return getStringLiteral().getValue();
         }
     ;
 

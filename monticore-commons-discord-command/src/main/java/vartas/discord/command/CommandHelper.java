@@ -17,7 +17,7 @@
 
 package vartas.discord.command;
 
-import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
+import de.se_rwth.commons.Joiners;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._parser.CommandParser;
 import vartas.discord.command._symboltable.CommandArtifactScope;
@@ -58,7 +58,7 @@ public abstract class CommandHelper {
         CommandArtifactScope artifactScope = symbolTableCreator.createFromAST(ast);
         scope.addSubScope(artifactScope);
 
-        ast.getPrefixOpt().map(ASTStringLiteral::getValue).ifPresent(artifactScope::setPackageName);
+        artifactScope.setPackageName(Joiners.DOT.join(ast.getPrefixList()));
     }
 
     private static CommandSymbolTableCreatorDelegator createSymbolTableCreator(CommandGlobalScope scope){

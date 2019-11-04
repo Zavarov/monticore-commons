@@ -1,8 +1,8 @@
 command {
-    "test1"{
+    test1{
              class : "TestCommand"
     }
-    "test2"{
+    test2{
              class : "TestCommand"
     }
 }

@@ -1,11 +1,11 @@
-package "vartas.discord.bot.exec.example"
-prefix "example"
+package vartas.discord.bot.exec.example;
+prefix example;
 
 command {
-    "test" @ guild, attachment{
+    test @ Guild, Attachment{
              class : "TestCommand"
-        permission : administrator, manage messages
-         parameter : g:guild, d:date
-              rank : root, dev
+        permission : Administrator, Manage Messages
+         parameter : g:Guild, d:Date
+              rank : Root, Dev
     }
 }

@@ -21,7 +21,7 @@ import de.monticore.ast.ASTNode;
 import de.monticore.expressions.commonexpressions._ast.*;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisitor;
 import de.monticore.prettyprint.IndentPrinter;
-import vartas.arithmeticexpressions.prettyprinter.ArithmeticExpressionsPrettyPrinter;
+import vartas.arithmeticexpressions.prettyprint.ArithmeticExpressionsPrettyPrinter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

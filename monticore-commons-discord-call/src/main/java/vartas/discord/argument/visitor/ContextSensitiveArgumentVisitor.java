@@ -19,21 +19,27 @@ package vartas.discord.argument.visitor;
 
 import de.monticore.expressions.commonexpressions._ast.ASTMinusExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import de.monticore.expressions.expressionsbasis._ast.ExpressionsBasisNodeFactory;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._ast.MCCommonLiteralsNodeFactory;
+import de.monticore.prettyprint.IndentPrinter;
+import org.apache.commons.lang3.StringUtils;
 import vartas.arithmeticexpressions._ast.ArithmeticExpressionsNodeFactory;
-import vartas.arithmeticexpressions.calculator.ExpressionsBasisValueCalculator;
+import vartas.arithmeticexpressions.prettyprint.ArithmeticExpressionsPrettyPrinter;
 import vartas.discord.argument._ast.*;
+import vartas.discord.argument._visitor.ArgumentInheritanceVisitor;
 import vartas.discord.argument._visitor.ArgumentVisitor;
+import vartas.discord.entity.prettyprinter.EntityPrettyPrinter;
+
+import java.util.Locale;
 
 /**
  * This class solves the conflict of ambiguous calls.<br>
- * For example, a date could both be treated as a date and an arithmetic expression
- * in which case, both branches are visited.
+ * For example, a date could be interpreted as a date, a (raw) string or an arithmetic expression
+ * in which case, all branches are visited.
  */
-public class ContextSensitiveArgumentVisitor implements ArgumentVisitor {
+public class ContextSensitiveArgumentVisitor implements ArgumentInheritanceVisitor {
+    protected ArithmeticExpressionsPrettyPrinter expressionsPrinter = new ArithmeticExpressionsPrettyPrinter(new IndentPrinter());
+    protected EntityPrettyPrinter entityPrinter = new EntityPrettyPrinter(new IndentPrinter());
     protected ArgumentVisitor realThis = this;
 
     @Override
@@ -47,50 +53,114 @@ public class ContextSensitiveArgumentVisitor implements ArgumentVisitor {
     }
 
     @Override
-    public void handle(ASTDateArgument ast){
-        //xx-xx-xxxx can both be a date and an arithmetic expression
-        ArgumentVisitor.super.handle(ast);
-
-        ASTExpressionArgument argument = ArgumentNodeFactory.createASTExpressionArgument();
-        ASTMinusExpression m1 = ArithmeticExpressionsNodeFactory.createASTMinusExpression();
-        ASTMinusExpression m2 = ArithmeticExpressionsNodeFactory.createASTMinusExpression();
-        ASTExpression day = ast.getDay();
-        ASTExpression month = ast.getMonth();
-        ASTExpression year = ast.getYear();
-
-        m1.setLeft(day);
-        m1.setRight(month);
-
-        m2.setLeft(m1);
-        m2.setRight(year);
-        argument.setExpression(m2);
-        ArgumentVisitor.super.handle(argument);
+    public void handle(ASTIntervalArgument node){
+        node.getIntervalArgumentEntry().accept(getRealThis());
+        handleAsString(node.getIntervalArgumentEntry());
     }
 
-    public void handle(String value){
-        ASTStringLiteral literal = MCCommonLiteralsNodeFactory.createASTStringLiteral();
-        ASTStringArgument argument = ArgumentNodeFactory.createASTStringArgument();
-
-        literal.setSource(value);
-        argument.setStringLiteral(literal);
-        ArgumentVisitor.super.handle(argument);
+    private void handleAsString(ASTIntervalArgumentEntry node){
+        String name = node.getIntervalName().getName();
+        name = name.toLowerCase(Locale.ENGLISH);
+        name = StringUtils.capitalize(name);
+        handleAsRawString(name);
     }
 
     @Override
-    public void handle(ASTRawTextArgument ast){
-        String text = ast.getText();
-        switch(text){
-            case ExpressionsBasisValueCalculator.PI:
-            case ExpressionsBasisValueCalculator.E:
-                ASTNameExpression expression = ExpressionsBasisNodeFactory.createASTNameExpression();
-                ASTExpressionArgument argument = ArgumentNodeFactory.createASTExpressionArgument();
+    public void handle(ASTOnlineStatusArgument node){
+        node.getOnlineStatusArgumentEntry().accept(getRealThis());
+        handleAsString(node.getOnlineStatusArgumentEntry());
+    }
 
-                expression.setName(text);
-                argument.setExpression(expression);
-                ArgumentVisitor.super.handle(argument);
-            //Always treat the raw text as a string
-            default:
-                handle(text);
-        }
+    private void handleAsString(ASTOnlineStatusArgumentEntry node){
+        String name = node.getOnlineStatusName().getName();
+        name = name.toLowerCase(Locale.ENGLISH);
+        name = StringUtils.capitalize(name);
+        handleAsRawString(name);
+    }
+
+    @Override
+    public void handle(ASTDateArgument node){
+        node.getDateArgumentEntry().accept(getRealThis());
+        handleAsString(node.getDateArgumentEntry());
+        handleAsExpression(node.getDateArgumentEntry());
+    }
+
+    private void handleAsString(ASTDateArgumentEntry node){
+        StringBuilder builder = new StringBuilder();
+        builder.append(expressionsPrinter.prettyprint(node.getDay()));
+        builder.append("-");
+        builder.append(expressionsPrinter.prettyprint(node.getMonth()));
+        builder.append("-");
+        builder.append(expressionsPrinter.prettyprint(node.getYear()));
+        handleAsRawString(builder.toString());
+    }
+
+    private void handleAsExpression(ASTDateArgumentEntry node){
+        ASTExpressionArgumentEntry target = ArgumentNodeFactory.createASTExpressionArgumentEntry();
+        ASTMinusExpression root = ArithmeticExpressionsNodeFactory.createASTMinusExpression();
+        ASTMinusExpression child = ArithmeticExpressionsNodeFactory.createASTMinusExpression();
+        ASTExpression day = node.getDay();
+        ASTExpression month = node.getMonth();
+        ASTExpression year = node.getYear();
+
+        child.setLeft(day);
+        child.setRight(month);
+
+        root.setLeft(child);
+        root.setRight(year);
+
+        target.setExpression(root);
+
+        target.accept(getRealThis());
+    }
+
+    @Override
+    public void handle(ASTUserArgument node){
+        node.getUserArgumentEntry().accept(getRealThis());
+        handleAsString(node.getUserArgumentEntry());
+    }
+
+    public void handleAsString(ASTUserArgumentEntry node){
+        String name = entityPrinter.prettyprint(node.getUser());
+        handleAsRawString(name);
+    }
+
+    @Override
+    public void handle(ASTTextChannelArgument node){
+        node.getTextChannelArgumentEntry().accept(getRealThis());
+        handleAsString(node.getTextChannelArgumentEntry());
+    }
+
+    public void handleAsString(ASTTextChannelArgumentEntry node){
+        String name = entityPrinter.prettyprint(node.getTextChannel());
+        handleAsRawString(name);
+    }
+
+    @Override
+    public void handle(ASTRoleArgument node){
+        node.getRoleArgumentEntry().accept(getRealThis());
+        handleAsString(node.getRoleArgumentEntry());
+    }
+
+    public void handleAsString(ASTRoleArgumentEntry node){
+        String name = entityPrinter.prettyprint(node.getRole());
+        handleAsRawString(name);
+    }
+
+    @Override
+    public void handle(ASTExpressionArgument node){
+        node.getExpressionArgumentEntry().accept(getRealThis());
+        handleAsString(node.getExpressionArgumentEntry());
+    }
+
+    public void handleAsString(ASTExpressionArgumentEntry node){
+        String name = expressionsPrinter.prettyprint(node.getExpression());
+        handleAsRawString(name);
+    }
+
+    private void handleAsRawString(String string){
+        ASTStringLiteral target = MCCommonLiteralsNodeFactory.createASTStringLiteral();
+        target.setSource(StringUtils.deleteWhitespace(string));
+        target.accept(getRealThis());
     }
 }

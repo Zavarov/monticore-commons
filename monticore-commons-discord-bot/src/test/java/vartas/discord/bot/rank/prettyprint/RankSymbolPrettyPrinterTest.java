@@ -61,10 +61,10 @@ public class RankSymbolPrettyPrinterTest{
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    { "1.ROOT", "root" },
-                    { "1.REDDIT", "reddit" },
-                    { "2.DEVELOPER", "developer" },
-                    { "2.REDDIT", "reddit" }
+                    { "1.ROOT", "Root" },
+                    { "1.REDDIT", "Reddit" },
+                    { "2.DEVELOPER", "Developer" },
+                    { "2.REDDIT", "Reddit" }
             });
         }
         @Parameter
@@ -88,8 +88,8 @@ public class RankSymbolPrettyPrinterTest{
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    { "1", "user : 1L has rank root, reddit\n" },
-                    { "2", "user : 2L has rank developer, reddit\n" },
+                    { "1", "user : 1L has rank Root, Reddit\n" },
+                    { "2", "user : 2L has rank Developer, Reddit\n" },
             });
         }
         @Parameter

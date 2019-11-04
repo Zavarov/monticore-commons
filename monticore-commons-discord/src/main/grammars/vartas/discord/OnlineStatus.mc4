@@ -13,11 +13,11 @@ component grammar OnlineStatus{
     /*=========================================================*/
 
     enum OnlineStatus =
-        ONLINE         : "online"    |
-        IDLE           : "idle"      |
-        DO_NOT_DISTURB : "busy"      |
-        INVISIBLE      : "invisible" |
-        OFFLINE        : "offline"
+        ONLINE         : "Online"    |
+        IDLE           : "Idle"      |
+        DO_NOT_DISTURB : "Busy"      |
+        INVISIBLE      : "Invisible" |
+        OFFLINE        : "Offline"
     ;
 
     /*=========================================================*/

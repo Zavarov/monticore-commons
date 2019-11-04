@@ -17,35 +17,30 @@
 
 package vartas.discord.argument.visitor;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
-import org.assertj.core.data.Percentage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import vartas.discord.argument._ast.ASTArgument;
-import vartas.discord.argument._ast.ASTDateArgument;
+import vartas.chart.interval._ast.ASTInterval;
+import vartas.discord.argument._ast.*;
 import vartas.discord.call._parser.CallParser;
+import vartas.discord.onlinestatus._ast.ASTOnlineStatus;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator.valueOf;
 
 @RunWith(Enclosed.class)
 public class ContextSensitiveArgumentVisitorTest {
-    protected static Percentage precisision = Percentage.withPercentage(1e-15);
+    protected static ASTArgument argument;
+    protected static int visits;
+
     protected static ASTArgument parse(String content) throws IOException {
         CallParser parser = new CallParser();
         return parser.parse_StringArgument(content).get();
     }
-
     public static class ContextSensitiveTest extends ContextSensitiveArgumentVisitor{
         @Test
         public void testSetRealThis(){
@@ -59,73 +54,192 @@ public class ContextSensitiveArgumentVisitorTest {
     }
 
     public static class ContextSensitiveDateTest extends ContextSensitiveArgumentVisitor{
-        protected ASTArgument argument;
-
         @Before
         public void setUp() throws IOException {
             argument = parse("22-11-3333");
+            visits = 0;
         }
 
         @Test
         public void testVisit(){
             argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(3);
         }
 
         @Override
-        public void visit(ASTDateArgument ast){
+        public void visit(ASTDateArgumentEntry ast){
             assertThat(valueOf(ast.getDay()).intValueExact()).isEqualTo(22);
             assertThat(valueOf(ast.getMonth()).intValueExact()).isEqualTo(11);
             assertThat(valueOf(ast.getYear()).intValueExact()).isEqualTo(3333);
+            ++visits;
         }
 
         @Override
-        public void visit(ASTExpression ast){
-            assertThat(valueOf(ast).intValueExact()).isEqualTo(22-11-3333);
+        public void handle(ASTExpressionArgumentEntry ast){
+            assertThat(valueOf(ast.getExpression()).intValueExact()).isEqualTo(22-11-3333);
+            ++visits;
         }
 
         @Override
-        public void visit(ASTStringLiteral ast){
+        public void handle(ASTStringLiteral ast){
             assertThat(ast.getValue()).isEqualTo("22-11-3333");
+            ++visits;
         }
     }
 
-    @RunWith(Parameterized.class)
-    public static class ContextSensitiveRawTextTest extends ContextSensitiveArgumentVisitor{
-        @Parameters
-        public static Collection<Object[]> data() {
-            return Arrays.asList(new Object[][] {
-                    { "pi",   Math.PI },
-                    { "e",    Math.E },
-                    { "wololo", Double.NaN },
-            });
-        }
-
-        @Parameter
-        public String input;
-
-        @Parameter(1)
-        public double expected;
-
-        protected ASTArgument argument;
-
+    public static class ContextSensitiveIntervalTest extends ContextSensitiveArgumentVisitor{
         @Before
         public void setUp() throws IOException {
-            argument = parse(input);
+            argument = parse("Day");
+            visits = 0;
         }
 
         @Test
         public void testVisit(){
             argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
         }
 
         @Override
-        public void visit(ASTExpression ast){
-            assertThat(valueOf(ast).doubleValue()).isCloseTo(expected, precisision);
+        public void handle(ASTIntervalArgumentEntry ast){
+            assertThat(ast.getIntervalName().getInterval()).isEqualTo(ASTInterval.DAY);
+            ++visits;
         }
 
         @Override
-        public void visit(ASTStringLiteral ast){
-            assertThat(ast.getValue()).isEqualTo(input);
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("Day");
+            ++visits;
+        }
+    }
+
+    public static class ContextSensitiveOnlineStatusTest extends ContextSensitiveArgumentVisitor{
+        @Before
+        public void setUp() throws IOException {
+            argument = parse("Online");
+            visits = 0;
+        }
+
+        @Test
+        public void testVisit(){
+            argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
+        }
+
+        @Override
+        public void handle(ASTOnlineStatusArgumentEntry ast){
+            assertThat(ast.getOnlineStatusName().getOnlineStatus()).isEqualTo(ASTOnlineStatus.ONLINE);
+            ++visits;
+        }
+
+        @Override
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("Online");
+            ++visits;
+        }
+    }
+
+    public static class ContextSensitiveUserTest extends ContextSensitiveArgumentVisitor{
+        @Before
+        public void setUp() throws IOException {
+            argument = parse("<@12345>");
+            visits = 0;
+        }
+
+        @Test
+        public void testVisit(){
+            argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
+        }
+
+        @Override
+        public void handle(ASTUserArgumentEntry ast){
+            assertThat(ast.getUser().getId().getValue()).isEqualTo(12345);
+            ++visits;
+        }
+
+        @Override
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("<@12345>");
+            ++visits;
+        }
+    }
+
+    public static class ContextSensitiveRoleTest extends ContextSensitiveArgumentVisitor{
+        @Before
+        public void setUp() throws IOException {
+            argument = parse("<@&12345>");
+            visits = 0;
+        }
+
+        @Test
+        public void testVisit(){
+            argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
+        }
+
+        @Override
+        public void handle(ASTRoleArgumentEntry ast){
+            assertThat(ast.getRole().getId().getValue()).isEqualTo(12345);
+            ++visits;
+        }
+
+        @Override
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("<@&12345>");
+            ++visits;
+        }
+    }
+
+    public static class ContextSensitiveTextChannelTest extends ContextSensitiveArgumentVisitor{
+        @Before
+        public void setUp() throws IOException {
+            argument = parse("<#12345>");
+            visits = 0;
+        }
+
+        @Test
+        public void testVisit(){
+            argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
+        }
+
+        @Override
+        public void handle(ASTTextChannelArgumentEntry ast){
+            assertThat(ast.getTextChannel().getId().getValue()).isEqualTo(12345);
+            ++visits;
+        }
+
+        @Override
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("<#12345>");
+            ++visits;
+        }
+    }
+
+    public static class ContextSensitiveExpressionTest extends ContextSensitiveArgumentVisitor{
+        @Before
+        public void setUp() throws IOException {
+            argument = parse("12345");
+            visits = 0;
+        }
+
+        @Test
+        public void testVisit(){
+            argument.accept(getRealThis());
+            assertThat(visits).isEqualTo(2);
+        }
+
+        @Override
+        public void handle(ASTExpressionArgumentEntry ast){
+            assertThat(valueOf(ast.getExpression()).intValueExact()).isEqualTo(12345);
+            ++visits;
+        }
+
+        @Override
+        public void handle(ASTStringLiteral ast){
+            assertThat(ast.getValue()).isEqualTo("12345");
+            ++visits;
         }
     }
 }

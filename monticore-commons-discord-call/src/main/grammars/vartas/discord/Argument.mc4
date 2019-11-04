@@ -2,71 +2,105 @@ package vartas.discord;
 
 /**
  * This grammar defines all valid arguments for the command calls.
+ * We have to separate entry from argument, in order to accommodate
+ * for ambiguity.
+ * e.g. pi can both be interpreted as a string and an arithmetic expression,
+ * So even if it is matched by one argument, it should be handled by both entries.
  */
 component grammar Argument extends vartas.ArithmeticExpressions,
                                  vartas.chart.Interval,
                                  vartas.discord.Entity,
                                  vartas.discord.OnlineStatus{
+    /**
+     * Hookpoint for other grammars
+     */
     interface symbol Argument;
 
     astrule Argument = name:String;
 
     /*=========================================================*/
-    /*========================  Misc  =========================*/
+    /*=== Misc                                              ===*/
     /*=========================================================*/
 
-    StringArgument implements Argument <500> =
+    //String -> String
+    StringArgument implements Argument <400> =
         StringLiteral
     ;
 
-    IntervalArgument implements Argument <500> =
-        Interval
+    //Interval -> Interval, String
+    IntervalArgument implements Argument <400> =
+        IntervalArgumentEntry
     ;
 
-    OnlineStatusArgument implements Argument <500> =
-        OnlineStatus
+    IntervalArgumentEntry =
+        IntervalName
+    ;
+
+    //OnlineStatus -> OnlineStatus, String
+    OnlineStatusArgument implements Argument <400> =
+        OnlineStatusArgumentEntry
+    ;
+
+    OnlineStatusArgumentEntry =
+        OnlineStatusName
     ;
 
     /*=========================================================*/
-    /*========================  Time  =========================*/
+    /*=== Time                                              ===*/
     /*=========================================================*/
 
-    //All dates are also arithmetic expressions
-    DateArgument implements Argument <400> =
+    //Date -> Date, Expression, String
+    DateArgument implements Argument <300> =
+        DateArgumentEntry
+    ;
+
+    DateArgumentEntry =
           day:Expression "-"
         month:Expression "-"
          year:Expression
     ;
 
     /*=========================================================*/
-    /*==================  Discord Entities  ===================*/
+    /*=== Discord Entities                                  ===*/
     /*=========================================================*/
 
-    UserArgument implements Argument <400> =
+    //User -> User, String
+    UserArgument implements Argument <200> =
+        UserArgumentEntry
+    ;
+
+    UserArgumentEntry =
         User
     ;
 
-    TextChannelArgument implements Argument <400> =
+    //TextChannel -> TextChannel, String
+    TextChannelArgument implements Argument <200> =
+        TextChannelArgumentEntry
+    ;
+
+    TextChannelArgumentEntry =
         TextChannel
     ;
 
-    RoleArgument implements Argument <400> =
+    //Role -> Role, String
+    RoleArgument implements Argument  <200> =
+        RoleArgumentEntry
+    ;
+
+    RoleArgumentEntry =
         Role
     ;
 
     /*=========================================================*/
-    /*=======================  Raw Text  ======================*/
+    /*=== Arithmetic Expression and Raw Text               ====*/
     /*=========================================================*/
 
-    RawTextArgument implements Argument <350> =
-        text:Name
+    //Expression -> Expression, String
+    ExpressionArgument implements Argument <100> =
+        ExpressionArgumentEntry
     ;
 
-    /*=========================================================*/
-    /*================  Arithmetic Expression  ================*/
-    /*=========================================================*/
-
-    ExpressionArgument implements Argument <300> =
+    ExpressionArgumentEntry =
         Expression
     ;
 }
