@@ -4,19 +4,20 @@ package vartas.discord;
  * This grammar specifies the properties of the commands.
  * For example, it is possible to specify the number of arguments or the permissions that are required to execute it.
  */
-grammar Command extends vartas.discord.Permission,
+grammar Command extends de.monticore.literals.MCCommonLiterals,
+                        vartas.discord.Permission,
                         vartas.discord.Parameter,
                         vartas.discord.bot.Rank{
     CommandArtifact =
-        ("package" package:(Name& || ".")+ ";")?
-        ("prefix" prefix:(Name& || ".")+ ";")?
+        ("package" package:StringLiteral)?
+        ("prefix" prefix:StringLiteral)?
         "command" "{"
             Command*
         "}"
     ;
 
     symbol scope Command =
-        Name& ("@" (RestrictionName || ",")+ )? "{"
+        StringLiteral ("@" (RestrictionName || ",")+ )? "{"
             Attribute*
         "}"
     ;
@@ -24,7 +25,6 @@ grammar Command extends vartas.discord.Permission,
     /*=========================================================*/
     /*=== Restriction                                       ===*/
     /*=========================================================*/
-
 
     /**
      * A restriction imposes a condition on a command.
@@ -48,7 +48,7 @@ grammar Command extends vartas.discord.Permission,
     interface Attribute;
 
     symbol ClassAttribute implements Attribute =
-        "class" ":" Name&
+        "class" ":" StringLiteral
     ;
 
     PermissionAttributeAdapter implements Attribute =
@@ -70,6 +70,18 @@ grammar Command extends vartas.discord.Permission,
     astrule RestrictionName =
         method public String getName(){
             return getRestriction().name();
+        }
+    ;
+
+    astrule Command =
+        method public String getName(){
+            return getStringLiteral().getValue();
+        }
+    ;
+
+    astrule ClassAttribute =
+        method public String getName(){
+            return getStringLiteral().getValue();
         }
     ;
 }

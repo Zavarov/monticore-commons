@@ -1,6 +1,6 @@
 command {
-    test{
-             class : TestCommand1
-             class : TestCommand2
+    "test" {
+             class : "TestCommand1"
+             class : "TestCommand2"
     }
 }

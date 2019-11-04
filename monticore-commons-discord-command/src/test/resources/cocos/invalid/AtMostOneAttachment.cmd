@@ -1,5 +1,5 @@
 command {
-    test @ attachment, attachment{
-             class : TestCommand
+    "test" @ attachment, attachment{
+             class : "TestCommand"
     }
 }

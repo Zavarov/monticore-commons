@@ -115,6 +115,11 @@ public class CoCoTest extends AbstractTest {
                 "TextChannelParameterRequiresGuild.cmd",
                 TextChannelParameterRequiresGuildCoCo.ERROR_MESSAGE,
                 ""
+            },
+            {
+                "NamesHaveNoWhitespaces.cmd",
+                NamesHaveNoWhitespacesCoCo.ERROR_MESSAGE,
+                "te st"
             }
         });
     }

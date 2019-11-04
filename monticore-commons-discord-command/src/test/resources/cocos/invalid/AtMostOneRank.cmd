@@ -1,6 +1,6 @@
 command {
-    test {
-             class : TestCommand
+    "test" {
+             class : "TestCommand"
               rank : root
               rank : root
     }

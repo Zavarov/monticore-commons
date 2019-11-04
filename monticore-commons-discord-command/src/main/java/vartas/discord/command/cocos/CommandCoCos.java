@@ -38,6 +38,7 @@ public abstract class CommandCoCos {
         checker.addCoCo(new MessageParameterRequiresGuildCoCo());
         checker.addCoCo(new CommandNameIsUniqueCoCo());
         checker.addCoCo(new ClassNameIsUniqueCoCo());
+        checker.addCoCo(new NamesHaveNoWhitespacesCoCo());
 
         return checker;
     }

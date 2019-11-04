@@ -1,5 +1,5 @@
 command {
-    "test" @ guild, attachment{
+    "te st" @ guild, attachment{
              class : "TestCommand"
         permission : administrator, manage messages
          parameter : g:guild, d:date
