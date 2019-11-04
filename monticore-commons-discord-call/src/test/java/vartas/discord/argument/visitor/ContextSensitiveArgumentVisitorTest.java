@@ -28,6 +28,8 @@ import vartas.discord.call._parser.CallParser;
 import vartas.discord.onlinestatus._ast.ASTOnlineStatus;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator.valueOf;
@@ -39,7 +41,9 @@ public class ContextSensitiveArgumentVisitorTest {
 
     protected static ASTArgument parse(String content) throws IOException {
         CallParser parser = new CallParser();
-        return parser.parse_StringArgument(content).get();
+        Optional<ASTArgument> astOpt = parser.parse_StringArgument(content);
+        assertThat(astOpt).isPresent();
+        return astOpt.get();
     }
     public static class ContextSensitiveTest extends ContextSensitiveArgumentVisitor{
         @Test
@@ -68,15 +72,29 @@ public class ContextSensitiveArgumentVisitorTest {
 
         @Override
         public void visit(ASTDateArgumentEntry ast){
-            assertThat(valueOf(ast.getDay()).intValueExact()).isEqualTo(22);
-            assertThat(valueOf(ast.getMonth()).intValueExact()).isEqualTo(11);
-            assertThat(valueOf(ast.getYear()).intValueExact()).isEqualTo(3333);
+            Optional<BigDecimal> valueOpt;
+
+            valueOpt = valueOf(ast.getDay());
+            assertThat(valueOpt).isPresent();
+            assertThat(valueOpt.map(BigDecimal::intValueExact)).contains(22);
+
+            valueOpt = valueOf(ast.getMonth());
+            assertThat(valueOpt).isPresent();
+            assertThat(valueOpt.map(BigDecimal::intValueExact)).contains(11);
+
+            valueOpt = valueOf(ast.getYear());
+            assertThat(valueOpt).isPresent();
+            assertThat(valueOpt.map(BigDecimal::intValueExact)).contains(3333);
             ++visits;
         }
 
         @Override
         public void handle(ASTExpressionArgumentEntry ast){
-            assertThat(valueOf(ast.getExpression()).intValueExact()).isEqualTo(22-11-3333);
+            Optional<BigDecimal> valueOpt;
+
+            valueOpt = valueOf(ast.getExpression());
+            assertThat(valueOpt).isPresent();
+            assertThat(valueOpt.map(BigDecimal::intValueExact)).contains(22-11-3333);
             ++visits;
         }
 
@@ -232,7 +250,11 @@ public class ContextSensitiveArgumentVisitorTest {
 
         @Override
         public void handle(ASTExpressionArgumentEntry ast){
-            assertThat(valueOf(ast.getExpression()).intValueExact()).isEqualTo(12345);
+            Optional<BigDecimal> valueOpt;
+
+            valueOpt = valueOf(ast.getExpression());
+            assertThat(valueOpt).isPresent();
+            assertThat(valueOpt.map(BigDecimal::intValueExact)).contains(12345);
             ++visits;
         }
 

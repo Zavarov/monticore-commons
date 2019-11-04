@@ -20,8 +20,6 @@ package vartas.arithmeticexpressions.calculator;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.commonexpressions._ast.*;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisitor;
-import de.monticore.prettyprint.IndentPrinter;
-import vartas.arithmeticexpressions.prettyprint.ArithmeticExpressionsPrettyPrinter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -53,73 +51,6 @@ public class CommonExpressionsValueCalculator implements CommonExpressionsVisito
         checkArgument(values.containsKey(node.getExpression()));
 
         values.put(node, values.get(node.getExpression()));
-    }
-
-    @Override
-    public void visit(ASTCallExpression node) {
-        ArithmeticExpressionsPrettyPrinter prettyPrinter = new ArithmeticExpressionsPrettyPrinter(new IndentPrinter());
-
-        throw new IllegalArgumentException("The expression " + prettyPrinter.prettyprint(node) + " is not defined.");
-    }
-
-    @Override
-    public void visit(ASTFieldAccessExpression node) {
-        throw new IllegalArgumentException("Qualified names are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTBooleanNotExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTLogicalNotExpression node) {
-        throw new IllegalArgumentException("Logical operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTLessEqualExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTGreaterEqualExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTLessThanExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTGreaterThanExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTEqualsExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTNotEqualsExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTBooleanAndOpExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTBooleanOrOpExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
-    }
-
-    @Override
-    public void visit(ASTConditionalExpression node) {
-        throw new IllegalArgumentException("Boolean operators are not a allowed.");
     }
 
     @Override

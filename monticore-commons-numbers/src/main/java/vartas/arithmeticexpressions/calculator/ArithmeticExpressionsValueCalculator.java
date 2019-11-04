@@ -52,13 +52,15 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
     /**
      * @param expression the arithmetic expression that is going to be evaluated.
      * @return the value of the expression.
-     * @throws IllegalStateException if the expression couldn't be evaluated.
      */
-    public static BigDecimal valueOf(ASTExpression expression) throws IllegalStateException{
-        ArithmeticExpressionsValueCalculator calculator = new ArithmeticExpressionsValueCalculator();
-        expression.accept(calculator);
-
-        return calculator.getValue(expression).orElseThrow(() -> new IllegalStateException("The value of the expression couldn't be determined"));
+    public static Optional<BigDecimal> valueOf(ASTExpression expression) throws IllegalStateException{
+        try {
+            ArithmeticExpressionsValueCalculator calculator = new ArithmeticExpressionsValueCalculator();
+            expression.accept(calculator);
+            return calculator.getValue(expression);
+        }catch(IllegalArgumentException e){
+            return Optional.empty();
+        }
     }
 
     public Optional<BigDecimal> getValue(ASTExpression expression) {

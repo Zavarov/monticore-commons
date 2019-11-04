@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public abstract class AbstractTest {
     @BeforeClass
     public static void setUpClass(){
@@ -54,7 +56,13 @@ public abstract class AbstractTest {
         }
     }
 
-    public static BigDecimal valueOf(String expression){
+    public static Optional<BigDecimal> valueOfOpt(String expression){
         return ArithmeticExpressionsValueCalculator.valueOf(parse(expression));
+    }
+
+    public static BigDecimal valueOf(String expression){
+        Optional<BigDecimal> valueOpt = valueOfOpt(expression);
+        assertThat(valueOpt).isPresent();
+        return valueOpt.get();
     }
 }

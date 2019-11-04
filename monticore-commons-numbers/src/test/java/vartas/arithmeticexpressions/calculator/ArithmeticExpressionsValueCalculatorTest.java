@@ -19,242 +19,116 @@ package vartas.arithmeticexpressions.calculator;
 
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 import vartas.AbstractTest;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(Enclosed.class)
 public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
-    private Percentage precision = Percentage.withPercentage(10e-15);
+    private static Percentage precision = Percentage.withPercentage(10e-15);
 
-    //***------------------------------------------------------------------------------------------------------------***
-    //***---------------------------------------------  Literals  ---------------------------------------------------***
-    //***------------------------------------------------------------------------------------------------------------***
+    @RunWith(Parameterized.class)
+    public static class ArithmeticExpressionsValueCalculator{
+        @Parameters
+        public static Collection<Object[]> data(){
+            return Arrays.asList(new Object[][] {
+                    { "tan(1.5)", Math.tan(1.5) },
+                    { "tan@1.5", Math.tan(1.5) },
+                    { "sqrt@1.5", Math.sqrt(1.5) },
+                    { "sin@1.5", Math.sin(1.5) },
+                    { "min(-1,2)", Math.min(-1,2)},
+                    { "max(-1,2)", Math.max(-1,2)},
+                    { "ln@1.5", Math.log(1.5) },
+                    { "log@1.5", Math.log10(1.5) },
+                    { "floor@1.5", Math.floor(1.5) },
+                    { "cos@1.5", Math.cos(1.5) },
+                    { "ceil@1.5", Math.ceil(1.5) },
+                    { "atan@1.5", Math.atan(1.5) },
+                    { "asin@1.0", Math.asin(1.0) },
+                    { "acos@1.0", Math.acos(1.0) },
+                    { "abs@-1", Math.abs(-1) },
+                    { "random(1,1)", 1 },
+                    { "2^3", Math.pow(2,3) },
+                    { "7-3.33", 7-3.33 },
+                    { "7+3.33", 7+3.33 },
+                    { "5%3", 5%3 },
+                    { "3/2", 1.5 },
+                    { "3/2.0", 1.5 },
+                    { "3.0/2", 1.5 },
+                    { "1.5*3", 1.5*3 },
+                    { "e", Math.E },
+                    { "pi", Math.PI },
+                    { "1.0", 1.0 },
+                    { "-1.0", -1.0 },
+                    { "1.0F", 1.0 },
+                    { "-1.0F", -1.0 },
+                    { "1", 1 },
+                    { "-1", -1 },
+                    { "1L", 1  },
+                    { "-1L", -1 },
+            });
+        }
 
-    @Test
-    public void testSignedNatLiteral(){
-        assertThat(valueOf("1").doubleValue()).isCloseTo(1.0, precision);
-        assertThat(valueOf("-1").doubleValue()).isCloseTo(-1.0, precision);
+        @Parameter
+        public String arg;
+        @Parameter(1)
+        public double expected;
+
+        @Test
+        public void testExpression(){
+            assertThat(valueOf(arg).doubleValue()).isCloseTo(expected, precision);
+        }
     }
 
-    @Test
-    public void testSignedLongLiteral(){
-        assertThat(valueOf("1L").doubleValue()).isCloseTo(1.0, precision);
-        assertThat(valueOf("-1L").doubleValue()).isCloseTo(-1.0, precision);
-    }
+    @RunWith(Parameterized.class)
+    public static class ArithmeticExpressionsInvalidValueCalculator{
+        @Parameters
+        public static Object[] data() {
+            return new Object[] {
+                    "x",
+                    "false",
+                    "@x",
+                    "x^1",
+                    "1^x",
+                    "random(x,1)",
+                    "random(1,x)",
+                    "random(99999999,1)",
+                    "random(1,99999999)",
+                    "abs(x)",
+                    "acos(x)",
+                    "asin(x)",
+                    "atan(x)",
+                    "ceil(x)",
+                    "cos(x)",
+                    "floor(x)",
+                    "log(x)",
+                    "ln(x)",
+                    "max(x,1)",
+                    "max(1,x)",
+                    "min(x,1)",
+                    "min(1,x)",
+                    "sin(x)",
+                    "sqrt(x)",
+                    "tan(x)",
+                    "asin(1.5)",
+                    "acos(1.5)"
+            };
+        }
 
-    @Test
-    public void testSignedDoubleLiteral(){
-        assertThat(valueOf("1.0").doubleValue()).isCloseTo(1.0, precision);
-        assertThat(valueOf("-1.0").doubleValue()).isCloseTo(-1.0, precision);
-    }
+        @Parameter
+        public String arg;
 
-    @Test
-    public void testSignedFloat(){
-        assertThat(valueOf("1.0F").doubleValue()).isCloseTo(1.0, precision);
-        assertThat(valueOf("-1.0F").doubleValue()).isCloseTo(-1.0, precision);
-    }
-
-    //***------------------------------------------------------------------------------------------------------------***
-    //***------------------------------------------  Expressions-----------------------------------------------------***
-    //***------------------------------------------------------------------------------------------------------------***
-    @Test
-    public void testPi(){
-        assertThat(valueOf("pi").doubleValue()).isCloseTo(Math.PI, precision);
-    }
-
-    @Test
-    public void testE(){
-        assertThat(valueOf("e").doubleValue()).isCloseTo(Math.E, precision);
-    }
-
-    @Test
-    public void testMultiplication(){
-        assertThat(valueOf("1.5*3").doubleValue()).isCloseTo(4.5, precision);
-    }
-
-    @Test
-    public void testDivision(){
-        assertThat(valueOf("3/2").doubleValue()).isCloseTo(1.5, precision);
-        assertThat(valueOf("3/2.0").doubleValue()).isCloseTo(1.5, precision);
-        assertThat(valueOf("3.0/2").doubleValue()).isCloseTo(1.5, precision);
-    }
-
-    @Test
-    public void testModulo(){
-        assertThat(valueOf("5%3").doubleValue()).isCloseTo(2.0, precision);
-    }
-
-    @Test
-    public void testAddition(){
-        assertThat(valueOf("7+3.33").doubleValue()).isCloseTo(10.33, precision);
-    }
-
-    @Test
-    public void testSubtraction(){
-        assertThat(valueOf("7-3.33").doubleValue()).isCloseTo(7-3.33, precision);
-    }
-
-    @Test
-    public void testPower(){
-        assertThat(valueOf("2^3").doubleValue()).isCloseTo(8.0, precision);
-    }
-
-    @Test
-    public void testRandomNumber(){
-        assertThat(valueOf("random(1,2)").doubleValue()).isBetween(1.0, 5.0);
-    }
-
-    @Test
-    public void testAbsolute(){
-        assertThat(valueOf("abs@-1").doubleValue()).isCloseTo(1.0, precision);
-    }
-
-    @Test
-    public void testACos(){
-        assertThat(valueOf("acos@1.0").doubleValue()).isCloseTo(Math.acos(1.0), precision);
-    }
-
-    @Test
-    public void testASin(){
-        assertThat(valueOf("asin@1.0").doubleValue()).isCloseTo(Math.asin(1.0), precision);
-    }
-
-    @Test
-    public void testATan(){
-        assertThat(valueOf("atan@1.0").doubleValue()).isCloseTo(Math.atan(1.0), precision);
-    }
-
-    @Test
-    public void testCeil(){
-        assertThat(valueOf("ceil@1.5").doubleValue()).isCloseTo(Math.ceil(1.5), precision);
-    }
-
-    @Test
-    public void testCos(){
-        assertThat(valueOf("cos@1.0").doubleValue()).isCloseTo(Math.cos(1.0), precision);
-    }
-
-    @Test
-    public void testFloor(){
-        assertThat(valueOf("floor@1.5").doubleValue()).isCloseTo(Math.floor(1.5), precision);
-    }
-
-    @Test
-    public void testLog(){
-        assertThat(valueOf("log@1.5").doubleValue()).isCloseTo(Math.log10(1.5), precision);
-    }
-
-    @Test
-    public void testLn(){
-        assertThat(valueOf("ln@1.5").doubleValue()).isCloseTo(Math.log(1.5), precision);
-    }
-
-    @Test
-    public void testMax(){
-        assertThat(valueOf("max(-1, 2)").doubleValue()).isCloseTo(Math.max(-1, 2), precision);
-    }
-
-    @Test
-    public void testMin(){
-        assertThat(valueOf("min(-1, 2)").doubleValue()).isCloseTo(Math.min(-1, 2), precision);
-    }
-
-    @Test
-    public void testSin(){
-        assertThat(valueOf("sin@1.5").doubleValue()).isCloseTo(Math.sin(1.5), precision);
-    }
-
-    @Test
-    public void testSqrt(){
-        assertThat(valueOf("sqrt@1.5").doubleValue()).isCloseTo(Math.sqrt(1.5), precision);
-    }
-
-    @Test
-    public void testTan(){
-        assertThat(valueOf("tan@1.5").doubleValue()).isCloseTo(Math.tan(1.5), precision);
-    }
-
-    @Test
-    public void testArgumentViaAt(){
-        assertThat(valueOf("tan@1.5").doubleValue()).isCloseTo(Math.tan(1.5), precision);
-    }
-
-    @Test
-    public void testArgumentViaBracket(){
-        assertThat(valueOf("tan(1.5)").doubleValue()).isCloseTo(Math.tan(1.5), precision);
-    }
-
-    //***------------------------------------------------------------------------------------------------------------***
-    //***--------------------------------------  Invalid Expressions  -----------------------------------------------***
-    //***------------------------------------------------------------------------------------------------------------***
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testUnknownLiteral(){
-        valueOf("junk");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testUnknownFunction(){
-        valueOf("foo()");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testFieldAccess(){
-        valueOf("B.a");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testBooleanNot(){
-        valueOf("!true");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testLogicalNot(){
-        valueOf("~0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testLessEqual(){
-        valueOf("1 <= 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testGreaterEqual(){
-        valueOf("1 >= 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testLessThan(){
-        valueOf("1 < 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testGreaterThan(){
-        valueOf("1 > 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testEquals(){
-        valueOf("1 == 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testNotEquals(){
-        valueOf("1 != 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testBooleanAnd(){
-        valueOf("1 && 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testBooleanOr(){
-        valueOf("1 || 0");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testConditional(){
-        valueOf("1 > 0 ? 2 : 3");
+        @Test
+        public void testExpression(){
+            assertThat(valueOfOpt(arg)).isNotPresent();
+        }
     }
 }
