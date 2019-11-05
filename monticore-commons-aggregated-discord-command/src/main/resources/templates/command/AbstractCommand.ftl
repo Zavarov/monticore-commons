@@ -2,7 +2,7 @@ ${signature("package", "existsHandwrittenClass", "className")}
 <#assign Communicator = getGlobalVar("Communicator")>
 <#assign Environment = getGlobalVar("Environment")>
 <#assign symbol = ast.getCommandSymbol()>
-<#assign parameters = symbol.getParameters()>
+<#assign parameters = symbol.getSpannedScope().getLocalParameterVariableSymbols()>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign User = "net.dv8tion.jda.api.entities.User">
 <#assign Argument = "vartas.discord.argument._ast.ASTArgument">
@@ -25,14 +25,13 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${A
         this.author = source.getAuthor();
         ${includeArgs("command.CheckGuild", symbol)}
         ${includeArgs("command.CheckPermission", symbol)}
-        ${includeArgs("command.AbstractSourceVariableInitialization", symbol)}
+        ${includeArgs("command.AbstractVariableInitialization", symbol)}
     }
 
     public void setCommunicator(${Communicator} communicator){
         this.communicator = communicator;
         this.environment = communicator.environment();
         ${includeArgs("command.CheckRank", symbol)}
-        ${includeArgs("command.AbstractCommunicatorVariableInitialization", symbol)}
     }
 
 <#if !existsHandwrittenClass>

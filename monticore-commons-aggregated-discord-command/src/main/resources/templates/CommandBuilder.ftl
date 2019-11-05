@@ -31,13 +31,13 @@ public class CommandBuilder extends ${AbstractCommandBuilder}{
     <#list ast.getCommandList() as command>
         <#assign symbol = command.getCommandSymbol()>
         <#assign name = symbol.getFullName()>
-        <#assign className = symbol.getClassName()>
-        <#assign parameters = symbol.getParameters()>
+        <#assign className = Helper.getClassName(symbol)>
+        <#assign parameters = Helper.getParameters(symbol)>
         commands.put("${name}", (context, arguments) -> {
             ${includeArgs("CheckArgument", parameters)}
             ${commandPackage}.${className} command = new ${commandPackage}.${className}(
         <#list parameters as parameter>
-            <#assign class = parameter.getClass().getSimpleName()?remove_ending("Parameter")?remove_beginning("AST")>
+            <#assign class = parameter.getAstNode().get().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
             <#assign name = parameter.getName()>
             <#assign index = parameter?index>
                 ${GeneratorHelper}.resolve${class}("${name}", arguments.get(${index}), context)

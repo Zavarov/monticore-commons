@@ -18,26 +18,23 @@
 package vartas.discord.aggregated.argument.symboltable;
 
 import net.dv8tion.jda.api.OnlineStatus;
+import vartas.discord.argument._ast.ASTOnlineStatusArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
-import vartas.discord.onlinestatus._ast.ASTOnlineStatus;
-import vartas.discord.onlinestatus._visitor.OnlineStatusInheritanceVisitor;
-import vartas.discord.onlinestatus._visitor.OnlineStatusVisitor;
+import vartas.discord.onlinestatus._symboltable.OnlineStatusNameSymbol;
 
 import java.util.Optional;
 
 public class OnlineStatusArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected OnlineStatus onlineStatus;
 
     public OnlineStatusArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setOnlineStatusVisitor(new OnlineStatusArgumentVisitor());
+        visitor = new OnlineStatusArgumentVisitor();
     }
 
     public Optional<OnlineStatus> accept(){
@@ -46,25 +43,12 @@ public class OnlineStatusArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(onlineStatus);
     }
 
-    /**
-     * This class evaluates the online status inside the argument.
-     */
-    private class OnlineStatusArgumentVisitor implements OnlineStatusInheritanceVisitor {
-        OnlineStatusVisitor realThis = this;
-
+    private class OnlineStatusArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(OnlineStatusVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public OnlineStatusVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTOnlineStatus ast){
-            onlineStatus = ast.getOnlineStatusType();
+        public void handle(ASTOnlineStatusArgumentEntry node){
+            OnlineStatusNameSymbol symbol = new OnlineStatusNameSymbol(node.getOnlineStatusName().getName());
+            symbol.setAstNode(node.getOnlineStatusName());
+            onlineStatus = symbol.getOnlineStatus();
         }
     }
 }

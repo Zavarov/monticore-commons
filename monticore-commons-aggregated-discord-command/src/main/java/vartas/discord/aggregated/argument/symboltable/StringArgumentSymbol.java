@@ -18,24 +18,21 @@
 package vartas.discord.aggregated.argument.symboltable;
 
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
-import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.util.Optional;
 
 public class StringArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected String value;
 
     public StringArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
+        visitor = new StringArgumentVisitor();
     }
 
     public Optional<String> accept(){
@@ -43,24 +40,9 @@ public class StringArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(value);
     }
 
-    /**
-     * This class evaluates the value of the string inside the argument.
-     */
-    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
-        MCCommonLiteralsVisitor realThis = this;
-
+    private class StringArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(MCCommonLiteralsVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public MCCommonLiteralsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTStringLiteral ast){
+        public void handle(ASTStringLiteral ast){
             value = ast.getValue();
         }
     }

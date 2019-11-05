@@ -1,6 +1,6 @@
 ${signature("package", "existsHandwrittenClass", "className", "parentName")}
 <#assign symbol = ast.getCommandSymbol()>
-<#assign parameters = symbol.getParameters()>
+<#assign parameters = symbol.getSpannedScope().getLocalParameterVariableSymbols()>
 <#assign Communicator = getGlobalVar("Communicator")>
 <#assign Helper = getGlobalVar("Helper")>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
@@ -13,7 +13,7 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${p
 
     public ${className}(
 <#list parameters as parameter>
-        ${Helper.getType(parameter)} ${parameter.getName()}<#if parameter?has_next>,</#if>
+        ${Helper.getType(parameter.getAstNode().get())} ${parameter.getName()}<#if parameter?has_next>,</#if>
 </#list>
     )
     throws

@@ -17,17 +17,14 @@
 
 package vartas.discord.aggregated.argument.symboltable;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
-import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
+import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
@@ -37,7 +34,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class RoleArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected Role role;
     protected Guild guild;
@@ -45,10 +42,7 @@ public class RoleArgumentSymbol extends ArgumentSymbol {
     public RoleArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
-        visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
+        visitor = new RoleArgumentVisitor();
     }
 
     public Optional<Role> accept(Message context){
@@ -61,48 +55,15 @@ public class RoleArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(role);
     }
 
-    /**
-     * This class evaluates the id of the role by using the arithmetic expression inside the argument.
-     */
-    private class ExpressionArgumentVisitor implements ArithmeticExpressionsInheritanceVisitor {
-        ArithmeticExpressionsVisitor realThis = this;
-
+    private class RoleArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(ArithmeticExpressionsVisitor realThis){
-            this.realThis = realThis;
+        public void handle(ASTExpressionArgumentEntry ast){
+            Optional<BigDecimal> valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
+            valueOpt.ifPresent(value -> role = guild.getRoleById(value.longValueExact()));
         }
 
         @Override
-        public ArithmeticExpressionsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTExpression ast){
-            BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
-            role = guild.getRoleById(value.longValueExact());
-        }
-    }
-
-    /**
-     * This class evaluates the name of the role inside the argument.
-     * The id is evaluated via the expression.
-     */
-    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
-        MCCommonLiteralsVisitor realThis = this;
-
-        @Override
-        public void setRealThis(MCCommonLiteralsVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public MCCommonLiteralsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTStringLiteral ast){
+        public void handle(ASTStringLiteral ast){
             List<Role> roles = guild.getRolesByName(ast.getValue(), false);
             if(roles.size() == 1)
                 role = roles.get(0);

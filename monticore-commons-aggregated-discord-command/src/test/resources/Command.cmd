@@ -2,65 +2,65 @@ package vartas.discord.command.example;
 prefix example;
 
 command {
-    test @ guild{
-             class : TestCommand
-        permission : administrator, manage messages
-         parameter : g:guild, d:date
-              rank : root, dev
+    test @ Guild{
+             class : "TestCommand"
+        permission : Administrator, Manage Messages
+         parameter : g:Guild, d:Date
+              rank : Root, Dev
     }
 
-    date @ guild{
-             class : DateCommand
-         parameter : d:date
+    date @ Guild{
+             class : "DateCommand"
+         parameter : d:Date
     }
 
-    expression @ guild{
-             class : ExpressionCommand
-         parameter : e:expression
+    expression @ Guild{
+             class : "ExpressionCommand"
+         parameter : e:Expression
     }
 
-    guild @ guild{
-             class : GuildCommand
-         parameter : g:guild
+    guild @ Guild{
+             class : "GuildCommand"
+         parameter : g:Guild
     }
 
-    interval @ guild{
-             class : IntervalCommand
-         parameter : i:interval
+    interval @ Guild{
+             class : "IntervalCommand"
+         parameter : i:Interval
     }
 
-    member @ guild{
-             class : MemberCommand
-         parameter : m:member
+    member @ Guild{
+             class : "MemberCommand"
+         parameter : m:Member
     }
 
-    message @ guild{
-             class : MessageCommand
-         parameter : m:message
+    message @ Guild{
+             class : "MessageCommand"
+         parameter : m:Message
     }
 
-    onlinestatus @ guild{
-             class : OnlineStatusCommand
-         parameter : o:onlinestatus
+    onlinestatus @ Guild{
+             class : "OnlineStatusCommand"
+         parameter : o:Onlinestatus
     }
 
-    role @ guild{
-             class : RoleCommand
-         parameter : r:role
+    role @ Guild{
+             class : "RoleCommand"
+         parameter : r:Role
     }
 
-    string @ guild{
-             class : StringCommand
-         parameter : s:string
+    string @ Guild{
+             class : "StringCommand"
+         parameter : s:String
     }
 
-    textchannel @ guild{
-             class : TextChannelCommand
-         parameter : t:textchannel
+    textchannel @ Guild{
+             class : "TextChannelCommand"
+         parameter : t:Textchannel
     }
 
-    user @ guild{
-             class : UserCommand
-         parameter : u:user
+    user @ Guild{
+             class : "UserCommand"
+         parameter : u:User
     }
 }

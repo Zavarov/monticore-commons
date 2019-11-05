@@ -31,29 +31,31 @@ import org.junit.runners.Parameterized.Parameters;
 import vartas.chart.Interval;
 import vartas.discord.aggregated.argument.symboltable.*;
 import vartas.discord.argument._ast.ASTArgument;
-import vartas.discord.bot.rank.RankType;
+import vartas.discord.bot.rank._ast.ASTRank;
+import vartas.discord.bot.rank._symboltable.RankNameSymbol;
 import vartas.discord.call._ast.ASTCallArtifact;
 import vartas.discord.call._parser.CallParser;
 import vartas.discord.command.CommandHelper;
+import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.command._symboltable.CommandGlobalScope;
 import vartas.discord.command._symboltable.CommandLanguage;
 import vartas.discord.command._symboltable.CommandSymbol;
-import vartas.discord.parameter._ast.ASTDateParameter;
-import vartas.discord.parameter._ast.ASTGuildParameter;
+import vartas.discord.parameter._ast.ASTParameter;
+import vartas.discord.parameter._ast.ASTParameterVariable;
+import vartas.discord.parameter._symboltable.ParameterVariableSymbol;
+import vartas.discord.permission._symboltable.PermissionNameSymbol;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Enclosed.class)
-public class CommandGlobalScopeTest {
+public class ArgumentSymbolsTest {
     static CommandGlobalScope commandScope;
     static Percentage precision = Percentage.withPercentage(10e-15);
 
@@ -87,7 +89,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse("example.test \"guild\" 11-11-2000");
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            assertThat(command.requiresGuild()).isTrue();
+            assertThat(command.getSpannedScope().resolveRestrictionName(ASTRestriction.GUILD.name())).isPresent();
         }
 
         @Test
@@ -95,9 +97,9 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse("example.test \"guild\" 11-11-2000");
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            assertThat(command.getParameters()).hasSize(2);
-            assertThat(command.getParameters().get(0)).isInstanceOf(ASTGuildParameter.class);
-            assertThat(command.getParameters().get(1)).isInstanceOf(ASTDateParameter.class);
+            assertThat(getParameters(command)).hasSize(2);
+            checkParameter(getParameters(command).get(0), ASTParameter.GUILD);
+            checkParameter(getParameters(command).get(1), ASTParameter.DATE);
         }
 
         @Test
@@ -105,7 +107,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse("example.test \"guild\" 11-11-2000");
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            assertThat(command.getRequiredPermissions()).containsExactlyInAnyOrder(Permission.ADMINISTRATOR, Permission.MESSAGE_MANAGE);
+            assertThat(getRequiredPermission(command)).containsExactlyInAnyOrder(Permission.ADMINISTRATOR, Permission.MESSAGE_MANAGE);
         }
 
         @Test
@@ -113,7 +115,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse("example.test \"guild\" 11-11-2000");
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            assertThat(command.getValidRanks()).containsExactlyInAnyOrder(RankType.ROOT, RankType.DEVELOPER);
+            assertThat(getValidRanks(command)).containsExactlyInAnyOrder(ASTRank.ROOT, ASTRank.DEVELOPER);
         }
     }
 
@@ -137,7 +139,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             DateArgumentSymbol symbol =new DateArgumentSymbol(name);
@@ -169,7 +171,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             ExpressionArgumentSymbol symbol = new ExpressionArgumentSymbol(name);
@@ -198,7 +200,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             GuildArgumentSymbol symbol = new GuildArgumentSymbol(name);
@@ -229,7 +231,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             MemberArgumentSymbol symbol = new MemberArgumentSymbol(name);
@@ -243,10 +245,10 @@ public class CommandGlobalScopeTest {
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    { "example.interval day", Interval.DAY},
-                    { "example.interval month", Interval.MONTH},
-                    { "example.interval week", Interval.WEEK},
-                    { "example.interval year", Interval.YEAR}
+                    { "example.interval Day", Interval.DAY},
+                    { "example.interval Month", Interval.MONTH},
+                    { "example.interval Week", Interval.WEEK},
+                    { "example.interval Year", Interval.YEAR}
             });
         }
 
@@ -259,9 +261,10 @@ public class CommandGlobalScopeTest {
         @Test
         public void resolveIntervalTest(){
             ASTCallArtifact call = parse(argument);
-            CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            CommandSymbol command = commandScope.resolveCommandDown(call.getQualifiedName()).get();
+
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             IntervalArgumentSymbol symbol = new IntervalArgumentSymbol(name);
@@ -277,10 +280,10 @@ public class CommandGlobalScopeTest {
         @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][] {
-                    { "example.onlinestatus online", OnlineStatus.ONLINE},
-                    { "example.onlinestatus busy", OnlineStatus.DO_NOT_DISTURB},
-                    { "example.onlinestatus idle", OnlineStatus.IDLE},
-                    { "example.onlinestatus invisible", OnlineStatus.INVISIBLE}
+                    { "example.onlinestatus Online", OnlineStatus.ONLINE},
+                    { "example.onlinestatus Busy", OnlineStatus.DO_NOT_DISTURB},
+                    { "example.onlinestatus Idle", OnlineStatus.IDLE},
+                    { "example.onlinestatus Invisible", OnlineStatus.INVISIBLE}
             });
         }
 
@@ -295,7 +298,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             OnlineStatusArgumentSymbol symbol = new OnlineStatusArgumentSymbol(name);
@@ -327,7 +330,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             StringArgumentSymbol symbol = new StringArgumentSymbol(name);
@@ -358,7 +361,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             UserArgumentSymbol symbol = new UserArgumentSymbol(name);
@@ -388,7 +391,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             TextChannelArgumentSymbol symbol = new TextChannelArgumentSymbol(name);
@@ -418,7 +421,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             RoleArgumentSymbol symbol = new RoleArgumentSymbol(name);
@@ -445,7 +448,7 @@ public class CommandGlobalScopeTest {
             ASTCallArtifact call = parse(argument);
             CommandSymbol command = commandScope.resolveCommand(call.getQualifiedName()).get();
 
-            String name = command.getParameters().get(0).getName();
+            String name = getParameters(command).get(0).getName();
             ASTArgument argument = call.getArgumentList().get(0);
 
             MessageArgumentSymbol symbol = new MessageArgumentSymbol(name);
@@ -453,5 +456,22 @@ public class CommandGlobalScopeTest {
 
             assertThat(symbol).isNotNull();
         }
+    }
+
+    private static void checkParameter(ParameterVariableSymbol parameter, ASTParameter expected){
+        Optional<ASTParameter> parameterOpt = parameter.getAstNode().map(ASTParameterVariable::getParameter);
+        assertThat(parameterOpt).contains(expected);
+    }
+
+    private static List<ParameterVariableSymbol> getParameters(CommandSymbol command){
+        return command.getSpannedScope().getLocalParameterVariableSymbols();
+    }
+
+    private static List<ASTRank> getValidRanks(CommandSymbol command){
+        return command.getSpannedScope().getLocalRankNameSymbols().stream().map(RankNameSymbol::getRank).collect(Collectors.toList());
+    }
+
+    private static List<Permission> getRequiredPermission(CommandSymbol command){
+        return command.getSpannedScope().getLocalPermissionNameSymbols().stream().map(PermissionNameSymbol::getPermission).collect(Collectors.toList());
     }
 }

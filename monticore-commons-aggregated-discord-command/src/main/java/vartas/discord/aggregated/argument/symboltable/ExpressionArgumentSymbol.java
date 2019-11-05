@@ -18,24 +18,23 @@
 package vartas.discord.aggregated.argument.symboltable;
 
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
-import vartas.discord.argument._ast.ASTExpressionArgument;
+import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 public class ExpressionArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected BigDecimal value;
 
     public ExpressionArgumentSymbol(String name) {
         super(name);
 
-        this.visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ExpressionArgumentVisitor());
+        this.visitor = new ExpressionArgumentVisitor();
     }
 
     public Optional<BigDecimal> accept(){
@@ -44,13 +43,11 @@ public class ExpressionArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(value);
     }
 
-    /**
-     * This class evaluates the arithmetic expression inside the argument.
-     */
     private class ExpressionArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void traverse(ASTExpressionArgument ast){
-            value = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
+        public void handle(ASTExpressionArgumentEntry ast){
+            Optional<BigDecimal> valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
+            valueOpt.ifPresent(bigDecimal -> value = bigDecimal);
         }
     }
 }

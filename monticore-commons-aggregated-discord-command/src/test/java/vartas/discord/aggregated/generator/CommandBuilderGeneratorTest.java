@@ -77,7 +77,6 @@ public class CommandBuilderGeneratorTest extends CommandGeneratorTest{
         templatePath = IterablePath.from(Collections.singletonList(templateFolder), TEMPLATE_EXTENSION);
         outputDirectory = new File(OUTPUT_DIRECTORY);
 
-
         glex = new GlobalExtensionManagement();
         glex.defineGlobalVar("Helper", new CommandGeneratorHelper());
         glex.defineGlobalVar("English", new English());

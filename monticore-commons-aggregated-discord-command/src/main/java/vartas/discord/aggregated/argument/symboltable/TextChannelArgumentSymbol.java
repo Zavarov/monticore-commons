@@ -17,17 +17,14 @@
 
 package vartas.discord.aggregated.argument.symboltable;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
-import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
+import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
@@ -37,7 +34,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TextChannelArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected TextChannel channel;
     protected Guild guild;
@@ -45,10 +42,7 @@ public class TextChannelArgumentSymbol extends ArgumentSymbol {
     public TextChannelArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setMCCommonLiteralsVisitor(new LiteralsArgumentVisitor());
-        visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
+        visitor = new TextChannelArgumentVisitor();
     }
 
     public Optional<TextChannel> accept(Message context){
@@ -61,48 +55,15 @@ public class TextChannelArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(channel);
     }
 
-    /**
-     * This class evaluates the id of the channel by using the arithmetic expression inside the argument.
-     */
-    private class ExpressionArgumentVisitor implements ArithmeticExpressionsInheritanceVisitor {
-        ArithmeticExpressionsVisitor realThis = this;
-
+    private class TextChannelArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(ArithmeticExpressionsVisitor realThis){
-            this.realThis = realThis;
+        public void handle(ASTExpressionArgumentEntry ast){
+            Optional<BigDecimal> valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
+            valueOpt.ifPresent(value -> channel = guild.getTextChannelById(value.longValueExact()));
         }
 
         @Override
-        public ArithmeticExpressionsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTExpression ast){
-            BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
-            channel = guild.getTextChannelById(value.longValueExact());
-        }
-    }
-
-    /**
-     * This class evaluates the name the channel inside the argument.
-     * The id is evaluated via the expression.
-     */
-    private class LiteralsArgumentVisitor implements MCCommonLiteralsVisitor {
-        MCCommonLiteralsVisitor realThis = this;
-
-        @Override
-        public void setRealThis(MCCommonLiteralsVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public MCCommonLiteralsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTStringLiteral ast){
+        public void handle(ASTStringLiteral ast){
             List<TextChannel> channels = guild.getTextChannelsByName(ast.getValue(), false);
             if(channels.size() == 1)
                 channel = channels.get(0);

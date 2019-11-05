@@ -26,7 +26,6 @@ import vartas.discord.command._ast.ASTCommandArtifact;
 import java.nio.file.Path;
 
 public abstract class CommandGenerator {
-    private CommandGenerator(){}
 
     private static GeneratorEngine generator;
     private static IterablePath targetPath;
@@ -42,8 +41,8 @@ public abstract class CommandGenerator {
     }
 
     public static void generate(ASTCommand ast){
-        String className = ast.getCommandSymbol().getClassName();
-        String abstractClassName = "Abstract"+ast.getCommandSymbol().getClassName();
+        String className = ast.getCommandSymbol().getSpannedScope().getLocalClassAttributeSymbols().get(0).getName();
+        String abstractClassName = "Abstract"+className;
 
         boolean fileExists = GeneratorHelper.existsHandwrittenClass(className, packageName, targetPath);
         String fileName = GeneratorHelper.getSimpleTypeNameToGenerate(className, packageName, targetPath);
@@ -54,10 +53,11 @@ public abstract class CommandGenerator {
     }
 
     public static void generateAbstract(ASTCommand ast){
-        String className = "Abstract" + ast.getCommandSymbol().getClassName();
+        String className = ast.getCommandSymbol().getSpannedScope().getLocalClassAttributeSymbols().get(0).getName();
+        String abstractClassName = "Abstract"+className;
 
-        boolean fileExists = GeneratorHelper.existsHandwrittenClass(className, packageName, targetPath);
-        String fileName = GeneratorHelper.getSimpleTypeNameToGenerate(className, packageName, targetPath);
+        boolean fileExists = GeneratorHelper.existsHandwrittenClass(abstractClassName, packageName, targetPath);
+        String fileName = GeneratorHelper.getSimpleTypeNameToGenerate(abstractClassName, packageName, targetPath);
         Path path = CommandGeneratorHelper.getQualifiedPath(packageName, fileName);
 
         generator.generate("command.AbstractCommand", path, ast, packageName, fileExists, fileName);

@@ -17,16 +17,14 @@
 
 package vartas.discord.aggregated.argument.symboltable;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsInheritanceVisitor;
-import vartas.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
+import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
@@ -35,7 +33,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MessageArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected Message message;
     protected TextChannel channel;
@@ -43,9 +41,7 @@ public class MessageArgumentSymbol extends ArgumentSymbol {
     public MessageArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setArithmeticExpressionsVisitor(new ExpressionArgumentVisitor());
+        visitor = new MessageArgumentVisitor();
     }
 
     public Optional<Message> accept(Message context){
@@ -58,28 +54,12 @@ public class MessageArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(message);
     }
 
-    /**
-     * This class evaluates the id of the role by using the arithmetic expression inside the argument.
-     */
-    private class ExpressionArgumentVisitor implements ArithmeticExpressionsInheritanceVisitor {
-        ArithmeticExpressionsVisitor realThis = this;
-
+    private class MessageArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(ArithmeticExpressionsVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public ArithmeticExpressionsVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTExpression ast){
-            BigDecimal value = ArithmeticExpressionsValueCalculator.valueOf(ast);
-
+        public void handle(ASTExpressionArgumentEntry ast){
+            Optional<BigDecimal> valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getExpression());
             try {
-                message = channel.retrieveMessageById(value.longValueExact()).complete();
+                valueOpt.ifPresent(value -> message = channel.retrieveMessageById(value.longValueExact()).complete());
             }catch(ErrorResponseException e){
                 //The message id was invalid
                 if(e.getErrorResponse() != ErrorResponse.UNKNOWN_MESSAGE)

@@ -17,45 +17,61 @@
 
 package vartas.discord.aggregated.generator;
 
+import com.google.common.base.Joiner;
+import com.google.common.util.concurrent.Futures;
 import de.se_rwth.commons.Joiners;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.internal.utils.PermissionUtil;
 import vartas.chart.Interval;
 import vartas.discord.aggregated.argument.symboltable.*;
-import vartas.discord.aggregated.parameter.visitor.ParameterTypeVisitor;
 import vartas.discord.argument._ast.ASTArgument;
+import vartas.discord.bot.EnvironmentInterface;
+import vartas.discord.bot.rank._ast.ASTRank;
+import vartas.discord.bot.rank._symboltable.IRankScope;
+import vartas.discord.bot.rank._symboltable.RankNameSymbol;
 import vartas.discord.command._ast.ASTCommandArtifact;
+import vartas.discord.command._ast.ASTRestriction;
+import vartas.discord.command._symboltable.CommandSymbol;
 import vartas.discord.parameter._ast.ASTParameter;
+import vartas.discord.parameter._ast.ASTParameterVariable;
+import vartas.discord.parameter._symboltable.ParameterVariableSymbol;
+import vartas.discord.permission._symboltable.PermissionNameSymbol;
 
 import java.math.BigDecimal;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CommandGeneratorHelper {
+    public CommandGeneratorHelper(){}
 
-    public static final String DISCORD_MESSAGE = Message.class.getCanonicalName();
-    public static final String DISCORD_USER = User.class.getCanonicalName();
-    public static final String DISCORD_TEXTCHANNEL = TextChannel.class.getCanonicalName();
-    public static final String DISCORD_GUILD = Guild.class.getCanonicalName();
-    public static final String DISCORD_ROLE = Role.class.getCanonicalName();
-    public static final String DISCORD_MEMBER = Member.class.getCanonicalName();
-    public static final String DISCORD_ONLINESTATUS = OnlineStatus.class.getCanonicalName();
-    public static final String CHART_INTERVAL = Interval.class.getCanonicalName();
-    public static final String JAVA_DATE = Date.class.getCanonicalName();
-    public static final String JAVA_STRING = String.class.getCanonicalName();
-    public static final String MONTICORE_EXPRESSION = BigDecimal.class.getCanonicalName();
+    private static final Map<ASTParameter, String> PARAMETER_MAP = new HashMap<>();
 
-    protected static ParameterTypeVisitor typeVisitor = new ParameterTypeVisitor();
+    static{
+        PARAMETER_MAP.put(ASTParameter.MESSAGE,Message.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.USER,User.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.TEXT_CHANNEL,TextChannel.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.GUILD,Guild.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.ROLE,Role.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.MEMBER,Member.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.ONLINE_STATUS,OnlineStatus.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.INTERVAL,Interval.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.DATE,Date.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.STRING,String.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.EXPRESSION,BigDecimal.class.getCanonicalName());
+    }
 
     public static Path getQualifiedPath(String packageName, String fileName){
         return Paths.get(packageName.replaceAll("\\.", FileSystems.getDefault().getSeparator()), fileName + ".java");
     }
 
-    public static String getType(ASTParameter ast){
-        return typeVisitor.accept(ast).orElseThrow(() -> new IllegalArgumentException(ast.getName() + " doesn't have a valid type."));
+    public static String getType(ASTParameterVariable ast){
+        return PARAMETER_MAP.get(ast.getParameter());
     }
 
     public static String getPackage(ASTCommandArtifact ast){
@@ -63,7 +79,7 @@ public class CommandGeneratorHelper {
     }
 
     public static String getPackageFolder(ASTCommandArtifact ast){
-        return ast.getPackageList().stream().reduce((u,v) -> u + FileSystems.getDefault().getSeparator() + v).orElse("");
+        return Joiner.on(FileSystems.getDefault().getSeparator()).join(ast.getPackageList());
     }
 
     public static Optional<Message> resolveMessage(String name, ASTArgument argument, Message context){
@@ -130,5 +146,52 @@ public class CommandGeneratorHelper {
         DateArgumentSymbol symbol = new DateArgumentSymbol(name);
         symbol.setAstNode(argument);
         return symbol.accept();
+    }
+
+    public static boolean requiresGuild(CommandSymbol symbol){
+        return !symbol.getSpannedScope().resolveRestrictionNameMany(ASTRestriction.GUILD.name()).isEmpty();
+    }
+
+    public static boolean requiresAttachment(CommandSymbol symbol){
+        return !symbol.getSpannedScope().resolveRestrictionNameMany(ASTRestriction.ATTACHMENT.name()).isEmpty();
+    }
+
+    public static String getClassName(CommandSymbol symbol){
+        return symbol.getSpannedScope().getLocalClassAttributeSymbols().get(0).getName();
+    }
+
+    public static List<Permission> getPermissions(CommandSymbol symbol){
+        return symbol
+                .getSpannedScope()
+                .getLocalPermissionNameSymbols()
+                .stream()
+                .map(PermissionNameSymbol::getPermission)
+                .collect(Collectors.toList());
+    }
+
+    public static List<ASTRank> getRanks(CommandSymbol symbol){
+        return symbol
+                .getSpannedScope()
+                .getLocalRankNameSymbols()
+                .stream()
+                .map(RankNameSymbol::getRank)
+                .collect(Collectors.toList());
+    }
+
+    public static List<ParameterVariableSymbol> getParameters(CommandSymbol symbol){
+        return symbol
+                .getSpannedScope()
+                .getLocalParameterVariableSymbols();
+    }
+
+    public static boolean checkRank(EnvironmentInterface environment, User user, ASTRank rank){
+        Function<IRankScope, Boolean> operation = scope -> {
+            return scope.resolveRankName(Joiners.DOT.join(user.getId(), rank.name())).isPresent();
+        };
+        return Futures.getUnchecked(environment.accessRank(operation));
+    }
+
+    public static boolean checkPermission(Member member, Permission permission){
+        return PermissionUtil.checkPermission(member, permission);
     }
 }

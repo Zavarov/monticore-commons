@@ -23,9 +23,7 @@ import vartas.discord.command._ast.ASTCommandArtifact;
 import java.nio.file.Path;
 import java.util.List;
 
-public class CommandBuilderGenerator {
-    protected CommandBuilderGenerator(){}
-
+public abstract class CommandBuilderGenerator {
     public static void generate(List<ASTCommandArtifact> asts, GeneratorEngine generator, String packageName){
         Path path = CommandGeneratorHelper.getQualifiedPath(packageName, "CommandBuilder");
 

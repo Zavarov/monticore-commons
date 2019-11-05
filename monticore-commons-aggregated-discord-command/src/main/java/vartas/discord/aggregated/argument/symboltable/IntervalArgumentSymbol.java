@@ -18,26 +18,23 @@
 package vartas.discord.aggregated.argument.symboltable;
 
 import vartas.chart.Interval;
-import vartas.chart.interval._ast.ASTInterval;
-import vartas.chart.interval._visitor.IntervalInheritanceVisitor;
-import vartas.chart.interval._visitor.IntervalVisitor;
+import vartas.chart.interval._symboltable.IntervalNameSymbol;
+import vartas.discord.argument._ast.ASTIntervalArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
-import vartas.discord.argument._visitor.ArgumentDelegatorVisitor;
+import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.util.Optional;
 
 public class IntervalArgumentSymbol extends ArgumentSymbol {
-    protected ArgumentDelegatorVisitor visitor;
+    protected ArgumentVisitor visitor;
 
     protected Interval interval;
 
     public IntervalArgumentSymbol(String name) {
         super(name);
 
-        visitor = new ArgumentDelegatorVisitor();
-        visitor.setArgumentVisitor(new ContextSensitiveArgumentVisitor());
-        visitor.setIntervalVisitor(new IntervalArgumentVisitor());
+        visitor = new IntervalArgumentVisitor();
     }
 
     public Optional<Interval> accept(){
@@ -46,25 +43,12 @@ public class IntervalArgumentSymbol extends ArgumentSymbol {
         return Optional.ofNullable(interval);
     }
 
-    /**
-     * This class evaluates the interval inside the argument.
-     */
-    private class IntervalArgumentVisitor implements IntervalInheritanceVisitor {
-        IntervalVisitor realThis = this;
-
+    private class IntervalArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
-        public void setRealThis(IntervalVisitor realThis){
-            this.realThis = realThis;
-        }
-
-        @Override
-        public IntervalVisitor getRealThis(){
-            return realThis;
-        }
-
-        @Override
-        public void visit(ASTInterval ast){
-            interval = ast.getIntervalType();
+        public void handle(ASTIntervalArgumentEntry node){
+            IntervalNameSymbol symbol = new IntervalNameSymbol(node.getIntervalName().getName());
+            symbol.setAstNode(node.getIntervalName());
+            interval = symbol.getInterval();
         }
     }
 }
