@@ -36,8 +36,8 @@ public class ManyOnlyAtLastParameterCoCo implements CommandASTCommandCoCo, Comma
 
         node.accept(getRealThis());
 
-        for (Boolean element : list) {
-            if (element) {
+        for(int i = 0 ; i < list.size() - 1 ; ++i){
+            if (list.get(i)) {
                 Log.error(ERROR_MESSAGE);
                 break;
             }
