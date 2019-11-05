@@ -175,7 +175,7 @@
 
     <build>
         <plugins>
-            <!-- create grammar jar -->
+            <!-- create grammar & template jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -191,6 +191,18 @@
                         <configuration>
                             <classifier>${grammars.classifier}</classifier>
                             <classesDirectory>src/main/grammars</classesDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- templates -->
+                    <execution>
+                        <id>generate-templates</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>templates</classifier>
+                            <classesDirectory>src/main/resources/templates</classesDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -221,26 +233,6 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- create template jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-templates</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>templates</classifier>
-                            <classesDirectory>src/main/resources/templates</classesDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
