@@ -6,7 +6,11 @@ package vartas.discord;
  */
 component grammar Parameter extends de.monticore.MCBasics{
     symbol ParameterVariable =
-        Name& ":" Parameter
+        Name& ":" Parameter Cardinality?
+    ;
+
+    enum Cardinality =
+        MANY : "+"
     ;
 
     enum Parameter =

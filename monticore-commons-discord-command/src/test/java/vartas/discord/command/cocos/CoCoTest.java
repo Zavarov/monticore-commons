@@ -120,6 +120,11 @@ public class CoCoTest extends AbstractTest {
                 "NamesHaveNoWhitespaces.cmd",
                 NamesHaveNoWhitespacesCoCo.ERROR_MESSAGE,
                 "Test Command"
+            },
+            {
+                "ManyOnlyAtLastParameter.cmd",
+                ManyOnlyAtLastParameterCoCo.ERROR_MESSAGE,
+                ""
             }
         });
     }
