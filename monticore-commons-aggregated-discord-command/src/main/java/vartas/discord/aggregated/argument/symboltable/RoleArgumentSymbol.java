@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
+import vartas.discord.argument._ast.ASTRoleArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
@@ -63,9 +64,15 @@ public class RoleArgumentSymbol extends ArgumentSymbol {
         }
 
         @Override
+        public void handle(ASTRoleArgumentEntry ast){
+            role = guild.getRoleById(ast.getRole().getId().getSource());
+        }
+
+        @Override
         public void handle(ASTStringLiteral ast){
             List<Role> roles = guild.getRolesByName(ast.getValue(), false);
-            if(roles.size() == 1)
+            //Role via ID has precedence
+            if(roles.size() == 1 && role == null)
                 role = roles.get(0);
         }
     }

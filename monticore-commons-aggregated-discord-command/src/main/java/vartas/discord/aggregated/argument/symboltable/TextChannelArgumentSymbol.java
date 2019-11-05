@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
+import vartas.discord.argument._ast.ASTTextChannelArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
@@ -63,9 +64,15 @@ public class TextChannelArgumentSymbol extends ArgumentSymbol {
         }
 
         @Override
+        public void handle(ASTTextChannelArgumentEntry ast){
+            channel = guild.getTextChannelById(ast.getTextChannel().getId().getSource());
+        }
+
+        @Override
         public void handle(ASTStringLiteral ast){
             List<TextChannel> channels = guild.getTextChannelsByName(ast.getValue(), false);
-            if(channels.size() == 1)
+            //TextChannel via ID has precedence
+            if(channels.size() == 1 && channel == null)
                 channel = channels.get(0);
         }
     }

@@ -35,7 +35,7 @@ public class DateArgumentSymbol extends ArgumentSymbol {
     protected ArgumentVisitor visitor;
 
     protected Date date;
-    private SimpleDateFormat dateFormat;
+    protected SimpleDateFormat dateFormat;
 
     public DateArgumentSymbol(String name) {
         super(name);

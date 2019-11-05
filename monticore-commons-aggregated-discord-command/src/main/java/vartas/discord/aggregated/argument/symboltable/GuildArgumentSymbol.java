@@ -61,7 +61,8 @@ public class GuildArgumentSymbol extends ArgumentSymbol {
         @Override
         public void handle(ASTStringLiteral ast){
             List<Guild> guilds = jda.getGuildsByName(ast.getValue(), false);
-            if(guilds.size() == 1)
+            //Guild via ID has precedence
+            if(guilds.size() == 1 && guild == null)
                 guild = guilds.get(0);
         }
     }

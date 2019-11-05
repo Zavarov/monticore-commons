@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 import vartas.discord.argument._ast.ASTExpressionArgumentEntry;
+import vartas.discord.argument._ast.ASTUserArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
 import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
@@ -58,9 +59,15 @@ public class UserArgumentSymbol extends ArgumentSymbol {
         }
 
         @Override
+        public void handle(ASTUserArgumentEntry ast){
+            user = jda.getUserById(ast.getUser().getId().getSource());
+        }
+
+        @Override
         public void handle(ASTStringLiteral ast){
             List<User> users = jda.getUsersByName(ast.getValue(), false);
-            if(users.size() == 1)
+            //User via ID has precedence
+            if(users.size() == 1 && user == null)
                 user = users.get(0);
         }
     }
