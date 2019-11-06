@@ -46,6 +46,7 @@
         <assertj.version>3.12.2</assertj.version>
         <junit.version>4.12</junit.version>
         <evo.inflector.version>1.2.2</evo.inflector.version>
+        <reddit.version>2.0.11</reddit.version>
 
         <!-- .. Dependency Management........................................... -->
         <guava.management.version>23.0</guava.management.version>

@@ -28,6 +28,14 @@
 
     <artifactId>monticore-commons-reddit</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>vartas</groupId>
+            <artifactId>reddit-api</artifactId>
+            <version>${reddit.version}</version>
+        </dependency>
+    </dependencies>
+
     <!-- == DEFAULT BUILD SETTINGS =========================================== -->
 
     <build>
