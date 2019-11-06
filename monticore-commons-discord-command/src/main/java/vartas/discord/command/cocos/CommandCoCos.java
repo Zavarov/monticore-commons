@@ -39,7 +39,7 @@ public abstract class CommandCoCos {
         checker.addCoCo(new CommandNameIsUniqueCoCo());
         checker.addCoCo(new ClassNameIsUniqueCoCo());
         checker.addCoCo(new NamesHaveNoWhitespacesCoCo());
-        checker.addCoCo(new ManyOnlyAtLastParameterCoCo());
+        checker.addCoCo(new CardinalityOnlyAtLastParameterCoCo());
 
         return checker;
     }

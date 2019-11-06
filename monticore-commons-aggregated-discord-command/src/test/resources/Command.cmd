@@ -63,4 +63,9 @@ command {
              class : "UserCommand"
          parameter : u:User
     }
+
+    many @ Guild{
+             class : "ManyCommand"
+         parameter : s:String, e:String*
+    }
 }

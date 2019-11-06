@@ -10,7 +10,8 @@ component grammar Parameter extends de.monticore.MCBasics{
     ;
 
     enum Cardinality =
-        MANY : "+"
+         "*" |
+         "+"
     ;
 
     enum Parameter =

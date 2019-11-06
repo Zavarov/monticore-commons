@@ -27,6 +27,6 @@ public abstract class CommandBuilderGenerator {
     public static void generate(List<ASTCommandArtifact> asts, GeneratorEngine generator, String packageName){
         Path path = CommandGeneratorHelper.getQualifiedPath(packageName, "CommandBuilder");
 
-        generator.generateNoA("CommandBuilder", path, asts, packageName);
+        generator.generateNoA("helper.CommandBuilder", path, asts, packageName);
     }
 }

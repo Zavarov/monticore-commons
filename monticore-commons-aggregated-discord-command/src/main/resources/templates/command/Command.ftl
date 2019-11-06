@@ -12,9 +12,7 @@ public <#if existsHandwrittenClass>abstract </#if>class ${className} extends ${p
     ${includeArgs("command.VariableDeclaration", parameters)}
 
     public ${className}(
-<#list parameters as parameter>
-        ${Helper.getType(parameter.getAstNode().get())} ${parameter.getName()}<#if parameter?has_next>,</#if>
-</#list>
+        ${includeArgs("command.ConstructorVariable", parameters)}
     )
     throws
         IllegalArgumentException,

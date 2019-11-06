@@ -1,8 +1,6 @@
 ${signature("commands", "package")}
 package ${package};
 <#assign Communicator = getGlobalVar("Communicator")>
-<#assign Helper = getGlobalVar("Helper")>
-<#assign Ordinal = getGlobalVar("Ordinal")>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Command = "vartas.discord.bot.AbstractCommand">
 <#assign Call = "vartas.discord.call._ast.ASTCallArtifact">
@@ -17,7 +15,6 @@ package ${package};
 <#assign Logger = "org.slf4j.Logger">
 <#assign JDALogger = "net.dv8tion.jda.internal.utils.JDALogger">
 <#assign CallParser = "vartas.discord.call._parser.CallParser">
-<#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
 <#assign AbstractCommandBuilder = "vartas.discord.bot.AbstractCommandBuilder">
 
 public class CommandBuilder extends ${AbstractCommandBuilder}{
@@ -27,27 +24,8 @@ public class CommandBuilder extends ${AbstractCommandBuilder}{
 
     public CommandBuilder(${Communicator} communicator){
 <#list commands as ast>
-    <#assign commandPackage = Helper.getPackage(ast)>
     <#list ast.getCommandList() as command>
-        <#assign symbol = command.getCommandSymbol()>
-        <#assign name = symbol.getFullName()>
-        <#assign className = Helper.getClassName(symbol)>
-        <#assign parameters = Helper.getParameters(symbol)>
-        commands.put("${name}", (context, arguments) -> {
-            ${includeArgs("CheckArgument", parameters)}
-            ${commandPackage}.${className} command = new ${commandPackage}.${className}(
-        <#list parameters as parameter>
-            <#assign class = parameter.getAstNode().get().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
-            <#assign name = parameter.getName()>
-            <#assign index = parameter?index>
-                ${GeneratorHelper}.resolve${class}("${name}", arguments.get(${index}), context)
-                    .orElseThrow(() -> new IllegalArgumentException("The ${Ordinal.format(index+1)} argument ${name} couldn't be resolved."))<#if parameter?has_next>,</#if>
-        </#list>
-            );
-            command.setSource(context);
-            command.setCommunicator(communicator);
-            return command;
-        });
+        ${includeArgs("helper.Command", command, ast)}
     </#list>
 </#list>
     }

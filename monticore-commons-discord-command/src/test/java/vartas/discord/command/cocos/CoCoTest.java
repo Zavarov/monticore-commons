@@ -122,8 +122,8 @@ public class CoCoTest extends AbstractTest {
                 "Test Command"
             },
             {
-                "ManyOnlyAtLastParameter.cmd",
-                ManyOnlyAtLastParameterCoCo.ERROR_MESSAGE,
+                "CardinalityOnlyAtLastParameter.cmd",
+                CardinalityOnlyAtLastParameterCoCo.ERROR_MESSAGE,
                 ""
             }
         });

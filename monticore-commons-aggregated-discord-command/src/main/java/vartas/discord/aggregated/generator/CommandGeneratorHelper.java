@@ -34,6 +34,7 @@ import vartas.discord.bot.rank._symboltable.RankNameSymbol;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.command._symboltable.CommandSymbol;
+import vartas.discord.parameter._ast.ASTCardinality;
 import vartas.discord.parameter._ast.ASTParameter;
 import vartas.discord.parameter._ast.ASTParameterVariable;
 import vartas.discord.parameter._symboltable.ParameterVariableSymbol;
@@ -43,7 +44,10 @@ import java.math.BigDecimal;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -82,70 +86,70 @@ public class CommandGeneratorHelper {
         return Joiner.on(FileSystems.getDefault().getSeparator()).join(ast.getPackageList());
     }
 
-    public static Optional<Message> resolveMessage(String name, ASTArgument argument, Message context){
+    public static Message resolveMessage(String name, ASTArgument argument, Message context){
         MessageArgumentSymbol symbol = new MessageArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as message."));
     }
 
-    public static Optional<User> resolveUser(String name, ASTArgument argument, Message context){
+    public static User resolveUser(String name, ASTArgument argument, Message context){
         UserArgumentSymbol symbol = new UserArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as user."));
     }
 
-    public static Optional<TextChannel> resolveTextChannel(String name, ASTArgument argument, Message context){
+    public static TextChannel resolveTextChannel(String name, ASTArgument argument, Message context){
         TextChannelArgumentSymbol symbol = new TextChannelArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as text channel."));
     }
 
-    public static Optional<String> resolveString(String name, ASTArgument argument, Message context){
+    public static String resolveString(String name, ASTArgument argument, Message context){
         StringArgumentSymbol symbol = new StringArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept();
+        return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as string."));
     }
 
-    public static Optional<Role> resolveRole(String name, ASTArgument argument, Message context){
+    public static Role resolveRole(String name, ASTArgument argument, Message context){
         RoleArgumentSymbol symbol = new RoleArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as role."));
     }
 
-    public static Optional<OnlineStatus> resolveOnlineStatus(String name, ASTArgument argument, Message context){
+    public static OnlineStatus resolveOnlineStatus(String name, ASTArgument argument, Message context){
         OnlineStatusArgumentSymbol symbol = new OnlineStatusArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept();
+        return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as online status."));
     }
 
-    public static Optional<Member> resolveMember(String name, ASTArgument argument, Message context){
+    public static Member resolveMember(String name, ASTArgument argument, Message context){
         MemberArgumentSymbol symbol = new MemberArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as member."));
     }
 
-    public static Optional<Interval> resolveInterval(String name, ASTArgument argument, Message context){
+    public static Interval resolveInterval(String name, ASTArgument argument, Message context){
         IntervalArgumentSymbol symbol = new IntervalArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept();
+        return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as interval."));
     }
 
-    public static Optional<Guild> resolveGuild(String name, ASTArgument argument, Message context){
+    public static Guild resolveGuild(String name, ASTArgument argument, Message context){
         GuildArgumentSymbol symbol = new GuildArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept(context);
+        return symbol.accept(context).orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as guild."));
     }
 
-    public static Optional<BigDecimal> resolveExpression(String name, ASTArgument argument, Message context){
+    public static BigDecimal resolveExpression(String name, ASTArgument argument, Message context){
         ExpressionArgumentSymbol symbol = new ExpressionArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept();
+        return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as expression."));
     }
 
-    public static Optional<Date> resolveDate(String name, ASTArgument argument, Message context){
+    public static Date resolveDate(String name, ASTArgument argument, Message context){
         DateArgumentSymbol symbol = new DateArgumentSymbol(name);
         symbol.setAstNode(argument);
-        return symbol.accept();
+        return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The variable "+name+" couldn't be resolved as date."));
     }
 
     public static boolean requiresGuild(CommandSymbol symbol){
@@ -193,5 +197,31 @@ public class CommandGeneratorHelper {
 
     public static boolean checkPermission(Member member, Permission permission){
         return PermissionUtil.checkPermission(member, permission);
+    }
+
+    public static boolean isMany(ParameterVariableSymbol symbol){
+        return isStar(symbol) || isPlus(symbol);
+    }
+
+    public static boolean isStar(ParameterVariableSymbol symbol){
+        return symbol
+                .getAstNode()
+                .flatMap(ASTParameterVariable::getCardinalityOpt)
+                .map(card -> card == ASTCardinality.STAR)
+                .orElse(false);
+
+    }
+
+    public static boolean isPlus(ParameterVariableSymbol symbol){
+        return symbol
+                .getAstNode()
+                .flatMap(ASTParameterVariable::getCardinalityOpt)
+                .map(card -> card == ASTCardinality.PLUS)
+                .orElse(false);
+
+    }
+
+    public static long getMinSize(List<ParameterVariableSymbol> symbols){
+        return symbols.stream().filter(symbol -> !isStar(symbol)).count();
     }
 }

@@ -1,6 +1,6 @@
 command {
     test @ Guild{
              class : "TestCommand"
-         parameter : a:String+, b:String
+         parameter : a:String*, b:String
     }
 }

@@ -21,13 +21,12 @@ import de.se_rwth.commons.logging.Log;
 import vartas.discord.command._ast.ASTCommand;
 import vartas.discord.command._cocos.CommandASTCommandCoCo;
 import vartas.discord.command._visitor.CommandVisitor;
-import vartas.discord.parameter._ast.ASTCardinality;
 import vartas.discord.parameter._ast.ASTParameterVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManyOnlyAtLastParameterCoCo implements CommandASTCommandCoCo, CommandVisitor {
+public class CardinalityOnlyAtLastParameterCoCo implements CommandASTCommandCoCo, CommandVisitor {
     public static final String ERROR_MESSAGE = "Only the last parameter can have the '+' cardinality.";
     protected List<Boolean> list;
     @Override
@@ -46,9 +45,6 @@ public class ManyOnlyAtLastParameterCoCo implements CommandASTCommandCoCo, Comma
 
     @Override
     public void visit(ASTParameterVariable node){
-        if(node.isPresentCardinality() && node.getCardinality() == ASTCardinality.MANY)
-            list.add(true);
-        else
-            list.add(false);
+        list.add(node.isPresentCardinality());
     }
 }
