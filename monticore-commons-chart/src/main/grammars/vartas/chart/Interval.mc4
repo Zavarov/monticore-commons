@@ -13,10 +13,12 @@ component grammar Interval{
     /*=========================================================*/
 
     enum Interval =
-        DAY   : "Day"   |
-        WEEK  : "Week"  |
-        MONTH : "Month" |
-        YEAR  : "Year"
+        MINUTE : "Minute" |
+        HOUR   : "Hour"   |
+        DAY    : "Day"    |
+        WEEK   : "Week"   |
+        MONTH  : "Month"  |
+        YEAR   : "Year"
     ;
 
     /*=========================================================*/

@@ -28,6 +28,14 @@
 
     <artifactId>monticore-commons-chart</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>vartas</groupId>
+            <artifactId>chart</artifactId>
+            <version>${chart.version}</version>
+        </dependency>
+    </dependencies>
+
     <!-- == DEFAULT BUILD SETTINGS =========================================== -->
 
     <build>
