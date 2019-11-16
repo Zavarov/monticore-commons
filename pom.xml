@@ -21,32 +21,34 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>vartas</groupId>
+    <groupId>vartas.monticore-commons</groupId>
     <artifactId>monticore-commons</artifactId>
     <packaging>pom</packaging>
     <version>1.5</version>
     <modules>
-        <module>monticore-commons-numbers</module>
-        <module>monticore-commons-discord</module>
-        <module>monticore-commons-reddit</module>
-        <module>monticore-commons-chart</module>
-        <module>monticore-commons-discord-bot</module>
-        <module>monticore-commons-discord-command</module>
-        <module>monticore-commons-discord-call</module>
-        <module>monticore-commons-aggregated-discord-command</module>
+        <module>core</module>
+        <module>numbers</module>
+        <module>discord</module>
+        <module>reddit</module>
+        <module>chart</module>
+        <module>discord-bot</module>
+        <module>discord-command</module>
+        <module>discord-call</module>
+        <module>aggregated-discord-command</module>
     </modules>
 
     <properties>
         <!-- .. Libraries ..................................................... -->
 
         <monticore.version>5.3.0</monticore.version>
-        <jda.version>4.0.0_53</jda.version>
-        <chart.version>1.0</chart.version>
         <commons-text.version>1.8</commons-text.version>
-        <assertj.version>3.12.2</assertj.version>
-        <junit.version>4.12</junit.version>
         <evo.inflector.version>1.2.2</evo.inflector.version>
         <reddit.version>2.0.11</reddit.version>
+        <chart.version>1.1.5</chart.version>
+        <discord.bot.version>3.1</discord.bot.version>
+
+        <assertj.version>3.12.2</assertj.version>
+        <junit.version>4.12</junit.version>
 
         <!-- .. Dependency Management........................................... -->
         <guava.management.version>23.0</guava.management.version>
@@ -85,24 +87,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>vartas</groupId>
-            <artifactId>chart</artifactId>
-            <version>${chart.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>${jda.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${commons-text.version}</version>
-        </dependency>
-
         <!-- MontiCore Dependencies -->
 
         <dependency>
