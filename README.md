@@ -44,8 +44,11 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
  * **Apache Commons Text**
    * Version: **1.8**
    * [Github](https://github.com/apache/commons-text)
+ * **bot**
+   * Version: **3.2**
+   * [Github](https://github.com/Zavarov/discord-bot)
  * **chart**
-   * Version: **1.0**
+   * Version: **1.1.6**
    * [Github](https://github.com/Zavarov/chart)
  * **Evo Inflector**
    * Version: **1.2.2**
@@ -56,6 +59,9 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
  * **MontiCore**
    * Version: **5.3.0**
    * [Github](https://github.com/MontiCore/monticore)
+ * **reddit**
+   * Version: **2.0.13**
+   * [Github](https://github.com/Zavarov/reddit)
 
 ## Plugins:
  * **Apache Maven Jar Plugin**
