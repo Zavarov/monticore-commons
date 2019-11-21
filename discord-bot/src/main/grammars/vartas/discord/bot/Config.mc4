@@ -9,11 +9,11 @@ grammar Config extends de.monticore.literals.MCCommonLiterals{
     interface ConfigName = Config;
 
     symbol IntegerConfig implements ConfigName =
-        Config "=" NatLiteral type:Name?
+        Config "=" NatLiteral unit:Name?
     ;
 
     symbol StringConfig implements ConfigName =
-        Config "=" StringLiteral type:Name?
+        Config "=" StringLiteral unit:Name?
     ;
 
     /*=========================================================*/
@@ -41,10 +41,14 @@ grammar Config extends de.monticore.literals.MCCommonLiterals{
     /*=== AST Rules                                         ===*/
     /*=========================================================*/
 
-    //Use the enum name as a symbol name
     astrule ConfigName =
+        //Use the enum name as a symbol name
         method public String getName(){
             return getConfig().name();
+        }
+        //Use the name to determine the config type
+        method public vartas.discord.bot.entities.BotConfig.Type getType(){
+            return vartas.discord.bot.entities.BotConfig.Type.valueOf(getName());
         }
     ;
 }
