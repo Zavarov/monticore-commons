@@ -75,8 +75,8 @@ public abstract class Abstract${ClassName} extends ${Command}{
 <#if Helper.requiresGuild(symbol)>
     ${includeArgs("abstract.CheckGuild")}
     ${includeArgs("abstract.CheckPermission", symbol)}
-    ${includeArgs("abstract.CheckRank", symbol)}
 </#if>
+    ${includeArgs("abstract.CheckRank", symbol)}
     }
 
 <#if !existsHandwrittenClass>
