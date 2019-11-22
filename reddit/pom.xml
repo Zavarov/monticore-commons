@@ -31,7 +31,7 @@
     <dependencies>
         <dependency>
             <groupId>vartas</groupId>
-            <artifactId>reddit-api</artifactId>
+            <artifactId>reddit</artifactId>
             <version>${reddit.version}</version>
         </dependency>
         <dependency>

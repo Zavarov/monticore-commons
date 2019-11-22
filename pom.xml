@@ -43,7 +43,7 @@
         <monticore.version>5.3.0</monticore.version>
         <commons-text.version>1.8</commons-text.version>
         <evo.inflector.version>1.2.2</evo.inflector.version>
-        <reddit.version>2.1</reddit.version>
+        <reddit.version>2.2</reddit.version>
         <chart.version>1.1.6</chart.version>
         <discord.bot.version>3.2</discord.bot.version>
 
