@@ -82,7 +82,7 @@ public class BotGuildPrettyPrinter {
         printer.addLine("}");
     }
     private void printSubreddits(BotGuild config){
-        Multimap<String, TextChannel> channels = config.resolve(BotGuild.ROLEGROUP, Guild::getTextChannelById);
+        Multimap<String, TextChannel> channels = config.resolve(BotGuild.SUBREDDIT, Guild::getTextChannelById);
         channels.asMap().forEach(this::printSubreddit);
     }
     private void printSubreddit(String key, Collection<TextChannel> channels) {
