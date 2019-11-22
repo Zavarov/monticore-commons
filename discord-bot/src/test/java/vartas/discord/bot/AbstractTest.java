@@ -38,9 +38,9 @@ import java.util.Map;
 public abstract class AbstractTest {
     protected JDAImpl jda;
     protected GuildImpl guild;
-    private Map<Long, TextChannelImpl> channels = new HashMap<>();
-    private Map<Long, RoleImpl> roles = new HashMap<>();
-    private Map<Long, User> users = new HashMap<>();
+    protected Map<Long, TextChannelImpl> channels = new HashMap<>();
+    protected Map<Long, RoleImpl> roles = new HashMap<>();
+    protected Map<Long, User> users = new HashMap<>();
 
     protected UserImpl user1;
     protected UserImpl user2;
