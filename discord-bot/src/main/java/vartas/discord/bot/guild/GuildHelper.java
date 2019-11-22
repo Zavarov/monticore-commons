@@ -20,7 +20,10 @@ package vartas.discord.bot.guild;
 import de.monticore.prettyprint.IndentPrinter;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
 import vartas.discord.bot.guild._parser.GuildParser;
-import vartas.discord.bot.guild._symboltable.*;
+import vartas.discord.bot.guild._symboltable.GuildArtifactScope;
+import vartas.discord.bot.guild._symboltable.GuildArtifactSymbol;
+import vartas.discord.bot.guild._symboltable.GuildScope;
+import vartas.discord.bot.guild._symboltable.GuildSymbolTableCreator;
 import vartas.discord.bot.guild.cocos.GuildCoCos;
 import vartas.discord.bot.guild.prettyprint.GuildSymbolPrettyPrinter;
 
@@ -40,10 +43,10 @@ public abstract class GuildHelper {
         Files.write(symbol.getReference(), Collections.singletonList(content));
     }
 
-    public static ASTGuildArtifact parse(GuildGlobalScope scope, String filePath, Path reference) throws IllegalArgumentException{
+    public static ASTGuildArtifact parse(String filePath, Path reference) throws IllegalArgumentException{
         ASTGuildArtifact ast = parseArtifact(filePath);
 
-        buildSymbolTable(scope, ast);
+        buildSymbolTable(new GuildScope(), ast);
         setReference(ast, reference);
         checkCoCos(ast);
         return ast;

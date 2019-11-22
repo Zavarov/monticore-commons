@@ -40,6 +40,7 @@ public class SymbolRemoverTest extends AbstractGuildTest {
     SubredditGroupEntrySymbol subredditSymbol;
     RoleGroupEntrySymbol roleSymbol;
     LongGroupElementSymbol longSymbol;
+    GuildScope guildScope;
 
     @Before
     public void setUp() throws IOException {

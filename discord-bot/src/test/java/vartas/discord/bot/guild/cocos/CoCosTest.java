@@ -80,13 +80,13 @@ public class CoCosTest extends AbstractGuildTest {
 
     @Test
     public void testValid(){
-        GuildHelper.parse(globalScope,baseDir+"Valid.gld", null);
+        GuildHelper.parse(baseDir+"Valid.gld", null);
         checkValid();
     }
 
     @Test
     public void testInvalid(){
-        GuildHelper.parse(globalScope,baseDir+"invalid/"+fileName, null);
+        GuildHelper.parse(baseDir+"invalid/"+fileName, null);
         checkInvalid();
     }
 

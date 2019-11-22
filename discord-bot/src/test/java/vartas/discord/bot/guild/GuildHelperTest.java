@@ -49,15 +49,15 @@ public class GuildHelperTest extends AbstractGuildTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactFileNotFound(){
-        GuildHelper.parse(globalScope,"#", target);
+        GuildHelper.parse("#", target);
     }
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactInvalidFile(){
-        GuildHelper.parse(globalScope,"src/test/resources/junk.txt", target);
+        GuildHelper.parse("src/test/resources/junk.txt", target);
     }
     @Test
     public void testStore() throws IOException {
-        ASTGuildArtifact ast = GuildHelper.parse(globalScope, source.toString(), copy);
+        ASTGuildArtifact ast = GuildHelper.parse(source.toString(), copy);
         GuildHelper.store(ast.getSymbol());
 
         String original = FileUtils

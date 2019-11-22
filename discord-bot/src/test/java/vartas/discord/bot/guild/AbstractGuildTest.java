@@ -17,70 +17,18 @@
 
 package vartas.discord.bot.guild;
 
-import de.monticore.io.paths.ModelPath;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.internal.entities.GuildImpl;
-import net.dv8tion.jda.internal.entities.RoleImpl;
-import net.dv8tion.jda.internal.entities.TextChannelImpl;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import vartas.discord.bot.AbstractTest;
 import vartas.discord.bot.guild._ast.ASTGuildArtifact;
-import vartas.discord.bot.guild._symboltable.GuildGlobalScope;
-import vartas.discord.bot.guild._symboltable.GuildLanguage;
 import vartas.discord.bot.guild._symboltable.IGuildScope;
 
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class AbstractGuildTest extends AbstractTest {
-    protected GuildGlobalScope globalScope;
-    protected IGuildScope guildScope;
     protected ASTGuildArtifact ast;
-
-    protected GuildImpl guild;
-    protected Map<Long, TextChannelImpl> channels;
-    protected Map<Long, RoleImpl> roles;
-
-    @Before
-    public void initJda(){
-        channels = new HashMap<>();
-        roles = new HashMap<>();
-        guild = new GuildImpl(null, 12345){
-            @Override
-            public TextChannel getTextChannelById(long id){
-                return channels.getOrDefault(id, null);
-            }
-            @Override
-            public TextChannel getTextChannelById(@NotNull  String id){
-                return(getTextChannelById(Long.parseUnsignedLong(id)));
-            }
-            @Override
-            public Role getRoleById(long id){
-                return roles.getOrDefault(id, null);
-            }
-            @Override
-            public Role getRoleById(@NotNull String id){
-                return(getRoleById(Long.parseUnsignedLong(id)));
-            }
-        };
-
-        for(long id = 0 ; id < 5 ; ++id)
-            channels.put(id, new TextChannelImpl(id, guild));
-
-        for(long id = 5 ; id < 10 ; ++id)
-            roles.put(id, new RoleImpl(id, guild));
-    }
+    protected IGuildScope guildScope;
 
     @Before
     public void initScope(){
-        GuildLanguage language = new GuildLanguage();
-        ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
-        globalScope = new GuildGlobalScope(modelPath, language);
-
-        ast = GuildHelper.parse(globalScope, "src/test/resources/guild.gld", null);
+        ast = GuildHelper.parse("src/test/resources/guild.gld", null);
         guildScope = ast.getSpannedScope();
     }
 }
