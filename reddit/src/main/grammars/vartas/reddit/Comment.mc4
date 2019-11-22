@@ -23,6 +23,9 @@ grammar Comment extends de.monticore.literals.MCCommonLiterals{
     symbol ScoreLiteral implements Entry =
         name:"score" "=" SignedNatLiteral;
 
+    symbol CreatedLiteral implements Entry =
+        name:"created" "=" BasicLongLiteral;
+
     symbol SubmissionTitleLiteral implements Entry =
         name:"submissionTitle" "=" StringLiteral;
 

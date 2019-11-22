@@ -44,6 +44,7 @@ public class CommentPrettyPrinter {
         addSubreddit(comment);
         addSubmission(comment);
         addSubmissionTitle(comment);
+        addCreated(comment);
 
         printer.addLine("}");
 
@@ -72,5 +73,9 @@ public class CommentPrettyPrinter {
 
     private void addSubmission(CommentInterface comment){
         printer.addLine(String.format("submission = \"%s\"", escapeMonticore(comment.getSubmission())));
+    }
+
+    private void addCreated(CommentInterface comment){
+        printer.addLine(String.format("created = %dL", comment.getCreated().toEpochMilli()));
     }
 }

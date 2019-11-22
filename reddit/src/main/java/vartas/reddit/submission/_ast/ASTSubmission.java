@@ -21,7 +21,7 @@ import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.submission._symboltable.*;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -111,10 +111,10 @@ public class ASTSubmission extends ASTSubmissionTOP implements SubmissionInterfa
     /**
      * @return The timestamp when this submission was created.
      */
-    public Date getCreated() {
+    public Instant getCreated() {
         Optional<CreatedLiteralSymbol> symbol = getSpannedScope().resolveCreatedLiteralLocally("created");
 
-        return new Date(symbol.get().getAstNode().get().getBasicLongLiteral().getValue());
+        return Instant.ofEpochMilli(Long.parseUnsignedLong(symbol.get().getAstNode().get().getBasicLongLiteral().getDigits()));
     }
 
     /**

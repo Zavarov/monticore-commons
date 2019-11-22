@@ -80,7 +80,7 @@ public class SubmissionPrettyPrinterTest {
 
     @Test
     public void testGetCreated(){
-        assertThat(submission.getCreated().getTime()).isEqualTo(1L);
+        assertThat(submission.getCreated().toEpochMilli()).isEqualTo(1L);
     }
 
     @Test

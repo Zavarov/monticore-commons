@@ -91,7 +91,7 @@ public class SubmissionPrettyPrinter{
     }
 
     private void addCreated(SubmissionInterface submission){
-        printer.addLine(String.format("created = %dL", submission.getCreated().getTime()));
+        printer.addLine(String.format("created = %dL", submission.getCreated().toEpochMilli()));
     }
 
     private void addSelfText(SubmissionInterface submission){

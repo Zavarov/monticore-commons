@@ -5,6 +5,7 @@ comment {
     score = -1
     submission = "submission"
     submissionTitle = "submissionTitle"
+    created = 2L
 }
 
 comment {
@@ -14,4 +15,5 @@ comment {
     score = -1
     submission = "submission"
     submissionTitle = "junk"
+    created = 3L
 }

@@ -64,6 +64,11 @@ public class CommentTest {
     }
 
     @Test
+    public void testGetCreated(){
+        assertThat(comments.get(0).getCreated().toEpochMilli()).isEqualTo(2L);
+    }
+
+    @Test
     public void testEquals(){
         assertThat(comments.get(0).equals(comments.get(1))).isTrue();
         assertThat(comments.get(0).equals("junk")).isFalse();

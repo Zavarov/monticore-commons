@@ -77,7 +77,7 @@ public class SubmissionTest{
 
     @Test
     public void testGetCreated(){
-        assertThat(submissions.get(0).getCreated().getTime()).isEqualTo(1L);
+        assertThat(submissions.get(0).getCreated().toEpochMilli()).isEqualTo(1L);
     }
 
     @Test
@@ -108,9 +108,9 @@ public class SubmissionTest{
         TreeSet<SubmissionInterface> ordered = new TreeSet<>(submissions);
 
         Iterator<SubmissionInterface> iterator = ordered.iterator();
-        assertThat(iterator.next().getCreated().getTime()).isEqualTo(1L);
-        assertThat(iterator.next().getCreated().getTime()).isEqualTo(2L);
-        assertThat(iterator.next().getCreated().getTime()).isEqualTo(3L);
+        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(1L);
+        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(2L);
+        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(3L);
     }
 
     @Test

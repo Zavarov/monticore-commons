@@ -21,6 +21,7 @@ import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._symboltable.*;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -30,6 +31,14 @@ import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
  * the {@link CommentInterface}.
  */
 public class ASTComment extends ASTCommentTOP implements CommentInterface {
+    /**
+     * @return the time in UTC when the comment was made
+     */
+    @Override
+    public Instant getCreated() {
+        Optional<CreatedLiteralSymbol> symbol = getSpannedScope().resolveCreatedLiteralLocally("created");
+        return Instant.ofEpochMilli(Long.parseUnsignedLong(symbol.get().getAstNode().get().getBasicLongLiteral().getDigits()));
+    }
     /**
      * @return the name of the comment author.
      */

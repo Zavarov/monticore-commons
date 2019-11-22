@@ -67,4 +67,9 @@ public class CommentPrettyPrinterTest {
     public void testGetSubmissionTitle(){
         assertThat(comment.getSubmissionTitle()).isEqualTo("submissionTitle");
     }
+
+    @Test
+    public void testGetCreated(){
+        assertThat(comment.getCreated().toEpochMilli()).isEqualTo(2);
+    }
 }
