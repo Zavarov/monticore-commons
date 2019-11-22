@@ -19,9 +19,6 @@ package vartas.discord.bot.guild.prettyprint;
 
 import com.google.common.collect.Multimap;
 import de.monticore.prettyprint.IndentPrinter;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import vartas.discord.bot.entities.BotGuild;
 import vartas.reddit.MonticoreEscapeUtils;
 
@@ -31,8 +28,11 @@ import java.util.regex.Pattern;
 public class BotGuildPrettyPrinter {
     protected IndentPrinter printer = new IndentPrinter();
 
+    public BotGuildPrettyPrinter(){
+        printer.setIndentLength(4);
+    }
+
     public String prettyPrint(BotGuild config){
-        IndentPrinter printer = new IndentPrinter();
         printer.print("guild ");
         printer.print(config.getId());
         printer.addLine("L {");
@@ -52,7 +52,7 @@ public class BotGuildPrettyPrinter {
             printer.print("prefix ");
             printer.print("\"");
             printer.print(MonticoreEscapeUtils.escapeMonticore(prefix));
-            printer.print("\"");
+            printer.println("\"");
         });
     }
 
@@ -61,40 +61,40 @@ public class BotGuildPrettyPrinter {
             printer.print("blacklist ");
             printer.print("\"");
             printer.print(MonticoreEscapeUtils.escapeMonticore(pattern));
-            printer.print("\"");
+            printer.println("\"");
         });
     }
     private void printRoleGroups(BotGuild config){
-        Multimap<String, Role> roles = config.resolve(BotGuild.ROLEGROUP, Guild::getRoleById);
+        Multimap<String, Long> roles = config.resolve(BotGuild.ROLEGROUP, (g,l) -> l);
         roles.asMap().forEach(this::printRoleGroup);
     }
-    private void printRoleGroup(String key, Collection<Role> roles) {
-        printer.print("rolegroup ");
-        printer.print("\"");
+    private void printRoleGroup(String key, Collection<Long> roles) {
+        printer.print(BotGuild.ROLEGROUP);
+        printer.print(" \"");
         printer.print(MonticoreEscapeUtils.escapeMonticore(key));
-        printer.print("\"");
+        printer.print("\" ");
         printer.addLine("{");
         roles.forEach(role -> {
             printer.print("role : ");
-            printer.print(role.getId());
-            printer.print("L");
+            printer.print(role);
+            printer.println("L");
         });
         printer.addLine("}");
     }
     private void printSubreddits(BotGuild config){
-        Multimap<String, TextChannel> channels = config.resolve(BotGuild.SUBREDDIT, Guild::getTextChannelById);
+        Multimap<String, Long> channels = config.resolve(BotGuild.SUBREDDIT, (g,l) -> l);
         channels.asMap().forEach(this::printSubreddit);
     }
-    private void printSubreddit(String key, Collection<TextChannel> channels) {
-        printer.print("subreddit ");
-        printer.print("\"");
+    private void printSubreddit(String key, Collection<Long> channels) {
+        printer.print(BotGuild.SUBREDDIT);
+        printer.print(" \"");
         printer.print(MonticoreEscapeUtils.escapeMonticore(key));
-        printer.print("\"");
+        printer.print("\" ");
         printer.addLine("{");
         channels.forEach(channel -> {
             printer.print("channel : ");
-            printer.print(channel.getId());
-            printer.print("L");
+            printer.print(channel);
+            printer.println("L");
         });
         printer.addLine("}");
     }
