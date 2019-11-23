@@ -34,7 +34,7 @@ public class BotRankVisitorTest extends AbstractTest {
     public void setUp(){
         config = new BotRank(null);
         artifact = RankHelper.parse("src/test/resources/rank.perm", null);
-        new BotRankVisitor().accept(artifact, config, jda);
+        new BotRankVisitor().accept(artifact, config);
     }
 
     @Test
