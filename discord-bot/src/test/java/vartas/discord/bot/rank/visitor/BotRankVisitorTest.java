@@ -32,7 +32,7 @@ public class BotRankVisitorTest extends AbstractTest {
 
     @Before
     public void setUp(){
-        config = new BotRank(jda, null);
+        config = new BotRank(null);
         artifact = RankHelper.parse("src/test/resources/rank.perm", null);
         new BotRankVisitor().accept(artifact, config, jda);
     }
