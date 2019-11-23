@@ -25,9 +25,9 @@ public class BotRankPrettyPrinter {
         IndentPrinter printer = new IndentPrinter();
         printer.setIndentLength(4);
         printer.addLine("rank {");
-        config.asMultimap().asMap().forEach( (user, ranks) -> {
+        config.get().asMap().forEach( (user, ranks) -> {
             printer.print("user : ");
-            printer.print(user.getId());
+            printer.print(user);
             printer.print("L");
             printer.print(" has rank ");
             printer.println(ranks.stream().map(BotRank.Type::getName).reduce((u,v) -> u + ", " + v).orElse(""));

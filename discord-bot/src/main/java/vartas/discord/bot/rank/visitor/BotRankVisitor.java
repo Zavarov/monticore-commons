@@ -18,14 +18,11 @@
 package vartas.discord.bot.rank.visitor;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.User;
 import vartas.discord.bot.entities.BotRank;
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 import vartas.discord.bot.rank._ast.ASTRankName;
 import vartas.discord.bot.rank._ast.ASTUserWithRank;
 import vartas.discord.bot.rank._visitor.RankVisitor;
-
-import java.util.Optional;
 
 public class BotRankVisitor implements RankVisitor {
     protected JDA jda;
@@ -37,9 +34,9 @@ public class BotRankVisitor implements RankVisitor {
     }
 
     public void handle(ASTUserWithRank node){
-        Optional<User> userOpt = Optional.ofNullable(jda.getUserById(node.getName()));
+        long user = Long.parseUnsignedLong(node.getName());
         for(ASTRankName rank : node.getRankNameList()){
-            userOpt.ifPresent(user -> config.add(user, rank.getSymbol().getRank()));
+            config.add(user, rank.getSymbol().getRank());
         }
     }
 }
