@@ -45,7 +45,7 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
    * Version: **1.8**
    * [Github](https://github.com/apache/commons-text)
  * **bot**
-   * Version: **3.2**
+   * Version: **3.3.5**
    * [Github](https://github.com/Zavarov/discord-bot)
  * **chart**
    * Version: **1.1.6**
@@ -60,7 +60,7 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
    * Version: **5.3.0**
    * [Github](https://github.com/MontiCore/monticore)
  * **reddit**
-   * Version: **2.0.13**
+   * Version: **2.2**
    * [Github](https://github.com/Zavarov/reddit)
 
 ## Plugins:
