@@ -39,7 +39,7 @@ public class BotRankPrettyPrinterTest extends AbstractTest {
     @Before
     public void setUp(){
         path = Paths.get("src","test","resources","rank.perm");
-        config = new BotRank(jda, null);
+        config = new BotRank(null);
         artifact = RankHelper.parse(path.toString(), null);
         printer = new BotRankPrettyPrinter();
         new BotRankVisitor().accept(artifact, config, jda);
