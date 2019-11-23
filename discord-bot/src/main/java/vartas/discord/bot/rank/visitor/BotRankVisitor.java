@@ -17,7 +17,6 @@
 
 package vartas.discord.bot.rank.visitor;
 
-import net.dv8tion.jda.api.JDA;
 import vartas.discord.bot.entities.BotRank;
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 import vartas.discord.bot.rank._ast.ASTRankName;
@@ -25,10 +24,8 @@ import vartas.discord.bot.rank._ast.ASTUserWithRank;
 import vartas.discord.bot.rank._visitor.RankVisitor;
 
 public class BotRankVisitor implements RankVisitor {
-    protected JDA jda;
     protected BotRank config;
-    public void accept(ASTRankArtifact artifact, BotRank config, JDA jda){
-        this.jda = jda;
+    public void accept(ASTRankArtifact artifact, BotRank config){
         this.config = config;
         artifact.accept(getRealThis());
     }
