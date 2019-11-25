@@ -43,7 +43,7 @@ import java.math.BigDecimal;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class CommandGeneratorHelper {
         PARAMETER_MAP.put(ASTParameter.MEMBER,Member.class.getCanonicalName());
         PARAMETER_MAP.put(ASTParameter.ONLINE_STATUS,OnlineStatus.class.getCanonicalName());
         PARAMETER_MAP.put(ASTParameter.INTERVAL,Interval.class.getCanonicalName());
-        PARAMETER_MAP.put(ASTParameter.DATE,Date.class.getCanonicalName());
+        PARAMETER_MAP.put(ASTParameter.DATE,LocalDate.class.getCanonicalName());
         PARAMETER_MAP.put(ASTParameter.STRING,String.class.getCanonicalName());
         PARAMETER_MAP.put(ASTParameter.EXPRESSION,BigDecimal.class.getCanonicalName());
     }
@@ -145,7 +145,7 @@ public class CommandGeneratorHelper {
         return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The argument '"+name+"' couldn't be resolved as an Expression instance."));
     }
 
-    public static Date resolveDate(String name, ASTArgument argument, Message context){
+    public static LocalDate resolveDate(String name, ASTArgument argument, Message context){
         DateArgumentSymbol symbol = new DateArgumentSymbol(name);
         symbol.setAstNode(argument);
         return symbol.accept().orElseThrow(() -> new IllegalArgumentException("The argument '"+name+"' couldn't be resolved as a Date instance."));

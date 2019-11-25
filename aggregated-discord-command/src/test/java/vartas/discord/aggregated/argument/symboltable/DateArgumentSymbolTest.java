@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import vartas.discord.argument._ast.ASTArgument;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -35,10 +35,10 @@ public class DateArgumentSymbolTest extends AbstractArgumentSymbolTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "example.date 11-11-2000", "11-11-2000", true},
-                { "example.date x-11-2000", "", false},
-                { "example.date 11-x-2000", "", false},
-                { "example.date 11-11-x", "", false}
+                { "example.date 11-11-2000", LocalDate.of(2000, 11, 11), true},
+                { "example.date x-11-2000", null, false},
+                { "example.date 11-x-2000", null, false},
+                { "example.date 11-11-x", null, false}
         });
     }
 
@@ -46,17 +46,14 @@ public class DateArgumentSymbolTest extends AbstractArgumentSymbolTest {
     public String argument;
 
     @Parameterized.Parameter(1)
-    public String expected;
+    public LocalDate expected;
 
     @Parameterized.Parameter(2)
     public boolean valid;
 
-    protected SimpleDateFormat format;
-
     @Before
     public void setUp(){
         parse(argument);
-        format = new SimpleDateFormat("dd-MM-yyyy");
     }
 
     @Test
@@ -68,13 +65,8 @@ public class DateArgumentSymbolTest extends AbstractArgumentSymbolTest {
         symbol.setAstNode(argument);
 
         if(valid) {
-            assertThat(symbol.accept().map(format::format)).contains(expected);
-
-            symbol.dateFormat = new SimpleDateFormat("");
-
-            symbol.accept();
-
-            assertThat(Log.getFindings()).isNotEmpty();
+            assertThat(symbol.accept()).contains(expected);
+            assertThat(Log.getFindings()).isEmpty();
         }else {
             assertThat(symbol.accept()).isNotPresent();
         }

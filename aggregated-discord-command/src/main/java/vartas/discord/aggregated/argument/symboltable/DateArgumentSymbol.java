@@ -17,7 +17,6 @@
 
 package vartas.discord.aggregated.argument.symboltable;
 
-import de.se_rwth.commons.logging.Log;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 import vartas.discord.argument._ast.ASTDateArgumentEntry;
 import vartas.discord.argument._symboltable.ArgumentSymbol;
@@ -25,27 +24,20 @@ import vartas.discord.argument._visitor.ArgumentVisitor;
 import vartas.discord.argument.visitor.ContextSensitiveArgumentVisitor;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
-import java.util.TimeZone;
 
 public class DateArgumentSymbol extends ArgumentSymbol {
     protected ArgumentVisitor visitor;
 
-    protected Date date;
-    protected SimpleDateFormat dateFormat;
+    protected LocalDate date;
 
     public DateArgumentSymbol(String name) {
         super(name);
-
-        this.dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         this.visitor = new DateArgumentVisitor();
     }
 
-    public Optional<Date> accept(){
+    public Optional<LocalDate> accept(){
         date = null;
         getAstNode().ifPresent(ast -> ast.accept(visitor));
         return Optional.ofNullable(date);
@@ -54,31 +46,27 @@ public class DateArgumentSymbol extends ArgumentSymbol {
     private class DateArgumentVisitor extends ContextSensitiveArgumentVisitor {
         @Override
         public void handle(ASTDateArgumentEntry ast){
-            try{
-                Optional<BigDecimal> valueOpt;
-                int day;
-                int month;
-                int year;
+            Optional<BigDecimal> valueOpt;
+            int day;
+            int month;
+            int year;
 
-                valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getDay());
-                if(!valueOpt.isPresent())
-                    return;
-                day = valueOpt.get().intValueExact();
+            valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getDay());
+            if(valueOpt.isEmpty())
+                return;
+            day = valueOpt.get().intValueExact();
 
-                valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getMonth());
-                if(!valueOpt.isPresent())
-                    return;
-                month = valueOpt.get().intValueExact();
+            valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getMonth());
+            if(valueOpt.isEmpty())
+                return;
+            month = valueOpt.get().intValueExact();
 
-                valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getYear());
-                if(!valueOpt.isPresent())
-                    return;
-                year = valueOpt.get().intValueExact();
+            valueOpt = ArithmeticExpressionsValueCalculator.valueOf(ast.getYear());
+            if(valueOpt.isEmpty())
+                return;
+            year = valueOpt.get().intValueExact();
 
-                date = dateFormat.parse(String.format("%2d-%2d-%4d", day, month, year));
-            }catch(ParseException e){
-                Log.error(e.getMessage());
-            }
+            date = LocalDate.of(year, month, day);
         }
     }
 }
