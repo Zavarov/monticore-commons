@@ -24,7 +24,7 @@
     <groupId>vartas.monticore-commons</groupId>
     <artifactId>monticore-commons</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.3</version>
+    <version>1.7.4</version>
     <modules>
         <module>core</module>
         <module>numbers</module>
