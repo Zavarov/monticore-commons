@@ -20,6 +20,8 @@ package vartas.reddit.comment.prettyprint;
 import de.monticore.prettyprint.IndentPrinter;
 import vartas.reddit.CommentInterface;
 
+import java.time.ZoneOffset;
+
 import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
 
 /**
@@ -76,6 +78,6 @@ public class CommentPrettyPrinter {
     }
 
     private void addCreated(CommentInterface comment){
-        printer.addLine(String.format("created = %dL", comment.getCreated().toEpochMilli()));
+        printer.addLine(String.format("created = %dL", comment.getCreated().toEpochSecond(ZoneOffset.UTC)));
     }
 }

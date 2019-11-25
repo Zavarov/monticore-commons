@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import vartas.reddit.SubmissionInterface;
 
+import java.time.ZoneOffset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -77,7 +78,7 @@ public class SubmissionTest{
 
     @Test
     public void testGetCreated(){
-        assertThat(submissions.get(0).getCreated().toEpochMilli()).isEqualTo(1L);
+        assertThat(submissions.get(0).getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(1L);
     }
 
     @Test
@@ -108,9 +109,9 @@ public class SubmissionTest{
         TreeSet<SubmissionInterface> ordered = new TreeSet<>(submissions);
 
         Iterator<SubmissionInterface> iterator = ordered.iterator();
-        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(1L);
-        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(2L);
-        assertThat(iterator.next().getCreated().toEpochMilli()).isEqualTo(3L);
+        assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(1L);
+        assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(2L);
+        assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(3L);
     }
 
     @Test

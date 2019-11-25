@@ -17,11 +17,13 @@
 
 package vartas.reddit.submission._ast;
 
+import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.SubmissionInterface;
 import vartas.reddit.submission._symboltable.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -111,10 +113,15 @@ public class ASTSubmission extends ASTSubmissionTOP implements SubmissionInterfa
     /**
      * @return The timestamp when this submission was created.
      */
-    public Instant getCreated() {
-        Optional<CreatedLiteralSymbol> symbol = getSpannedScope().resolveCreatedLiteralLocally("created");
+    public LocalDateTime getCreated() {
+        String digits = getSpannedScope()
+                .resolveCreatedLiteralLocally("created")
+                .flatMap(CreatedLiteralSymbol::getAstNode)
+                .map(ASTCreatedLiteral::getBasicLongLiteral)
+                .map(ASTBasicLongLiteral::getDigits).orElseThrow();
+        long value = Long.parseUnsignedLong(digits);
 
-        return Instant.ofEpochMilli(Long.parseUnsignedLong(symbol.get().getAstNode().get().getBasicLongLiteral().getDigits()));
+        return LocalDateTime.ofEpochSecond(value, 0, ZoneOffset.UTC);
     }
 
     /**

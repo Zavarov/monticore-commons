@@ -20,6 +20,8 @@ package vartas.reddit.submission.prettyprint;
 import de.monticore.prettyprint.IndentPrinter;
 import vartas.reddit.SubmissionInterface;
 
+import java.time.ZoneOffset;
+
 import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
 /**
  * This class transforms the {@link vartas.reddit.submission._ast.ASTSubmission} back
@@ -91,7 +93,7 @@ public class SubmissionPrettyPrinter{
     }
 
     private void addCreated(SubmissionInterface submission){
-        printer.addLine(String.format("created = %dL", submission.getCreated().toEpochMilli()));
+        printer.addLine(String.format("created = %dL", submission.getCreated().toEpochSecond(ZoneOffset.UTC)));
     }
 
     private void addSelfText(SubmissionInterface submission){

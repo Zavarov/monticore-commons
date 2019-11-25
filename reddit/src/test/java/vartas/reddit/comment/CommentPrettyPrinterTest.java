@@ -22,6 +22,7 @@ import org.junit.Test;
 import vartas.reddit.CommentInterface;
 
 import java.io.File;
+import java.time.ZoneOffset;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,6 +71,6 @@ public class CommentPrettyPrinterTest {
 
     @Test
     public void testGetCreated(){
-        assertThat(comment.getCreated().toEpochMilli()).isEqualTo(2);
+        assertThat(comment.getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(2);
     }
 }

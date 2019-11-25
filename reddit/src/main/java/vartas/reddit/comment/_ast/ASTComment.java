@@ -17,11 +17,13 @@
 
 package vartas.reddit.comment._ast;
 
+import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import vartas.reddit.CommentInterface;
 import vartas.reddit.comment._symboltable.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static vartas.reddit.MonticoreEscapeUtils.unescapeMonticore;
@@ -35,9 +37,15 @@ public class ASTComment extends ASTCommentTOP implements CommentInterface {
      * @return the time in UTC when the comment was made
      */
     @Override
-    public Instant getCreated() {
-        Optional<CreatedLiteralSymbol> symbol = getSpannedScope().resolveCreatedLiteralLocally("created");
-        return Instant.ofEpochMilli(Long.parseUnsignedLong(symbol.get().getAstNode().get().getBasicLongLiteral().getDigits()));
+    public LocalDateTime getCreated() {
+        String digits = getSpannedScope()
+                .resolveCreatedLiteralLocally("created")
+                .flatMap(CreatedLiteralSymbol::getAstNode)
+                .map(ASTCreatedLiteral::getBasicLongLiteral)
+                .map(ASTBasicLongLiteral::getDigits).orElseThrow();
+        long value = Long.parseUnsignedLong(digits);
+
+        return LocalDateTime.ofEpochSecond(value, 0, ZoneOffset.UTC);
     }
     /**
      * @return the name of the comment author.

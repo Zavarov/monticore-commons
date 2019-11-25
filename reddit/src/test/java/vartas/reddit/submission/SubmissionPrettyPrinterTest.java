@@ -22,6 +22,7 @@ import org.junit.Test;
 import vartas.reddit.SubmissionInterface;
 
 import java.io.File;
+import java.time.ZoneOffset;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,7 +81,7 @@ public class SubmissionPrettyPrinterTest {
 
     @Test
     public void testGetCreated(){
-        assertThat(submission.getCreated().toEpochMilli()).isEqualTo(1L);
+        assertThat(submission.getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(1L);
     }
 
     @Test
