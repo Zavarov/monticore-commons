@@ -17,6 +17,7 @@
 
 package vartas.discord.bot.guild.visitor;
 
+import de.se_rwth.commons.logging.Log;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 public class BotGuildVisitor implements GuildVisitor {
     protected BotGuild config;
     protected Guild guild;
+    protected String log = this.getClass().getSimpleName();
 
     public void accept(ASTGuildArtifact artifact, BotGuild config, Guild guild){
         this.config = config;
@@ -48,15 +50,17 @@ public class BotGuildVisitor implements GuildVisitor {
 
     public void handle(ASTRoleGroupEntry node){
         for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList()){
+            Log.debug(String.format("Loading role %s in group '%s'",element.getName(), node.getName()), log);
             Optional<Role> roleOpt = Optional.ofNullable(guild.getRoleById(element.getName()));
-            roleOpt.ifPresent(role -> config.add(node.getName(), role));
+            roleOpt.ifPresentOrElse(role -> config.add(node.getName(), role), () -> Log.debug("Role couldn't be resolved", log));
         }
     }
 
     public void handle(ASTSubredditGroupEntry node){
         for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList()){
+            Log.debug(String.format("Loading channel %s in group '%s'",element.getName(), node.getName()), log);
             Optional<TextChannel> channelOpt = Optional.ofNullable(guild.getTextChannelById(element.getName()));
-            channelOpt.ifPresent(channel -> config.add(node.getName(), channel));
+            channelOpt.ifPresentOrElse(channel -> config.add(node.getName(), channel), () -> Log.debug("Channel couldn't be resolved", log));
         }
     }
 }
