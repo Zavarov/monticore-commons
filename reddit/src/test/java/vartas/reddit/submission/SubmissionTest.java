@@ -19,7 +19,7 @@ package vartas.reddit.submission;
 
 import org.junit.Before;
 import org.junit.Test;
-import vartas.reddit.SubmissionInterface;
+import vartas.reddit.Submission;
 
 import java.time.ZoneOffset;
 import java.util.Iterator;
@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubmissionTest{
-    List<SubmissionInterface> submissions;
+    List<Submission> submissions;
     @Before
     public void setUp(){
         submissions = SubmissionHelper.parse("src/test/resources/submission.sub");
@@ -105,10 +105,10 @@ public class SubmissionTest{
 
     @Test
     public void testOrder(){
-        List<SubmissionInterface> submissions = SubmissionHelper.parse("src/test/resources/ordered.sub");
-        TreeSet<SubmissionInterface> ordered = new TreeSet<>(submissions);
+        List<Submission> submissions = SubmissionHelper.parse("src/test/resources/ordered.sub");
+        TreeSet<Submission> ordered = new TreeSet<>(submissions);
 
-        Iterator<SubmissionInterface> iterator = ordered.iterator();
+        Iterator<Submission> iterator = ordered.iterator();
         assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(1L);
         assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(2L);
         assertThat(iterator.next().getCreated().toEpochSecond(ZoneOffset.UTC)).isEqualTo(3L);

@@ -18,7 +18,7 @@
 package vartas.reddit.submission.prettyprint;
 
 import de.monticore.prettyprint.IndentPrinter;
-import vartas.reddit.SubmissionInterface;
+import vartas.reddit.Submission;
 
 import java.time.ZoneOffset;
 
@@ -34,7 +34,7 @@ public class SubmissionPrettyPrinter{
         this.printer = printer;
     }
 
-    public String prettyprint(SubmissionInterface submission){
+    public String prettyprint(Submission submission){
         printer.clearBuffer();
 
         printer.addLine("submission {");
@@ -58,61 +58,61 @@ public class SubmissionPrettyPrinter{
         return printer.getContent();
     }
 
-    private void addAuthor(SubmissionInterface submission){
+    private void addAuthor(Submission submission){
         printer.addLine(String.format("author = \"%s\"", escapeMonticore(submission.getAuthor())));
     }
 
-    private void addId(SubmissionInterface submission){
+    private void addId(Submission submission){
         printer.addLine(String.format("id = \"%s\"", escapeMonticore(submission.getId())));
     }
 
-    private void addLinkFlairText(SubmissionInterface submission){
+    private void addLinkFlairText(Submission submission){
         submission.getLinkFlairText().ifPresent(
                 text -> printer.addLine(String.format("linkFlairText = \"%s\"", escapeMonticore(text)))
         );
     }
 
-    private void addSubreddit(SubmissionInterface submission){
+    private void addSubreddit(Submission submission){
         printer.addLine(String.format("subreddit = \"%s\"", escapeMonticore(submission.getSubreddit())));
     }
 
-    private void addNsfw(SubmissionInterface submission){
+    private void addNsfw(Submission submission){
         printer.addLine(String.format("nsfw = %b", submission.isNsfw()));
     }
 
-    private void addSpoiler(SubmissionInterface submission){
+    private void addSpoiler(Submission submission){
         printer.addLine(String.format("spoiler = %b", submission.isSpoiler()));
     }
 
-    private void addScore(SubmissionInterface submission){
+    private void addScore(Submission submission){
         printer.addLine(String.format("score = %d", submission.getScore()));
     }
 
-    private void addTitle(SubmissionInterface submission){
+    private void addTitle(Submission submission){
         printer.addLine(String.format("title = \"%s\"", escapeMonticore(submission.getTitle())));
     }
 
-    private void addCreated(SubmissionInterface submission){
+    private void addCreated(Submission submission){
         printer.addLine(String.format("created = %dL", submission.getCreated().toEpochSecond(ZoneOffset.UTC)));
     }
 
-    private void addSelfText(SubmissionInterface submission){
+    private void addSelfText(Submission submission){
         submission.getSelfText().ifPresent(
                 text -> printer.addLine(String.format("selfText = \"%s\"", escapeMonticore(text)))
         );
     }
 
-    private void addThumbnail(SubmissionInterface submission){
+    private void addThumbnail(Submission submission){
         submission.getThumbnail().ifPresent(
                 text -> printer.addLine(String.format("thumbnail = \"%s\"", escapeMonticore(text)))
         );
     }
 
-    private void addUrl(SubmissionInterface submission){
+    private void addUrl(Submission submission){
         printer.addLine(String.format("url = \"%s\"", escapeMonticore(submission.getUrl())));
     }
 
-    private void addPermalink(SubmissionInterface submission){
+    private void addPermalink(Submission submission){
         printer.addLine(String.format("permalink = \"%s\"", escapeMonticore(submission.getPermalink())));
     }
 }

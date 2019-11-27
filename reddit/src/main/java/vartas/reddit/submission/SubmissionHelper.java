@@ -19,7 +19,7 @@ package vartas.reddit.submission;
 
 import de.monticore.prettyprint.IndentPrinter;
 import de.se_rwth.commons.Files;
-import vartas.reddit.SubmissionInterface;
+import vartas.reddit.Submission;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 import vartas.reddit.submission._parser.SubmissionParser;
 import vartas.reddit.submission._symboltable.SubmissionArtifactScope;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 /**
  * This class provides utility functions for an easy transformation between text files
- * and instances of {@link SubmissionInterface}.
+ * and instances of {@link Submission}.
  */
 public class SubmissionHelper {
     /**
@@ -44,7 +44,7 @@ public class SubmissionHelper {
      * @param submissions A collection of all submissions that are stored.
      * @param target The target of the submission file.
      */
-    public static void store(Collection<SubmissionInterface> submissions, File target){
+    public static void store(Collection<Submission> submissions, File target){
         try {
             SubmissionPrettyPrinter printer = new SubmissionPrettyPrinter(new IndentPrinter());
 
@@ -66,7 +66,7 @@ public class SubmissionHelper {
      * @param filePath The path of the submission file.
      * @return A list of all submission instances in the file.
      */
-    public static List<SubmissionInterface> parse(String filePath) throws IllegalArgumentException{
+    public static List<Submission> parse(String filePath) throws IllegalArgumentException{
         ASTSubmissionArtifact ast = parseArtifact(filePath);
         buildSymbolTable(ast);
         return new ArrayList<>(ast.getSubmissionList());

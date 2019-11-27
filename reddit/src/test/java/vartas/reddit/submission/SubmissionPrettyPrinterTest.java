@@ -19,7 +19,7 @@ package vartas.reddit.submission;
 
 import org.junit.Before;
 import org.junit.Test;
-import vartas.reddit.SubmissionInterface;
+import vartas.reddit.Submission;
 
 import java.io.File;
 import java.time.ZoneOffset;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubmissionPrettyPrinterTest {
-    SubmissionInterface submission;
+    Submission submission;
     @Before
     public void setUp(){
         submission = SubmissionHelper.parse("src/test/resources/submission.sub").get(0);

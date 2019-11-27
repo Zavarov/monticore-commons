@@ -19,7 +19,7 @@ package vartas.reddit.comment;
 
 import de.monticore.prettyprint.IndentPrinter;
 import de.se_rwth.commons.Files;
-import vartas.reddit.CommentInterface;
+import vartas.reddit.Comment;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
 import vartas.reddit.comment._symboltable.CommentArtifactScope;
@@ -37,7 +37,7 @@ import java.util.Optional;
 
 /**
  * This class provides utility functions for an easy transformation between text files
- * and instances of {@link CommentInterface}.
+ * and instances of {@link Comment}.
  */
 public abstract class CommentHelper {
     /**
@@ -45,7 +45,7 @@ public abstract class CommentHelper {
      * @param comments A collection of all comments that are stored.
      * @param target The target of the comment file.
      */
-    public static void store(Collection<CommentInterface> comments, File target){
+    public static void store(Collection<Comment> comments, File target){
         try {
             CommentPrettyPrinter printer = new CommentPrettyPrinter(new IndentPrinter());
 
@@ -67,7 +67,7 @@ public abstract class CommentHelper {
      * @param filePath The path of the comment file.
      * @return A list of all comment instances in the file.
      */
-    public static List<CommentInterface> parse(String filePath){
+    public static List<Comment> parse(String filePath){
         ASTCommentArtifact ast = parseArtifact(filePath);
 
         CommentScope scope = new CommentScope(true);

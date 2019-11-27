@@ -19,7 +19,7 @@ package vartas.reddit.comment;
 
 import org.junit.Before;
 import org.junit.Test;
-import vartas.reddit.CommentInterface;
+import vartas.reddit.Comment;
 
 import java.time.ZoneOffset;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommentTest {
-    List<CommentInterface> comments;
+    List<Comment> comments;
     @Before
     public void setUp(){
         comments = CommentHelper.parse("src/test/resources/comment.com");

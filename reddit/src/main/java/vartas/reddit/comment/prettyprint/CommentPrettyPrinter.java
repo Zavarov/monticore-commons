@@ -18,7 +18,7 @@
 package vartas.reddit.comment.prettyprint;
 
 import de.monticore.prettyprint.IndentPrinter;
-import vartas.reddit.CommentInterface;
+import vartas.reddit.Comment;
 
 import java.time.ZoneOffset;
 
@@ -35,7 +35,7 @@ public class CommentPrettyPrinter {
         this.printer = printer;
     }
 
-    public String prettyprint(CommentInterface comment){
+    public String prettyprint(Comment comment){
         printer.clearBuffer();
 
         printer.addLine("comment {");
@@ -53,31 +53,31 @@ public class CommentPrettyPrinter {
         return printer.getContent();
     }
 
-    private void addAuthor(CommentInterface comment){
+    private void addAuthor(Comment comment){
         printer.addLine(String.format("author = \"%s\"", escapeMonticore(comment.getAuthor())));
     }
 
-    private void addId(CommentInterface comment){
+    private void addId(Comment comment){
         printer.addLine(String.format("id = \"%s\"", escapeMonticore(comment.getId())));
     }
 
-    private void addSubreddit(CommentInterface comment){
+    private void addSubreddit(Comment comment){
         printer.addLine(String.format("subreddit = \"%s\"", escapeMonticore(comment.getSubreddit())));
     }
 
-    private void addScore(CommentInterface comment){
+    private void addScore(Comment comment){
         printer.addLine(String.format("score = %d", comment.getScore()));
     }
 
-    private void addSubmissionTitle(CommentInterface comment){
+    private void addSubmissionTitle(Comment comment){
         printer.addLine(String.format("submissionTitle = \"%s\"", escapeMonticore(comment.getSubmissionTitle())));
     }
 
-    private void addSubmission(CommentInterface comment){
+    private void addSubmission(Comment comment){
         printer.addLine(String.format("submission = \"%s\"", escapeMonticore(comment.getSubmission())));
     }
 
-    private void addCreated(CommentInterface comment){
+    private void addCreated(Comment comment){
         printer.addLine(String.format("created = %dL", comment.getCreated().toEpochSecond(ZoneOffset.UTC)));
     }
 }
