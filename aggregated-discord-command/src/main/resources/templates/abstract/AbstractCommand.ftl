@@ -17,7 +17,7 @@ ${signature("package", "existsHandwrittenClass")}
 <#assign Rank = "vartas.discord.bot.entities.BotRank">
 package ${package};
 
-public abstract class Abstract${ClassName} extends ${Command}{
+public abstract class Abstract${ClassName} implements ${Command}{
     private ${Logger} log = ${JDALogger}.getLog(this.getClass().getSimpleName());
     private ${Rank} rank;
     private ${Message} source;
