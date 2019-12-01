@@ -22,15 +22,11 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.Comment;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
-import vartas.reddit.comment._symboltable.CommentArtifactScope;
-import vartas.reddit.comment._symboltable.CommentScope;
-import vartas.reddit.comment._symboltable.CommentSymbolTableCreator;
 import vartas.reddit.comment.prettyprint.CommentPrettyPrinter;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -66,15 +62,10 @@ public abstract class CommentHelper {
 
     /**
      * @param filePath The path of the comment file.
-     * @return A list of all comment instances in the file.
+     * @return An immutable list of all comments in the file.
      */
     public static List<Comment> parse(String filePath){
-        ASTCommentArtifact ast = parseArtifact(filePath);
-
-        CommentScope scope = new CommentScope(true);
-        buildSymbolTable(ast);
-
-        return new ArrayList<>(ast.getCommentList());
+        return List.copyOf(parseArtifact(filePath).getCommentList());
     }
 
     private static ASTCommentArtifact parseArtifact(String filePath){
@@ -87,11 +78,5 @@ public abstract class CommentHelper {
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private static CommentArtifactScope buildSymbolTable(ASTCommentArtifact ast){
-        CommentScope scope = new CommentScope(true);
-        CommentSymbolTableCreator symbolTableCreator = new CommentSymbolTableCreator(scope);
-        return symbolTableCreator.createFromAST(ast);
     }
 }

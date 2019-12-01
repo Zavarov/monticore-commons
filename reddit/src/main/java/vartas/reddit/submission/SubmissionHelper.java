@@ -22,15 +22,11 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.Submission;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 import vartas.reddit.submission._parser.SubmissionParser;
-import vartas.reddit.submission._symboltable.SubmissionArtifactScope;
-import vartas.reddit.submission._symboltable.SubmissionScope;
-import vartas.reddit.submission._symboltable.SubmissionSymbolTableCreator;
 import vartas.reddit.submission.prettyprint.SubmissionPrettyPrinter;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -65,12 +61,10 @@ public class SubmissionHelper {
 
     /**
      * @param filePath The path of the submission file.
-     * @return A list of all submission instances in the file.
+     * @return An immutable list of all submissions in the file.
      */
     public static List<Submission> parse(String filePath) throws IllegalArgumentException{
-        ASTSubmissionArtifact ast = parseArtifact(filePath);
-        buildSymbolTable(ast);
-        return new ArrayList<>(ast.getSubmissionList());
+        return List.copyOf(parseArtifact(filePath).getSubmissionList());
     }
 
     private static ASTSubmissionArtifact parseArtifact(String filePath){
@@ -83,11 +77,5 @@ public class SubmissionHelper {
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private static SubmissionArtifactScope buildSymbolTable(ASTSubmissionArtifact ast){
-        SubmissionScope scope = new SubmissionScope(true);
-        SubmissionSymbolTableCreator symbolTableCreator = new SubmissionSymbolTableCreator(scope);
-        return symbolTableCreator.createFromAST(ast);
     }
 }
