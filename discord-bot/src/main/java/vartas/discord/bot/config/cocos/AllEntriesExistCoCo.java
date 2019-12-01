@@ -21,7 +21,6 @@ import com.google.common.collect.Sets;
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.bot.config._ast.ASTConfig;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
-import vartas.discord.bot.config._ast.ASTConfigName;
 import vartas.discord.bot.config._cocos.ConfigASTConfigArtifactCoCo;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class AllEntriesExistCoCo implements ConfigASTConfigArtifactCoCo {
         Set<String> present = node
                 .getConfigNameList()
                 .stream()
-                .map(ASTConfigName::getName)
+                .map(key -> key.getConfig().name())
                 .collect(Collectors.toSet());
 
         if(!present.equals(expected))

@@ -23,10 +23,7 @@ import org.junit.Test;
 import vartas.discord.bot.entities.BotRank;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.parameter._ast.ASTParameter;
-import vartas.discord.parameter._ast.ASTParameterVariable;
 import vartas.discord.parameter._symboltable.ParameterVariableSymbol;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,7 +56,7 @@ public class ArgumentSymbolTest extends AbstractArgumentSymbolTest {
     }
 
     private void checkParameter(ParameterVariableSymbol parameter, ASTParameter expected){
-        Optional<ASTParameter> parameterOpt = parameter.getAstNode().map(ASTParameterVariable::getParameter);
-        assertThat(parameterOpt).contains(expected);
+        ASTParameter ast = parameter.getAstNode().getParameter();
+        assertThat(ast).isEqualTo(expected);
     }
 }

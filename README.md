@@ -45,10 +45,10 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
    * Version: **1.8**
    * [Github](https://github.com/apache/commons-text)
  * **bot**
-   * Version: **3.3.5**
+   * Version: **3.4**
    * [Github](https://github.com/Zavarov/discord-bot)
  * **chart**
-   * Version: **1.1.6**
+   * Version: **1.1.8**
    * [Github](https://github.com/Zavarov/chart)
  * **Evo Inflector**
    * Version: **1.2.2**
@@ -60,7 +60,7 @@ Due to an internal dependency of [MontiCore](https://github.com/MontiCore/montic
    * Version: **5.3.0**
    * [Github](https://github.com/MontiCore/monticore)
  * **reddit**
-   * Version: **2.2**
+   * Version: **2.4**
    * [Github](https://github.com/Zavarov/reddit)
 
 ## Plugins:

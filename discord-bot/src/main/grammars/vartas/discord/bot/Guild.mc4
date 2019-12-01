@@ -37,28 +37,6 @@ grammar Guild extends de.monticore.literals.MCCommonLiterals{
     ;
 
     /*=========================================================*/
-    /*=== AST Rules                                         ===*/
-    /*=========================================================*/
-
-    astrule Entry =
-        method public String getName(){
-            return getStringLiteral().getValue();
-        }
-    ;
-
-    astrule LongGroupElement =
-        method public String getName(){
-            return getElement().getDigits();
-        }
-    ;
-
-    astrule GuildArtifact =
-        method public String getName(){
-            return getId().getDigits();
-        }
-    ;
-
-    /*=========================================================*/
     /*=== Symbol Rules                                      ===*/
     /*=========================================================*/
 

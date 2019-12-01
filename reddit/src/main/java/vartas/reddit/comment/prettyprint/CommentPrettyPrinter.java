@@ -18,11 +18,13 @@
 package vartas.reddit.comment.prettyprint;
 
 import de.monticore.prettyprint.IndentPrinter;
+import net.sourceforge.plantuml.StringUtils;
 import vartas.reddit.Comment;
+import vartas.reddit.comment._ast.ASTCommentEnum;
 
 import java.time.ZoneOffset;
 
-import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
+import static vartas.MonticoreEscapeUtils.escapeMonticore;
 
 /**
  * This class transforms the {@link vartas.reddit.comment._ast.ASTComment} back
@@ -54,30 +56,34 @@ public class CommentPrettyPrinter {
     }
 
     private void addAuthor(Comment comment){
-        printer.addLine(String.format("author = \"%s\"", escapeMonticore(comment.getAuthor())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTCommentEnum.AUTHOR), escapeMonticore(comment.getAuthor())));
     }
 
     private void addId(Comment comment){
-        printer.addLine(String.format("id = \"%s\"", escapeMonticore(comment.getId())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTCommentEnum.ID), escapeMonticore(comment.getId())));
     }
 
     private void addSubreddit(Comment comment){
-        printer.addLine(String.format("subreddit = \"%s\"", escapeMonticore(comment.getSubreddit())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTCommentEnum.SUBREDDIT), escapeMonticore(comment.getSubreddit())));
     }
 
     private void addScore(Comment comment){
-        printer.addLine(String.format("score = %d", comment.getScore()));
+        printer.addLine(String.format("%s = %dL", prettyprint(ASTCommentEnum.SCORE), comment.getScore()));
     }
 
     private void addSubmissionTitle(Comment comment){
-        printer.addLine(String.format("submissionTitle = \"%s\"", escapeMonticore(comment.getSubmissionTitle())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTCommentEnum.SUBMISSIONTITLE), escapeMonticore(comment.getSubmissionTitle())));
     }
 
     private void addSubmission(Comment comment){
-        printer.addLine(String.format("submission = \"%s\"", escapeMonticore(comment.getSubmission())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTCommentEnum.SUBMISSION), escapeMonticore(comment.getSubmission())));
     }
 
     private void addCreated(Comment comment){
-        printer.addLine(String.format("created = %dL", comment.getCreated().toEpochSecond(ZoneOffset.UTC)));
+        printer.addLine(String.format("%s = \"%d\"", prettyprint(ASTCommentEnum.CREATED), comment.getCreated().toEpochSecond(ZoneOffset.UTC)));
+    }
+
+    private String prettyprint(ASTCommentEnum key){
+        return StringUtils.capitalize(key.name());
     }
 }

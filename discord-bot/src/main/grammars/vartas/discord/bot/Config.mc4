@@ -36,19 +36,4 @@ grammar Config extends de.monticore.literals.MCCommonLiterals{
         REDDIT_ID                       : "RedditId"                    |
         REDDIT_SECRET                   : "RedditSecret"
     ;
-
-    /*=========================================================*/
-    /*=== AST Rules                                         ===*/
-    /*=========================================================*/
-
-    astrule ConfigName =
-        //Use the enum name as a symbol name
-        method public String getName(){
-            return getConfig().name();
-        }
-        //Use the name to determine the config type
-        method public vartas.discord.bot.entities.BotConfig.Type getType(){
-            return vartas.discord.bot.entities.BotConfig.Type.valueOf(getName());
-        }
-    ;
 }

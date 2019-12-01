@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package vartas;
+
 import org.apache.commons.text.translate.AggregateTranslator;
 import org.apache.commons.text.translate.CharSequenceTranslator;
 import org.apache.commons.text.translate.LookupTranslator;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.apache.commons.text.StringEscapeUtils.ESCAPE_HTML4;
@@ -29,23 +29,17 @@ import static org.apache.commons.text.StringEscapeUtils.UNESCAPE_HTML4;
 public abstract class MonticoreEscapeUtils {
     private static final CharSequenceTranslator ESCAPE_MONTICORE;
     static {
-        final Map<CharSequence, CharSequence> escapeMonticoreMap = new HashMap<>();
-        escapeMonticoreMap.put("\"", "\\\"");
-        escapeMonticoreMap.put("\\", "\\\\");
         ESCAPE_MONTICORE = new AggregateTranslator(
                 ESCAPE_HTML4,
-                new LookupTranslator(Collections.unmodifiableMap(escapeMonticoreMap))
+                new LookupTranslator(Map.of("\"", "\\\"", "\\", "\\\\"))
         );
     }
 
     private static final CharSequenceTranslator MONTICORE_UNESCAPE;
     static {
-        final Map<CharSequence, CharSequence> unescapeMonticoreMap = new HashMap<>();
-        unescapeMonticoreMap.put("\\\"", "\"");
-        unescapeMonticoreMap.put("\\\\", "\\");
         MONTICORE_UNESCAPE = new AggregateTranslator(
                 UNESCAPE_HTML4,
-                new LookupTranslator(Collections.unmodifiableMap(unescapeMonticoreMap))
+                new LookupTranslator(Map.of("\\\"", "\"", "\\\\", "\\"))
         );
     }
 

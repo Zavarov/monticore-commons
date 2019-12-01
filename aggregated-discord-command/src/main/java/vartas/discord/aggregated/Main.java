@@ -46,8 +46,8 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    protected static final Path OUTPUT_PATH = Paths.get("target/generated-sources/monticore/sourcecode/");
-    protected static final Path REFERENCE_PATH = Paths.get("src/main/java");
+    protected static final Path TARGET_PATH = Paths.get("target/generated-sources/monticore/sourcecode/");
+    protected static final Path SOURCE_PATH = Paths.get("src/main/java");
 
     protected static final String TEMPLATE_EXTENSION = "ftl";
     protected static final String TARGET_EXTENSION = "java";
@@ -90,7 +90,7 @@ public class Main {
         IterablePath templatePath = IterablePath.from(templateFolder, TEMPLATE_EXTENSION);
 
         SETUP.setGlex(GLEX);
-        SETUP.setOutputDirectory(OUTPUT_PATH.toFile());
+        SETUP.setOutputDirectory(TARGET_PATH.toFile());
         SETUP.setDefaultFileExtension(TARGET_EXTENSION);
         SETUP.setAdditionalTemplatePaths(Collections.singletonList(templateFolder));
         SETUP.setAdditionalTemplatePaths(templatePath.getPaths().stream().map(Path::toFile).collect(Collectors.toList()));
@@ -104,10 +104,10 @@ public class Main {
     }
 
     private static void generate(List<ASTCommandArtifact> models, String builderPackage){
-        CommandBuilderGenerator.generate(models, GENERATOR, SETUP, OUTPUT_PATH, builderPackage);
-        CommandCreatorGenerator.generate(models, GENERATOR, SETUP, OUTPUT_PATH);
-        AbstractCommandGenerator.generate(models, GENERATOR, SETUP, OUTPUT_PATH, REFERENCE_PATH);
-        CommandGenerator.generate(models, GENERATOR, SETUP, OUTPUT_PATH, REFERENCE_PATH);
+        CommandBuilderGenerator.generate(models, GENERATOR, SETUP, TARGET_PATH, builderPackage);
+        CommandCreatorGenerator.generate(models, GENERATOR, SETUP, TARGET_PATH);
+        AbstractCommandGenerator.generate(models, GENERATOR, SETUP, TARGET_PATH);
+        CommandGenerator.generate(models, GENERATOR, SETUP, TARGET_PATH, SOURCE_PATH);
     }
 
     private static List<ASTCommandArtifact> parseModels(File modelFolder, CommandGlobalScope scope){

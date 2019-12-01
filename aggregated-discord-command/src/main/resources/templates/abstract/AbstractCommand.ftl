@@ -1,8 +1,8 @@
-${signature("package", "existsHandwrittenClass")}
+${signature("package")}
 <#assign ClassName = ast.getSpannedScope().getLocalClassAttributeSymbols()?first.getName()>
 <#assign Communicator = "vartas.discord.bot.entities.DiscordCommunicator">
 <#assign Environment = "vartas.discord.bot.entities.DiscordEnvironment">
-<#assign symbol = ast.getCommandSymbol()>
+<#assign symbol = ast.getSymbol()>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Jda = "net.dv8tion.jda.api.JDA">
 <#assign Guild = "net.dv8tion.jda.api.entities.Guild">
@@ -78,9 +78,4 @@ public abstract class Abstract${ClassName} implements ${Command}{
 </#if>
     ${includeArgs("abstract.CheckRank", symbol)}
     }
-
-<#if !existsHandwrittenClass>
-    @Override
-    public void run(){}
-</#if>
 }

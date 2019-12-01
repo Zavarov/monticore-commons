@@ -21,10 +21,10 @@ import de.se_rwth.commons.logging.Log;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import vartas.MonticoreEscapeUtils;
 import vartas.discord.bot.entities.BotGuild;
 import vartas.discord.bot.guild._ast.*;
 import vartas.discord.bot.guild._visitor.GuildVisitor;
-import vartas.reddit.MonticoreEscapeUtils;
 
 import java.util.Optional;
 import java.util.regex.Pattern;

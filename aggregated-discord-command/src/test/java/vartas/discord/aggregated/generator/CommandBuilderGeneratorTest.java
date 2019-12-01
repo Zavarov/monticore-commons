@@ -29,10 +29,10 @@ public class CommandBuilderGeneratorTest extends AbstractGeneratorTest{
     protected Path generated;
     @Before
     public void setUp(){
-        CommandBuilderGenerator.generate(ast, generator, setup, OUTPUT_PATH, "vartas.discord.bot");
+        CommandBuilderGenerator.generate(ast, generator, setup, TARGET_PATH, "vartas.discord.bot");
 
         Path file = Paths.get("vartas","discord","bot","MontiCoreCommandBuilder."+TARGET_EXTENSION);
-        generated = OUTPUT_PATH.resolve(file);
+        generated = TARGET_PATH.resolve(file);
     }
 
     @Test

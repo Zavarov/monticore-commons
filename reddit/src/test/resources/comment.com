@@ -1,19 +1,19 @@
 comment {
-    author = "author"
-    id = "id"
-    subreddit = "subreddit"
-    score = -1
-    submission = "submission"
-    submissionTitle = "submissionTitle"
-    created = 2L
+    Author = "author"
+    Id = "id"
+    Subreddit = "subreddit"
+    Score = -1L
+    Submission = "submission"
+    Submissiontitle = "submissionTitle"
+    Created = "2"
 }
 
 comment {
-    author = "author"
-    id = "id"
-    subreddit = "subreddit"
-    score = -1
-    submission = "submission"
-    submissionTitle = "junk"
-    created = 3L
+    Author = "author"
+    Id = "id"
+    Subreddit = "subreddit"
+    Score = -1L
+    Submission = "submission"
+    Submissiontitle = "junk"
+    Created = "3"
 }

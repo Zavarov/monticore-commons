@@ -17,11 +17,11 @@
 
 package vartas.discord.bot.status.visitor;
 
+import vartas.MonticoreEscapeUtils;
 import vartas.discord.bot.entities.BotStatus;
 import vartas.discord.bot.status._ast.ASTStatus;
 import vartas.discord.bot.status._ast.ASTStatusArtifact;
 import vartas.discord.bot.status._visitor.StatusVisitor;
-import vartas.reddit.MonticoreEscapeUtils;
 
 public class BotStatusVisitor implements StatusVisitor {
     protected BotStatus status;

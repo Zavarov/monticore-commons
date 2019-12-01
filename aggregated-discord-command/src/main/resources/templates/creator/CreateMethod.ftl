@@ -1,6 +1,6 @@
 ${signature("command")}
 <#assign Helper = getGlobalVar("Helper")>
-<#assign Symbol = command.getCommandSymbol()>
+<#assign Symbol = command.getSymbol()>
 <#assign Name = Symbol.getFullName()>
 <#assign ClassName = Helper.getClassName(Symbol)>
 <#assign Parameters = Helper.getParameters(Symbol)>
@@ -35,7 +35,7 @@ ${signature("command")}
         //Set parameter
 <#list Parameters as Parameter>
     <#assign Index = Parameter?index>
-    <#assign Class = Parameter.getAstNode().get().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
+    <#assign Class = Parameter.getAstNode().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
     <#assign Name = Parameter.getName()>
     <#if Helper.isMany(Parameter)>
         command.set${Parameter.getName()?capitalize}(context, arguments.subList(${Index}, arguments.size()));

@@ -40,18 +40,15 @@ public class LongGroupElementSymbolCreatorTest extends AbstractGuildTest {
     public void testCreate(){
         Optional<LongGroupElementSymbol> symbolOpt = guildScope.resolveLongGroupElement(value);
         LongGroupElementSymbol symbol;
-        Optional<ASTLongGroupElement> astOpt;
         ASTLongGroupElement ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(value);
-        assertThat(astOpt).isPresent();
 
-        ast = astOpt.get();
         assertThat(ast.getType()).isEqualTo(type);
         assertThat(ast.getName()).isEqualTo(value);
     }

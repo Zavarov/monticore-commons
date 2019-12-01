@@ -19,6 +19,7 @@ package vartas.discord.bot.guild.prettyprint;
 
 import de.monticore.MCCommonLiteralsPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import vartas.discord.bot.guild._ast.*;
 import vartas.discord.bot.guild._symboltable.*;
 import vartas.discord.bot.guild._visitor.GuildSymbolVisitor;
 
@@ -54,7 +55,7 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
     public void visit(GuildArtifactSymbol symbol){
         printer.print("guild");
         printer.print(" ");
-        symbol.getAstNode().ifPresent(ast -> ast.getId().accept(prettyPrinter));
+        symbol.getAstNode().getId().accept(prettyPrinter);
         printer.print(" ");
         printer.addLine("{");
     }
@@ -78,33 +79,30 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
 
     @Override
     public void handle(BlacklistEntrySymbol symbol){
-        symbol.getAstNode().ifPresent(ast -> {
-            printer.print("blacklist");
-            printer.print(" ");
-            ast.getStringLiteral().accept(prettyPrinter);
-            printer.println();
-        });
+        ASTBlacklistEntry ast = symbol.getAstNode();
+        printer.print("blacklist");
+        printer.print(" ");
+        ast.getStringLiteral().accept(prettyPrinter);
+        printer.println();
     }
 
     @Override
     public void handle(PrefixEntrySymbol symbol){
-        symbol.getAstNode().ifPresent(ast -> {
-            printer.print("prefix");
-            printer.print(" ");
-            ast.getStringLiteral().accept(prettyPrinter);
-            printer.println();
-        });
+        ASTPrefixEntry ast = symbol.getAstNode();
+        printer.print("prefix");
+        printer.print(" ");
+        ast.getStringLiteral().accept(prettyPrinter);
+        printer.println();
     }
 
     @Override
     public void visit(RoleGroupEntrySymbol symbol){
-        symbol.getAstNode().ifPresent(ast -> {
-            printer.print("rolegroup");
-            printer.print(" ");
-            ast.getStringLiteral().accept(prettyPrinter);
-            printer.print(" ");
-            printer.addLine("{");
-        });
+        ASTRoleGroupEntry ast = symbol.getAstNode();
+        printer.print("rolegroup");
+        printer.print(" ");
+        ast.getStringLiteral().accept(prettyPrinter);
+        printer.print(" ");
+        printer.addLine("{");
     }
 
     @Override
@@ -120,13 +118,12 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
 
     @Override
     public void visit(SubredditGroupEntrySymbol symbol){
-        symbol.getAstNode().ifPresent(ast -> {
-            printer.print("subreddit");
-            printer.print(" ");
-            ast.getStringLiteral().accept(prettyPrinter);
-            printer.print(" ");
-            printer.addLine("{");
-        });
+        ASTSubredditGroupEntry ast = symbol.getAstNode();
+        printer.print("subreddit");
+        printer.print(" ");
+        ast.getStringLiteral().accept(prettyPrinter);
+        printer.print(" ");
+        printer.addLine("{");
     }
 
     @Override
@@ -142,15 +139,14 @@ public class GuildSymbolPrettyPrinter implements GuildSymbolVisitor {
 
     @Override
     public void handle(LongGroupElementSymbol symbol){
-        symbol.getAstNode().ifPresent(ast -> {
-            //Print type
-            if(ast.isPresentType()) {
-                printer.print(ast.getType());
-                printer.print(" : ");
-            }
-            //Print element
-            ast.getElement().accept(prettyPrinter);
-            printer.println();
-        });
+        ASTLongGroupElement ast = symbol.getAstNode();
+        //Print type
+        if(ast.isPresentType()) {
+            printer.print(ast.getType());
+            printer.print(" : ");
+        }
+        //Print element
+        ast.getElement().accept(prettyPrinter);
+        printer.println();
     }
 }

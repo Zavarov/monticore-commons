@@ -17,44 +17,35 @@
 
 package vartas.discord.aggregated.generator;
 
-import com.google.common.base.Joiner;
-import de.monticore.codegen.GeneratorHelper;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.io.paths.IterablePath;
 import vartas.discord.command._ast.ASTCommand;
 import vartas.discord.command._ast.ASTCommandArtifact;
 
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 
 public abstract class AbstractCommandGenerator {
-    public static void generate(List<ASTCommandArtifact> artifacts, GeneratorEngine generator, GeneratorSetup setup, Path sourcePath, Path referencePath){
+    public static void generate(List<ASTCommandArtifact> artifacts, GeneratorEngine generator, GeneratorSetup setup, Path targetPath){
         for(ASTCommandArtifact artifact : artifacts)
-            generate(artifact, generator, setup, sourcePath, referencePath);
+            generate(artifact, generator, setup, targetPath);
     }
 
-    public static void generate(ASTCommandArtifact artifact, GeneratorEngine generator, GeneratorSetup setup, Path sourcePath, Path referencePath){
-        String packageName = Joiner.on(".").join(artifact.getPackageList());
-
-        for(ASTCommand command : artifact.getCommandList()) {
-            String fileName =
-                    Joiner.on(FileSystems.getDefault().getSeparator()).join(artifact.getPackageList()) +
-                            FileSystems.getDefault().getSeparator() +
-                            "Abstract"+command.getSpannedScope().getLocalClassAttributeSymbols().get(0).getName() +
-                            "."+setup.getDefaultFileExtension();
-
-            generate(command, generator, setup, sourcePath, referencePath, packageName, fileName);
-        }
+    public static void generate(ASTCommandArtifact artifact, GeneratorEngine generator, GeneratorSetup setup, Path targetPath){
+        for(ASTCommand command : artifact.getCommandList())
+            generate(artifact, command, generator, setup, targetPath);
     }
 
-    private static void generate(ASTCommand command, GeneratorEngine generator, GeneratorSetup setup, Path sourcePath, Path referencePath, String packageName, String fileName){
-        Path targetPath = sourcePath.resolve(fileName);
+    private static void generate(ASTCommandArtifact artifact, ASTCommand command, GeneratorEngine generator, GeneratorSetup setup, Path targetPath){
+        //The name of the command in the package
+        String className = "Abstract"+command.getSpannedScope().getLocalClassAttributeSymbols().get(0).getName();
+        //The relative path to the package directory
+        Path packagePath = CommandGeneratorHelper.getPackagePath(artifact);
+        //The path to the generated file
+        Path targetFilePath = targetPath.resolve(packagePath).resolve(className + "." + setup.getDefaultFileExtension());
+        //The package name is Java format (i.e X.Y.Z instead of X/Y/Z)
+        String packageName = CommandGeneratorHelper.getPackageName(artifact);
 
-        String className = command.getSpannedScope().getLocalClassAttributeSymbols().get(0).getName();
-        boolean fileExists = GeneratorHelper.existsHandwrittenClass(className, packageName, IterablePath.from(referencePath.toFile(), setup.getDefaultFileExtension()));
-
-        generator.generate("abstract.AbstractCommand", targetPath.toAbsolutePath(), command, packageName, fileExists);
+        generator.generate("abstract.AbstractCommand", targetFilePath.toAbsolutePath(), command, packageName);
     }
 }

@@ -50,7 +50,7 @@ public class MessageArgumentSymbol extends ArgumentSymbol {
         checkNotNull(context.getTextChannel());
         channel = context.getTextChannel();
 
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(message);
     }
 

@@ -4,7 +4,7 @@ ${signature("Parameter")}
 <#assign Lists = "com.google.common.collect.Lists">
 <#assign VariableName = Parameter.getName()>
 <#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
-<#assign Class = Parameter.getAstNode().get().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
+<#assign Class = Parameter.getAstNode().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>
 <#assign Name = Parameter.getName()>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#if Helper.isMany(Parameter)>

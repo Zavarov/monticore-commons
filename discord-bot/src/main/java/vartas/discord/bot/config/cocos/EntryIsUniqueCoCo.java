@@ -19,7 +19,6 @@ package vartas.discord.bot.config.cocos;
 
 import de.se_rwth.commons.logging.Log;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
-import vartas.discord.bot.config._ast.ASTConfigName;
 import vartas.discord.bot.config._cocos.ConfigASTConfigArtifactCoCo;
 
 import java.util.Map;
@@ -33,7 +32,7 @@ public class EntryIsUniqueCoCo implements ConfigASTConfigArtifactCoCo {
         Map<String, Long> frequency = node
                 .getConfigNameList()
                 .stream()
-                .map(ASTConfigName::getName)
+                .map(key -> key.getConfig().name())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         for(Map.Entry<String, Long> entry : frequency.entrySet())

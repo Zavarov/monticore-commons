@@ -42,6 +42,7 @@ public class GuildScope extends GuildScopeTOP {
         this.shadowing = isShadowingScope;
         this.name = Optional.empty();
     }
+
     @Override
     public void setEnclosingScope(IGuildScope newEnclosingScope) {
         if ((this.enclosingScope != null) && (newEnclosingScope != null)) {

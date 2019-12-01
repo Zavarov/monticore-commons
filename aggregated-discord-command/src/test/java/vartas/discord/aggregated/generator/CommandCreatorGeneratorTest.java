@@ -29,10 +29,10 @@ public class CommandCreatorGeneratorTest extends AbstractGeneratorTest{
     protected Path generated;
     @Before
     public void setUp(){
-        CommandCreatorGenerator.generate(ast, generator, setup, OUTPUT_PATH);
+        CommandCreatorGenerator.generate(ast, generator, setup, TARGET_PATH);
 
         Path file = Paths.get("vartas","discord","command","example","MontiCoreCommandCreator."+TARGET_EXTENSION);
-        generated = OUTPUT_PATH.resolve(file);
+        generated = TARGET_PATH.resolve(file);
     }
 
     @Test

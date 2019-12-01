@@ -38,9 +38,9 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public abstract class AbstractGeneratorTest {
-    protected static final Path OUTPUT_PATH = Paths.get("target/generated-test-sources/monticore/sourcecode/");
+    protected static final Path TARGET_PATH = Paths.get("target/generated-test-sources/monticore/sourcecode/");
     protected static final Path TEMPLATE_PATH = Paths.get("src/main/resources/templates");
-    protected static final Path REFERENCE_PATH = Paths.get("src/main/java");
+    protected static final Path SOURCE_PATH = Paths.get("src/main/java");
 
     protected static final String TEMPLATE_EXTENSION = "ftl";
     protected static final String TARGET_EXTENSION = "java";
@@ -59,7 +59,7 @@ public abstract class AbstractGeneratorTest {
         scope = new CommandGlobalScope(new ModelPath(Paths.get("")), new CommandLanguage());
         ast = CommandHelper.parse(scope, "src/test/resources/Command.cmd");
 
-        targetPath = IterablePath.from(REFERENCE_PATH.toFile(), TARGET_EXTENSION);
+        targetPath = IterablePath.from(SOURCE_PATH.toFile(), TARGET_EXTENSION);
         templatePath = IterablePath.from(TEMPLATE_PATH.toFile(), TEMPLATE_EXTENSION);
 
         glex = new GlobalExtensionManagement();
@@ -69,8 +69,8 @@ public abstract class AbstractGeneratorTest {
 
         setup = new GeneratorSetup();
         setup.setGlex(glex);
-        setup.setOutputDirectory(OUTPUT_PATH.toFile());
-        setup.setModelName(CommandGeneratorHelper.getPackage(ast));
+        setup.setOutputDirectory(TARGET_PATH.toFile());
+        setup.setModelName(CommandGeneratorHelper.getPackageName(ast));
         setup.setAdditionalTemplatePaths(templatePath.getPaths().stream().map(Path::toFile).collect(Collectors.toList()));
         setup.setDefaultFileExtension(TARGET_EXTENSION);
 

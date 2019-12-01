@@ -40,6 +40,7 @@ import java.util.Optional;
  * and instances of {@link Comment}.
  */
 public abstract class CommentHelper {
+    private static final CommentParser parser = new CommentParser();
     /**
      * Converts the comments into an by the grammar accepted format and stores them on the disk.
      * @param comments A collection of all comments that are stored.
@@ -78,9 +79,8 @@ public abstract class CommentHelper {
 
     private static ASTCommentArtifact parseArtifact(String filePath){
         try{
-            CommentParser parser = new CommentParser();
             Optional<ASTCommentArtifact> comment = parser.parse(filePath);
-            if(!comment.isPresent())
+            if(comment.isEmpty())
                 throw new IllegalArgumentException("The comment file couldn't be parsed.");
 
             return comment.get();

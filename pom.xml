@@ -40,12 +40,12 @@
     <properties>
         <!-- .. Libraries ..................................................... -->
 
-        <monticore.version>5.3.0</monticore.version>
+        <monticore.version>6.0.0</monticore.version>
         <commons-text.version>1.8</commons-text.version>
         <evo.inflector.version>1.2.2</evo.inflector.version>
-        <reddit.version>2.3.5</reddit.version>
+        <reddit.version>2.4</reddit.version>
         <chart.version>1.1.8</chart.version>
-        <discord.bot.version>3.3.11</discord.bot.version>
+        <discord.bot.version>3.4</discord.bot.version>
 
         <assertj.version>3.12.2</assertj.version>
         <junit.version>4.12</junit.version>

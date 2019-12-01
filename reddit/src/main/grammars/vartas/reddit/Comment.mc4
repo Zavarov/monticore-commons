@@ -2,33 +2,36 @@ package vartas.reddit;
 
 grammar Comment extends de.monticore.literals.MCCommonLiterals{
     CommentArtifact =
-        Comment*;
+        Comment*
+    ;
 
     scope Comment =
         "comment" "{"
-            Entry*
-        "}";
+            CommentEntry*
+        "}"
+    ;
 
-    interface Entry;
+    interface CommentEntry = key:CommentEnum;
 
-    symbol AuthorLiteral implements Entry =
-        name:"author" "=" StringLiteral;
+    symbol LongEntry implements CommentEntry =
+        key:CommentEnum "=" value:SignedBasicLongLiteral
+    ;
 
-    symbol IdLiteral implements Entry =
-        name:"id" "=" StringLiteral;
+    symbol StringEntry implements CommentEntry =
+        key:CommentEnum "=" value:StringLiteral
+    ;
 
-    symbol SubredditLiteral implements Entry =
-        name:"subreddit" "=" StringLiteral;
+    /*=========================================================*/
+    /*=== Entry keys                                        ===*/
+    /*=========================================================*/
 
-    symbol ScoreLiteral implements Entry =
-        name:"score" "=" SignedNatLiteral;
-
-    symbol CreatedLiteral implements Entry =
-        name:"created" "=" BasicLongLiteral;
-
-    symbol SubmissionTitleLiteral implements Entry =
-        name:"submissionTitle" "=" StringLiteral;
-
-    symbol SubmissionLiteral implements Entry =
-        name:"submission" "=" StringLiteral;
+    enum CommentEnum =
+        "Created"         |
+        "Author"          |
+        "Id"              |
+        "Subreddit"       |
+        "Score"           |
+        "Submission"      |
+        "Submissiontitle"
+    ;
 }

@@ -47,7 +47,7 @@ public class UserArgumentSymbol extends ArgumentSymbol {
     public Optional<User> accept(Message context){
         jda = context.getJDA();
 
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(user);
     }
 

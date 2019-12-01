@@ -23,6 +23,7 @@ import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicFloatLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicLongLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -48,30 +49,21 @@ public class MCCommonLiteralsValueCalculator implements MCCommonLiteralsVisitor 
 
     @Override
     public void visit(ASTSignedNatLiteral node){
-        //#TODO getSource() is bugged in 5.3.0 for negative numbers
-        String source = (node.isNegative() ? "-" : "") + node.getDigits();
-        values.put(node, new BigDecimal(source));
+        values.put(node, new BigDecimal(node.getSource()));
     }
 
     @Override
     public void visit(ASTSignedBasicLongLiteral node){
-        //#TODO getSource() is bugged in 5.3.0 for negative numbers
-        String source = (node.isNegative() ? "-" : "") + node.getDigits();
-        values.put(node, new BigDecimal(source));
+        values.put(node, new BigDecimal(StringUtils.chop(node.getSource())));
     }
 
     @Override
     public void visit(ASTSignedBasicFloatLiteral node){
-        //#TODO getSource() is bugged in 5.3.0 for negative numbers
-        String source = (node.isNegative() ? "-" : "") + node.getPre() + "." + node.getPost();
-        values.put(node, new BigDecimal(source));
+        values.put(node, new BigDecimal(StringUtils.chop(node.getSource())));
     }
 
     @Override
     public void visit(ASTSignedBasicDoubleLiteral node){
-        //getSource() is bugged in 5.3.0 for negative numbers
-        String source = (node.isNegative() ? "-" : "") + node.getPre() + "." + node.getPost();
-
-        values.put(node, new BigDecimal(source));
+        values.put(node, new BigDecimal(node.getSource()));
     }
 }

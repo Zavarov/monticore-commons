@@ -19,8 +19,8 @@ package vartas.discord.bot.guild.prettyprint;
 
 import com.google.common.collect.Multimap;
 import de.monticore.prettyprint.IndentPrinter;
+import vartas.MonticoreEscapeUtils;
 import vartas.discord.bot.entities.BotGuild;
-import vartas.reddit.MonticoreEscapeUtils;
 
 import java.util.Collection;
 import java.util.regex.Pattern;

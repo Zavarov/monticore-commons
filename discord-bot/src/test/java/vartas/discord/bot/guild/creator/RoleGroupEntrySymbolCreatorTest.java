@@ -39,18 +39,15 @@ public class RoleGroupEntrySymbolCreatorTest extends AbstractGuildTest {
     public void testLongGroupEntrySymbol(){
         Optional<RoleGroupEntrySymbol> symbolOpt = guildScope.resolveRoleGroupEntry(group);
         RoleGroupEntrySymbol symbol;
-        Optional<ASTRoleGroupEntry> astOpt;
         ASTRoleGroupEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(group);
-        assertThat(astOpt).isPresent();
 
-        ast = astOpt.get();
         assertThat(ast.getName()).isEqualTo(group);
     }
 }

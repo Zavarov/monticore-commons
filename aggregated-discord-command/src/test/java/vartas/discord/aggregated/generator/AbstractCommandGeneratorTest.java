@@ -29,10 +29,10 @@ public class AbstractCommandGeneratorTest extends AbstractGeneratorTest{
     protected Path generated;
     @Before
     public void setUp(){
-        AbstractCommandGenerator.generate(ast, generator, setup, OUTPUT_PATH, REFERENCE_PATH);
+        AbstractCommandGenerator.generate(ast, generator, setup, TARGET_PATH);
 
         Path file = Paths.get("vartas","discord","command","example","AbstractTestCommand."+TARGET_EXTENSION);
-        generated = OUTPUT_PATH.resolve(file);
+        generated = TARGET_PATH.resolve(file);
     }
 
     @Test

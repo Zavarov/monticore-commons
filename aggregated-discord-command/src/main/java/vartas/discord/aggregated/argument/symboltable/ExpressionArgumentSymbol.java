@@ -39,7 +39,7 @@ public class ExpressionArgumentSymbol extends ArgumentSymbol {
 
     public Optional<BigDecimal> accept(){
         value = null;
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(value);
     }
 

@@ -36,7 +36,7 @@ public class StringArgumentSymbol extends ArgumentSymbol {
     }
 
     public Optional<String> accept(){
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(value);
     }
 

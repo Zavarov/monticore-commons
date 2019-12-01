@@ -47,7 +47,7 @@ public class GuildArgumentSymbol extends ArgumentSymbol {
         guild = null;
         jda = context.getJDA();
 
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(guild);
     }
 

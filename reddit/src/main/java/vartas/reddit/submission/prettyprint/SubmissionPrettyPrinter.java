@@ -18,11 +18,13 @@
 package vartas.reddit.submission.prettyprint;
 
 import de.monticore.prettyprint.IndentPrinter;
+import net.sourceforge.plantuml.StringUtils;
 import vartas.reddit.Submission;
+import vartas.reddit.submission._ast.ASTSubmissionEnum;
 
 import java.time.ZoneOffset;
 
-import static vartas.reddit.MonticoreEscapeUtils.escapeMonticore;
+import static vartas.MonticoreEscapeUtils.escapeMonticore;
 /**
  * This class transforms the {@link vartas.reddit.submission._ast.ASTSubmission} back
  * into a String that is accepted by the submission language.
@@ -59,60 +61,64 @@ public class SubmissionPrettyPrinter{
     }
 
     private void addAuthor(Submission submission){
-        printer.addLine(String.format("author = \"%s\"", escapeMonticore(submission.getAuthor())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.AUTHOR), escapeMonticore(submission.getAuthor())));
     }
 
     private void addId(Submission submission){
-        printer.addLine(String.format("id = \"%s\"", escapeMonticore(submission.getId())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.ID), escapeMonticore(submission.getId())));
     }
 
     private void addLinkFlairText(Submission submission){
         submission.getLinkFlairText().ifPresent(
-                text -> printer.addLine(String.format("linkFlairText = \"%s\"", escapeMonticore(text)))
+                text -> printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.LINKFLAIRTEXT), escapeMonticore(text)))
         );
     }
 
     private void addSubreddit(Submission submission){
-        printer.addLine(String.format("subreddit = \"%s\"", escapeMonticore(submission.getSubreddit())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.SUBREDDIT), escapeMonticore(submission.getSubreddit())));
     }
 
     private void addNsfw(Submission submission){
-        printer.addLine(String.format("nsfw = %b", submission.isNsfw()));
+        printer.addLine(String.format("%s = %b", prettyprint(ASTSubmissionEnum.NSFW), submission.isNsfw()));
     }
 
     private void addSpoiler(Submission submission){
-        printer.addLine(String.format("spoiler = %b", submission.isSpoiler()));
+        printer.addLine(String.format("%s = %b", prettyprint(ASTSubmissionEnum.SPOILER), submission.isSpoiler()));
     }
 
     private void addScore(Submission submission){
-        printer.addLine(String.format("score = %d", submission.getScore()));
+        printer.addLine(String.format("%s = %dL", prettyprint(ASTSubmissionEnum.SCORE), submission.getScore()));
     }
 
     private void addTitle(Submission submission){
-        printer.addLine(String.format("title = \"%s\"", escapeMonticore(submission.getTitle())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.TITLE), escapeMonticore(submission.getTitle())));
     }
 
     private void addCreated(Submission submission){
-        printer.addLine(String.format("created = %dL", submission.getCreated().toEpochSecond(ZoneOffset.UTC)));
+        printer.addLine(String.format("%s = \"%d\"", prettyprint(ASTSubmissionEnum.CREATED), submission.getCreated().toEpochSecond(ZoneOffset.UTC)));
     }
 
     private void addSelfText(Submission submission){
         submission.getSelfText().ifPresent(
-                text -> printer.addLine(String.format("selfText = \"%s\"", escapeMonticore(text)))
+                text -> printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.SELFTEXT), escapeMonticore(text)))
         );
     }
 
     private void addThumbnail(Submission submission){
         submission.getThumbnail().ifPresent(
-                text -> printer.addLine(String.format("thumbnail = \"%s\"", escapeMonticore(text)))
+                text -> printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.THUMBNAIL), escapeMonticore(text)))
         );
     }
 
     private void addUrl(Submission submission){
-        printer.addLine(String.format("url = \"%s\"", escapeMonticore(submission.getUrl())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.URL), escapeMonticore(submission.getUrl())));
     }
 
     private void addPermalink(Submission submission){
-        printer.addLine(String.format("permalink = \"%s\"", escapeMonticore(submission.getPermalink())));
+        printer.addLine(String.format("%s = \"%s\"", prettyprint(ASTSubmissionEnum.PERMALINK), escapeMonticore(submission.getPermalink())));
+    }
+
+    private String prettyprint(ASTSubmissionEnum key){
+        return StringUtils.capitalize(key.name());
     }
 }

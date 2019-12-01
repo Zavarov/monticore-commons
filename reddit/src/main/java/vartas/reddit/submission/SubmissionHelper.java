@@ -39,6 +39,7 @@ import java.util.Optional;
  * and instances of {@link Submission}.
  */
 public class SubmissionHelper {
+    private static final SubmissionParser parser = new SubmissionParser();
     /**
      * Converts the submissions into an by the grammar accepted format and stores them on the disk.
      * @param submissions A collection of all submissions that are stored.
@@ -74,9 +75,8 @@ public class SubmissionHelper {
 
     private static ASTSubmissionArtifact parseArtifact(String filePath){
         try{
-            SubmissionParser parser = new SubmissionParser();
             Optional<ASTSubmissionArtifact> submission = parser.parse(filePath);
-            if(!submission.isPresent())
+            if(submission.isEmpty())
                 throw new IllegalArgumentException("The submission file couldn't be parsed.");
 
             return submission.get();

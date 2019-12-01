@@ -17,9 +17,10 @@
 
 package vartas.arithmeticexpressions.prettyprint;
 
+import de.monticore.MCCommonLiteralsPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
-import de.monticore.expressions.prettyprint2.CommonExpressionsPrettyPrinter;
-import de.monticore.expressions.prettyprint2.ExpressionsBasisPrettyPrinter;
+import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
+import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
 import vartas.arithmeticexpressions._ast.ASTAtExpression;
@@ -38,7 +39,7 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
         setCommonExpressionsVisitor(new CommonExpressionsPrettyPrinter(printer));
         setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
         setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-        setMCCommonLiteralsVisitor(new TemporaryMCCommonLiteralsPrettyPrinter(printer));
+        setMCCommonLiteralsVisitor(new MCCommonLiteralsPrettyPrinter(printer));
     }
 
     public String prettyprint(ASTExpressionsBasisNode node){

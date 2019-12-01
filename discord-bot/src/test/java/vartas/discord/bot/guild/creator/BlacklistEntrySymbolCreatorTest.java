@@ -40,18 +40,14 @@ public class BlacklistEntrySymbolCreatorTest extends AbstractGuildTest {
     public void testStringEntrySymbol(){
         Optional<BlacklistEntrySymbol> symbolOpt = guildScope.resolveBlacklistEntry(value);
         BlacklistEntrySymbol symbol;
-        Optional<ASTBlacklistEntry> astOpt;
         ASTBlacklistEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(value);
-        assertThat(astOpt).isPresent();
-
-        ast = astOpt.get();
 
         assertThat(ast.getName()).isEqualTo(value);
     }

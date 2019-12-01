@@ -39,18 +39,15 @@ public class SubredditGroupEntrySymbolCreatorTest extends AbstractGuildTest {
     public void testLongGroupEntrySymbol(){
         Optional<SubredditGroupEntrySymbol> symbolOpt = guildScope.resolveSubredditGroupEntry(group);
         SubredditGroupEntrySymbol symbol;
-        Optional<ASTSubredditGroupEntry> astOpt;
         ASTSubredditGroupEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(group);
-        assertThat(astOpt).isPresent();
 
-        ast = astOpt.get();
         assertThat(ast.getName()).isEqualTo(group);
     }
 }

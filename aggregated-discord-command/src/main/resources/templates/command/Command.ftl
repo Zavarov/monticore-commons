@@ -1,7 +1,7 @@
 ${signature("Package", "ExistsHandwrittenClass")}
 <#assign ClassName = ast.getSpannedScope().getLocalClassAttributeSymbols()?first.getName()>
 <#assign ParentName = "Abstract"+ClassName>
-<#assign Symbol = ast.getCommandSymbol()>
+<#assign Symbol = ast.getSymbol()>
 <#assign Parameters = Symbol.getSpannedScope().getLocalParameterVariableSymbols()>
 package ${Package};
 
@@ -12,4 +12,8 @@ public <#if ExistsHandwrittenClass>abstract </#if>class ${ClassName}<#if ExistsH
 <#list Parameters as Parameter>
     ${includeArgs("command.SetMethod", Parameter)}
 </#list>
+<#if !ExistsHandwrittenClass>
+    @Override
+    public void run(){}
+</#if>
 }

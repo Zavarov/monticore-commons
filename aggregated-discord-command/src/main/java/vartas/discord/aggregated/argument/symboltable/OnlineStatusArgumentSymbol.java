@@ -39,7 +39,7 @@ public class OnlineStatusArgumentSymbol extends ArgumentSymbol {
 
     public Optional<OnlineStatus> accept(){
         onlineStatus = null;
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(onlineStatus);
     }
 

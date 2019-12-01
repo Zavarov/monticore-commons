@@ -39,7 +39,7 @@ public class IntervalArgumentSymbol extends ArgumentSymbol {
 
     public Optional<Interval> accept(){
         interval = null;
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(interval);
     }
 

@@ -52,7 +52,7 @@ public class MemberArgumentSymbol extends ArgumentSymbol {
         checkNotNull(context.getGuild());
         guild = context.getGuild();
 
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(member);
     }
 

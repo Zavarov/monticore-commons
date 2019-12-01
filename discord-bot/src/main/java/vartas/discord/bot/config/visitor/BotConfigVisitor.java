@@ -17,12 +17,12 @@
 
 package vartas.discord.bot.config.visitor;
 
+import vartas.MonticoreEscapeUtils;
 import vartas.discord.bot.config._ast.ASTConfigArtifact;
 import vartas.discord.bot.config._ast.ASTIntegerConfig;
 import vartas.discord.bot.config._ast.ASTStringConfig;
 import vartas.discord.bot.config._visitor.ConfigVisitor;
 import vartas.discord.bot.entities.BotConfig;
-import vartas.reddit.MonticoreEscapeUtils;
 
 public class BotConfigVisitor implements ConfigVisitor {
     protected BotConfig config;

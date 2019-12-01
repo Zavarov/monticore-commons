@@ -77,10 +77,6 @@ public class CommandGeneratorHelper {
         return PARAMETER_MAP.get(ast.getParameter());
     }
 
-    public static String getPackage(ASTCommandArtifact ast){
-        return Joiners.DOT.join(ast.getPackageList());
-    }
-
     public static String getPackageFolder(ASTCommandArtifact ast){
         return Joiner.on(FileSystems.getDefault().getSeparator()).join(ast.getPackageList());
     }
@@ -211,24 +207,27 @@ public class CommandGeneratorHelper {
     }
 
     public static boolean isStar(ParameterVariableSymbol symbol){
-        return symbol
-                .getAstNode()
-                .flatMap(ASTParameterVariable::getCardinalityOpt)
-                .map(card -> card == ASTCardinality.STAR)
-                .orElse(false);
+        ASTParameterVariable ast = symbol.getAstNode();
+        return ast.isPresentCardinality() && ast.getCardinality().equals(ASTCardinality.STAR);
 
     }
 
     public static boolean isPlus(ParameterVariableSymbol symbol){
-        return symbol
-                .getAstNode()
-                .flatMap(ASTParameterVariable::getCardinalityOpt)
-                .map(card -> card == ASTCardinality.PLUS)
-                .orElse(false);
-
+        ASTParameterVariable ast = symbol.getAstNode();
+        return ast.isPresentCardinality() && ast.getCardinality().equals(ASTCardinality.PLUS);
     }
 
     public static long getMinSize(List<ParameterVariableSymbol> symbols){
         return symbols.stream().filter(symbol -> !isStar(symbol)).count();
+    }
+
+    public static String getPackageName(ASTCommandArtifact artifact){
+        return Joiners.DOT.join(artifact.getPackageList());
+
+    }
+
+    public static Path getPackagePath(ASTCommandArtifact artifact){
+        List<String> packageList = artifact.getPackageList();
+        return Paths.get(packageList.get(0), packageList.subList(1, packageList.size()).toArray(new String[0]));
     }
 }

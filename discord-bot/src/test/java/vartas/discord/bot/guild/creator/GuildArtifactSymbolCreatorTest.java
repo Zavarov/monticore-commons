@@ -53,20 +53,17 @@ public class GuildArtifactSymbolCreatorTest extends AbstractGuildTest {
         GuildArtifactSymbolCreator.create(guildScope, guild, target);
         Optional<GuildArtifactSymbol> symbolOpt = guildScope.resolveGuildArtifactDown(guildArtifact);
         GuildArtifactSymbol symbol;
-        Optional<ASTGuildArtifact> astOpt;
         ASTGuildArtifact ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(value);
         assertThat(symbol.getReference()).isEqualTo(target);
         assertThat(symbol.getReference()).exists();
-        assertThat(astOpt).isPresent();
-
-        ast = astOpt.get();
+        
         assertThat(ast.getName()).isEqualTo(guild.getId());
     }
 

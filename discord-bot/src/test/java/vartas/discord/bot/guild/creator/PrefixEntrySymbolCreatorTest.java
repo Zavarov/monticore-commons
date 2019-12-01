@@ -40,18 +40,14 @@ public class PrefixEntrySymbolCreatorTest extends AbstractGuildTest {
     public void testStringEntrySymbol(){
         Optional<PrefixEntrySymbol> symbolOpt = guildScope.resolvePrefixEntry(value);
         PrefixEntrySymbol symbol;
-        Optional<ASTPrefixEntry> astOpt;
         ASTPrefixEntry ast;
 
         assertThat(symbolOpt).isPresent();
 
         symbol = symbolOpt.get();
-        astOpt = symbol.getAstNode();
+        ast = symbol.getAstNode();
 
         assertThat(symbol.getName()).isEqualTo(value);
-        assertThat(astOpt).isPresent();
-
-        ast = astOpt.get();
 
         assertThat(ast.getName()).isEqualTo(value);
     }

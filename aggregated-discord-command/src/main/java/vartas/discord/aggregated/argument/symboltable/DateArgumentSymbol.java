@@ -39,7 +39,7 @@ public class DateArgumentSymbol extends ArgumentSymbol {
 
     public Optional<LocalDate> accept(){
         date = null;
-        getAstNode().ifPresent(ast -> ast.accept(visitor));
+        getAstNode().accept(visitor);
         return Optional.ofNullable(date);
     }
 

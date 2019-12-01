@@ -42,6 +42,7 @@ public class RankScope extends RankScopeTOP{
         this.shadowing = isShadowingScope;
         this.name = Optional.empty();
     }
+
     @Override
     public void setEnclosingScope(IRankScope newEnclosingScope) {
         if ((this.enclosingScope != null) && (newEnclosingScope != null)) {

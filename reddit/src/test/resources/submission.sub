@@ -1,28 +1,28 @@
 submission {
-    author = "author"
-    id = "id"
-    linkFlairText = "linkFlairText"
-    subreddit = "subreddit"
-    nsfw = true
-    spoiler = true
-    score = 1
-    title = "title"
-    created = 1L
-    selfText = "selfText"
-    thumbnail = "thumbnail"
-    url = "url"
-    permalink = "permalink"
+    Author = "author"
+    Id = "id"
+    Linkflairtext = "linkFlairText"
+    Subreddit = "subreddit"
+    Nsfw = true
+    Spoiler = true
+    Score = 1L
+    Title = "title"
+    Created = "1"
+    Selftext = "selfText"
+    Thumbnail = "thumbnail"
+    Url = "url"
+    Permalink = "permalink"
 }
 
 submission {
-    author = "author"
-    id = "id"
-    subreddit = "subreddit"
-    nsfw = true
-    spoiler = true
-    score = 1
-    title = "title"
-    created = 1L
-    url = "url"
-    permalink = "permalink"
+    Author = "author"
+    Id = "id"
+    Subreddit = "subreddit"
+    Nsfw = true
+    Spoiler = true
+    Score = 1L
+    Title = "title"
+    Created = "1"
+    Url = "url"
+    Permalink = "permalink"
 }
