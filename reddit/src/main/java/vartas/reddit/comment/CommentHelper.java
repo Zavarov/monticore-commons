@@ -22,7 +22,6 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.Comment;
 import vartas.reddit.comment._ast.ASTCommentArtifact;
 import vartas.reddit.comment._parser.CommentParser;
-import vartas.reddit.comment._symboltable.CommentScope;
 import vartas.reddit.comment._symboltable.CommentSymbolTableCreator;
 import vartas.reddit.comment.prettyprint.CommentPrettyPrinter;
 
@@ -30,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +77,7 @@ public abstract class CommentHelper {
                 throw new IllegalArgumentException("The comment file couldn't be parsed.");
 
             ASTCommentArtifact comment = commentOpt.get();
-            new CommentSymbolTableCreator(new CommentScope()).createFromAST(comment);
+            new CommentSymbolTableCreator(new LinkedList<>()).createFromAST(comment);
             return comment;
         }catch(IOException e){
             throw new IllegalArgumentException(e);

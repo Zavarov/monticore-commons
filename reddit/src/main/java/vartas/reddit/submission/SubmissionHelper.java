@@ -22,7 +22,6 @@ import de.se_rwth.commons.Files;
 import vartas.reddit.Submission;
 import vartas.reddit.submission._ast.ASTSubmissionArtifact;
 import vartas.reddit.submission._parser.SubmissionParser;
-import vartas.reddit.submission._symboltable.SubmissionScope;
 import vartas.reddit.submission._symboltable.SubmissionSymbolTableCreator;
 import vartas.reddit.submission.prettyprint.SubmissionPrettyPrinter;
 
@@ -30,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 /**
@@ -76,7 +76,7 @@ public class SubmissionHelper {
                 throw new IllegalArgumentException("The submission file couldn't be parsed.");
 
             ASTSubmissionArtifact submission = submissionOpt.get();
-            new SubmissionSymbolTableCreator(new SubmissionScope()).createFromAST(submission);
+            new SubmissionSymbolTableCreator(new LinkedList<>()).createFromAST(submission);
             return submission;
         }catch(IOException e){
             throw new IllegalArgumentException(e);
