@@ -32,7 +32,8 @@ import net.dv8tion.jda.internal.requests.RestActionImpl;
 import net.dv8tion.jda.internal.utils.config.AuthorizationConfig;
 import org.junit.After;
 import org.junit.Before;
-import vartas.discord.bot.entities.BotRank;
+import vartas.discord.bot.entities.Rank;
+import vartas.discord.bot.rank._ast.ASTRankName;
 import vartas.discord.bot.rank._symboltable.RankNameSymbol;
 import vartas.discord.call._ast.ASTCallArtifact;
 import vartas.discord.call._parser.CallParser;
@@ -290,8 +291,8 @@ public abstract class AbstractArgumentSymbolTest {
         return command.getSpannedScope().getLocalParameterVariableSymbols();
     }
 
-    protected List<BotRank.Type> getValidRanks(CommandSymbol command){
-        return command.getSpannedScope().getLocalRankNameSymbols().stream().map(RankNameSymbol::getRank).collect(Collectors.toList());
+    protected List<Rank.Ranks> getValidRanks(CommandSymbol command){
+        return command.getSpannedScope().getLocalRankNameSymbols().stream().map(RankNameSymbol::getAstNode).map(ASTRankName::getRank).collect(Collectors.toList());
     }
 
     protected List<Permission> getRequiredPermission(CommandSymbol command){

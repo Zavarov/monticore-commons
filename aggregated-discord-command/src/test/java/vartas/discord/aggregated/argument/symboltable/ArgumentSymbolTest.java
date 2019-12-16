@@ -20,7 +20,7 @@ package vartas.discord.aggregated.argument.symboltable;
 import net.dv8tion.jda.api.Permission;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.entities.BotRank;
+import vartas.discord.bot.entities.Rank;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.parameter._ast.ASTParameter;
 import vartas.discord.parameter._symboltable.ParameterVariableSymbol;
@@ -52,7 +52,7 @@ public class ArgumentSymbolTest extends AbstractArgumentSymbolTest {
 
     @Test
     public void ranksTest(){
-        assertThat(getValidRanks(symbol)).containsExactlyInAnyOrder(BotRank.Type.ROOT, BotRank.Type.DEVELOPER);
+        assertThat(getValidRanks(symbol)).containsExactlyInAnyOrder(Rank.Ranks.ROOT, Rank.Ranks.DEVELOPER);
     }
 
     private void checkParameter(ParameterVariableSymbol parameter, ASTParameter expected){
