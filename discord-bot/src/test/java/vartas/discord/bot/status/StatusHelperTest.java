@@ -17,7 +17,6 @@
 
 package vartas.discord.bot.status;
 
-import com.google.common.collect.Lists;
 import org.assertj.core.data.Index;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StatusTest extends AbstractTest {
+public class StatusHelperTest extends AbstractTest {
     ASTStatusArtifact ast;
 
     @Before

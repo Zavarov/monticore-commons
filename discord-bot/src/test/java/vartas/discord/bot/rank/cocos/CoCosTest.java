@@ -70,13 +70,13 @@ public class CoCosTest extends AbstractTest {
 
     @Test
     public void testValid(){
-        RankHelper.parse(baseDir+"Valid.rnk", null);
+        RankHelper.parse(baseDir+"Valid.rnk");
         checkValid();
     }
 
     @Test
     public void testInvalid(){
-        RankHelper.parse( baseDir+"invalid/"+fileName, null);
+        RankHelper.parse( baseDir+"invalid/"+fileName);
         checkInvalid();
     }
 

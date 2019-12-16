@@ -20,28 +20,28 @@ package vartas.discord.bot.rank.visitor;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.entities.BotRank;
+import vartas.discord.bot.entities.Rank;
 import vartas.discord.bot.rank.RankHelper;
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotRankVisitorTest extends AbstractTest {
-    protected BotRank config;
-    protected ASTRankArtifact artifact;
+public class RankVisitorTest extends AbstractTest {
+    Rank config;
+    ASTRankArtifact artifact;
 
     @Before
     public void setUp(){
-        config = new BotRank(null);
-        artifact = RankHelper.parse("src/test/resources/rank.perm", null);
-        new BotRankVisitor().accept(artifact, config);
+        config = new Rank();
+        artifact = RankHelper.parse("src/test/resources/rank.perm");
+        new RankVisitor().accept(artifact, config);
     }
 
     @Test
     public void resolveTest(){
-        assertThat(config.resolve(user1, BotRank.Type.ROOT)).isTrue();
-        assertThat(config.resolve(user1, BotRank.Type.REDDIT)).isTrue();
-        assertThat(config.resolve(user2, BotRank.Type.DEVELOPER)).isTrue();
-        assertThat(config.resolve(user2, BotRank.Type.REDDIT)).isTrue();
+        assertThat(config.resolve(user1, Rank.Ranks.ROOT)).isTrue();
+        assertThat(config.resolve(user1, Rank.Ranks.REDDIT)).isTrue();
+        assertThat(config.resolve(user2, Rank.Ranks.DEVELOPER)).isTrue();
+        assertThat(config.resolve(user2, Rank.Ranks.REDDIT)).isTrue();
     }
 }

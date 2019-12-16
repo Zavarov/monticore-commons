@@ -23,8 +23,8 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import vartas.discord.bot.configuration.AbstractGuildTest;
-import vartas.discord.bot.configuration.GuildHelper;
+import vartas.discord.bot.AbstractTest;
+import vartas.discord.bot.configuration.ConfigurationHelper;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +32,7 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class CoCosTest extends AbstractGuildTest {
+public class CoCosTest extends AbstractTest {
     protected static String baseDir = "src/test/resources/cocos/guild/";
 
     @Parameterized.Parameters
@@ -61,7 +61,7 @@ public class CoCosTest extends AbstractGuildTest {
                 {
                         "RoleGroupEntriesAreUnique.gld",
                         RoleGroupEntriesAreUniqueCoCo.ERROR_MESSAGE,
-                        "9"
+                        "9L"
                 }
         });
     }
@@ -80,13 +80,13 @@ public class CoCosTest extends AbstractGuildTest {
 
     @Test
     public void testValid(){
-        GuildHelper.parse(baseDir+"Valid.gld", null);
+        ConfigurationHelper.parse(baseDir+"Valid.gld");
         checkValid();
     }
 
     @Test
     public void testInvalid(){
-        GuildHelper.parse(baseDir+"invalid/"+fileName, null);
+        ConfigurationHelper.parse(baseDir+"invalid/"+fileName);
         checkInvalid();
     }
 

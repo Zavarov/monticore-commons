@@ -20,7 +20,7 @@ package vartas.discord.bot.rank.prettyprint;
 import de.monticore.prettyprint.IndentPrinter;
 import vartas.discord.bot.entities.Rank;
 
-public class BotRankPrettyPrinter {
+public class RankPrettyPrinter {
     public String prettyPrint(Rank rank){
         IndentPrinter printer = new IndentPrinter();
         printer.setIndentLength(4);

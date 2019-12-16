@@ -1,8 +1,8 @@
 package vartas.discord.bot;
 
-grammar Guild extends de.monticore.literals.MCCommonLiterals{
-    symbol scope GuildArtifact =
-        "guild" id:BasicLongLiteral "{"
+grammar Configuration extends de.monticore.literals.MCCommonLiterals{
+    scope ConfigurationArtifact =
+        "configuration" id:BasicLongLiteral "{"
             Entry*
         "}";
 
@@ -16,35 +16,37 @@ grammar Guild extends de.monticore.literals.MCCommonLiterals{
         "}"
     ;
 
-    symbol LongGroupElement =
+    LongGroupElement =
         (type:Name ":")? element:BasicLongLiteral
     ;
 
-    symbol BlacklistEntry implements Entry =
+    BlacklistEntry implements Entry =
         "blacklist" StringLiteral
     ;
 
-    symbol PrefixEntry implements Entry =
+    PrefixEntry implements Entry =
         "prefix" StringLiteral
     ;
 
-    symbol scope RoleGroupEntry implements Entry =
-        "rolegroup" StringLiteral LongGroup
+    scope RoleGroupEntry implements Entry =
+        "selfassignable" StringLiteral LongGroup
     ;
 
-    symbol scope SubredditGroupEntry implements Entry =
+    scope SubredditGroupEntry implements Entry =
         "subreddit" StringLiteral LongGroup
     ;
 
     /*=========================================================*/
-    /*=== Symbol Rules                                      ===*/
+    /*=== AST Rules                                         ===*/
     /*=========================================================*/
 
-    symbolrule GuildArtifact =
-        reference : java.nio.file.Path
+    astrule BlacklistEntry =
+        pattern : java.util.regex.Pattern
     ;
 
-    symbolrule BlacklistEntry =
-        pattern : java.util.regex.Pattern
+    astrule Entry =
+        method public String getName(){
+            return getStringLiteral().getValue();
+        }
     ;
 }

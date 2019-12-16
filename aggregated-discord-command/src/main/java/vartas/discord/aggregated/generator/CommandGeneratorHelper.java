@@ -26,10 +26,11 @@ import net.dv8tion.jda.internal.utils.PermissionUtil;
 import vartas.chart.Interval;
 import vartas.discord.aggregated.argument.symboltable.*;
 import vartas.discord.argument._ast.ASTArgument;
-import vartas.discord.bot.entities.BotRank;
-import vartas.discord.bot.entities.DiscordEnvironment;
+import vartas.discord.bot.entities.Rank;
+import vartas.discord.bot.entities.Shard;
+import vartas.discord.bot.rank._ast.ASTRankName;
 import vartas.discord.bot.rank._symboltable.RankNameSymbol;
-import vartas.discord.bot.visitor.DiscordEnvironmentVisitor;
+import vartas.discord.bot.visitor.ShardVisitor;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.command._symboltable.CommandSymbol;
@@ -168,12 +169,13 @@ public class CommandGeneratorHelper {
                 .collect(Collectors.toList());
     }
 
-    public static List<BotRank.Type> getRanks(CommandSymbol symbol){
+    public static List<Rank.Ranks> getRanks(CommandSymbol symbol){
         return symbol
                 .getSpannedScope()
                 .getLocalRankNameSymbols()
                 .stream()
-                .map(RankNameSymbol::getRank)
+                .map(RankNameSymbol::getAstNode)
+                .map(ASTRankName::getRank)
                 .collect(Collectors.toList());
     }
 
@@ -183,17 +185,17 @@ public class CommandGeneratorHelper {
                 .getLocalParameterVariableSymbols();
     }
 
-    public static boolean checkRank(DiscordEnvironment environment, User user, BotRank.Type rank){
+    public static boolean checkRank(Shard shard , User user, Rank.Ranks rank){
         AtomicBoolean valid = new AtomicBoolean(false);
 
-        DiscordEnvironmentVisitor visitor = new DiscordEnvironmentVisitor() {
+        ShardVisitor visitor = new ShardVisitor() {
             @Override
-            public void handle(BotRank bot){
-                valid.set(bot.resolve(user, rank));
+            public void handle(Rank _rank){
+                valid.set(_rank.resolve(user, rank));
             }
         };
 
-        environment.accept(visitor);
+        shard.accept(visitor);
 
         return valid.get();
     }

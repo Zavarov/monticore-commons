@@ -18,17 +18,15 @@
 package vartas.discord.bot.credentials.visitor;
 
 import vartas.MonticoreEscapeUtils;
-import vartas.discord.bot.credentials._ast.ASTConfigArtifact;
+import vartas.discord.bot.credentials._ast.ASTCredentialsArtifact;
 import vartas.discord.bot.credentials._ast.ASTIntegerCredentials;
 import vartas.discord.bot.credentials._ast.ASTStringCredentials;
-import vartas.discord.bot.credentials._visitor.ConfigVisitor;
-import vartas.discord.bot.credentials._visitor.CredentialsVisitor;
 import vartas.discord.bot.entities.Credentials;
 
-public class BotConfigVisitor implements CredentialsVisitor {
+public class CredentialsVisitor implements vartas.discord.bot.credentials._visitor.CredentialsVisitor {
     protected Credentials credentials;
 
-    public void accept(ASTConfigArtifact artifact, Credentials credentials){
+    public void accept(ASTCredentialsArtifact artifact, Credentials credentials){
         this.credentials = credentials;
         artifact.accept(getRealThis());
     }

@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.credentials.ConfigHelper;
-import vartas.discord.bot.credentials._ast.ASTConfig;
+import vartas.discord.bot.credentials.CredentialsHelper;
+import vartas.discord.bot.credentials._ast.ASTCredentials;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,12 +42,12 @@ public class CoCosTest extends AbstractTest {
                 {
                         "AllEntriesExist.cfg",
                         AllEntriesExistCoCo.ERROR_MESSAGE,
-                        ASTConfig.STATUS_MESSAGE_UPDATE_INTERVAL.name()
+                        ASTCredentials.STATUS_MESSAGE_UPDATE_INTERVAL.name()
                 },
                 {
                         "EntryIsUnique.cfg",
                         EntryIsUniqueCoCo.ERROR_MESSAGE,
-                        ASTConfig.STATUS_MESSAGE_UPDATE_INTERVAL.name()
+                        ASTCredentials.STATUS_MESSAGE_UPDATE_INTERVAL.name()
                 }
         });
     }
@@ -66,13 +66,13 @@ public class CoCosTest extends AbstractTest {
 
     @Test
     public void testValid(){
-        ConfigHelper.parse(baseDir+"Valid.cfg");
+        CredentialsHelper.parse(baseDir+"Valid.cfg");
         checkValid();
     }
 
     @Test
     public void testInvalid(){
-        ConfigHelper.parse( baseDir+"invalid/"+fileName);
+        CredentialsHelper.parse( baseDir+"invalid/"+fileName);
         checkInvalid();
     }
 

@@ -24,12 +24,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 public abstract class StatusHelper {
-
     public static ASTStatusArtifact parse(String filePath){
         try{
             StatusParser parser = new StatusParser();
             Optional<ASTStatusArtifact> status = parser.parse(filePath);
-            if(!status.isPresent())
+            if(status.isEmpty())
                 throw new IllegalArgumentException("The status file couldn't be parsed");
 
             return status.get();

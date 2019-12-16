@@ -17,85 +17,73 @@
 
 package vartas.discord.bot.configuration.prettyprint;
 
-import com.google.common.collect.Multimap;
 import de.monticore.prettyprint.IndentPrinter;
+import org.jetbrains.annotations.NotNull;
 import vartas.MonticoreEscapeUtils;
-import vartas.discord.bot.entities.BotGuild;
+import vartas.discord.bot.entities.Configuration;
+import vartas.discord.bot.visitor.ConfigurationVisitor;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-public class BotGuildPrettyPrinter {
+public class ConfigurationPrettyPrinter implements ConfigurationVisitor {
     protected IndentPrinter printer = new IndentPrinter();
 
-    public BotGuildPrettyPrinter(){
+    public ConfigurationPrettyPrinter(){
         printer.setIndentLength(4);
     }
 
-    public String prettyPrint(BotGuild config){
-        printer.print("guild ");
-        printer.print(config.getId());
-        printer.addLine("L {");
-        printPrefix(config);
-        printBlacklist(config);
-        printSubreddits(config);
-        printRoleGroups(config);
-        printer.addLine("}");
+    public String prettyPrint(Configuration config){
+        handle(config);
 
         String result = printer.getContent();
         printer.clearBuffer();
         return result;
     }
 
-    private void printPrefix(BotGuild config){
-        config.prefix().ifPresent(prefix -> {
-            printer.print("prefix ");
-            printer.print("\"");
-            printer.print(MonticoreEscapeUtils.escapeMonticore(prefix));
-            printer.println("\"");
-        });
+    @Override
+    public void visit(Configuration config){
+        printer.print("configuration ");
+        printer.print(config.getGuildId());
+        printer.addLine("L {");
     }
 
-    private void printBlacklist(BotGuild config){
-        config.blacklist().map(Pattern::pattern).ifPresent(pattern -> {
-            printer.print("blacklist ");
-            printer.print("\"");
-            printer.print(MonticoreEscapeUtils.escapeMonticore(pattern));
-            printer.println("\"");
-        });
-    }
-    private void printRoleGroups(BotGuild config){
-        Multimap<String, Long> roles = config.resolve(BotGuild.ROLEGROUP, (g,l) -> l);
-        roles.asMap().forEach(this::printRoleGroup);
-    }
-    private void printRoleGroup(String key, Collection<Long> roles) {
-        printer.print(BotGuild.ROLEGROUP);
-        printer.print(" \"");
-        printer.print(MonticoreEscapeUtils.escapeMonticore(key));
-        printer.print("\" ");
-        printer.addLine("{");
-        roles.forEach(role -> {
-            printer.print("role : ");
-            printer.print(role);
-            printer.println("L");
-        });
+    @Override
+    public void endVisit(@NotNull Configuration config){
         printer.addLine("}");
     }
-    private void printSubreddits(BotGuild config){
-        Multimap<String, Long> channels = config.resolve(BotGuild.SUBREDDIT, (g,l) -> l);
-        channels.asMap().forEach(this::printSubreddit);
+
+    @Override
+    public void visit(@NotNull String prefix){
+        printer.print("prefix ");
+        printer.print("\"");
+        printer.print(MonticoreEscapeUtils.escapeMonticore(prefix));
+        printer.println("\"");
     }
-    private void printSubreddit(String key, Collection<Long> channels) {
-        printer.print(BotGuild.SUBREDDIT);
+
+    @Override
+    public void visit(Pattern pattern){
+        printer.print("blacklist ");
+        printer.print("\"");
+        printer.print(MonticoreEscapeUtils.escapeMonticore(pattern.pattern()));
+        printer.println("\"");
+    }
+
+    @Override
+    public void visit(Configuration.LongType type, @NotNull String key, Collection<Long> values) {
+        printer.print(type.getName());
         printer.print(" \"");
         printer.print(MonticoreEscapeUtils.escapeMonticore(key));
         printer.print("\" ");
         printer.addLine("{");
-        channels.forEach(channel -> {
-            printer.print("channel : ");
-            printer.print(channel);
+        for(long value : values){
+            if(type == Configuration.LongType.SELFASSIGNABLE)
+                printer.print("role : ");
+            else if(type == Configuration.LongType.SUBREDDIT)
+                printer.print("channel : ");
+            printer.print(value);
             printer.println("L");
-        });
+        }
         printer.addLine("}");
     }
 }

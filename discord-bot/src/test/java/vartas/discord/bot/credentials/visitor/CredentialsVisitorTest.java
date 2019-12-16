@@ -20,89 +20,89 @@ package vartas.discord.bot.credentials.visitor;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.credentials.ConfigHelper;
-import vartas.discord.bot.credentials._ast.ASTConfigArtifact;
-import vartas.discord.bot.entities.BotConfig;
+import vartas.discord.bot.credentials.CredentialsHelper;
+import vartas.discord.bot.credentials._ast.ASTCredentialsArtifact;
+import vartas.discord.bot.entities.Credentials;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotConfigVisitorTest extends AbstractTest {
-    protected BotConfig config;
-    protected ASTConfigArtifact artifact;
+public class CredentialsVisitorTest extends AbstractTest {
+    protected Credentials credentials;
+    protected ASTCredentialsArtifact artifact;
     @Before
     public void setUp(){
-        config = new BotConfig();
-        artifact = ConfigHelper.parse("src/test/resources/config.cfg");
-        new CredentialsVisitor().accept(artifact, config);
+        credentials = new Credentials();
+        artifact = CredentialsHelper.parse("src/test/resources/credentials.cfg");
+        new CredentialsVisitor().accept(artifact, credentials);
     }
 
     @Test
     public void getStatusMessageUpdateIntervalTest(){
-        assertThat(config.getStatusMessageUpdateInterval()).isEqualTo(5);
+        assertThat(credentials.getStatusMessageUpdateInterval()).isEqualTo(5);
     }
 
     @Test
     public void getDiscordShardsTest(){
-        assertThat(config.getDiscordShards()).isEqualTo(2);
+        assertThat(credentials.getDiscordShards()).isEqualTo(2);
     }
 
     @Test
     public void getInteractiveMessageLifetimeTest(){
-        assertThat(config.getInteractiveMessageLifetime()).isEqualTo(10);
+        assertThat(credentials.getInteractiveMessageLifetime()).isEqualTo(10);
     }
 
     @Test
     public void getActivityUpdateIntervalTest(){
-        assertThat(config.getActivityUpdateInterval()).isEqualTo(15);
+        assertThat(credentials.getActivityUpdateInterval()).isEqualTo(15);
     }
 
     @Test
     public void getInviteSupportServerTest(){
-        assertThat(config.getInviteSupportServer()).isEqualTo("invite");
+        assertThat(credentials.getInviteSupportServer()).isEqualTo("invite");
     }
 
     @Test
     public void getBotNameTest(){
-        assertThat(config.getBotName()).isEqualTo("bot");
+        assertThat(credentials.getBotName()).isEqualTo("bot");
     }
 
     @Test
     public void getGlobalPrefixTest(){
-        assertThat(config.getGlobalPrefix()).isEqualTo("globalPrefix");
+        assertThat(credentials.getGlobalPrefix()).isEqualTo("globalPrefix");
     }
 
     @Test
     public void getWikiLinkTest(){
-        assertThat(config.getWikiLink()).isEqualTo("wiki");
+        assertThat(credentials.getWikiLink()).isEqualTo("wiki");
     }
 
     @Test
     public void getImageWidthTest(){
-        assertThat(config.getImageWidth()).isEqualTo(1024);
+        assertThat(credentials.getImageWidth()).isEqualTo(1024);
     }
 
     @Test
     public void getImageHeightTest(){
-        assertThat(config.getImageHeight()).isEqualTo(768);
+        assertThat(credentials.getImageHeight()).isEqualTo(768);
     }
 
     @Test
     public void getDiscordTokenTest(){
-        assertThat(config.getDiscordToken()).isEqualTo("token");
+        assertThat(credentials.getDiscordToken()).isEqualTo("token");
     }
 
     @Test
     public void getRedditAccountTest(){
-        assertThat(config.getRedditAccount()).isEqualTo("account");
+        assertThat(credentials.getRedditAccount()).isEqualTo("account");
     }
 
     @Test
     public void getRedditIdTest(){
-        assertThat(config.getRedditId()).isEqualTo("id");
+        assertThat(credentials.getRedditId()).isEqualTo("id");
     }
 
     @Test
     public void getRedditSecretTest(){
-        assertThat(config.getRedditSecret()).isEqualTo("secret");
+        assertThat(credentials.getRedditSecret()).isEqualTo("secret");
     }
 }

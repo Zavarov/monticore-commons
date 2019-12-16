@@ -17,23 +17,22 @@
 
 package vartas.discord.bot.rank.visitor;
 
-import vartas.discord.bot.entities.BotRank;
+import vartas.discord.bot.entities.Rank;
 import vartas.discord.bot.rank._ast.ASTRankArtifact;
 import vartas.discord.bot.rank._ast.ASTRankName;
 import vartas.discord.bot.rank._ast.ASTUserWithRank;
-import vartas.discord.bot.rank._visitor.RankVisitor;
 
-public class BotRankVisitor implements RankVisitor {
-    protected BotRank config;
-    public void accept(ASTRankArtifact artifact, BotRank config){
-        this.config = config;
+public class RankVisitor implements vartas.discord.bot.rank._visitor.RankVisitor {
+    protected Rank rank;
+    public void accept(ASTRankArtifact artifact, Rank rank){
+        this.rank = rank;
         artifact.accept(getRealThis());
     }
 
     public void handle(ASTUserWithRank node){
         long user = Long.parseUnsignedLong(node.getName());
         for(ASTRankName rank : node.getRankNameList()){
-            config.add(user, rank.getSymbol().getRank());
+            this.rank.add(user, rank.getRank());
         }
     }
 }

@@ -1,13 +1,13 @@
-guild 12345L {
+configuration 12345L {
     prefix "prefix"
     blacklist "expression"
     subreddit "x" {
         channel : 0L
     }
-    rolegroup "c" {
+    selfassignable "c" {
         role : 9L
     }
-    rolegroup "d" {
+    selfassignable "d" {
         role : 9L
     }
 }

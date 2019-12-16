@@ -17,5 +17,9 @@
 
 package vartas.discord.bot.rank._ast;
 
-public class ASTRankName {
+public class ASTRankName extends ASTRankNameTOP{
+    @Override
+    public String getName() {
+        return super.getRankName().name();
+    }
 }

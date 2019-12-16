@@ -18,17 +18,17 @@
 package vartas.discord.bot.configuration.cocos;
 
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.bot.configuration._ast.ASTGuildArtifact;
+import vartas.discord.bot.configuration._ast.ASTConfigurationArtifact;
 import vartas.discord.bot.configuration._ast.ASTPrefixEntry;
-import vartas.discord.bot.configuration._cocos.GuildASTGuildArtifactCoCo;
-import vartas.discord.bot.configuration._visitor.GuildVisitor;
+import vartas.discord.bot.configuration._cocos.ConfigurationASTConfigurationArtifactCoCo;
+import vartas.discord.bot.configuration._visitor.ConfigurationVisitor;
 
-public class PrefixIsUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
+public class PrefixIsUniqueCoCo implements ConfigurationASTConfigurationArtifactCoCo, ConfigurationVisitor {
     public static final String ERROR_MESSAGE = "The prefix identifier appears more than once.";
     protected int counter;
 
     @Override
-    public void check(ASTGuildArtifact node) {
+    public void check(ASTConfigurationArtifact node) {
         counter = 0;
 
         node.accept(this);

@@ -17,49 +17,46 @@
 
 package vartas.discord.bot.configuration.prettyprint;
 
-import de.monticore.prettyprint.IndentPrinter;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import vartas.discord.bot.configuration.AbstractGuildTest;
+import vartas.discord.bot.AbstractTest;
+import vartas.discord.bot.entities.Configuration;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigurationSymbolPrettyPrinterTest extends AbstractGuildTest {
-    IndentPrinter printer;
+public class ConfigurationPrettyPrinterTest extends AbstractTest {
+    Configuration configuration;
+    Path reference;
     ConfigurationPrettyPrinter prettyPrinter;
 
     @Before
     public void setUp(){
-        String source = "src/test/resources/configuration.gld";
+        configuration = new Configuration(12345);
+        configuration.setPrefix("prefix");
+        configuration.setPattern(Pattern.compile("expression"));
+        configuration.add(Configuration.LongType.SUBREDDIT, "x", 0L);
+        configuration.add(Configuration.LongType.SUBREDDIT, "x", 1L);
+        configuration.add(Configuration.LongType.SUBREDDIT, "y", 2L);
+        configuration.add(Configuration.LongType.SUBREDDIT, "y", 3L);
+        configuration.add(Configuration.LongType.SUBREDDIT, "z", 4L);
 
-        reference = new File(source);
+        configuration.add(Configuration.LongType.SELFASSIGNABLE, "a", 5L);
+        configuration.add(Configuration.LongType.SELFASSIGNABLE, "a", 6L);
+        configuration.add(Configuration.LongType.SELFASSIGNABLE, "b", 7L);
+        configuration.add(Configuration.LongType.SELFASSIGNABLE, "b", 8L);
+        configuration.add(Configuration.LongType.SELFASSIGNABLE, "c", 9L);
 
-        printer = new IndentPrinter();
-        printer.setIndentLength(4);
-
-        prettyPrinter = new ConfigurationPrettyPrinter(printer);
+        reference = Paths.get("src","test","resources","configuration.gld");
+        prettyPrinter = new ConfigurationPrettyPrinter();
     }
 
     @Test
-    public void testPrettyPrint() throws IOException {
-        String original = FileUtils
-                .readFileToString(reference)
-                .replaceAll("\\R","");
-        String expected = prettyPrinter
-                .prettyPrint(ast.getSymbol())
-                .replaceAll("\\R","");
-
-        assertThat(original).isEqualTo(expected);
-    }
-
-    @Test
-    public void testSetRealThis(){
-        assertThat(prettyPrinter.getRealThis()).isEqualTo(prettyPrinter);
-        prettyPrinter.setRealThis(null);
-        assertThat(prettyPrinter.getRealThis()).isNull();
+    public void testPrettyPrint() {
+        String expected = prettyPrinter.prettyPrint(configuration);
+        assertThat(reference).hasContent(expected);
     }
 }

@@ -17,53 +17,16 @@
 
 package vartas.discord.bot.rank;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.rank._ast.ASTRankArtifact;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class RankHelperTest extends AbstractTest {
-    Path target;
-    Path source;
-    Path copy;
-    @Before
-    public void setUp() throws IOException {
-        source = Paths.get("src/test/resources/rank.perm");
-        copy = Paths.get("target/test/resources/directory/rank.perm");
-        target = Paths.get("target/test/resources/directory/junk.rnk");
-        FileUtils.deleteDirectory(target.getParent().toFile());
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        FileUtils.deleteDirectory(target.getParent().toFile());
-        FileUtils.deleteDirectory(copy.getParent().toFile());
-    }
-
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactFileNotFound(){
-        RankHelper.parse("#", target);
+        RankHelper.parse("#");
     }
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactInvalidFile(){
-        RankHelper.parse("src/test/resources/junk.txt", target);
-    }
-    @Test
-    public void testStore() throws IOException {
-        ASTRankArtifact ast = RankHelper.parse(source.toString(), copy);
-        RankHelper.store(ast);
-
-        String original = FileUtils.readFileToString(source.toFile()).replaceAll("\\s|\\R","");
-        String expected = FileUtils.readFileToString(copy.toFile()).replaceAll("\\s|\\R","");
-
-        assertThat(original).isEqualTo(expected);
+        RankHelper.parse("src/test/resources/junk.txt");
     }
 }

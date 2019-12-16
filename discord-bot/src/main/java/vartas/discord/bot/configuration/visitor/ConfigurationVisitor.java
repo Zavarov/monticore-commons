@@ -17,50 +17,48 @@
 
 package vartas.discord.bot.configuration.visitor;
 
-import de.se_rwth.commons.logging.Log;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import vartas.MonticoreEscapeUtils;
-import vartas.discord.bot.entities.BotGuild;
 import vartas.discord.bot.configuration._ast.*;
-import vartas.discord.bot.configuration._visitor.GuildVisitor;
+import vartas.discord.bot.entities.Configuration;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class BotGuildVisitor implements GuildVisitor {
-    protected BotGuild config;
+public class ConfigurationVisitor implements vartas.discord.bot.configuration._visitor.ConfigurationVisitor {
+    protected Configuration config;
     protected Guild guild;
     protected String log = this.getClass().getSimpleName();
 
-    public void accept(ASTConfigurationArtifact artifact, BotGuild config, Guild guild){
+    public void accept(ASTConfigurationArtifact artifact, Configuration config, Guild guild){
         this.config = config;
         this.guild = guild;
         artifact.accept(getRealThis());
     }
 
     public void handle(ASTPrefixEntry node){
-        config.set(MonticoreEscapeUtils.unescapeMonticore(node.getName()));
+        config.setPrefix(MonticoreEscapeUtils.unescapeMonticore(node.getName()));
     }
 
     public void handle(ASTBlacklistEntry node){
-        config.set(Pattern.compile(MonticoreEscapeUtils.unescapeMonticore(node.getName())));
+        config.setPattern(Pattern.compile(MonticoreEscapeUtils.unescapeMonticore(node.getName())));
     }
 
     public void handle(ASTRoleGroupEntry node){
         for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList()){
-            Log.debug(String.format("Loading role %s in group '%s'",element.getName(), node.getName()), log);
-            Optional<Role> roleOpt = Optional.ofNullable(guild.getRoleById(element.getName()));
-            roleOpt.ifPresentOrElse(role -> config.add(node.getName(), role), () -> Log.debug("Role couldn't be resolved", log));
+            String id = element.getElement().getDigits();
+            Optional<Role> roleOpt = Optional.ofNullable(guild.getRoleById(id));
+            roleOpt.ifPresent(role -> config.add(node.getName(), role));
         }
     }
 
     public void handle(ASTSubredditGroupEntry node){
         for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList()){
-            Log.debug(String.format("Loading channel %s in group '%s'",element.getName(), node.getName()), log);
-            Optional<TextChannel> channelOpt = Optional.ofNullable(guild.getTextChannelById(element.getName()));
-            channelOpt.ifPresentOrElse(channel -> config.add(node.getName(), channel), () -> Log.debug("Channel couldn't be resolved", log));
+            String id = element.getElement().getDigits();
+            Optional<TextChannel> channelOpt = Optional.ofNullable(guild.getTextChannelById(id));
+            channelOpt.ifPresent(channel -> config.add(node.getName(), channel));
         }
     }
 }

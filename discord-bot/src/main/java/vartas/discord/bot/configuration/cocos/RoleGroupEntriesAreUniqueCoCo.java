@@ -20,18 +20,18 @@ package vartas.discord.bot.configuration.cocos;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.bot.configuration._ast.ASTGuildArtifact;
+import vartas.discord.bot.configuration._ast.ASTConfigurationArtifact;
 import vartas.discord.bot.configuration._ast.ASTLongGroupElement;
 import vartas.discord.bot.configuration._ast.ASTRoleGroupEntry;
-import vartas.discord.bot.configuration._cocos.GuildASTGuildArtifactCoCo;
-import vartas.discord.bot.configuration._visitor.GuildVisitor;
+import vartas.discord.bot.configuration._cocos.ConfigurationASTConfigurationArtifactCoCo;
+import vartas.discord.bot.configuration._visitor.ConfigurationVisitor;
 
-public class RoleGroupEntriesAreUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
+public class RoleGroupEntriesAreUniqueCoCo implements ConfigurationASTConfigurationArtifactCoCo, ConfigurationVisitor {
     public static final String ERROR_MESSAGE = "The role with id '%s' appears in multiple groups.";
     Multiset<String> roles;
 
     @Override
-    public void check(ASTGuildArtifact node) {
+    public void check(ASTConfigurationArtifact node) {
         roles = HashMultiset.create();
 
         node.accept(getRealThis());
@@ -44,6 +44,6 @@ public class RoleGroupEntriesAreUniqueCoCo implements GuildASTGuildArtifactCoCo,
     @Override
     public void handle(ASTRoleGroupEntry node){
         for(ASTLongGroupElement element : node.getLongGroup().getLongGroupElementList())
-            roles.add(element.getName());
+            roles.add(element.getElement().getSource());
     }
 }

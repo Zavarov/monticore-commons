@@ -18,14 +18,13 @@
 package vartas.discord.bot.status.visitor;
 
 import vartas.MonticoreEscapeUtils;
-import vartas.discord.bot.entities.BotStatus;
+import vartas.discord.bot.entities.Status;
 import vartas.discord.bot.status._ast.ASTStatus;
 import vartas.discord.bot.status._ast.ASTStatusArtifact;
-import vartas.discord.bot.status._visitor.StatusVisitor;
 
-public class BotStatusVisitor implements StatusVisitor {
-    protected BotStatus status;
-    public BotStatus accept(ASTStatusArtifact artifact, BotStatus status){
+public class StatusVisitor implements vartas.discord.bot.status._visitor.StatusVisitor {
+    protected Status status;
+    public Status accept(ASTStatusArtifact artifact, Status status){
         this.status = status;
         artifact.accept(getRealThis());
         return status;

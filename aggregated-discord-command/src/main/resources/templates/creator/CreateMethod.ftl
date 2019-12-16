@@ -8,11 +8,11 @@ ${signature("command")}
 <#assign GeneratorHelper = "vartas.discord.aggregated.generator.CommandGeneratorHelper">
 <#assign List = "java.util.List">
 <#assign Collectors = "java.util.stream.Collectors">
-<#assign Communicator = "vartas.discord.bot.entities.DiscordCommunicator">
+<#assign Shard = "vartas.discord.bot.entities.Shard">
 <#assign Argument = "vartas.discord.argument._ast.ASTArgument">
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 
-    public static ${ClassName} create${ClassName} (${Message} context, ${List}<${Argument}> arguments, ${Communicator} communicator){
+    public static ${ClassName} create${ClassName} (${Message} context, ${List}<${Argument}> arguments, ${Shard} shard){
         ${includeArgs("creator.CheckArgument", Parameters)}
         ${ClassName} command = new ${ClassName}();
         //Set global arguments
@@ -20,7 +20,7 @@ ${signature("command")}
         command.initGuild(context.getGuild());
         command.initMember(context.getMember());
         command.initChannel(context.getTextChannel());
-        command.initConfig(communicator.guild(context.getGuild()));
+        command.initConfig(shard.guild(context.getGuild()));
         command.initSelfmember(context.getGuild().getSelfMember());
 <#else>
         command.initChannel(context.getChannel());
@@ -29,9 +29,7 @@ ${signature("command")}
         command.initSource(context);
         command.initAuthor(context.getAuthor());
         command.initSelfuser(context.getJDA().getSelfUser());
-        command.initCommunicator(communicator);
-        command.initRank(communicator.environment().rank());
-        command.initEnvironment(communicator.environment());
+        command.initShard(shard);
         //Set parameter
 <#list Parameters as Parameter>
     <#assign Index = Parameter?index>

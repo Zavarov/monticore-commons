@@ -6,10 +6,10 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
             UserWithRank*
         "}";
 
-    symbol scope UserWithRank =
+    scope UserWithRank =
         "user" ":" id:BasicLongLiteral "has" "rank" (RankName || ",")+ ;
 
-    symbol RankName = Rank;
+    symbol RankName = rankName:Rank;
 
     /*=========================================================*/
     /*=== Enum                                              ===*/
@@ -26,15 +26,10 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     /*=== AST Rules                                         ===*/
     /*=========================================================*/
 
-    //The reference file any changes are printed to.
-    astrule RankArtifact =
-        reference : java.nio.file.Path
-    ;
-
     //Use the enum name as a symbol name
     astrule RankName =
-        method public String getName(){
-            return getRank().name();
+        method public vartas.discord.bot.entities.Rank.Ranks getRank(){
+            return vartas.discord.bot.entities.Rank.Ranks.valueOf(getName());
         }
     ;
 
@@ -42,16 +37,6 @@ grammar Rank extends de.monticore.literals.MCCommonLiterals{
     astrule UserWithRank =
         method public String getName(){
             return getId().getDigits();
-        }
-    ;
-
-    /*=========================================================*/
-    /*=== Symbol Rules                                      ===*/
-    /*=========================================================*/
-
-    symbolrule RankName =
-        method public vartas.discord.bot.entities.BotRank.Type getRank(){
-            return vartas.discord.bot.entities.BotRank.Type.valueOf(getName());
         }
     ;
 }

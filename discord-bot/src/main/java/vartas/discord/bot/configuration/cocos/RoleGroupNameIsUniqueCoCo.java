@@ -20,17 +20,17 @@ package vartas.discord.bot.configuration.cocos;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import de.se_rwth.commons.logging.Log;
-import vartas.discord.bot.configuration._ast.ASTGuildArtifact;
+import vartas.discord.bot.configuration._ast.ASTConfigurationArtifact;
 import vartas.discord.bot.configuration._ast.ASTRoleGroupEntry;
-import vartas.discord.bot.configuration._cocos.GuildASTGuildArtifactCoCo;
-import vartas.discord.bot.configuration._visitor.GuildVisitor;
+import vartas.discord.bot.configuration._cocos.ConfigurationASTConfigurationArtifactCoCo;
+import vartas.discord.bot.configuration._visitor.ConfigurationVisitor;
 
-public class RoleGroupNameIsUniqueCoCo implements GuildASTGuildArtifactCoCo, GuildVisitor {
+public class RoleGroupNameIsUniqueCoCo implements ConfigurationASTConfigurationArtifactCoCo, ConfigurationVisitor {
     public static final String ERROR_MESSAGE = "The role group '%s' appears more than once.";
     Multiset<String> group;
 
     @Override
-    public void check(ASTGuildArtifact node) {
+    public void check(ASTConfigurationArtifact node) {
         group = HashMultiset.create();
 
         node.accept(getRealThis());

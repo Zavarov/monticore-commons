@@ -20,7 +20,7 @@ package vartas.discord.bot.status.visitor;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.entities.BotStatus;
+import vartas.discord.bot.entities.Status;
 import vartas.discord.bot.status.StatusHelper;
 import vartas.discord.bot.status._ast.ASTStatusArtifact;
 
@@ -30,22 +30,22 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotStatusVisitorTest extends AbstractTest {
-    private BotStatus config;
+public class StatusVisitorTest extends AbstractTest {
+    private Status status;
     private ASTStatusArtifact artifact;
     private List<String> valid = Arrays.asList("Status0","Status1","Status2","Status3","Status4");
 
     @Before
     public void setUp(){
-        config = new BotStatus();
+        status = new Status();
         artifact = StatusHelper.parse("src/test/resources/status.stt");
-        new BotStatusVisitor().accept(artifact, config);
+        new StatusVisitor().accept(artifact, status);
     }
 
     @Test
     public void getTest(){
         for(int i = 0 ; i < 20 ; ++i){
-            Optional<String> stringOpt = config.get();
+            Optional<String> stringOpt = status.get();
             assertThat(stringOpt).isPresent();
             assertThat(stringOpt.get()).isIn(valid);
         }

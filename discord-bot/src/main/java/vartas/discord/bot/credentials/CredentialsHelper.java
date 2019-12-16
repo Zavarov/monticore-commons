@@ -17,22 +17,16 @@
 
 package vartas.discord.bot.credentials;
 
-import vartas.discord.bot.credentials._ast.ASTConfigArtifact;
 import vartas.discord.bot.credentials._ast.ASTCredentialsArtifact;
-import vartas.discord.bot.credentials._parser.ConfigParser;
-import vartas.discord.bot.credentials._symboltable.ConfigArtifactScope;
-import vartas.discord.bot.credentials._symboltable.ConfigSymbolTableCreator;
-import vartas.discord.bot.credentials._symboltable.CredentialsSymbolTableCreator;
+import vartas.discord.bot.credentials._parser.CredentialsParser;
 import vartas.discord.bot.credentials.cocos.CredentialsCoCos;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Optional;
 
 public abstract class CredentialsHelper {
     public static ASTCredentialsArtifact parse(String filePath) throws IllegalArgumentException{
         ASTCredentialsArtifact ast = parseArtifact(filePath);
-        buildSymbolTable(ast);
         checkCoCos(ast);
         return ast;
     }
@@ -44,20 +38,14 @@ public abstract class CredentialsHelper {
 
     private static ASTCredentialsArtifact parseArtifact(String filePath){
         try{
-            ConfigParser parser = new ConfigParser();
-            Optional<ASTConfigArtifact> config = parser.parse(filePath);
-            if(!config.isPresent())
+            CredentialsParser parser = new CredentialsParser();
+            Optional<ASTCredentialsArtifact> config = parser.parse(filePath);
+            if(config.isEmpty())
                 throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
 
             return config.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
-    }
-
-    private static ConfigArtifactScope buildSymbolTable(ASTCredentialsArtifact ast){
-        CredentialsSymbolTableCreator symbolTableCreator = new CredentialsSymbolTableCreator(new LinkedList<>());
-
-        return symbolTableCreator.createFromAST(ast);
     }
 }

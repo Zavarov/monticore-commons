@@ -23,10 +23,10 @@ import vartas.discord.bot.AbstractTest;
 public class CredentialsHelperTest extends AbstractTest {
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactFileNotFound(){
-        ConfigHelper.parse("#");
+        CredentialsHelper.parse("#");
     }
     @Test(expected=IllegalArgumentException.class)
     public void testParseArtifactInvalidFile(){
-        ConfigHelper.parse("src/test/resources/junk.txt");
+        CredentialsHelper.parse("src/test/resources/junk.txt");
     }
 }

@@ -1,6 +1,6 @@
 ${signature("commands", "package")}
 package ${package};
-<#assign Communicator = "vartas.discord.bot.entities.DiscordCommunicator">
+<#assign Shard = "vartas.discord.bot.entities.Shard">
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
 <#assign Command = "vartas.discord.bot.Command">
 <#assign Call = "vartas.discord.call._ast.ASTCallArtifact">
@@ -22,7 +22,7 @@ public class MontiCoreCommandBuilder extends ${CommandBuilder}{
     protected ${Map}<String, ${BiFunction}<${Message}, ${List}<${Argument}>, ${Command}>> commands = new ${HashMap}<>();
     protected ${CallParser} parser = new ${CallParser}();
 
-    public MontiCoreCommandBuilder(${Communicator} communicator){
+    public MontiCoreCommandBuilder(${Shard} shard){
 <#list commands as artifact>
     <#list artifact.getCommandList() as command>
         ${includeArgs("builder.Command", command, artifact)}

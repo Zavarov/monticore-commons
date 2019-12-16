@@ -27,8 +27,8 @@ import de.se_rwth.commons.logging.Log;
 import org.apache.commons.io.FileUtils;
 import org.atteo.evo.inflector.English;
 import vartas.discord.aggregated.generator.*;
-import vartas.discord.bot.entities.DiscordCommunicator;
-import vartas.discord.bot.entities.DiscordEnvironment;
+import vartas.discord.bot.entities.Cluster;
+import vartas.discord.bot.entities.Shard;
 import vartas.discord.command.CommandHelper;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._cocos.CommandCoCoChecker;
@@ -64,8 +64,8 @@ public class Main {
         GLEX.defineGlobalVar("Helper", new CommandGeneratorHelper());
         GLEX.defineGlobalVar("English", new English());
         GLEX.defineGlobalVar("Ordinal", new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL));
-        GLEX.defineGlobalVar("Communicator", DiscordCommunicator.class.getCanonicalName());
-        GLEX.defineGlobalVar("Environment", DiscordEnvironment.class.getCanonicalName());
+        GLEX.defineGlobalVar("Shard", Shard.class.getCanonicalName());
+        GLEX.defineGlobalVar("Cluster", Cluster.class.getCanonicalName());
     }
 
     /**

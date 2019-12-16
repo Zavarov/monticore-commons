@@ -6,4 +6,4 @@ ${signature("command", "artifact")}
 <#assign className = Helper.getClassName(symbol)>
 <#assign parameters = Helper.getParameters(symbol)>
 <#assign size = parameters?size>
-        commands.put("${name}", (context, arguments) -> ${package}.MontiCoreCommandCreator.create${className}(context, arguments, communicator));
+        commands.put("${name}", (context, arguments) -> ${package}.MontiCoreCommandCreator.create${className}(context, arguments, shard));

@@ -17,64 +17,34 @@
 
 package vartas.discord.bot.configuration;
 
-import de.monticore.prettyprint.IndentPrinter;
 import vartas.discord.bot.configuration._ast.ASTConfigurationArtifact;
-import vartas.discord.bot.configuration._parser.GuildParser;
-import vartas.discord.bot.configuration._symboltable.GuildArtifactScope;
-import vartas.discord.bot.configuration._symboltable.GuildArtifactSymbol;
-import vartas.discord.bot.configuration._symboltable.GuildScope;
-import vartas.discord.bot.configuration._symboltable.GuildSymbolTableCreator;
-import vartas.discord.bot.configuration.cocos.GuildCoCos;
-import vartas.discord.bot.configuration.prettyprint.GuildSymbolPrettyPrinter;
+import vartas.discord.bot.configuration._parser.ConfigurationParser;
+import vartas.discord.bot.configuration.cocos.ConfigurationCoCos;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Optional;
 
-public abstract class GuildHelper {
-    public static void store(GuildArtifactSymbol symbol) throws IOException {
-        if(!symbol.getReference().getParent().toFile().exists())
-            Files.createDirectories(symbol.getReference().getParent());
-        if(!symbol.getReference().toFile().exists())
-            Files.createFile(symbol.getReference());
-        String content = new GuildSymbolPrettyPrinter(new IndentPrinter()).prettyPrint(symbol);
-        Files.write(symbol.getReference(), Collections.singletonList(content));
-    }
-
-    public static ASTConfigurationArtifact parse(String filePath, Path reference) throws IllegalArgumentException{
+public abstract class ConfigurationHelper {
+    public static ASTConfigurationArtifact parse(String filePath) throws IllegalArgumentException{
         ASTConfigurationArtifact ast = parseArtifact(filePath);
-
-        buildSymbolTable(new GuildScope(), ast);
-        setReference(ast, reference);
         checkCoCos(ast);
         return ast;
     }
 
     private static ASTConfigurationArtifact parseArtifact(String filePath){
         try{
-            GuildParser parser = new GuildParser();
-            Optional<ASTConfigurationArtifact> guild = parser.parse(filePath);
-            if(!guild.isPresent())
-                throw new IllegalArgumentException("The guild configuration file couldn't be parsed");
+            ConfigurationParser parser = new ConfigurationParser();
+            Optional<ASTConfigurationArtifact> Configuration = parser.parse(filePath);
+            if(Configuration.isEmpty())
+                throw new IllegalArgumentException("The Configuration configuration file couldn't be parsed");
 
-            return guild.get();
+            return Configuration.get();
         }catch(IOException e){
             throw new IllegalArgumentException(e);
         }
     }
 
     private static void checkCoCos(ASTConfigurationArtifact ast){
-        GuildCoCos.getCheckerForAllCoCos().checkAll(ast);
-    }
-
-    private static void setReference(ASTConfigurationArtifact ast, Path reference){
-        ast.getSymbol().setReference(reference);
-    }
-
-    private static GuildArtifactScope buildSymbolTable(GuildScope scope, ASTConfigurationArtifact ast){
-        GuildSymbolTableCreator symbolTableCreator = new GuildSymbolTableCreator(scope);
-        return symbolTableCreator.createFromAST(ast);
+        ConfigurationCoCos.getCheckerForAllCoCos().checkAll(ast);
     }
 }

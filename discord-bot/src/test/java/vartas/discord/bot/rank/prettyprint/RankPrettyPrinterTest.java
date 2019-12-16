@@ -20,34 +20,33 @@ package vartas.discord.bot.rank.prettyprint;
 import org.junit.Before;
 import org.junit.Test;
 import vartas.discord.bot.AbstractTest;
-import vartas.discord.bot.entities.BotRank;
-import vartas.discord.bot.rank.RankHelper;
-import vartas.discord.bot.rank._ast.ASTRankArtifact;
-import vartas.discord.bot.rank.visitor.BotRankVisitor;
+import vartas.discord.bot.entities.Rank;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotRankPrettyPrinterTest extends AbstractTest {
-    protected BotRank config;
-    protected ASTRankArtifact artifact;
-    protected BotRankPrettyPrinter printer;
-    protected Path path;
+public class RankPrettyPrinterTest extends AbstractTest {
+    Rank rank;
+    Path reference;
+    RankPrettyPrinter prettyPrinter;
 
     @Before
     public void setUp(){
-        path = Paths.get("src","test","resources","rank.perm");
-        config = new BotRank(null);
-        artifact = RankHelper.parse(path.toString(), null);
-        printer = new BotRankPrettyPrinter();
-        new BotRankVisitor().accept(artifact, config);
+        rank = new Rank();
+        rank.add(user1, Rank.Ranks.ROOT);
+        rank.add(user1, Rank.Ranks.REDDIT);
+        rank.add(user2, Rank.Ranks.DEVELOPER);
+        rank.add(user2, Rank.Ranks.REDDIT);
+
+        reference = Paths.get("src","test","resources","rank.perm");
+        prettyPrinter = new RankPrettyPrinter();
     }
 
     @Test
-    public void prettyPrintTest(){
-        String content = printer.prettyPrint(config);
-        assertThat(path).hasContent(content);
+    public void testPrettyPrint() {
+        String expected = prettyPrinter.prettyPrint(rank);
+        assertThat(reference).hasContent(expected);
     }
 }
