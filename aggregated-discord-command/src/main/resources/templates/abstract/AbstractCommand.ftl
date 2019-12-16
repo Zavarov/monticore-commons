@@ -9,6 +9,7 @@ ${signature("package")}
 <#assign TextChannel = "net.dv8tion.jda.api.entities.TextChannel">
 <#assign MessageChannel = "net.dv8tion.jda.api.entities.MessageChannel">
 <#assign User = "net.dv8tion.jda.api.entities.User">
+<#assign SelfUser = "net.dv8tion.jda.api.entities.SelfUser">
 <#assign Command = "vartas.discord.bot.Command">
 <#assign Config = "vartas.discord.bot.entities.Configuration">
 <#assign Logger = "org.slf4j.Logger">
@@ -20,7 +21,7 @@ public abstract class Abstract${ClassName} implements ${Command}{
     private ${Message} source;
     private ${Shard} shard;
     private ${User} author;
-    private ${User} selfuser;
+    private ${SelfUser} selfuser;
     private ${Jda} jda;
 
 <#if Helper.requiresGuild(symbol)>
@@ -51,10 +52,10 @@ public abstract class Abstract${ClassName} implements ${Command}{
 </#if>
     ${includeArgs("abstract.InitVariable",User, "author")}
     ${includeArgs("abstract.InitVariable",Message, "source")}
-    ${includeArgs("abstract.InitVariable",User, "selfuser")}
+    ${includeArgs("abstract.InitVariable",SelfUser, "selfuser")}
     ${includeArgs("abstract.InitVariable",Jda, "jda")}
     ${includeArgs("abstract.GetVariable",Jda, "jda")}
-    ${includeArgs("abstract.GetVariable",User, "selfuser")}
+    ${includeArgs("abstract.GetVariable",SelfUser, "selfuser")}
     ${includeArgs("abstract.GetVariable",User, "author")}
     ${includeArgs("abstract.GetVariable",Message, "source")}
     ${includeArgs("abstract.GetVariable",Shard, "shard")}
