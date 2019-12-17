@@ -42,11 +42,6 @@ public class CredentialsVisitorTest extends AbstractTest {
     }
 
     @Test
-    public void getDiscordShardsTest(){
-        assertThat(credentials.getDiscordShards()).isEqualTo(2);
-    }
-
-    @Test
     public void getInteractiveMessageLifetimeTest(){
         assertThat(credentials.getInteractiveMessageLifetime()).isEqualTo(10);
     }
