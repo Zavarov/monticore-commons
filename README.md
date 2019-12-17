@@ -39,7 +39,7 @@ This project will then serve as a core module for further projects.
 
 ## Dependencies:
 
-This project requires at least **Java 8**.  
+This project requires at least **Java 11**.  
 Due to an internal dependency of [MontiCore](https://github.com/MontiCore/monticore), we can't use a newer version of [Guava](https://github.com/google/guava) than **23.0**.
  * **Apache Commons Text**
    * Version: **1.8**
