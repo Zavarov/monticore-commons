@@ -36,5 +36,5 @@ public abstract class Abstract${ClassName} implements ${Command}, <#if Helper.re
         finalize();
     }
 
-    public abstract void finalize();
+    public abstract void uponCompletion();
 }
