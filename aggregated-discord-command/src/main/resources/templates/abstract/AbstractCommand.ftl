@@ -19,6 +19,7 @@ ${signature("package")}
 package ${package};
 
 public abstract class Abstract${ClassName} implements ${Command}, <#if Helper.requiresGuild(symbol)>${GuildCommandVisitor}<#else>${CommandVisitor}</#if>{
+    @Override
     public void accept(${Message} message, ${Shard} shard){
         //Check permissions
     <#if Helper.requiresGuild(symbol)>
