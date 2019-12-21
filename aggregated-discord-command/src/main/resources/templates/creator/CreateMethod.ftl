@@ -15,22 +15,7 @@ ${signature("command")}
     public static ${ClassName} create${ClassName} (${Message} context, ${List}<${Argument}> arguments, ${Shard} shard){
         ${includeArgs("creator.CheckArgument", Parameters)}
         ${ClassName} command = new ${ClassName}();
-        //Set global arguments
-<#if Helper.requiresGuild(Symbol)>
-        command.initGuild(context.getGuild());
-        command.initMember(context.getMember());
-        command.initChannel(context.getTextChannel());
-        command.initConfig(shard.guild(context.getGuild()));
-        command.initSelfmember(context.getGuild().getSelfMember());
-<#else>
-        command.initChannel(context.getChannel());
-</#if>
-        command.initJda(context.getJDA());
-        command.initSource(context);
-        command.initAuthor(context.getAuthor());
-        command.initSelfuser(context.getJDA().getSelfUser());
-        command.initShard(shard);
-        //Set parameter
+        //Set parameters
 <#list Parameters as Parameter>
     <#assign Index = Parameter?index>
     <#assign Class = Parameter.getAstNode().getParameter().name()?lower_case?replace("_"," ")?capitalize?replace(" ","")>

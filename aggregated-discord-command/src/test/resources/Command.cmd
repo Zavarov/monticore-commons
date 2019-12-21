@@ -69,7 +69,7 @@ command {
          parameter : s:String, e:String*
     }
 
-    empty @ Guild{
+    empty{
              class : "EmptyCommand"
     }
 }

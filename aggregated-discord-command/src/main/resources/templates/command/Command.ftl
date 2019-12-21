@@ -14,6 +14,6 @@ public <#if ExistsHandwrittenClass>abstract </#if>class ${ClassName}<#if ExistsH
 </#list>
 <#if !ExistsHandwrittenClass>
     @Override
-    public void run(){}
+    public void finalize(){}
 </#if>
 }
