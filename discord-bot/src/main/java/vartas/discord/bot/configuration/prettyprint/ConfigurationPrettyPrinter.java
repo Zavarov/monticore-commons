@@ -21,12 +21,11 @@ import de.monticore.prettyprint.IndentPrinter;
 import org.jetbrains.annotations.NotNull;
 import vartas.MonticoreEscapeUtils;
 import vartas.discord.bot.entities.Configuration;
-import vartas.discord.bot.visitor.ConfigurationVisitor;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-public class ConfigurationPrettyPrinter implements ConfigurationVisitor {
+public class ConfigurationPrettyPrinter implements Configuration.Visitor {
     protected IndentPrinter printer = new IndentPrinter();
 
     public ConfigurationPrettyPrinter(){

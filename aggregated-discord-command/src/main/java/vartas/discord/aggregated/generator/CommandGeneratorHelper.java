@@ -26,11 +26,10 @@ import net.dv8tion.jda.internal.utils.PermissionUtil;
 import vartas.chart.Interval;
 import vartas.discord.aggregated.argument.symboltable.*;
 import vartas.discord.argument._ast.ASTArgument;
+import vartas.discord.bot.entities.Cluster;
 import vartas.discord.bot.entities.Rank;
-import vartas.discord.bot.entities.Shard;
 import vartas.discord.bot.rank._ast.ASTRankName;
 import vartas.discord.bot.rank._symboltable.RankNameSymbol;
-import vartas.discord.bot.visitor.ShardVisitor;
 import vartas.discord.command._ast.ASTCommandArtifact;
 import vartas.discord.command._ast.ASTRestriction;
 import vartas.discord.command._symboltable.CommandSymbol;
@@ -185,17 +184,17 @@ public class CommandGeneratorHelper {
                 .getLocalParameterVariableSymbols();
     }
 
-    public static boolean checkRank(Shard shard , User user, Rank.Ranks rank){
+    public static boolean checkRank(Cluster cluster , User user, Rank.Ranks rank){
         AtomicBoolean valid = new AtomicBoolean(false);
 
-        ShardVisitor visitor = new ShardVisitor() {
+        Cluster.Visitor visitor = new Cluster.ClusterVisitor() {
             @Override
             public void handle(Rank _rank){
                 valid.set(_rank.resolve(user, rank));
             }
         };
 
-        shard.accept(visitor);
+        cluster.accept(visitor);
 
         return valid.get();
     }
