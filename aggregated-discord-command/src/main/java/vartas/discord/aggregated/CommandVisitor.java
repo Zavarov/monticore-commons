@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Zavarov
+ * Copyright (c) 2020 Zavarov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ public interface CommandVisitor extends CommandVisitorCore{
         traverse(author);
         endVisit(author);
     }
+
     default void visit(@Nonnull MessageChannel messageChannel){}
     default void traverse(@Nonnull MessageChannel messageChannel){}
     default void endVisit(@Nonnull MessageChannel messageChannel){}
@@ -40,6 +41,7 @@ public interface CommandVisitor extends CommandVisitorCore{
         traverse(messageChannel);
         endVisit(messageChannel);
     }
+
     @Override
     default void traverse(@Nonnull Message message){
         handle(message.getJDA());

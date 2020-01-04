@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Zavarov
+ * Copyright (c) 2020 Zavarov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ public interface GuildCommandVisitor extends CommandVisitorCore{
         traverse(author);
         endVisit(author);
     }
+
     default void visit(@Nonnull Guild guild){}
     default void traverse(@Nonnull Guild guild){}
     default void endVisit(@Nonnull Guild guild){}
@@ -42,6 +43,7 @@ public interface GuildCommandVisitor extends CommandVisitorCore{
         traverse(guild);
         endVisit(guild);
     }
+
     default void visit(@Nonnull TextChannel textChannel){}
     default void traverse(@Nonnull TextChannel textChannel){}
     default void endVisit(@Nonnull TextChannel textChannel){}
