@@ -1,5 +1,6 @@
 ${signature("package")}
 <#assign ClassName = ast.getSpannedScope().getLocalClassAttributeSymbols()?first.getName()>
+<#assign Cluster = "vartas.discord.bot.entities.Cluster">
 <#assign Shard = "vartas.discord.bot.entities.Shard">
 <#assign symbol = ast.getSymbol()>
 <#assign Message = "net.dv8tion.jda.api.entities.Message">
@@ -27,6 +28,14 @@ public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements 
     private ${Guild} guild;
 </#if>
     private ${Shard} shard;
+
+    public Abstract${ClassName}(){
+        setClusterVisitor(new ${Cluster}.ClusterVisitor());
+        setShardVisitor(new ${Cluster}.ShardVisitor());
+        setConfigurationVisitor(new ${Shard}.ConfigurationVisitor());
+        setShardVisitor(new ${Shard}.ShardVisitor());
+    }
+
     @Override
     public void accept(${Message} message, ${Shard} shard){
         this.shard = shard;
