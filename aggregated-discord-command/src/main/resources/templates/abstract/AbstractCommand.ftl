@@ -15,7 +15,7 @@ ${signature("package")}
 <#assign Configuration = "vartas.discord.bot.entities.Configuration">
 <#assign Logger = "org.slf4j.Logger">
 <#assign JDALogger = "net.dv8tion.jda.internal.utils.JDALogger">
-<#assign ClusterVisitor = "vartas.discord.bot.entities.Cluster.VisitorDelegator">
+<#assign ClusterVisitor = "vartas.discord.bot.entities.Cluster.Visitor">
 <#if Helper.requiresGuild(symbol)>
     <#assign CommandVisitor = "vartas.discord.aggregated.GuildCommandVisitor">
 <#else>
@@ -23,18 +23,11 @@ ${signature("package")}
 </#if>
 package ${package};
 
-public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements ${Command}, ${CommandVisitor}{
+public abstract class Abstract${ClassName} implements ${Command}, ${CommandVisitor}, ${ClusterVisitor}{
 <#if Helper.requiresGuild(symbol)>
     private ${Guild} guild;
 </#if>
     private ${Shard} shard;
-
-    public Abstract${ClassName}(){
-        setClusterVisitor(new ${Cluster}.ClusterVisitor());
-        setShardVisitor(new ${Cluster}.ShardVisitor());
-        setConfigurationVisitor(new ${Shard}.ConfigurationVisitor());
-        setShardVisitor(new ${Shard}.ShardVisitor());
-    }
 
     @Override
     public void accept(${Message} message, ${Shard} shard){
@@ -61,17 +54,17 @@ public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements 
     @Override
     public void visit(${Configuration} configuration){
         ${CommandVisitor}.super.visit(configuration);
-        super.visit(configuration);
+        ${ClusterVisitor}.super.visit(configuration);
     }
     @Override
     public void traverse(${Configuration} configuration){
         ${CommandVisitor}.super.traverse(configuration);
-        super.traverse(configuration);
+        ${ClusterVisitor}.super.traverse(configuration);
     }
     @Override
     public void endVisit(${Configuration} configuration){
         ${CommandVisitor}.super.endVisit(configuration);
-        super.endVisit(configuration);
+        ${ClusterVisitor}.super.endVisit(configuration);
     }
     //For Guild commands, only handle the guild-specific configuration
     @Override
@@ -79,7 +72,7 @@ public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements 
     <#if Helper.requiresGuild(symbol)>
         if(guild.getIdLong() == configuration.getGuildId()){
             ${CommandVisitor}.super.handle(configuration);
-            super.handle(configuration);
+            ${ClusterVisitor}.super.handle(configuration);
         }
     </#if>
     }
@@ -87,46 +80,46 @@ public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements 
     @Override
     public void visit(${Jda} jda){
         ${CommandVisitor}.super.visit(jda);
-        super.visit(jda);
+        ${ClusterVisitor}.super.visit(jda);
     }
     @Override
     public void traverse(${Jda} jda){
         ${CommandVisitor}.super.traverse(jda);
-        super.traverse(jda);
+        ${ClusterVisitor}.super.traverse(jda);
     }
     @Override
     public void endVisit(${Jda} jda){
         ${CommandVisitor}.super.endVisit(jda);
-        super.endVisit(jda);
+        ${ClusterVisitor}.super.endVisit(jda);
     }
     //The uniqueness of the JDA is guaranteed by the shard
     @Override
     public void handle(${Jda} jda){
         ${CommandVisitor}.super.handle(jda);
-        super.handle(jda);
+        ${ClusterVisitor}.super.handle(jda);
     }
     //Shard
     @Override
     public void visit(${Shard} shard){
         ${CommandVisitor}.super.visit(shard);
-        super.visit(shard);
+        ${ClusterVisitor}.super.visit(shard);
     }
     @Override
     public void traverse(${Shard} shard){
         ${CommandVisitor}.super.traverse(shard);
-        super.traverse(shard);
+        ${ClusterVisitor}.super.traverse(shard);
     }
     @Override
     public void endVisit(${Shard} shard){
         ${CommandVisitor}.super.endVisit(shard);
-        super.endVisit(shard);
+        ${ClusterVisitor}.super.endVisit(shard);
     }
     //Only handle the shard the command is in
     @Override
     public void handle(${Shard} shard){
         if(this.shard == shard){
             ${CommandVisitor}.super.handle(shard);
-            super.handle(shard);
+            ${ClusterVisitor}.super.handle(shard);
         }
     }
 }

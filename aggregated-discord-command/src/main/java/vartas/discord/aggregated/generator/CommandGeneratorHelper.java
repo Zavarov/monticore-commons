@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Zavarov
+ * Copyright (c) 2020 Zavarov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ public class CommandGeneratorHelper {
     public static boolean checkRank(Cluster cluster , User user, Rank.Ranks rank){
         AtomicBoolean valid = new AtomicBoolean(false);
 
-        Cluster.Visitor visitor = new Cluster.ClusterVisitor() {
+        Cluster.Visitor visitor = new Cluster.Visitor() {
             @Override
             public void handle(Rank _rank){
                 valid.set(_rank.resolve(user, rank));
