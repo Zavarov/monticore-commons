@@ -77,8 +77,10 @@ public abstract class Abstract${ClassName} extends ${ClusterVisitor} implements 
     @Override
     public void handle(${Configuration} configuration){
     <#if Helper.requiresGuild(symbol)>
-        if(guild.getIdLong() == configuration.getGuildId())
+        if(guild.getIdLong() == configuration.getGuildId()){
             ${CommandVisitor}.super.handle(configuration);
+            super.handle(configuration);
+        }
     </#if>
     }
     //JDA
