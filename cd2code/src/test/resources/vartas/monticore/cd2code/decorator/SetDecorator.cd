@@ -1,0 +1,7 @@
+package vartas.monticore.cd2code.decorator;
+
+classdiagram SetDecorator{
+    public class Set{
+        Set<Integer> set;
+    }
+}

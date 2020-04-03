@@ -1,0 +1,21 @@
+package vartas.monticore.cd2code;
+
+classdiagram FactoryCreator{
+    <<factory>>
+    class V extends W{
+        - List<V> list;
+        - Set<V> set;
+        - Optional<V> optional;
+        - Map<V,V> map;
+        - Cache<V,V> cache;
+        - V v;
+    }
+
+    class W extends X{
+        - int w;
+    }
+
+    class X{
+        - String x;
+    }
+}

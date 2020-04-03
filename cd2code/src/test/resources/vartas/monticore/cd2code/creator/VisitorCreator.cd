@@ -1,0 +1,13 @@
+package vartas.monticore.cd2code;
+
+classdiagram VisitorCreator{
+    class V{
+        List<V> list;
+        Set<V> set;
+        Optional<V> optional;
+        Map<V,V> map;
+        Cache<V,V> cache;
+        V v;
+        int i;
+    }
+}
