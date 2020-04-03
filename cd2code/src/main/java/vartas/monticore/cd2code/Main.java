@@ -25,6 +25,8 @@ import de.monticore.generating.templateengine.StringHookPoint;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.se_rwth.commons.Joiners;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
 import vartas.monticore.cd2code._symboltable.CD2CodeModelLoader;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Main {
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class.getSimpleName());
     private static final String JAVA_FILE_EXTENSION = "java";
     private static CD2CodeLanguage LANGUAGE = new CD2CodeLanguage();
     private static ModelPath MODEL_PATH;
@@ -45,19 +48,29 @@ public class Main {
         Path OUTPUT_PATH = Paths.get(args[2]);
         String CLASS_DIAGRAM = args[3];
 
+        LOG.info("Executing CD Generator.");
+        LOG.info("Template Path: {}", TEMPLATE_PATH);
+        LOG.info("Output Path: {}", OUTPUT_PATH);
+        LOG.info("Class Diagram: {}", CLASS_DIAGRAM);
+        LOG.info("Generating Symbol Table");
+
         //Load the symbol table
         MODEL_PATH = new ModelPath(Paths.get(args[0]));
         SCOPE = new CD2CodeGlobalScope(MODEL_PATH, LANGUAGE);
 
+        LOG.info("Parsing Class Diagram.");
         //Parse the class diagram
         ASTCDCompilationUnit cdCompilationUnit = parse(CLASS_DIAGRAM);
-        String importString = cdCompilationUnit.getMCImportStatementList().stream().map(ASTMCImportStatement::printType).reduce((u, v) -> u + "\n" + v).orElse("");
 
+        LOG.info("Initializing GLEX.");
         //Initialize the GLEX
         GlobalExtensionManagement GLEX = new GlobalExtensionManagement();
         GLEX.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, CoreTemplates.createPackageHookPoint(cdCompilationUnit.getPackageList()));
+
+        String importString = cdCompilationUnit.getMCImportStatementList().stream().map(ASTMCImportStatement::printType).reduce((u, v) -> u + "\n" + v).orElse("");
         GLEX.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(importString));
 
+        LOG.info("Initializing Generator.");
         //Initialize the generator
         GeneratorSetup GENERATOR_SETUP = new GeneratorSetup();
         GENERATOR_SETUP.setDefaultFileExtension(JAVA_FILE_EXTENSION);
@@ -66,6 +79,7 @@ public class Main {
         GENERATOR_SETUP.setTracing(false);
         GENERATOR_SETUP.setGlex(GLEX);
 
+        LOG.info("Executing Generator.");
         //Generate the source code
         CDGenerator.generate(GENERATOR_SETUP, cdCompilationUnit);
     }

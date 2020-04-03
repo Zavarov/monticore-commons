@@ -25,6 +25,8 @@ import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.StringHookPoint;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vartas.monticore.cd2code.creator.FactoryCreator;
 import vartas.monticore.cd2code.creator.VisitorCreator;
 import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
@@ -38,6 +40,8 @@ import java.util.List;
 
 @Nonnull
 public class CDGenerator {
+    @Nonnull
+    private final Logger log = LoggerFactory.getLogger(getClass().getSimpleName());
     @Nonnull
     protected final Path qualifiedPath;
     @Nonnull
@@ -86,15 +90,20 @@ public class CDGenerator {
         ASTCDDefinition cdDefinition = cdCompilationUnit.getCDDefinition();
         CDGenerator generator = new CDGenerator(generatorSetup, cdCompilationUnit);
 
+        generator.log.info("Generating Visitors.");
         // == Visitors ==
         generator.generateVisitor();
+        generator.log.info("Generating Factories.");
         // == Factories ==
         cdDefinition.streamCDClasss()
                 .filter(cdClass -> CDGeneratorHelper.hasStereoValue(cdClass, DecoratorHelper.FACTORY_STEREOVALUE))
                 .forEach(generator::generateFactory);
+        generator.log.info("Generating Interfaces.");
         // == Interfaces ==
         cdDefinition.forEachCDInterfaces(generator::generateInterface);
+        generator.log.info("Generating Enums.");
         // == Enums ==
+        generator.log.info("Generating Classes.");
         cdDefinition.forEachCDEnums(generator::generateEnum);
         // == Classes ==
     }
@@ -131,6 +140,7 @@ public class CDGenerator {
     }
 
     protected void generate(String template, Path outputDirectory, ASTCDType cdType){
+        log.info("Generating {}.",cdType.getName());
         Path outputPath = outputDirectory.resolve(cdType.getName() + "." + generatorSetup.getDefaultFileExtension());
         generatorEngine.generate(template, outputPath, cdType);
     }
