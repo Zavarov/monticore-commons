@@ -104,6 +104,13 @@
             <version>${cd4analysis.version}</version>
             <classifier>${grammars.classifier}</classifier>
             <scope>provided</scope>
+            <!-- Use slf4j-jdk14 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
