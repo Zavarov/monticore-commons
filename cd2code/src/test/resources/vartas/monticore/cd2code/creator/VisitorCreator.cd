@@ -1,4 +1,4 @@
-package vartas.monticore.cd2code;
+package vartas.monticore.cd2code.creator;
 
 classdiagram VisitorCreator{
     class V{
