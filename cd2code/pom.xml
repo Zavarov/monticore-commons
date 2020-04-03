@@ -89,6 +89,13 @@
             <groupId>de.monticore.lang</groupId>
             <artifactId>cd4analysis</artifactId>
             <version>${cd4analysis.version}</version>
+            <!-- Use slf4j-jdk14 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
