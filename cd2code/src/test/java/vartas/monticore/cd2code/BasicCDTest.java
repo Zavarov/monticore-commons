@@ -28,7 +28,6 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import de.se_rwth.commons.Joiners;
-import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
@@ -67,7 +66,7 @@ public abstract class BasicCDTest {
 
     @BeforeAll
     public static void setUpAll(){
-        Log.enableFailQuick(false);
+        //Log.enableFailQuick(false);
     }
 
     @BeforeEach
@@ -84,6 +83,7 @@ public abstract class BasicCDTest {
         GENERATOR_SETUP.setOutputDirectory(OUTPUT_PATH.toFile());
         GENERATOR_ENGINE = new GeneratorEngine(GENERATOR_SETUP);
     }
+
     protected ASTCDCompilationUnit parse(String... names){
         String qualifiedName = Joiners.DOT.join(names);
 

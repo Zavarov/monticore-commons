@@ -17,15 +17,30 @@
 
 package vartas.monticore.cd2code.decorator;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import vartas.monticore.cd2code.BasicCDTest;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractDecoratorTest extends BasicCDTest {
+    protected Path outputPath;
+    @AfterEach
+    public void tearDown() throws IOException {
+        if(outputPath != null && Files.exists(outputPath))
+            Files.delete(outputPath);
+    }
+
     @Test
     public void testGenerate(){
+        outputPath = QUALIFIED_PATH.resolve("decorator").resolve(cdClass.getName()+".java");
+
         cdGenerator.generateClass(cdClass);
-        assertThat(QUALIFIED_PATH.resolve("decorator").resolve(cdClass.getName()+".java")).exists();
+
+        assertThat(outputPath).exists();
     }
 }

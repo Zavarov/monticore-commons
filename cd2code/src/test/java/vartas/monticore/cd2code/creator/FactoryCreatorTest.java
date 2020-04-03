@@ -19,25 +19,39 @@ package vartas.monticore.cd2code.creator;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import vartas.monticore.cd2code.BasicCDTest;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FactoryCreatorTest extends BasicCDTest {
     private ASTCDClass cdFactoryClass;
+    private Path outputPath;
     @BeforeEach
     public void setUp(){
         super.setUp();
         parseCDClass("V","vartas","monticore", "cd2code","creator","FactoryCreator");
         cdFactoryClass = FactoryCreator.create(cdClass, GLEX);
+
+        outputPath = QUALIFIED_PATH.resolve("creator").resolve("factory").resolve(cdFactoryClass.getName()+".java");
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        if(Files.exists(outputPath))
+            Files.delete(outputPath);
     }
 
     @Test
     public void testGenerate(){
         cdGenerator.generateFactory(cdClass);
-        assertThat(QUALIFIED_PATH.resolve("creator").resolve("factory").resolve(cdFactoryClass.getName()+".java")).exists();
+        assertThat(outputPath).exists();
     }
 
     @Test

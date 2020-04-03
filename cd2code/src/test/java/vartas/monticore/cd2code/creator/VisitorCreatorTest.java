@@ -19,26 +19,40 @@ package vartas.monticore.cd2code.creator;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import vartas.monticore.cd2code.decorator.AbstractDecoratorTest;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VisitorCreatorTest extends AbstractDecoratorTest {
     private ASTCDInterface cdVisitorInterface;
+    private Path outputPath;
 
     @BeforeEach
     public void setUp(){
         super.setUp();
         parseCDClass("V","vartas","monticore", "cd2code","creator","VisitorCreator");
         cdVisitorInterface = VisitorCreator.create(cdDefinition, GLEX);
-    }
-    @Test
 
+        outputPath = QUALIFIED_PATH.resolve("creator").resolve("visitor").resolve(cdVisitorInterface.getName()+".java");
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        if(Files.exists(outputPath))
+            Files.delete(outputPath);
+    }
+
+    @Test
     public void testGenerate(){
         cdGenerator.generateVisitor();
-        assertThat(QUALIFIED_PATH.resolve("visitor").resolve(cdVisitorInterface.getName()+".java")).exists();
+        assertThat(outputPath).exists();
     }
 
     @Test
