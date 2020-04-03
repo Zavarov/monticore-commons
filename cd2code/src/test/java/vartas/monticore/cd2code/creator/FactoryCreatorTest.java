@@ -37,7 +37,7 @@ public class FactoryCreatorTest extends BasicCDTest {
     @Test
     public void testGenerate(){
         cdGenerator.generateFactory(cdClass);
-        assertThat(QUALIFIED_PATH.resolve("factory").resolve(cdFactoryClass.getName()+".java")).exists();
+        assertThat(QUALIFIED_PATH.resolve("creator").resolve("factory").resolve(cdFactoryClass.getName()+".java")).exists();
     }
 
     @Test
