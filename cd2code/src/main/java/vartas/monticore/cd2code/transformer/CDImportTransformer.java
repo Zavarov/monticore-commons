@@ -37,7 +37,7 @@ public class CDImportTransformer implements CD2CodeInheritanceVisitor {
         StringBuilder builder = new StringBuilder();
 
         for(ASTMCImportStatement mcImportStatement : ast.getMCImportStatementList())
-            builder.append(mcImportStatement.printType());
+            builder.append(mcImportStatement.printType()).append("\n");
 
         ASTMCImportStatement mcImportStatement;
         //Default package
