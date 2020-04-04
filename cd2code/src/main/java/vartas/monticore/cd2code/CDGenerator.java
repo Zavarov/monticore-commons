@@ -21,6 +21,7 @@ import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.io.paths.IterablePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vartas.monticore.cd2code.creator.FactoryCreator;
@@ -50,6 +51,8 @@ public class CDGenerator {
     protected final CDGeneratorHelper genHelper;
     @Nonnull
     protected final ASTCDCompilationUnit cdCompilationUnit;
+    @Nonnull
+    public static final Path SOURCES_DIRECTORY = Paths.get("src","main", "java");
 
 
     public CDGenerator
@@ -136,7 +139,13 @@ public class CDGenerator {
     }
 
     protected void generate(String template, Path outputDirectory, ASTCDType cdType){
+        IterablePath iterablePath = IterablePath.from(
+                SOURCES_DIRECTORY.resolve(outputDirectory).toFile(),
+                generatorSetup.getDefaultFileExtension()
+        );
+
         log.info("Applying transformers.");
+        CDHandwrittenClassTransformer.apply(iterablePath, cdType);
         CDInitializerTransformer.apply(cdType, glex);
         CDOptionalTransformer.apply(cdType, glex);
         CDAnnotatorTransformer.apply(cdType, glex);
