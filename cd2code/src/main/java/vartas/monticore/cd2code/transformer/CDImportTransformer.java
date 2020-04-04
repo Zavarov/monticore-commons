@@ -25,29 +25,42 @@ import vartas.monticore.cd2code.CDGeneratorHelper;
 import vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor;
 
 public class CDImportTransformer implements CD2CodeInheritanceVisitor {
-    private final GlobalExtensionManagement glex;
-    private final CDGeneratorHelper genHelper;
-
-    public CDImportTransformer(GlobalExtensionManagement glex, CDGeneratorHelper genHelper){
-        this.glex = glex;
-        this.genHelper = genHelper;
-    }
-
-    public static void apply(ASTCDCompilationUnit ast, GlobalExtensionManagement glex, CDGeneratorHelper genHelper){
-        StringBuilder builder = new StringBuilder();
-
+    private static void apply(ASTCDCompilationUnit ast, StringBuilder builder){
         for(ASTMCImportStatement mcImportStatement : ast.getMCImportStatementList())
             builder.append(mcImportStatement.printType()).append("\n");
+    }
 
-        ASTMCImportStatement mcImportStatement;
-        //Default package
-        mcImportStatement = genHelper.getPackageAsImport();
-        builder.append(mcImportStatement.printType()).append("\n");
-        //Factory
-        mcImportStatement = genHelper.getPackageAsImport(CDGeneratorHelper.FACTORY_PACKAGE);
-        builder.append(mcImportStatement.printType()).append("\n");
+    public static void applyDefaultPackage(ASTCDCompilationUnit ast, GlobalExtensionManagement glex, CDGeneratorHelper genHelper){
+        StringBuilder builder = new StringBuilder();
+
+        apply(ast, builder);
+
         //Visitor
-        mcImportStatement = genHelper.getPackageAsImport(CDGeneratorHelper.VISITOR_PACKAGE);
+        ASTMCImportStatement mcImportStatement = genHelper.getPackageAsImport(CDGeneratorHelper.VISITOR_PACKAGE);
+        builder.append(mcImportStatement.printType()).append("\n");
+
+        glex.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(builder.toString()));
+    }
+
+    public static void applyFactoryPackage(ASTCDCompilationUnit ast, GlobalExtensionManagement glex, CDGeneratorHelper genHelper){
+        StringBuilder builder = new StringBuilder();
+
+        apply(ast, builder);
+
+        //Default package
+        ASTMCImportStatement mcImportStatement = genHelper.getPackageAsImport();
+        builder.append(mcImportStatement.printType()).append("\n");
+
+        glex.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(builder.toString()));
+    }
+
+    public static void applyVisitorPackage(ASTCDCompilationUnit ast, GlobalExtensionManagement glex, CDGeneratorHelper genHelper){
+        StringBuilder builder = new StringBuilder();
+
+        apply(ast, builder);
+
+        //Default package
+        ASTMCImportStatement mcImportStatement = genHelper.getPackageAsImport();
         builder.append(mcImportStatement.printType()).append("\n");
 
         glex.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(builder.toString()));

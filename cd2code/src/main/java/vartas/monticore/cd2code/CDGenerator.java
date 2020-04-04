@@ -109,27 +109,37 @@ public class CDGenerator {
     }
 
     public void generateFactory(ASTCDClass cdClass){
+        CDImportTransformer.applyFactoryPackage(cdCompilationUnit, glex, genHelper);
+
         ASTCDClass cdFactoryClass = FactoryCreator.create(cdClass, glex);
         glex.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, cdFactoryClass, new StringHookPoint(genHelper.getPackage(CDGeneratorHelper.FACTORY_PACKAGE)));
         generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(CDGeneratorHelper.FACTORY_PACKAGE) , cdFactoryClass);
     }
 
     public void generateVisitor(){
+        CDImportTransformer.applyVisitorPackage(cdCompilationUnit, glex, genHelper);
+
         glex.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, cdVisitor, new StringHookPoint(genHelper.getPackage(CDGeneratorHelper.VISITOR_PACKAGE)));
         generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath(CDGeneratorHelper.VISITOR_PACKAGE) , cdVisitor);
     }
 
     public void generateInterface(ASTCDInterface cdInterface){
+        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
+
         glex.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, cdInterface, new StringHookPoint(genHelper.getPackage()));
         generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath() , cdInterface);
     }
 
     public void generateEnum(ASTCDEnum cdEnum){
+        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
+
         glex.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, cdEnum, new StringHookPoint(genHelper.getPackage()));
         generate(CDGeneratorHelper.ENUM_TEMPLATE, genHelper.getPackagePath() , cdEnum);
     }
 
     public void generateClass(ASTCDClass cdClass){
+        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
+
         ASTCDClass cdTransformedClass = transform(cdClass);
         glex.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, cdTransformedClass, new StringHookPoint(genHelper.getPackage()));
         generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(), cdTransformedClass);
@@ -137,7 +147,6 @@ public class CDGenerator {
 
     protected void generate(String template, Path outputDirectory, ASTCDType cdType){
         log.info("Applying transformers.");
-        CDImportTransformer.apply(cdCompilationUnit, glex, genHelper);
         CDAnnotatorTransformer.apply(cdType, glex);
         log.info("Generating {}.",cdType.getName());
         Path outputPath = outputDirectory.resolve(cdType.getName() + "." + generatorSetup.getDefaultFileExtension());
