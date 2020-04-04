@@ -19,6 +19,7 @@ package vartas.monticore.cd2code.creator;
 
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
+import de.monticore.cd.facade.CDModifier;
 import de.monticore.codegen.cd2java.AbstractCreator;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
@@ -60,6 +61,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
     public ASTCDInterface decorate(ASTCDDefinition cdDefinition) {
         ASTCDInterface cdInterface = CD4AnalysisMill.cDInterfaceBuilder()
                 .setName(cdDefinition.getName()+"Visitor")
+                .setModifier(CDModifier.PUBLIC.build())
                 .build();
 
         cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
