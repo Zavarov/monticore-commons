@@ -82,31 +82,33 @@ public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implemen
         }
 
         @Override
-        public void visit(ASTMCListType ast){
-            cdClass.addAllCDMethods(new CollectionDecorator(glex).decorate(cdAttribute));
+        public void handle(ASTMCListType ast){
             cdClass.addAllCDMethods(new ListDecorator(glex).decorate(cdAttribute));
-        }
-
-        @Override
-        public void visit(ASTMCSetType ast){
             cdClass.addAllCDMethods(new CollectionDecorator(glex).decorate(cdAttribute));
+            cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
-        public void visit(ASTMCMapType ast){
+        public void handle(ASTMCSetType ast){
+            cdClass.addAllCDMethods(new CollectionDecorator(glex).decorate(cdAttribute));
+            cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(cdAttribute));
+        }
+
+        @Override
+        public void handle(ASTMCMapType ast){
             cdClass.addAllCDMethods(new MapDecorator(glex).decorate(cdAttribute));
+            cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
         public void handle(ASTMCOptionalType ast){
-            //Handle instead of visit, to ignore the core getter and setter
             cdClass.addAllCDMethods(new OptionalDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
         public void handle(ASTMCCacheType ast){
-            //Handle instead of visit, since Cache extends Map
             cdClass.addAllCDMethods(new CacheDecorator(glex).decorate(cdAttribute));
+            cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
