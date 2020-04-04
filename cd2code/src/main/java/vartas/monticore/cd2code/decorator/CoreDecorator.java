@@ -53,7 +53,7 @@ public class CoreDecorator extends AbstractMethodDecorator<ASTCDAttribute>{
         LinkedHashMap<String, String> signatures = new LinkedHashMap<>();
 
         //Type
-        String typeName = cdAttribute.printType();
+        String typeName = DecoratorHelper.prettyprint(cdAttribute.getMCType());
 
         //T get()
         signatures.put(CORE_GET, String.format

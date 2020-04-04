@@ -18,11 +18,11 @@
 package vartas.monticore.cd2code.transformer;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
-import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDStereotype;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.cd.cd4analysis._ast.ASTModifier;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import de.monticore.generating.templateengine.StringHookPoint;
+import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.monticore.types.MCTypeFacade;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
@@ -32,8 +32,6 @@ import vartas.monticore.cd2code.DecoratorHelper;
 import vartas.monticore.cd2code._ast.CD2CodeMill;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
 
-import javax.annotation.Nullable;
-
 public class CDOptionalTransformer implements CD2CodeVisitor {
     private final GlobalExtensionManagement glex;
     private final ASTCDAttribute cdAttribute;
@@ -42,8 +40,8 @@ public class CDOptionalTransformer implements CD2CodeVisitor {
         this.cdAttribute = cdAttribute;
     }
 
-    public static void apply(ASTCDClass cdClass, GlobalExtensionManagement glex){
-        cdClass.forEachCDAttributes(cdAttribute -> apply(cdAttribute, glex));
+    public static void apply(ASTCDType cdType, GlobalExtensionManagement glex){
+        cdType.getCDAttributeList().forEach(cdAttribute -> apply(cdAttribute, glex));
     }
 
     public static void apply(ASTCDAttribute cdAttribute, GlobalExtensionManagement glex){
@@ -56,7 +54,7 @@ public class CDOptionalTransformer implements CD2CodeVisitor {
         glex.replaceTemplate(
                 CDGeneratorHelper.ANNOTATION_TEMPLATE,
                 cdAttribute,
-                new StringHookPoint("@"+ Nullable.class.getName() +"\n")
+                new TemplateHookPoint(CDGeneratorHelper.NULLABLE_TEMPLATE)
         );
 
         //Optional<?> -> Object, otherwise Optional<X> -> X

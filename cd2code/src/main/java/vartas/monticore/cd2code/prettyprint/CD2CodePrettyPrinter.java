@@ -19,11 +19,16 @@ package vartas.monticore.cd2code.prettyprint;
 
 import de.monticore.MCCommonLiteralsPrettyPrinter;
 import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
+import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
+import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
+import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.prettyprint.CDPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
-import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
+import de.monticore.types.mccollectiontypes._ast.ASTMCCollectionTypesNode;
+import de.monticore.types.mcfullgenerictypes._ast.ASTMCFullGenericTypesNode;
+import de.monticore.types.mcsimplegenerictypes._ast.ASTMCSimpleGenericTypesNode;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCCollectionTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
@@ -31,7 +36,9 @@ import de.monticore.types.prettyprint.MCSimpleGenericTypesPrettyPrinter;
 import vartas.monticore.cd2code._ast.ASTCD2CodeNode;
 import vartas.monticore.cd2code._visitor.CD2CodeDelegatorVisitor;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
+import vartas.monticore.cd2code.types.cd2codebasictypes._ast.ASTCD2CodeBasicTypesNode;
 import vartas.monticore.cd2code.types.cd2codebasictypes.prettyprint.CD2CodeBasicTypesPrettyPrinter;
+import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTCD2CodeCollectionTypesNode;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes.prettyprint.CD2CodeCollectionPrettyPrinter;
 
 public class CD2CodePrettyPrinter extends CD2CodeDelegatorVisitor {
@@ -55,7 +62,37 @@ public class CD2CodePrettyPrinter extends CD2CodeDelegatorVisitor {
         this.setMCFullGenericTypesVisitor(new MCFullGenericTypesPrettyPrinter(printer));
     }
 
-    public String prettyprint(ASTCD4AnalysisNode ast){
+    public String printType(ASTCDParameter ast){
+        return prettyprint(ast.getMCType());
+    }
+
+    public String printType(ASTCDAttribute ast){
+        return prettyprint(ast.getMCType());
+    }
+
+    public String printReturnType(ASTCDMethod ast){
+        return prettyprint(ast.getMCReturnType());
+    }
+
+    public String prettyprint(ASTMCBasicTypesNode ast){
+        printer.clearBuffer();
+        ast.accept(this);
+        return printer.getContent();
+    }
+
+    public String prettyprint(ASTMCCollectionTypesNode ast){
+        printer.clearBuffer();
+        ast.accept(this);
+        return printer.getContent();
+    }
+
+    public String prettyprint(ASTMCSimpleGenericTypesNode ast){
+        printer.clearBuffer();
+        ast.accept(this);
+        return printer.getContent();
+    }
+
+    public String prettyprint(ASTMCFullGenericTypesNode ast){
         printer.clearBuffer();
         ast.accept(this);
         return printer.getContent();
@@ -67,13 +104,19 @@ public class CD2CodePrettyPrinter extends CD2CodeDelegatorVisitor {
         return printer.getContent();
     }
 
-    public String prettyprint(ASTMCBasicTypesNode ast){
+    public String prettyprint(ASTCD2CodeBasicTypesNode ast){
         printer.clearBuffer();
         ast.accept(this);
         return printer.getContent();
     }
 
-    public String prettyprint(ASTMCTypeArgument ast){
+    public String prettyprint(ASTCD2CodeCollectionTypesNode ast){
+        printer.clearBuffer();
+        ast.accept(this);
+        return printer.getContent();
+    }
+
+    public String prettyprint(ASTCD4AnalysisNode ast){
         printer.clearBuffer();
         ast.accept(this);
         return printer.getContent();

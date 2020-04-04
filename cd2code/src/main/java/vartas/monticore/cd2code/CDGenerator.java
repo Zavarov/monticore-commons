@@ -100,10 +100,6 @@ public class CDGenerator {
                 .forEach(generator::generateClass);
     }
 
-    public ASTCDClass transform(ASTCDClass cdClass){
-        return CDClassTransformers.transform(cdClass, cdVisitor, glex);
-    }
-
     public void generateFactory(ASTCDClass cdClass){
         CDImportTransformer.applyFactoryPackage(cdCompilationUnit, glex, genHelper);
         CDPackageTransformer.applyFactoryPackage(cdCompilationUnit, glex, genHelper);
@@ -142,7 +138,10 @@ public class CDGenerator {
 
     protected void generate(String template, Path outputDirectory, ASTCDType cdType){
         log.info("Applying transformers.");
+        CDInitializerTransformer.apply(cdType, glex);
+        CDOptionalTransformer.apply(cdType, glex);
         CDAnnotatorTransformer.apply(cdType, glex);
+
         log.info("Generating {}.",cdType.getName());
         Path outputPath = outputDirectory.resolve(cdType.getName() + "." + generatorSetup.getDefaultFileExtension());
         generatorEngine.generate(template, outputPath, cdType);

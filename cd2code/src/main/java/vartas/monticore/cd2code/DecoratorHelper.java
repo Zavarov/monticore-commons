@@ -18,9 +18,12 @@
 package vartas.monticore.cd2code;
 
 import com.google.common.base.Preconditions;
+import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDField;
 import de.monticore.cd.cd4analysis._ast.ASTCDStereoValue;
+import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
+import de.monticore.types.mccollectiontypes._ast.ASTMCCollectionTypesNode;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +42,7 @@ public class DecoratorHelper {
     public static final ASTCDStereoValue NONNULL_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("Nonnull").build();
     public static final ASTCDStereoValue CACHED_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("cached").build();
     public static final ASTCDStereoValue FACTORY_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("factory").build();
+    private static CD2CodePrettyPrinter PRINTER = new CD2CodePrettyPrinter();
 
     public static ASTMCTypeArgument getMCTypeArgument(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
         return ArgumentTypeVisitor.getGenericTypeArgumentOf(cdAttribute, genericTypeIndex);
@@ -46,9 +50,24 @@ public class DecoratorHelper {
 
     public static String getMCTypeArgumentName(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
         ASTMCTypeArgument mcTypeArgument = getMCTypeArgument(cdAttribute, genericTypeIndex);
-        CD2CodePrettyPrinter printer = new CD2CodePrettyPrinter();
 
-        return printer.prettyprint(mcTypeArgument);
+        return prettyprint(mcTypeArgument);
+    }
+
+    public static void setPrinter(CD2CodePrettyPrinter printer){
+        PRINTER = printer;
+    }
+
+    public static String prettyprint(ASTMCCollectionTypesNode ast){
+        return PRINTER.prettyprint(ast);
+    }
+
+    public static String prettyprint(ASTMCBasicTypesNode ast){
+        return PRINTER.prettyprint(ast);
+    }
+
+    public static String prettyprint(ASTCD4AnalysisNode ast){
+        return PRINTER.prettyprint(ast);
     }
 
 

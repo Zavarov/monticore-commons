@@ -34,6 +34,7 @@ import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
 import vartas.monticore.cd2code._symboltable.CD2CodeModelLoader;
 import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
+import vartas.monticore.cd2code.transformer.CDClassTransformer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -110,7 +111,7 @@ public abstract class BasicCDTest {
         GLEX.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(importString));
 
         cdClass = cdDefinition.getCDClassList().stream().filter(cdClazz -> cdClazz.getName().equals(className)).findAny().orElseThrow();
-        cdDecoratedClass = cdGenerator.transform(cdClass);
+        cdDecoratedClass = CDClassTransformer.apply(cdClass, cdGenerator.glex, cdGenerator.cdVisitor);
     }
 
     protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){

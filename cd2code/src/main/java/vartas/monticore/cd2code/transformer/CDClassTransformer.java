@@ -22,10 +22,12 @@ import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
 import de.monticore.codegen.cd2java.AbstractTransformer;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCListType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCMapType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
+import vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
 import vartas.monticore.cd2code.decorator.*;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType;
@@ -48,13 +50,13 @@ public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implemen
     }
 
     @Override
-    public ASTCDClass decorate(ASTCDClass originalClass, ASTCDClass transformedClass) {
-        originalClass.accept(new CDClassVisitor(transformedClass));
+    public ASTCDClass decorate(ASTCDClass originalClass, ASTCDClass decoratedClass) {
+        originalClass.accept(new CDClassVisitor(decoratedClass));
 
         for(ASTCDAttribute cdAttribute : originalClass.getCDAttributeList())
-            cdAttribute.accept(new CDAttributeVisitor(cdAttribute, transformedClass));
+            cdAttribute.accept(new CDAttributeVisitor(cdAttribute, decoratedClass));
 
-        return transformedClass;
+        return decoratedClass;
     }
 
     private class CDClassVisitor implements CD2CodeVisitor {
@@ -68,18 +70,9 @@ public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implemen
         public void visit(ASTCDClass ast){
             cdClass.addAllCDMethods(new VisitorDecorator(glex).decorate(cdVisitor));
         }
-
-        @Override
-        public void visit(ASTCDAttribute ast){
-            //We store the reference type of optionals, so conventional methods won't work
-            //if(!MCCollectionTypesHelper.isOptional(ast.getMCType()))
-            //    cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(ast));
-        }
-
-
     }
 
-    private class CDAttributeVisitor implements CD2CodeVisitor {
+    private class CDAttributeVisitor implements CD2CodeInheritanceVisitor {
         private final ASTCDAttribute cdAttribute;
         private final ASTCDClass cdClass;
 
@@ -89,29 +82,36 @@ public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implemen
         }
 
         @Override
-        public void handle(ASTMCListType ast){
+        public void visit(ASTMCListType ast){
             cdClass.addAllCDMethods(new CollectionDecorator(glex).decorate(cdAttribute));
             cdClass.addAllCDMethods(new ListDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
-        public void handle(ASTMCSetType ast){
+        public void visit(ASTMCSetType ast){
             cdClass.addAllCDMethods(new CollectionDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
-        public void handle(ASTMCMapType ast){
+        public void visit(ASTMCMapType ast){
             cdClass.addAllCDMethods(new MapDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
         public void handle(ASTMCOptionalType ast){
+            //Handle instead of visit, to ignore the core getter and setter
             cdClass.addAllCDMethods(new OptionalDecorator(glex).decorate(cdAttribute));
         }
 
         @Override
-        public void visit(ASTMCCacheType ast){
+        public void handle(ASTMCCacheType ast){
+            //Handle instead of visit, since Cache extends Map
             cdClass.addAllCDMethods(new CacheDecorator(glex).decorate(cdAttribute));
+        }
+
+        @Override
+        public void visit(ASTMCType ast){
+            cdClass.addAllCDMethods(new CoreDecorator(glex).decorate(cdAttribute));
         }
     }
 }

@@ -1,7 +1,8 @@
 <#assign hasModifier = ast.printModifier()?has_content>
+<#assign cdPrinter = getGlobalVar("cdPrinter")>
 ${include("hook.Annotation")}<#t>
 <#-- Method signature -->
-<#if hasModifier>${ast.printModifier()} </#if>${ast.printReturnType()} ${ast.getName()}<#t>
+<#if hasModifier>${ast.printModifier()} </#if>${cdPrinter.printReturnType(ast)} ${ast.getName()}<#t>
     (<#t>
         <#-- Parameters -->
         <#list ast.getCDParameterList() as cdParameter>

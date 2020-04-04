@@ -32,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import vartas.monticore.cd2code.CDGeneratorHelper;
 import vartas.monticore.cd2code.DecoratorHelper;
 import vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor;
-import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType;
 
 import javax.annotation.Nonnull;
@@ -138,7 +137,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         }
 
         private boolean isPresent(){
-            String mcElementTypeName = new CD2CodePrettyPrinter().prettyprint(cdAttribute.getMCType());
+            String mcElementTypeName = DecoratorHelper.prettyprint(cdAttribute.getMCType());
             return cdDefinitionSymbol.getType(mcElementTypeName).isPresent();
         }
 

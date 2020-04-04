@@ -18,7 +18,7 @@
 package vartas.monticore.cd2code.transformer;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
-import de.monticore.cd.cd4analysis._ast.ASTCDClass;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.StringHookPoint;
 import de.monticore.types.mccollectiontypes._ast.ASTMCListType;
@@ -37,8 +37,8 @@ public class CDInitializerTransformer implements CD2CodeVisitor {
         this.cdAttribute = cdAttribute;
     }
 
-    public static void apply(ASTCDClass cdClass, GlobalExtensionManagement glex){
-        cdClass.forEachCDAttributes(cdAttribute -> apply(cdAttribute, glex));
+    public static void apply(ASTCDType cdType, GlobalExtensionManagement glex){
+        cdType.getCDAttributeList().forEach(cdAttribute -> apply(cdAttribute, glex));
     }
 
     public static void apply(ASTCDAttribute cdAttribute, GlobalExtensionManagement glex){

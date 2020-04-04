@@ -11,7 +11,7 @@ import com.google.common.cache.*;
 import com.google.common.collect.*;
 
 ${include("hook.Annotation")}
-${ast.printModifier()?trim} class ${ast.getName()} <#t>
+${ast.printModifier()} class ${ast.getName()} <#t>
 <#if ast.isPresentSuperclass()> extends ${ast.printSuperClass()}</#if> <#t>
 <#if ast.isPresentTImplements()> implements ${ast.printInterfaces()}</#if> {
 <#t>
