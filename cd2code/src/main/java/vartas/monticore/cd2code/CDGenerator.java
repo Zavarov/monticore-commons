@@ -95,9 +95,7 @@ public class CDGenerator {
         cdDefinition.forEachCDEnums(generator::generateEnum);
         // == Classes ==
         generator.log.info("Generating Classes.");
-        cdDefinition.streamCDClasss()
-                .map(cdClass -> CDClassTransformer.apply(cdClass, generator.glex, generator.cdVisitor))
-                .forEach(generator::generateClass);
+        cdDefinition.streamCDClasss().forEach(generator::generateClass);
     }
 
     public void generateFactory(ASTCDClass cdClass){
@@ -118,22 +116,23 @@ public class CDGenerator {
     public void generateInterface(ASTCDInterface cdInterface){
         CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
         CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-
-        generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath() , cdInterface);
+        generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath(), cdInterface);
     }
 
     public void generateEnum(ASTCDEnum cdEnum){
+        ASTCDType cdType = CDTypeTransformer.apply(cdEnum, glex, cdVisitor);
+
         CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
         CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-
-        generate(CDGeneratorHelper.ENUM_TEMPLATE, genHelper.getPackagePath() , cdEnum);
+        generate(CDGeneratorHelper.ENUM_TEMPLATE, genHelper.getPackagePath(), cdType);
     }
 
     public void generateClass(ASTCDClass cdClass){
+        ASTCDType cdType = CDTypeTransformer.apply(cdClass, glex, cdVisitor);
+
         CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
         CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-
-        generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(), cdClass);
+        generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(), cdType);
     }
 
     protected void generate(String template, Path outputDirectory, ASTCDType cdType){

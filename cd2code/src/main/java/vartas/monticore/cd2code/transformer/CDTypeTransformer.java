@@ -17,9 +17,7 @@
 
 package vartas.monticore.cd2code.transformer;
 
-import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
-import de.monticore.cd.cd4analysis._ast.ASTCDClass;
-import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
+import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.codegen.cd2java.AbstractTransformer;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -34,41 +32,47 @@ import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType
 
 import javax.annotation.Nonnull;
 
-public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implements CD2CodeVisitor{
+public class CDTypeTransformer extends AbstractTransformer<ASTCDType> {
     private final ASTCDInterface cdVisitor;
-    public CDClassTransformer(@Nonnull GlobalExtensionManagement glex, @Nonnull ASTCDInterface cdVisitor){
+
+    public CDTypeTransformer(@Nonnull GlobalExtensionManagement glex, @Nonnull ASTCDInterface cdVisitor){
         super(glex);
         this.cdVisitor = cdVisitor;
     }
 
-    public static ASTCDClass apply(ASTCDClass cdClass, GlobalExtensionManagement glex, ASTCDInterface cdVisitor){
-        CDClassTransformer visitor = new CDClassTransformer(glex, cdVisitor);
+    public static ASTCDType apply(ASTCDType originalType, GlobalExtensionManagement glex, ASTCDInterface cdVisitor){
+        CDTypeTransformer visitor = new CDTypeTransformer(glex, cdVisitor);
 
-        ASTCDClass transformedClass = cdClass.deepClone();
-        CDClassTransformer transformer = new CDClassTransformer(glex, cdVisitor);
-        return visitor.decorate(cdClass, transformedClass);
+        ASTCDType decoratedType = originalType.deepClone();
+        return visitor.decorate(originalType, decoratedType);
     }
 
     @Override
-    public ASTCDClass decorate(ASTCDClass originalClass, ASTCDClass decoratedClass) {
-        originalClass.accept(new CDClassVisitor(decoratedClass));
-
-        for(ASTCDAttribute cdAttribute : originalClass.getCDAttributeList())
-            cdAttribute.accept(new CDAttributeVisitor(cdAttribute, decoratedClass));
-
-        return decoratedClass;
+    public ASTCDType decorate(ASTCDType originalType, ASTCDType decoratedType) {
+        decoratedType.accept(new CDTypeVisitor(originalType));
+        return decoratedType;
     }
 
-    private class CDClassVisitor implements CD2CodeVisitor {
-        private final ASTCDClass cdClass;
+    private class CDTypeVisitor implements CD2CodeVisitor {
+        private final ASTCDType originalType;
 
-        private CDClassVisitor(ASTCDClass cdClass){
-            this.cdClass = cdClass;
+        public CDTypeVisitor(ASTCDType originalType){
+            this.originalType = originalType;
         }
 
         @Override
         public void visit(ASTCDClass ast){
-            cdClass.addAllCDMethods(new VisitorDecorator(glex).decorate(cdVisitor));
+            //Visitor
+            ast.addAllCDMethods(new VisitorDecorator(glex).decorate(cdVisitor));
+            //Decorator for attributes
+            for(ASTCDAttribute cdAttribute : originalType.getCDAttributeList())
+                cdAttribute.accept(new CDAttributeVisitor(cdAttribute, ast));
+        }
+
+        @Override
+        public void visit(ASTCDEnum ast){
+            //Visitor
+            ast.addAllCDMethods(new VisitorDecorator(glex).decorate(cdVisitor));
         }
     }
 

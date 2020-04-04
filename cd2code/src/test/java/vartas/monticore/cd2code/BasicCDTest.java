@@ -18,14 +18,11 @@
 package vartas.monticore.cd2code;
 
 import de.monticore.cd.cd4analysis._ast.*;
-import de.monticore.codegen.cd2java.CoreTemplates;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import de.monticore.generating.templateengine.StringHookPoint;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import de.se_rwth.commons.Joiners;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +31,7 @@ import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
 import vartas.monticore.cd2code._symboltable.CD2CodeModelLoader;
 import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
-import vartas.monticore.cd2code.transformer.CDClassTransformer;
+import vartas.monticore.cd2code.transformer.CDTypeTransformer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,7 +55,7 @@ public abstract class BasicCDTest {
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;
     public ASTCDClass cdClass;
-    public ASTCDClass cdDecoratedClass;
+    public ASTCDType cdDecoratedType;
     public CDGenerator cdGenerator;
 
     public GlobalExtensionManagement GLEX;
@@ -105,13 +102,8 @@ public abstract class BasicCDTest {
         cdDefinition = cdCompilationUnit.getCDDefinition();
         cdGenerator = new CDGenerator(GENERATOR_SETUP ,cdCompilationUnit);
 
-        String importString = cdCompilationUnit.getMCImportStatementList().stream().map(ASTMCImportStatement::printType).reduce((u, v) -> u + "\n" + v).orElse("");
-
-        GLEX.replaceTemplate(CDGeneratorHelper.PACKAGE_TEMPLATE, CoreTemplates.createPackageHookPoint(cdCompilationUnit.getPackageList()));
-        GLEX.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(importString));
-
         cdClass = cdDefinition.getCDClassList().stream().filter(cdClazz -> cdClazz.getName().equals(className)).findAny().orElseThrow();
-        cdDecoratedClass = CDClassTransformer.apply(cdClass, cdGenerator.glex, cdGenerator.cdVisitor);
+        cdDecoratedType = CDTypeTransformer.apply(cdClass, cdGenerator.glex, cdGenerator.cdVisitor);
     }
 
     protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){

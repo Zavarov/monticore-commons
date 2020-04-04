@@ -64,56 +64,57 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 .build();
 
         cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
+        cdDefinition.streamCDEnums().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
 
         return cdInterface;
     }
 
-    protected List<ASTCDMethod> createMethods(ASTCDClass cdClass){
+    protected List<ASTCDMethod> createMethods(ASTCDType cdType){
         return Arrays.asList(
-                createHandle(cdClass),
-                createVisit(cdClass),
-                createTraverse(cdClass),
-                createEndVisit(cdClass)
+                createHandle(cdType),
+                createVisit(cdType),
+                createTraverse(cdType),
+                createEndVisit(cdType)
         );
     }
 
-    protected ASTCDMethod createVisit(ASTCDClass cdClass){
-        String className = cdClass.getName();
-        String varName = StringUtils.uncapitalize(className);
-        String signature = String.format(VISIT, className, varName);
+    protected ASTCDMethod createVisit(ASTCDType cdType){
+        String typeName = cdType.getName();
+        String varName = StringUtils.uncapitalize(typeName);
+        String signature = String.format(VISIT, typeName, varName);
 
         ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
-        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.Visit", cdClass));
+        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.Visit", cdType));
         return cdMethod;
     }
 
-    protected ASTCDMethod createEndVisit(ASTCDClass cdClass){
-        String className = cdClass.getName();
-        String varName = StringUtils.uncapitalize(className);
-        String signature = String.format(END_VISIT, className, varName);
+    protected ASTCDMethod createEndVisit(ASTCDType cdType){
+        String typeName = cdType.getName();
+        String varName = StringUtils.uncapitalize(typeName);
+        String signature = String.format(END_VISIT, typeName, varName);
 
         ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
-        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.EndVisit", cdClass));
+        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.EndVisit", cdType));
         return cdMethod;
     }
 
-    protected ASTCDMethod createTraverse(ASTCDClass cdClass){
-        String className = cdClass.getName();
-        String varName = StringUtils.uncapitalize(className);
-        String signature = String.format(TRAVERSE, className, varName);
+    protected ASTCDMethod createTraverse(ASTCDType cdType){
+        String typeName = cdType.getName();
+        String varName = StringUtils.uncapitalize(typeName);
+        String signature = String.format(TRAVERSE, typeName, varName);
 
         ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
-        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.Traverse", cdClass));
+        replaceTemplate(CDGeneratorHelper.METHOD_TEMPLATE, cdMethod, new TemplateHookPoint("visitor.Traverse", cdType));
 
         //Link the templates for the individual attributes
-        for(ASTCDAttribute cdAttribute : cdClass.getCDAttributeList())
-            cdAttribute.accept(new TraverseVisitor(cdClass, cdAttribute));
+        for(ASTCDAttribute cdAttribute : cdType.getCDAttributeList())
+            cdAttribute.accept(new TraverseVisitor(cdType, cdAttribute));
 
         return cdMethod;
     }
 
-    private ASTCDMethod createHandle(ASTCDClass cdClass){
-        String className = cdClass.getName();
+    private ASTCDMethod createHandle(ASTCDType cdType){
+        String className = cdType.getName();
         String varName = StringUtils.uncapitalize(className);
         String signature = String.format(HANDLE, className, varName);
 
@@ -124,10 +125,10 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
 
     private class TraverseVisitor implements CD2CodeInheritanceVisitor {
         private final ASTCDAttribute cdAttribute;
-        private final ASTCDClass cdClass;
+        private final ASTCDType cdType;
 
-        private TraverseVisitor(ASTCDClass cdClass, ASTCDAttribute cdAttribute){
-            this.cdClass = cdClass;
+        private TraverseVisitor(ASTCDType cdType, ASTCDAttribute cdAttribute){
+            this.cdType = cdType;
             this.cdAttribute = cdAttribute;
         }
 
@@ -147,7 +148,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Collection", cdClass, cdAttribute)
+                        new TemplateHookPoint("visitor.traverse.Collection", cdType, cdAttribute)
                 );
         }
         @Override
@@ -156,7 +157,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Collection", cdClass, cdAttribute)
+                        new TemplateHookPoint("visitor.traverse.Collection", cdType, cdAttribute)
                 );
         }
         @Override
@@ -165,7 +166,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Optional", cdClass, cdAttribute)
+                        new TemplateHookPoint("visitor.traverse.Optional", cdType, cdAttribute)
                 );
         }
         @Override
@@ -176,7 +177,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Map", cdClass, cdAttribute, iterateKeys, iterateValues)
+                        new TemplateHookPoint("visitor.traverse.Map", cdType, cdAttribute, iterateKeys, iterateValues)
                 );
         }
         @Override
@@ -187,7 +188,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Cache", cdClass, cdAttribute, iterateKeys, iterateValues)
+                        new TemplateHookPoint("visitor.traverse.Cache", cdType, cdAttribute, iterateKeys, iterateValues)
                 );
         }
         @Override
@@ -196,7 +197,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
                 replaceTemplate(
                         CDGeneratorHelper.ATTRIBUTE_TEMPLATE,
                         cdAttribute,
-                        new TemplateHookPoint("visitor.traverse.Singleton", cdClass, cdAttribute)
+                        new TemplateHookPoint("visitor.traverse.Singleton", cdType, cdAttribute)
                 );
         }
     }

@@ -39,7 +39,7 @@ public abstract class AbstractDecoratorTest extends BasicCDTest {
     public void testGenerate(){
         outputPath = QUALIFIED_PATH.resolve("decorator").resolve(cdClass.getName()+".java");
 
-        cdGenerator.generateClass(cdDecoratedClass);
+        cdGenerator.generateClass(cdClass);
 
         assertThat(outputPath).exists();
     }
