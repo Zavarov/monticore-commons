@@ -1,0 +1,7 @@
+package vartas.monticore.cd2code;
+
+classdiagram InternetCD{
+    class Website{
+        URL link;
+    }
+}
