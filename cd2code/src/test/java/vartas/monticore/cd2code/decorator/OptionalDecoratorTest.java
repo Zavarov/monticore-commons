@@ -32,21 +32,21 @@ public class OptionalDecoratorTest extends AbstractDecoratorTest {
 
     @Test
     public void testGet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getOptional");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getOptional");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Optional<String>");
     }
 
     @Test
     public void testSetOptional(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "setOptional", "Optional<String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "setOptional", "Optional<String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testSet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "setOptional", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "setOptional", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }

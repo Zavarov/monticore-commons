@@ -32,98 +32,98 @@ public class CacheDecoratorTest extends AbstractDecoratorTest {
 
     @Test
     public void testAsMap(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "asMapCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "asMapCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("ConcurrentMap<String,A>");
     }
 
     @Test
     public void testCleanUp(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "cleanUpCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "cleanUpCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testGet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getCache", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getCache", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
 
     @Test
     public void testGetLoader(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getCache", "String", "Callable<? extends A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getCache", "String", "Callable<? extends A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
 
     @Test
     public void testGetAllPresent(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getAllPresentCache", "Iterable<?>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getAllPresentCache", "Iterable<?>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("ImmutableMap<String,A>");
     }
 
     @Test
     public void testGetIfPresent(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getIfPresentCache", "Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getIfPresentCache", "Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
 
     @Test
     public void testInvalidate(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "invalidateCache", "Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "invalidateCache", "Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testInvalidateAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "invalidateAllCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "invalidateAllCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testInvalidateAllKeys(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "invalidateAllCache", "Iterable<?>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "invalidateAllCache", "Iterable<?>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testPut(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "putCache", "String","A");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "putCache", "String","A");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testPutAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "putAllCache", "Map<? extends String,? extends A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "putAllCache", "Map<? extends String,? extends A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testSize(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "sizeCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "sizeCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("long");
     }
 
     @Test
     public void testStats(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "statsCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "statsCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("CacheStats");
     }
 
     @Test
     public void testValues(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "valuesCache");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "valuesCache");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Collection<A>");
     }

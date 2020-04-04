@@ -32,213 +32,213 @@ public class ListDecoratorTest extends AbstractDecoratorTest {
     //Collection
     @Test
     public void testAdd(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "addList","A");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "addList","A");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testAddAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "addAllList", "Collection<? extends A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "addAllList", "Collection<? extends A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testClear(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "clearList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "clearList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testContains(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "containsList","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "containsList","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testContainsAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "containsAllList","Collection<?>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "containsAllList","Collection<?>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testEquals(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "equalsList", "Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "equalsList", "Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testForEach(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "forEachList", "Consumer<? super A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "forEachList", "Consumer<? super A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testHashCode(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "hashCodeList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "hashCodeList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
 
     @Test
     public void testIsEmpty(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "isEmptyList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "isEmptyList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testIterator(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "iteratorList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "iteratorList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Iterator<A>");
     }
 
     @Test
     public void testParallelStream(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "parallelStreamList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "parallelStreamList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Stream<A>");
     }
 
     @Test
     public void testRemove(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeList","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeList","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testRemoveAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeAllList","Collection<?>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeAllList","Collection<?>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testRemoveIf(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeIfList","Predicate<? super A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeIfList","Predicate<? super A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testRetainAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "retainAllList", "Collection<?>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "retainAllList", "Collection<?>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testSize(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "sizeList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "sizeList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
 
     @Test
     public void testSpliterator(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "spliteratorList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "spliteratorList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Spliterator<A>");
     }
 
     @Test
     public void testToArray(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "toArrayList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "toArrayList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Object[]");
     }
 
     @Test
     public void testToIntFunctionArray(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "toArrayList","IntFunction<A[]>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "toArrayList","IntFunction<A[]>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A[]");
     }
 
     @Test
     public void testToGenericArray(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "toArrayList","A[]");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "toArrayList","A[]");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A[]");
     }
     //List
     @Test
     public void testAddList(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "addList","int","A");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "addList","int","A");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
     @Test
     public void testAddAllList(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "addAllList","int","Collection<? extends A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "addAllList","int","Collection<? extends A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
     @Test
     public void testGet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getList","int");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getList","int");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
     @Test
     public void testIndexOf(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "indexOfList","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "indexOfList","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
     @Test
     public void testLastIndexOf(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "lastIndexOfList","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "lastIndexOfList","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
     @Test
     public void testListIterator(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "listIteratorList");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "listIteratorList");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("ListIterator<A>");
     }
     @Test
     public void testListIteratorIndex(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "listIteratorList", "int");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "listIteratorList", "int");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("ListIterator<A>");
     }
     @Test
     public void testRemoveList(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeList", "int");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeList", "int");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
     @Test
     public void testReplaceAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "replaceAllList", "UnaryOperator<A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "replaceAllList", "UnaryOperator<A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
     @Test
     public void testSet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "setList", "int","A");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "setList", "int","A");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("A");
     }
     @Test
     public void testSort(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "sortList", "Comparator<? super A>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "sortList", "Comparator<? super A>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
     @Test
     public void testSubList(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "subListList", "int","int");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "subListList", "int","int");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("List<A>");
     }

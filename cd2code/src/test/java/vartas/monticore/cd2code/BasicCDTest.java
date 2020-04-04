@@ -57,7 +57,7 @@ public abstract class BasicCDTest {
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;
     public ASTCDClass cdClass;
-    public ASTCDClass cdTransformedClass;
+    public ASTCDClass cdDecoratedClass;
     public CDGenerator cdGenerator;
 
     public GlobalExtensionManagement GLEX;
@@ -110,7 +110,7 @@ public abstract class BasicCDTest {
         GLEX.replaceTemplate(CDGeneratorHelper.IMPORT_TEMPLATE, new StringHookPoint(importString));
 
         cdClass = cdDefinition.getCDClassList().stream().filter(cdClazz -> cdClazz.getName().equals(className)).findAny().orElseThrow();
-        cdTransformedClass = cdGenerator.transform(cdClass);
+        cdDecoratedClass = cdGenerator.transform(cdClass);
     }
 
     protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){

@@ -32,175 +32,175 @@ public class MapDecoratorTest extends AbstractDecoratorTest {
 
     @Test
     public void testClear(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "clearMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "clearMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testCompute(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "computeMap","Integer","BiFunction<? super Integer,? super String,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "computeMap","Integer","BiFunction<? super Integer,? super String,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testComputeIfAbsent(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "computeIfAbsentMap","Integer","Function<? super Integer,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "computeIfAbsentMap","Integer","Function<? super Integer,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testComputeIfPresent(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "computeIfPresentMap","Integer","BiFunction<? super Integer,? super String,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "computeIfPresentMap","Integer","BiFunction<? super Integer,? super String,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testContainsKey(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "containsKeyMap","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "containsKeyMap","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testContainsValue(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "containsValueMap","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "containsValueMap","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testEntrySet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "entrySetMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "entrySetMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Set<Map.Entry<Integer,String>>");
     }
 
     @Test
     public void testEquals(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "equalsMap","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "equalsMap","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testForEach(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "forEachMap","BiConsumer<? super Integer,? super String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "forEachMap","BiConsumer<? super Integer,? super String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testGet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getMap","Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getMap","Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testGetOrDefault(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "getOrDefaultMap","Object", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "getOrDefaultMap","Object", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testHashCode(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "hashCodeMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "hashCodeMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
 
     @Test
     public void testIsEmpty(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "isEmptyMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "isEmptyMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testKeySet(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "keySetMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "keySetMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Set<Integer>");
     }
 
     @Test
     public void testMerge(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "mergeMap", "Integer", "String", "BiFunction<? super String,? super String,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "mergeMap", "Integer", "String", "BiFunction<? super String,? super String,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testPut(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "putMap", "Integer", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "putMap", "Integer", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testPutAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "putAllMap", "Map<? extends Integer,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "putAllMap", "Map<? extends Integer,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testPutIfAbsent(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "putMap", "Integer", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "putMap", "Integer", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testRemoveKey(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeMap", "Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeMap", "Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testRemoveKeyValue(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "removeMap", "Object", "Object");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "removeMap", "Object", "Object");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testReplaceKey(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "replaceMap", "Integer", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "replaceMap", "Integer", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("String");
     }
 
     @Test
     public void testReplaceKeyValue(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "replaceMap", "Integer", "String", "String");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "replaceMap", "Integer", "String", "String");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("boolean");
     }
 
     @Test
     public void testReplaceAll(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "replaceAllMap", "BiFunction<? super Integer,? super String,? extends String>");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "replaceAllMap", "BiFunction<? super Integer,? super String,? extends String>");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("void");
     }
 
     @Test
     public void testSize(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "sizeMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "sizeMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("int");
     }
 
     @Test
     public void testValues(){
-        ASTCDMethod cdMethod = getMethod(cdTransformedClass, "valuesMap");
+        ASTCDMethod cdMethod = getMethod(cdDecoratedClass, "valuesMap");
 
         assertThat(mcPrinter.prettyprint(cdMethod.getMCReturnType())).isEqualTo("Collection<String>");
     }
