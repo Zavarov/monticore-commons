@@ -33,6 +33,7 @@ import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
 import vartas.monticore.cd2code._symboltable.CD2CodeModelLoader;
+import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BasicCDTest {
-    private static final Path MODEL_PATH = Paths.get("src","test","resources");
+    protected static final Path MODEL_PATH = Paths.get("src","test","resources");
 
     protected CD2CodeLanguage cdLanguage;
     protected ModelPath cdModelPath;
@@ -50,7 +51,7 @@ public abstract class BasicCDTest {
     public Path OUTPUT_PATH = Paths.get("target","generated-sources");
     public Path PACKAGE_PATH = Paths.get("vartas","monticore","cd2code");
     public Path QUALIFIED_PATH = OUTPUT_PATH.resolve(PACKAGE_PATH);
-    public Path TEMPLATE_PATH = Paths.get("src","main","resources");
+    public Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
     public String JAVA_FILE_EXTENSION = "java";
 
     public ASTCDCompilationUnit cdCompilationUnit;
@@ -62,7 +63,7 @@ public abstract class BasicCDTest {
     public GlobalExtensionManagement GLEX;
     public GeneratorSetup GENERATOR_SETUP;
     public GeneratorEngine GENERATOR_ENGINE;
-    public MCFullGenericTypesPrettyPrinter mcPrinter = new MCFullGenericTypesPrettyPrinter(new IndentPrinter());
+    public CD2CodePrettyPrinter mcPrinter = new CD2CodePrettyPrinter();
 
     @BeforeAll
     public static void setUpAll(){

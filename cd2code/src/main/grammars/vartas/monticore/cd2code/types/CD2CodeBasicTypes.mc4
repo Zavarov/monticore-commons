@@ -1,11 +1,11 @@
 package vartas.monticore.cd2code.types;
 
 component grammar CD2CodeBasicTypes extends de.monticore.types.MCBasicTypes {
-    MCURLType implements MCObjectType =
+    MCURLType implements MCObjectType <200> =
         {next("URL")}? Name
     ;
 
-    MCInstantType implements MCObjectType =
+    MCInstantType implements MCObjectType <200> =
         {next("Instant")}? Name
     ;
 }

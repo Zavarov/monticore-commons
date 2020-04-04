@@ -18,12 +18,16 @@
 package vartas.monticore.cd2code;
 
 import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mccollectiontypes._ast.ASTMCListType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCMapType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
 import de.se_rwth.commons.Joiners;
+import de.se_rwth.commons.Splitters;
 import org.apache.commons.lang3.StringUtils;
+import vartas.monticore.cd2code._ast.CD2CodeMill;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType;
 
@@ -57,38 +61,64 @@ public static final String CLASS_TEMPLATE = "core.Class";
     @Nonnull
     public static final String NONNULL_TEMPLATE = "annotation.Nonnull";
     @Nonnull
+    public static final String FACTORY_PACKAGE = "factory";
+    @Nonnull
+    public static final String VISITOR_PACKAGE = "visitor";
+    @Nonnull
     private final ASTCDCompilationUnit ast;
 
     public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast){
         this.ast = ast;
     }
 
-    private List<String> getDefaultPackageList(){
+    public List<String> getPackageList(){
         return ast.getPackageList();
     }
 
-    public String getDefaultPackage(){
-        return Joiners.DOT.join(getDefaultPackageList());
+    public List<String> getPackageList(String subPackage){
+        List<String> packageList = new ArrayList<>(getPackageList());
+        packageList.addAll(Splitters.DOT.splitToList(subPackage));
+        return packageList;
     }
 
-    public String getVisitorPackage(){
-        return Joiners.DOT.join(getDefaultPackage(), "visitor");
+    public String getPackage(){
+        return Joiners.DOT.join(getPackageList());
     }
 
-    public String getFactoryPackage(){
-        return Joiners.DOT.join(getDefaultPackage(), "factory");
+    public String getPackage(String subPackage){
+        return Joiners.DOT.join(getPackage(), subPackage);
     }
 
-    public Path getDefaultPackagePath(){
-        return Paths.get("", getDefaultPackageList().toArray(new String[0]));
+    public Path getPackagePath(){
+        return getPackagePath(getPackageList());
     }
 
-    public Path getVisitorPackagePath(){
-        return getDefaultPackagePath().resolve("visitor");
+    public Path getPackagePath(String subPackage){
+        return getPackagePath(getPackageList(subPackage));
     }
 
-    public Path getFactoryPackagePath(){
-        return getDefaultPackagePath().resolve("factory");
+    public Path getPackagePath(List<String> packageList){
+        return Paths.get("", packageList.toArray(String[]::new));
+    }
+
+    public ASTMCImportStatement getPackageAsImport(){
+        return getPackageAsImport(getPackageList());
+    }
+
+    public ASTMCImportStatement getPackageAsImport(String subPackage){
+        return getPackageAsImport(getPackageList(subPackage));
+    }
+
+    private ASTMCImportStatement getPackageAsImport(List<String> packageList){
+        ASTMCQualifiedName mcQualifiedName;
+        ASTMCImportStatement mcImportStatement;
+
+        mcQualifiedName = CD2CodeMill.mCQualifiedNameBuilder().setPartList(packageList).build();
+        mcImportStatement = CD2CodeMill.mCImportStatementBuilder().setMCQualifiedName(mcQualifiedName).build();
+
+        mcImportStatement.setStar(true);
+
+        return mcImportStatement;
     }
 
 

@@ -39,6 +39,14 @@ public class CDClassTransformer extends AbstractTransformer<ASTCDClass> implemen
         this.cdVisitor = cdVisitor;
     }
 
+    public static ASTCDClass apply(ASTCDClass cdClass, GlobalExtensionManagement glex, ASTCDInterface cdVisitor){
+        CDClassTransformer visitor = new CDClassTransformer(glex, cdVisitor);
+
+        ASTCDClass transformedClass = cdClass.deepClone();
+        CDClassTransformer transformer = new CDClassTransformer(glex, cdVisitor);
+        return visitor.decorate(cdClass, transformedClass);
+    }
+
     @Override
     public ASTCDClass decorate(ASTCDClass originalClass, ASTCDClass transformedClass) {
         originalClass.accept(new CDClassVisitor(transformedClass));
