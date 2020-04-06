@@ -1,0 +1,10 @@
+package vartas.monticore.cd2code;
+
+classdiagram NestedCD{
+    <<factory>>
+    public class Nested{
+        - Set<String> words;
+
+        + Set<Set<String>> powerSet();
+    }
+}

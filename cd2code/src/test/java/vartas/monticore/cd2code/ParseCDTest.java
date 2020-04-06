@@ -26,7 +26,8 @@ public class ParseCDTest extends BasicCDTest {
             "Browser, vartas.monticore.cd2code.BrowserCD",
             "Person, vartas.monticore.cd2code.PersonCD",
             "Website, vartas.monticore.cd2code.InternetCD",
-            "Database, vartas.monticore.cd2code.DatabaseCD"
+            "Database, vartas.monticore.cd2code.DatabaseCD",
+            "Nested, vartas.monticore.cd2code.LanguageCD"
     })
     public void testParse(String className, String classDiagram){
         parseCDClass(className, classDiagram);

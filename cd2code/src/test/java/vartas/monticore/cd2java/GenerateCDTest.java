@@ -27,6 +27,7 @@ public class GenerateCDTest extends BasicCDTest {
             "vartas.monticore.cd2code.BrowserCD",
             "vartas.monticore.cd2code.DatabaseCD",
             "vartas.monticore.cd2code.InternetCD",
+            "vartas.monticore.cd2code.LanguageCD",
             "vartas.monticore.cd2code.PersonCD",
             "vartas.monticore.cd2java.FactoryCD",
             "vartas.monticore.cd2java.VisitorCD",
