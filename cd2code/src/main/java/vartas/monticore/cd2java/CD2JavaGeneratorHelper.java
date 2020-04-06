@@ -15,20 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2code;
+package vartas.monticore.cd2java;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
+import de.monticore.io.paths.IterablePath;
+import vartas.monticore.cd2code.CDGeneratorHelper;
 
-public class ParseCDTest extends BasicCDTest {
-    @ParameterizedTest(name = "[{index}] {0} <= {1}")
-    @CsvSource({
-            "Browser, vartas.monticore.cd2code.BrowserCD",
-            "Person, vartas.monticore.cd2code.PersonCD",
-            "Website, vartas.monticore.cd2code.InternetCD",
-            "Database, vartas.monticore.cd2code.DatabaseCD"
-    })
-    public void testParse(String className, String classDiagram){
-        parseCDClass(className, classDiagram);
+import javax.annotation.Nonnull;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class CD2JavaGeneratorHelper extends CDGeneratorHelper {
+    public static Path SOURCES_DIRECTORY = Paths.get("src","main", "java");
+    public static IterablePath SOURCES = IterablePath.from(SOURCES_DIRECTORY.toFile(), "java");
+
+    public CD2JavaGeneratorHelper(@Nonnull ASTCDCompilationUnit ast) {
+        super(ast);
     }
 }

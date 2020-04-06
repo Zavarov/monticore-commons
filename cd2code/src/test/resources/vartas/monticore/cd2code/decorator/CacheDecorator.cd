@@ -1,7 +1,0 @@
-package vartas.monticore.cd2code.decorator;
-
-classdiagram CacheDecorator{
-    public class Cache{
-        Cache<String, A> cache;
-    }
-}

@@ -50,6 +50,8 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
     @Nonnull
     @Override
     public ASTCDClass decorate(@Nonnull ASTCDClass cdClass) {
+        //Ignore a possible TOP class;
+        cdClass = cdClass.deepClone();
 
         ASTCDClass cdFactoryClass = CD4AnalysisMill.cDClassBuilder()
                 .setName(cdClass.getName()+"Factory")

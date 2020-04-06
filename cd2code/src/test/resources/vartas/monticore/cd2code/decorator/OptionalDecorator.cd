@@ -1,7 +1,0 @@
-package vartas.monticore.cd2code.decorator;
-
-classdiagram OptionalDecorator{
-    public class Optional{
-        Optional<String> optional;
-    }
-}

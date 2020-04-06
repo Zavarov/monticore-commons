@@ -1,7 +1,0 @@
-package vartas.monticore.cd2code.decorator;
-
-classdiagram ListDecorator{
-    public class List{
-        List<A> list;
-    }
-}

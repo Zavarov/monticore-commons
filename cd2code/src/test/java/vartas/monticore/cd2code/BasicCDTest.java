@@ -18,92 +18,41 @@
 package vartas.monticore.cd2code;
 
 import de.monticore.cd.cd4analysis._ast.*;
-import de.monticore.generating.GeneratorEngine;
-import de.monticore.generating.GeneratorSetup;
-import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
-import de.se_rwth.commons.Joiners;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
-import vartas.monticore.cd2code._symboltable.CD2CodeModelLoader;
-import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
-import vartas.monticore.cd2code.transformer.CDTypeTransformer;
+import vartas.monticore.cd2java.Main;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BasicCDTest {
     protected static final Path MODEL_PATH = Paths.get("src","test","resources");
-
-    protected CD2CodeLanguage cdLanguage;
-    protected ModelPath cdModelPath;
-    protected CD2CodeGlobalScope cdGlobalScope;
-
-    public Path OUTPUT_PATH = Paths.get("target","generated-sources");
-    public Path PACKAGE_PATH = Paths.get("vartas","monticore","cd2code");
-    public Path QUALIFIED_PATH = OUTPUT_PATH.resolve(PACKAGE_PATH);
-    public Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
-    public String JAVA_FILE_EXTENSION = "java";
+    protected static final Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
+    protected static final Path OUTPUT_PATH = Paths.get("target","generated-sources");
 
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;
     public ASTCDClass cdClass;
-    public ASTCDType cdDecoratedType;
-    public CDGenerator cdGenerator;
-
-    public GlobalExtensionManagement GLEX;
-    public GeneratorSetup GENERATOR_SETUP;
-    public GeneratorEngine GENERATOR_ENGINE;
-    public CD2CodePrettyPrinter mcPrinter = new CD2CodePrettyPrinter();
 
     @BeforeAll
     public static void setUpAll(){
         //Log.enableFailQuick(false);
     }
 
-    @BeforeEach
-    public void setUp(){
-        cdLanguage = new CD2CodeLanguage();
-        cdModelPath = new ModelPath(MODEL_PATH);
-        cdGlobalScope = new CD2CodeGlobalScope(cdModelPath, cdLanguage);
-        GLEX = new GlobalExtensionManagement();
-        GENERATOR_SETUP = new GeneratorSetup();
-        GENERATOR_SETUP.setDefaultFileExtension(JAVA_FILE_EXTENSION);
-        GENERATOR_SETUP.setAdditionalTemplatePaths(Collections.singletonList(TEMPLATE_PATH.toFile()));
-        GENERATOR_SETUP.setGlex(GLEX);
-        GENERATOR_SETUP.setTracing(false);
-        GENERATOR_SETUP.setOutputDirectory(OUTPUT_PATH.toFile());
-        GENERATOR_ENGINE = new GeneratorEngine(GENERATOR_SETUP);
-    }
+    protected void parseCDClass(String className, String classDiagram){
+        CD2CodeLanguage cdLanguage = new CD2CodeLanguage();
+        ModelPath cdModelPath = new ModelPath(MODEL_PATH);
+        CD2CodeGlobalScope cdGlobalScope = new CD2CodeGlobalScope(cdModelPath, cdLanguage);
 
-    protected ASTCDCompilationUnit parse(String... names){
-        String qualifiedName = Joiners.DOT.join(names);
-
-        CD2CodeModelLoader modelLoader = new CD2CodeModelLoader(cdLanguage);
-        List<ASTCDCompilationUnit> models = modelLoader.loadModelsIntoScope(qualifiedName, cdModelPath, cdGlobalScope);
-
-        if(models.size() == 0)
-            throw GeneratorError.of(Errors.NO_MATCHING_MODEL_FOUND);
-        else if(models.size() > 1)
-            throw GeneratorError.of(Errors.MULTIPLE_MODELS_FOUND);
-        else
-            return models.get(0);
-    }
-
-    protected void parseCDClass(String className, String... names){
-        cdCompilationUnit = parse(names);
+        cdCompilationUnit = Main.parse(cdGlobalScope, cdModelPath, classDiagram);
         cdDefinition = cdCompilationUnit.getCDDefinition();
-        cdGenerator = new CDGenerator(GENERATOR_SETUP ,cdCompilationUnit);
-
         cdClass = cdDefinition.getCDClassList().stream().filter(cdClazz -> cdClazz.getName().equals(className)).findAny().orElseThrow();
-        cdDecoratedType = CDTypeTransformer.apply(cdClass, cdGenerator.glex, cdGenerator.cdVisitor);
     }
 
     protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){

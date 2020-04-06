@@ -30,7 +30,6 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
 import org.apache.commons.lang3.StringUtils;
 import vartas.monticore.cd2code.CDGeneratorHelper;
-import vartas.monticore.cd2code.DecoratorHelper;
 import vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType;
 
@@ -58,6 +57,8 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
 
     @Override
     public ASTCDInterface decorate(ASTCDDefinition cdDefinition) {
+        //Ignore possible TOP classes;
+        cdDefinition = cdDefinition.deepClone();
         ASTCDInterface cdInterface = CD4AnalysisMill.cDInterfaceBuilder()
                 .setName(cdDefinition.getName()+"Visitor")
                 .setModifier(CDModifier.PUBLIC.build())
@@ -133,12 +134,12 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         }
 
         private boolean isPresentGenericArgument(int index){
-            String mcElementTypeName = DecoratorHelper.getMCTypeArgumentName(cdAttribute, index);
+            String mcElementTypeName = CDGeneratorHelper.getMCTypeArgumentName(cdAttribute, index);
             return cdDefinitionSymbol.getType(mcElementTypeName).isPresent();
         }
 
         private boolean isPresent(){
-            String mcElementTypeName = DecoratorHelper.prettyprint(cdAttribute.getMCType());
+            String mcElementTypeName = CDGeneratorHelper.prettyprint(cdAttribute.getMCType());
             return cdDefinitionSymbol.getType(mcElementTypeName).isPresent();
         }
 

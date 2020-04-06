@@ -2,13 +2,7 @@ ${include("hook.Package")}
 <#t>
 ${include("hook.Import")}
 <#t>
-import java.time.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.stream.*;
-import com.google.common.cache.*;
-import com.google.common.collect.*;
+${include("core.Import")}
 
 ${include("hook.Annotation")}
 ${ast.printModifier()} class ${ast.getName()} <#t>

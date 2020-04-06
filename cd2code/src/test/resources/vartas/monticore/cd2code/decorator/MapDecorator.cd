@@ -1,7 +1,0 @@
-package vartas.monticore.cd2code.decorator;
-
-classdiagram MapDecorator{
-    public class Map{
-        Map<Integer, String> map;
-    }
-}

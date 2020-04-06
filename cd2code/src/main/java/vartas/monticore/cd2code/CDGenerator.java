@@ -20,138 +20,64 @@ package vartas.monticore.cd2code;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import de.monticore.io.paths.IterablePath;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import vartas.monticore.cd2code.creator.FactoryCreator;
-import vartas.monticore.cd2code.creator.VisitorCreator;
-import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
-import vartas.monticore.cd2code.transformer.*;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Nonnull
 public class CDGenerator {
-    @Nonnull
-    private final Logger log = LoggerFactory.getLogger(getClass().getSimpleName());
-    @Nonnull
-    protected final Path qualifiedPath;
     @Nonnull
     protected final GeneratorEngine generatorEngine;
     @Nonnull
     protected final GeneratorSetup generatorSetup;
     @Nonnull
-    protected final ASTCDInterface cdVisitor;
-    @Nonnull
-    protected final GlobalExtensionManagement glex;
-    @Nonnull
-    protected final CDGeneratorHelper genHelper;
-    @Nonnull
-    protected final ASTCDCompilationUnit cdCompilationUnit;
-    @Nonnull
-    public static final Path SOURCES_DIRECTORY = Paths.get("src","main", "java");
-
+    protected final CDGeneratorHelper generatorHelper;
 
     public CDGenerator
     (
                 @Nonnull GeneratorSetup generatorSetup,
-                @Nonnull ASTCDCompilationUnit cdCompilationUnit
+                @Nonnull CDGeneratorHelper generatorHelper
     )
     {
         this.generatorSetup = generatorSetup;
         this.generatorEngine = new GeneratorEngine(generatorSetup);
-        this.qualifiedPath = Paths.get("", cdCompilationUnit.getPackageList().toArray(new String[0]));
-        this.glex = generatorSetup.getGlex();
-        this.cdVisitor = VisitorCreator.create(cdCompilationUnit.getCDDefinition(), glex);
-        this.genHelper = new CDGeneratorHelper(cdCompilationUnit);
-        this.cdCompilationUnit = cdCompilationUnit;
-
-        glex.setGlobalValue("cdPrinter", new CD2CodePrettyPrinter());
-        glex.setGlobalValue("cdGenHelper", this.genHelper);
+        this.generatorHelper = generatorHelper;
     }
 
-    public static void generate
-    (
-            @Nonnull GeneratorSetup generatorSetup,
-            @Nonnull ASTCDCompilationUnit cdCompilationUnit
-    )
-    {
+    public void generate(@Nonnull ASTCDCompilationUnit cdCompilationUnit){
         ASTCDDefinition cdDefinition = cdCompilationUnit.getCDDefinition();
-        CDGenerator generator = new CDGenerator(generatorSetup, cdCompilationUnit);
 
-        // == Visitors ==
-        generator.log.info("Generating Visitors.");
-        generator.generateVisitor();
-        // == Factories ==
-        generator.log.info("Generating Factories.");
-        cdDefinition.streamCDClasss()
-                .filter(cdClass -> CDGeneratorHelper.hasStereoValue(cdClass, DecoratorHelper.FACTORY_STEREOVALUE))
-                .forEach(generator::generateFactory);
-        // == Interfaces ==
-        generator.log.info("Generating Interfaces.");
-        cdDefinition.forEachCDInterfaces(generator::generateInterface);
-        // == Enums ==
-        generator.log.info("Generating Enums.");
-        cdDefinition.forEachCDEnums(generator::generateEnum);
-        // == Classes ==
-        generator.log.info("Generating Classes.");
-        cdDefinition.streamCDClasss().forEach(generator::generateClass);
+        for(ASTCDClass ast : cdDefinition.getCDClassList())
+            generateClass(cdCompilationUnit.getPackageList(), ast);
+
+        for(ASTCDEnum ast : cdDefinition.getCDEnumList())
+            generateEnum(cdCompilationUnit.getPackageList(), ast);
+
+        for(ASTCDInterface ast : cdDefinition.getCDInterfaceList())
+            generateInterface(cdCompilationUnit.getPackageList(), ast);
     }
 
-    public void generateFactory(ASTCDClass cdClass){
-        CDImportTransformer.applyFactoryPackage(cdCompilationUnit, glex, genHelper);
-        CDPackageTransformer.applyFactoryPackage(cdCompilationUnit, glex, genHelper);
-
-        ASTCDClass cdFactoryClass = FactoryCreator.create(cdClass, glex);
-        generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(CDGeneratorHelper.FACTORY_PACKAGE) , cdFactoryClass);
+    private void generateInterface(List<String> packageName, ASTCDInterface ast){
+        generate(CDGeneratorHelper.INTERFACE_TEMPLATE, packageName, ast);
     }
 
-    public void generateVisitor(){
-        CDImportTransformer.applyVisitorPackage(cdCompilationUnit, glex, genHelper);
-        CDPackageTransformer.applyVisitorPackage(cdCompilationUnit, glex, genHelper);
-
-        generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath(CDGeneratorHelper.VISITOR_PACKAGE) , cdVisitor);
+    private void generateEnum(List<String> packageName, ASTCDEnum ast){
+        generate(CDGeneratorHelper.ENUM_TEMPLATE, packageName, ast);
     }
 
-    public void generateInterface(ASTCDInterface cdInterface){
-        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        generate(CDGeneratorHelper.INTERFACE_TEMPLATE, genHelper.getPackagePath(), cdInterface);
+    private void generateClass(List<String> packageName, ASTCDClass ast){
+        generate(CDGeneratorHelper.CLASS_TEMPLATE, packageName, ast);
     }
 
-    public void generateEnum(ASTCDEnum cdEnum){
-        ASTCDType cdType = CDTypeTransformer.apply(cdEnum, glex, cdVisitor);
-
-        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        generate(CDGeneratorHelper.ENUM_TEMPLATE, genHelper.getPackagePath(), cdType);
+    protected void generate(String template, List<String> packageName , ASTCDType ast){
+        Path outputPath = Paths.get("", packageName.toArray(String[]::new));
+        Path outputFile = outputPath.resolve(ast.getName() + "." + generatorSetup.getDefaultFileExtension());
+        generatorEngine.generate(template, outputFile, ast);
     }
 
-    public void generateClass(ASTCDClass cdClass){
-        ASTCDType cdType = CDTypeTransformer.apply(cdClass, glex, cdVisitor);
-
-        CDImportTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        CDPackageTransformer.applyDefaultPackage(cdCompilationUnit, glex, genHelper);
-        generate(CDGeneratorHelper.CLASS_TEMPLATE, genHelper.getPackagePath(), cdType);
-    }
-
-    protected void generate(String template, Path outputDirectory, ASTCDType cdType){
-        IterablePath iterablePath = IterablePath.from(
-                SOURCES_DIRECTORY.resolve(outputDirectory).toFile(),
-                generatorSetup.getDefaultFileExtension()
-        );
-
-        log.info("Applying transformers.");
-        CDHandwrittenClassTransformer.apply(iterablePath, cdType);
-        CDInitializerTransformer.apply(cdType, glex);
-        CDOptionalTransformer.apply(cdType, glex);
-        CDAnnotatorTransformer.apply(cdType, glex);
-
-        log.info("Generating {}.",cdType.getName());
-        Path outputPath = outputDirectory.resolve(cdType.getName() + "." + generatorSetup.getDefaultFileExtension());
-        generatorEngine.generate(template, outputPath, cdType);
+    protected void generate(String template, Path outputFile, ASTCDType ast){
+        generatorEngine.generate(template, outputFile, ast);
     }
 }

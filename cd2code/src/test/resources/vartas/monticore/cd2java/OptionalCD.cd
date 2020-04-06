@@ -1,0 +1,7 @@
+package vartas.monticore.cd2java.decorator;
+
+classdiagram OptionalCD{
+    public class Optional{
+        Optional<String> optional;
+    }
+}

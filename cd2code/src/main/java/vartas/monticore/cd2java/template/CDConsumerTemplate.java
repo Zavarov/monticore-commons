@@ -15,20 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2code;
+package vartas.monticore.cd2java.template;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
 
-public class ParseCDTest extends BasicCDTest {
-    @ParameterizedTest(name = "[{index}] {0} <= {1}")
-    @CsvSource({
-            "Browser, vartas.monticore.cd2code.BrowserCD",
-            "Person, vartas.monticore.cd2code.PersonCD",
-            "Website, vartas.monticore.cd2code.InternetCD",
-            "Database, vartas.monticore.cd2code.DatabaseCD"
-    })
-    public void testParse(String className, String classDiagram){
-        parseCDClass(className, classDiagram);
+import java.util.function.Consumer;
+
+public interface CDConsumerTemplate <T extends ASTCD4AnalysisNode> extends vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor, Consumer<T> {
+    @Override
+    default void accept(T ast) {
+        ast.accept(this);
     }
 }

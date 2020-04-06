@@ -17,29 +17,40 @@
 
 package vartas.monticore.cd2code;
 
+import com.google.common.base.Preconditions;
 import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
-import de.monticore.types.mccollectiontypes._ast.ASTMCListType;
-import de.monticore.types.mccollectiontypes._ast.ASTMCMapType;
-import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
-import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
+import de.monticore.types.mccollectiontypes._ast.*;
+import de.monticore.utils.Names;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
 import org.apache.commons.lang3.StringUtils;
+import org.atteo.evo.inflector.English;
 import vartas.monticore.cd2code._ast.CD2CodeMill;
+import vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
+import vartas.monticore.cd2code.creator.VisitorCreator;
+import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
 import vartas.monticore.cd2code.types.cd2codecollectiontypes._ast.ASTMCCacheType;
+import vartas.monticore.cd2code.types.cd2codecollectiontypes._visitor.CD2CodeCollectionTypesInheritanceVisitor;
 
 import javax.annotation.Nonnull;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CDGeneratorHelper {@Nonnull
-public static final String CLASS_TEMPLATE = "core.Class";
+public class CDGeneratorHelper {
+    //----------------------------------------------------------------------------------------------------------------//
+    //
+    //        Global Constants
+    //
+    //----------------------------------------------------------------------------------------------------------------//
+    @Nonnull
+    public static final String CLASS_TEMPLATE = "core.Class";
     @Nonnull
     public static final String ENUM_TEMPLATE = "core.Enum";
     @Nonnull
@@ -65,48 +76,67 @@ public static final String CLASS_TEMPLATE = "core.Class";
     @Nonnull
     public static final String VISITOR_PACKAGE = "visitor";
     @Nonnull
+    public static final String TOP_POSTFIX = "TOP";
+    @Nonnull
+    public static final ASTCDStereoValue JSON_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("json").build();
+    @Nonnull
+    public static final ASTCDStereoValue NULLABLE_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("Nullable").build();
+    @Nonnull
+    public static final ASTCDStereoValue NONNULL_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("Nonnull").build();
+    @Nonnull
+    public static final ASTCDStereoValue CACHED_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("cached").build();
+    @Nonnull
+    public static final ASTCDStereoValue FACTORY_STEREOVALUE = CD2CodeMill.cDStereoValueBuilder().setName("factory").build();
+    @Nonnull
+    private static CD2CodePrettyPrinter PRINTER = new CD2CodePrettyPrinter();
+    //----------------------------------------------------------------------------------------------------------------//
+    //
+    //        Local Variables
+    //
+    //----------------------------------------------------------------------------------------------------------------//
+    @Nonnull
+    private final GlobalExtensionManagement glex;
+    @Nonnull
     private final ASTCDCompilationUnit ast;
+    @Nonnull
+    private final ASTCDInterface visitor;
+
+    public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast, @Nonnull GlobalExtensionManagement glex){
+        this.glex = glex;
+        this.ast = ast;
+        this.visitor = VisitorCreator.create(ast.getCDDefinition(), new GlobalExtensionManagement());
+    }
 
     public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast){
-        this.ast = ast;
+        this(ast, new GlobalExtensionManagement());
     }
 
-    public List<String> getPackageList(){
-        return ast.getPackageList();
+    @Nonnull
+    public GlobalExtensionManagement getGlex(){
+        return glex;
     }
 
-    public List<String> getPackageList(String subPackage){
-        List<String> packageList = new ArrayList<>(getPackageList());
-        packageList.addAll(Splitters.DOT.splitToList(subPackage));
-        return packageList;
+    @Nonnull
+    public ASTCDInterface getVisitor(){
+        return visitor;
     }
 
-    public String getPackage(){
-        return Joiners.DOT.join(getPackageList());
+    @Nonnull
+    public ASTCDCompilationUnit getAst(){
+        return ast;
     }
 
-    public String getPackage(String subPackage){
-        return Joiners.DOT.join(getPackage(), subPackage);
-    }
-
-    public Path getPackagePath(){
-        return getPackagePath(getPackageList());
-    }
-
-    public Path getPackagePath(String subPackage){
-        return getPackagePath(getPackageList(subPackage));
-    }
-
-    public Path getPackagePath(List<String> packageList){
-        return Paths.get("", packageList.toArray(String[]::new));
+    public String getRootPackage(){
+        return Joiners.DOT.join(ast.getPackageList());
     }
 
     public ASTMCImportStatement getPackageAsImport(){
-        return getPackageAsImport(getPackageList());
+        return getPackageAsImport(Splitters.DOT.splitToList(getRootPackage()));
     }
 
     public ASTMCImportStatement getPackageAsImport(String subPackage){
-        return getPackageAsImport(getPackageList(subPackage));
+        String qualifiedName = Names.getQualifiedName(getRootPackage(), subPackage);
+        return getPackageAsImport(Splitters.DOT.splitToList(qualifiedName));
     }
 
     private ASTMCImportStatement getPackageAsImport(List<String> packageList){
@@ -153,6 +183,77 @@ public static final String CLASS_TEMPLATE = "core.Class";
             String cdStereoValueName = cdStereoValue.getName().toLowerCase(Locale.ENGLISH);
             if(this.cdStereoValueName.equals(cdStereoValueName) && cdStereoValue.isPresentValue())
                 stereoValueValues.add(cdStereoValue.getValue());
+        }
+    }
+    public static ASTMCTypeArgument getMCTypeArgument(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
+        return ArgumentTypeVisitor.getGenericTypeArgumentOf(cdAttribute, genericTypeIndex);
+    }
+
+    public static String getMCTypeArgumentName(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
+        ASTMCTypeArgument mcTypeArgument = getMCTypeArgument(cdAttribute, genericTypeIndex);
+
+        return prettyprint(mcTypeArgument);
+    }
+
+    public static void setPrinter(CD2CodePrettyPrinter printer){
+        PRINTER = printer;
+    }
+
+    public static String prettyprint(ASTMCCollectionTypesNode ast){
+        return PRINTER.prettyprint(ast);
+    }
+
+    public static String prettyprint(ASTMCBasicTypesNode ast){
+        return PRINTER.prettyprint(ast);
+    }
+
+    public static String prettyprint(ASTCD4AnalysisNode ast){
+        return PRINTER.prettyprint(ast);
+    }
+
+
+    public static String toSingular(ASTCDField cdField){
+        return English.plural(cdField.getName(), 1);
+    }
+
+    public static String toPlural(ASTCDField cdField){
+        return English.plural(cdField.getName());
+    }
+
+    public static String toSingularCapitalized(ASTCDField cdField){
+        return English.plural(getCapitalizedName(cdField), 1);
+    }
+
+    public static String toPluralCapitalized(ASTCDField cdField){
+        return English.plural(getCapitalizedName(cdField));
+    }
+
+    public static String getCapitalizedName(ASTCDField cdField){
+        return StringUtils.capitalize(cdField.getName());
+    }
+
+    @Nonnull
+    private static class ArgumentTypeVisitor implements CD2CodeInheritanceVisitor, CD2CodeCollectionTypesInheritanceVisitor {
+        private int genericTypeIndex;
+        @Nullable
+        private ASTMCTypeArgument genericTypeArgument;
+
+        private ArgumentTypeVisitor(int genericTypeIndex){
+            Preconditions.checkArgument(genericTypeIndex >= 0);
+            this.genericTypeIndex = genericTypeIndex;
+        }
+
+        @Nonnull
+        public static ASTMCTypeArgument getGenericTypeArgumentOf(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
+            ArgumentTypeVisitor visitor = new ArgumentTypeVisitor(genericTypeIndex);
+            cdAttribute.accept(visitor);
+            return Preconditions.checkNotNull(visitor.genericTypeArgument);
+        }
+
+        @Override
+        public void visit(@Nonnull ASTMCGenericType ast){
+            if(ast.getMCTypeArgumentList().size() > genericTypeIndex)
+                genericTypeArgument = ast.getMCTypeArgument(genericTypeIndex);
         }
     }
 

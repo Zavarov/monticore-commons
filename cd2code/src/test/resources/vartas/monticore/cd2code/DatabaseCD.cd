@@ -1,7 +1,8 @@
 package vartas.monticore.cd2code;
 
 classdiagram DatabaseCD{
-    class Database{
+    <<factory>>
+    public class Database{
         + List<String> entries(Instant inclusiveFrom, Instant exclusiveTo);
     }
 }
