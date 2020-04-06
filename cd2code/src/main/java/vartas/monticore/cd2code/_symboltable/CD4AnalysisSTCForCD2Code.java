@@ -46,7 +46,6 @@ public class CD4AnalysisSTCForCD2Code extends CD4AnalysisSTCForCD2CodeTOP{
 
     @Override
     public void setReturnTypeOfMethod(CDMethOrConstrSymbol methodSymbol, ASTCDMethod astMethod) {
-        super.setReturnTypeOfMethod(methodSymbol, astMethod);
         //TODO
         //Ignore, since the return type might be more than just a simple generic one.
     }
