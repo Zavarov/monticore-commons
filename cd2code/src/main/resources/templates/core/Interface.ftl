@@ -2,6 +2,8 @@ ${include("hook.Package")}
 <#t>
 ${include("hook.Import")}
 <#t>
+${include("core.Import")}
+
 ${include("hook.Annotation")}
 <#-- Interface signature -->
 ${ast.printModifier()} interface ${ast.getName()}<#t>
