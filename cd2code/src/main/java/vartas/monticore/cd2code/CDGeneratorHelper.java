@@ -58,6 +58,8 @@ public class CDGeneratorHelper {
     @Nonnull
     public static final String ANNOTATION_TEMPLATE = "hook.Annotation";
     @Nonnull
+    public static final String CONSTRUCTOR_TEMPLATE = "hook.Constructor";
+    @Nonnull
     public static final String PACKAGE_TEMPLATE = "hook.Package";
     @Nonnull
     public static final String IMPORT_TEMPLATE = "hook.Import";

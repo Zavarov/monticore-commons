@@ -17,8 +17,7 @@
 
 package vartas.monticore.cd2java.template;
 
-import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
-import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.utils.Names;
 import de.se_rwth.commons.Joiners;
@@ -37,12 +36,40 @@ public class CDHandwrittenFileTemplate implements CDConsumerTemplate<ASTCDCompil
     }
 
     @Override
-    public void visit(ASTCDType ast){
+    public void visit(ASTCDInterface ast){
         String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        //Rename the class to avoid duplicates
         if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName))
+            //Rename the interface
             ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
+    }
+
+    @Override
+    public void visit(ASTCDEnum ast){
+        String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
+        String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
+
+        if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName)) {
+            //Rename the enum
+            ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
+            //Rename the constructor as well to match the enum name
+            for (ASTCDConstructor cdConstructor : ast.getCDConstructorList())
+                cdConstructor.setName(ast.getName());
+        }
+    }
+
+    @Override
+    public void visit(ASTCDClass ast){
+        String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
+        String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
+
+        if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName)) {
+            //Rename the class
+            ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
+            //Rename the constructor as well to match the class name
+            for (ASTCDConstructor cdConstructor : ast.getCDConstructorList())
+                cdConstructor.setName(ast.getName());
+        }
     }
 }

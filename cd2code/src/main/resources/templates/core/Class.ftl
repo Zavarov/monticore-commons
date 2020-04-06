@@ -13,6 +13,9 @@ ${ast.printModifier()} class ${ast.getName()} <#t>
     ${tc.include("core.Attribute", cdAttribute)}
 </#list>
 <#t>
+<#list ast.getCDConstructorList() as cdConstructor>
+    ${tc.include("core.Constructor", cdConstructor)}
+</#list>
 <#list ast.getCDMethodList() as cdMethod>
     ${tc.include("core.Method", cdMethod)}
 </#list>
