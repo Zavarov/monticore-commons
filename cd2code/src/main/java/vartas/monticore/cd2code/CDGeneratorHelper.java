@@ -188,13 +188,40 @@ public class CDGeneratorHelper {
         }
     }
     public static ASTMCTypeArgument getMCTypeArgument(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
-        return ArgumentTypeVisitor.getGenericTypeArgumentOf(cdAttribute, genericTypeIndex);
+        return TypeArgumentVisitor.getGenericTypeArgumentOf(cdAttribute, genericTypeIndex);
     }
 
     public static String getMCTypeArgumentName(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
         ASTMCTypeArgument mcTypeArgument = getMCTypeArgument(cdAttribute, genericTypeIndex);
 
         return prettyprint(mcTypeArgument);
+    }
+
+    @Nonnull
+    private static class TypeArgumentVisitor implements CD2CodeInheritanceVisitor, CD2CodeCollectionTypesInheritanceVisitor {
+        private int genericTypeIndex;
+        @Nullable
+        private ASTMCTypeArgument genericTypeArgument;
+
+        private TypeArgumentVisitor(int genericTypeIndex){
+            Preconditions.checkArgument(genericTypeIndex >= 0);
+            this.genericTypeIndex = genericTypeIndex;
+        }
+
+        @Nonnull
+        public static ASTMCTypeArgument getGenericTypeArgumentOf(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
+            TypeArgumentVisitor visitor = new TypeArgumentVisitor(genericTypeIndex);
+            cdAttribute.accept(visitor);
+            return Preconditions.checkNotNull(visitor.genericTypeArgument);
+        }
+
+        @Override
+        public void visit(@Nonnull ASTMCGenericType ast){
+            //In case of a recursive generic type, select the root type
+            if(genericTypeArgument == null)
+                if(ast.getMCTypeArgumentList().size() > genericTypeIndex)
+                    genericTypeArgument = ast.getMCTypeArgument(genericTypeIndex);
+        }
     }
 
     public static void setPrinter(CD2CodePrettyPrinter printer){
@@ -232,31 +259,6 @@ public class CDGeneratorHelper {
 
     public static String getCapitalizedName(ASTCDField cdField){
         return StringUtils.capitalize(cdField.getName());
-    }
-
-    @Nonnull
-    private static class ArgumentTypeVisitor implements CD2CodeInheritanceVisitor, CD2CodeCollectionTypesInheritanceVisitor {
-        private int genericTypeIndex;
-        @Nullable
-        private ASTMCTypeArgument genericTypeArgument;
-
-        private ArgumentTypeVisitor(int genericTypeIndex){
-            Preconditions.checkArgument(genericTypeIndex >= 0);
-            this.genericTypeIndex = genericTypeIndex;
-        }
-
-        @Nonnull
-        public static ASTMCTypeArgument getGenericTypeArgumentOf(@Nonnull ASTCDAttribute cdAttribute, int genericTypeIndex){
-            ArgumentTypeVisitor visitor = new ArgumentTypeVisitor(genericTypeIndex);
-            cdAttribute.accept(visitor);
-            return Preconditions.checkNotNull(visitor.genericTypeArgument);
-        }
-
-        @Override
-        public void visit(@Nonnull ASTMCGenericType ast){
-            if(ast.getMCTypeArgumentList().size() > genericTypeIndex)
-                genericTypeArgument = ast.getMCTypeArgument(genericTypeIndex);
-        }
     }
 
 
