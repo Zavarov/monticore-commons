@@ -20,6 +20,7 @@ package vartas.monticore.cd2code;
 import com.google.common.base.Preconditions;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.io.paths.IterablePath;
 import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -102,15 +103,18 @@ public class CDGeneratorHelper {
     private final ASTCDCompilationUnit ast;
     @Nonnull
     private final ASTCDInterface visitor;
+    @Nonnull
+    private final IterablePath sourcesPath;
 
-    public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast, @Nonnull GlobalExtensionManagement glex){
+    public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast, @Nonnull GlobalExtensionManagement glex, @Nonnull IterablePath sourcesPath){
         this.glex = glex;
         this.ast = ast;
         this.visitor = VisitorCreator.create(ast.getCDDefinition(), new GlobalExtensionManagement());
+        this.sourcesPath = sourcesPath;
     }
 
-    public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast){
-        this(ast, new GlobalExtensionManagement());
+    public CDGeneratorHelper(@Nonnull ASTCDCompilationUnit ast, @Nonnull IterablePath sourcesPath){
+        this(ast, new GlobalExtensionManagement(), sourcesPath);
     }
 
     @Nonnull
@@ -126,6 +130,11 @@ public class CDGeneratorHelper {
     @Nonnull
     public ASTCDCompilationUnit getAst(){
         return ast;
+    }
+
+    @Nonnull
+    public IterablePath getSourcesPath(){
+        return sourcesPath;
     }
 
     public String getRootPackage(){

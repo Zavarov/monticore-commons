@@ -42,6 +42,7 @@ public class GenerateCDTest extends BasicCDTest {
                 MODEL_PATH.toString(),
                 TEMPLATE_PATH.toString(),
                 OUTPUT_PATH.toString(),
+                SOURCES_PATH.toString(),
                 classDiagram
         });
     }

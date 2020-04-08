@@ -18,10 +18,12 @@
 package vartas.monticore.cd2java.decorator;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd2code.BasicCDTest;
 import vartas.monticore.cd2code.CDGeneratorHelper;
 import vartas.monticore.cd2code.prettyprint.CD2CodePrettyPrinter;
+import vartas.monticore.cd2java.CD2JavaGeneratorHelper;
 import vartas.monticore.cd2java.template.CDDecoratorTemplate;
 
 public abstract class AbstractDecoratorTest extends BasicCDTest {
@@ -33,7 +35,7 @@ public abstract class AbstractDecoratorTest extends BasicCDTest {
 
     @BeforeEach
     public void setUp(){
-        generatorHelper = new CDGeneratorHelper(cdCompilationUnit);
+        generatorHelper = new CD2JavaGeneratorHelper(cdCompilationUnit, new GlobalExtensionManagement(), SOURCES_PATH);
         cdTemplate = new CDDecoratorTemplate(generatorHelper);
         cdDecoratedType = cdClass.deepClone();
 

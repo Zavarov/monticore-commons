@@ -39,7 +39,7 @@ public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> 
                 new CDInitializerTemplate(generatorHelper),
                 new CDImportTransformer(generatorHelper),
                 new CDPackageTransformer(generatorHelper),
-                new CDHandwrittenFileTemplate(),
+                new CDHandwrittenFileTemplate(generatorHelper),
                 new CDAnnotatorTemplate(generatorHelper)
         );
     }

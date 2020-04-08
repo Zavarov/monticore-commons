@@ -48,11 +48,13 @@ public class Main {
         Path MODEL_PATH = Paths.get(args[0]);
         Path TEMPLATE_PATH = Paths.get(args[1]);
         Path OUTPUT_PATH = Paths.get(args[2]);
-        String CLASS_DIAGRAM = args[3];
+        Path SOURCES_PATH = Paths.get(args[3]);
+        String CLASS_DIAGRAM = args[4];
 
         LOG.info("Executing CD Generator.");
         LOG.info("Template Path: {}", TEMPLATE_PATH);
         LOG.info("Output Path: {}", OUTPUT_PATH);
+        LOG.info("Sources Path: {}", SOURCES_PATH);
         LOG.info("Class Diagram: {}", CLASS_DIAGRAM);
         LOG.info("Generating Symbol Table");
 
@@ -65,7 +67,7 @@ public class Main {
         ASTCDCompilationUnit cdCompilationUnit = parse(scope, modelPath, CLASS_DIAGRAM);
 
         LOG.info("Initializing Glex.");
-        CDGeneratorHelper generatorHelper = new CDGeneratorHelper(cdCompilationUnit, GLEX);
+        CDGeneratorHelper generatorHelper = new CD2JavaGeneratorHelper(cdCompilationUnit, GLEX, SOURCES_PATH);
         GLEX.setGlobalValue("cdPrinter", new CD2CodePrettyPrinter());
         GLEX.setGlobalValue("cdGenHelper", generatorHelper);
 

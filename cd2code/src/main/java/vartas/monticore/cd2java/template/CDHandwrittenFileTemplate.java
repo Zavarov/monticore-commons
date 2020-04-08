@@ -22,12 +22,13 @@ import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.utils.Names;
 import de.se_rwth.commons.Joiners;
 import vartas.monticore.cd2code.CDGeneratorHelper;
-import vartas.monticore.cd2java.CD2JavaGeneratorHelper;
 
 public class CDHandwrittenFileTemplate implements CDConsumerTemplate<ASTCDCompilationUnit> {
     private ASTCDCompilationUnit cdCompilationUnit;
+    private final CDGeneratorHelper generatorHelper;
 
-    public CDHandwrittenFileTemplate(){
+    public CDHandwrittenFileTemplate(CDGeneratorHelper generatorHelper){
+        this.generatorHelper = generatorHelper;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CDHandwrittenFileTemplate implements CDConsumerTemplate<ASTCDCompil
         String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName))
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName))
             //Rename the interface
             ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
     }
@@ -50,7 +51,7 @@ public class CDHandwrittenFileTemplate implements CDConsumerTemplate<ASTCDCompil
         String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName)) {
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the enum
             ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
             //Rename the constructor as well to match the enum name
@@ -64,7 +65,7 @@ public class CDHandwrittenFileTemplate implements CDConsumerTemplate<ASTCDCompil
         String packageName = Joiners.DOT.join(cdCompilationUnit.getPackageList());
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName)) {
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the class
             ast.setName(ast.getName() + CDGeneratorHelper.TOP_POSTFIX);
             //Rename the constructor as well to match the class name

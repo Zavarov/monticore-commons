@@ -35,6 +35,7 @@ public abstract class BasicCDTest {
     protected static final Path MODEL_PATH = Paths.get("src","test","resources");
     protected static final Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
     protected static final Path OUTPUT_PATH = Paths.get("target","generated-sources");
+    protected static final Path SOURCES_PATH = Paths.get("src","main", "java");
 
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;

@@ -24,7 +24,6 @@ import de.monticore.utils.Names;
 import vartas.monticore.cd2code.CDGeneratorHelper;
 import vartas.monticore.cd2code._visitor.CD2CodeVisitor;
 import vartas.monticore.cd2code.creator.VisitorCreator;
-import vartas.monticore.cd2java.CD2JavaGeneratorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,7 @@ public class CDVisitorTemplate implements CD2CodeVisitor, UnaryOperator<ASTCDCom
             //The visitor will only visit classes from the root package
             String qualifiedName = Names.getQualifiedName(generatorHelper.getRootPackage(), baseName);
             //Use the more general TOP class for the visitor
-            if(TransformationHelper.existsHandwrittenClass(CD2JavaGeneratorHelper.SOURCES, qualifiedName)) {
+            if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
                 String TOPTypeName = baseName + CDGeneratorHelper.TOP_POSTFIX;
                 ASTMCType TOPType = TransformationHelper.createType(TOPTypeName);
                 ast.setMCType(TOPType);

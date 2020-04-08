@@ -18,18 +18,15 @@
 package vartas.monticore.cd2java;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import vartas.monticore.cd2code.CDGeneratorHelper;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class CD2JavaGeneratorHelper extends CDGeneratorHelper {
-    public static Path SOURCES_DIRECTORY = Paths.get("src","main", "java");
-    public static IterablePath SOURCES = IterablePath.from(SOURCES_DIRECTORY.toFile(), "java");
-
-    public CD2JavaGeneratorHelper(@Nonnull ASTCDCompilationUnit ast) {
-        super(ast);
+    public CD2JavaGeneratorHelper(@Nonnull ASTCDCompilationUnit ast, @Nonnull GlobalExtensionManagement glex, @Nonnull Path sourcesPath) {
+        super(ast, glex, IterablePath.from(sourcesPath.toFile(), "java"));
     }
 }
