@@ -40,6 +40,7 @@ public class CacheDecoratorTest extends AbstractDecoratorTest {
             "ConcurrentMap<String,A> : asMapCache         : ''",
             "                   void : cleanUpCache       : ''",
             "                      A : getCache           : 'String'",
+            "                      A : getUncheckedCache  : 'String'",
             "                      A : getCache           : 'String, Callable<? extends A>'",
             " ImmutableMap<String,A> : getAllPresentCache : 'Iterable<?>'",
             "                      A : getIfPresentCache  : 'Object'",

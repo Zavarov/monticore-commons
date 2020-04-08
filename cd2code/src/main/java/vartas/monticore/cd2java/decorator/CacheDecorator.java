@@ -54,7 +54,11 @@ public class CacheDecorator extends AbstractMethodDecorator<ASTCDAttribute> {
     @Nonnull
     private static final String GET = "<<Nonnull>> public %3$s get%1$s(" +
             "%2$s key" +
-    ") throws NoSuchElementException;";
+    ") throws NoSuchElementException, ExecutionException;";
+    @Nonnull
+    private static final String GET_UNCHECKED = "<<Nonnull>> public %3$s getUnchecked%1$s(" +
+            "%2$s key" +
+            ") throws NoSuchElementException, UncheckedExecutionException;";
     /**
      * @see Cache#get(Object, Callable)
      */
@@ -134,6 +138,7 @@ public class CacheDecorator extends AbstractMethodDecorator<ASTCDAttribute> {
         TEMPLATES.put(AS_MAP, "decorator.cache.AsMap");
         TEMPLATES.put(CLEAN_UP, "decorator.cache.CleanUp");
         TEMPLATES.put(GET, "decorator.cache.Get");
+        TEMPLATES.put(GET_UNCHECKED, "decorator.cache.GetUnchecked");
         TEMPLATES.put(GET_LOADER, "decorator.cache.GetLoader");
         TEMPLATES.put(GET_ALL_PRESENT, "decorator.cache.GetAllPresent");
         TEMPLATES.put(GET_IF_PRESENT, "decorator.cache.GetIfPresent");
@@ -176,6 +181,15 @@ public class CacheDecorator extends AbstractMethodDecorator<ASTCDAttribute> {
         signatures.put(GET, String.format
                 (
                         GET,
+                        CDGeneratorHelper.toSingularCapitalized(cdAttribute),
+                        keyTypeArgumentName,
+                        valueTypeArgumentName
+                )
+        );
+        //V getUnchecked(K key)
+        signatures.put(GET_UNCHECKED, String.format
+                (
+                        GET_UNCHECKED,
                         CDGeneratorHelper.toSingularCapitalized(cdAttribute),
                         keyTypeArgumentName,
                         valueTypeArgumentName
