@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> {
     @Nonnull
-    private final CDGeneratorHelper generatorHelper;
+    protected final CDGeneratorHelper generatorHelper;
     @Nonnull
     private final List<CDConsumerTemplate<ASTCDCompilationUnit>> templates;
 
@@ -71,17 +71,17 @@ public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> 
         return asts;
     }
 
-    private ASTCDCompilationUnit getDecorated(){
+    protected ASTCDCompilationUnit getDecorated(){
         ASTCDCompilationUnit ast = generatorHelper.getAst();
         return new CDDecoratorTemplate(generatorHelper).apply(ast);
     }
 
-    private ASTCDCompilationUnit getVisitor(){
+    protected ASTCDCompilationUnit getVisitor(){
         ASTCDCompilationUnit ast = generatorHelper.getAst();
         return new CDVisitorTemplate(generatorHelper).apply(ast);
     }
 
-    private ASTCDCompilationUnit getFactory(){
+    protected ASTCDCompilationUnit getFactory(){
         ASTCDCompilationUnit ast = generatorHelper.getAst();
         return new CDFactoryTemplate(generatorHelper).apply(ast);
     }
