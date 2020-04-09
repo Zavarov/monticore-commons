@@ -32,15 +32,27 @@ public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> 
     @Nonnull
     private final List<CDConsumerTemplate<ASTCDCompilationUnit>> templates;
 
-    public CDTransformerChain(@Nonnull CDGeneratorHelper generatorHelper){
+
+    public CDTransformerChain(
+            @Nonnull CDGeneratorHelper generatorHelper,
+            @Nonnull List<CDConsumerTemplate<ASTCDCompilationUnit>> templates
+    )
+    {
         this.generatorHelper = generatorHelper;
-        this.templates = Arrays.asList(
-                new CDOptionalUnwrapperTemplate(generatorHelper),
-                new CDInitializerTemplate(generatorHelper),
-                new CDImportTransformer(generatorHelper),
-                new CDPackageTransformer(generatorHelper),
-                new CDHandwrittenFileTemplate(generatorHelper),
-                new CDAnnotatorTemplate(generatorHelper)
+        this.templates = templates;
+    }
+
+    public CDTransformerChain(@Nonnull CDGeneratorHelper generatorHelper){
+        this(
+                generatorHelper,
+                Arrays.asList(
+                        new CDOptionalUnwrapperTemplate(generatorHelper),
+                        new CDInitializerTemplate(generatorHelper),
+                        new CDImportTransformer(generatorHelper),
+                        new CDPackageTransformer(generatorHelper),
+                        new CDHandwrittenFileTemplate(generatorHelper),
+                        new CDAnnotatorTemplate(generatorHelper)
+                )
         );
     }
 
