@@ -22,7 +22,6 @@ import vartas.monticore.cd2code.CDGeneratorHelper;
 import vartas.monticore.cd2java.template.*;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,7 +30,7 @@ public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> 
     @Nonnull
     protected final CDGeneratorHelper generatorHelper;
     @Nonnull
-    protected final List<CDConsumerTemplate<ASTCDCompilationUnit>> templates;
+    private final List<CDConsumerTemplate<ASTCDCompilationUnit>> templates;
 
 
     public CDTransformerChain(
@@ -40,7 +39,7 @@ public class CDTransformerChain implements Supplier<List<ASTCDCompilationUnit>> 
     )
     {
         this.generatorHelper = generatorHelper;
-        this.templates = new ArrayList<>(templates);
+        this.templates = templates;
     }
 
     public CDTransformerChain(@Nonnull CDGeneratorHelper generatorHelper){
