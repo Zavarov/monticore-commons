@@ -56,7 +56,7 @@ public class Main {
         LOG.info("Output Path: {}", OUTPUT_PATH);
         LOG.info("Sources Path: {}", SOURCES_PATH);
         LOG.info("Class Diagram: {}", CLASS_DIAGRAM);
-        LOG.info("Generating Symbol Table");
+        LOG.info("Create Symbol Table");
 
         //Load the symbol table
         ModelPath modelPath = new ModelPath(MODEL_PATH);
@@ -80,7 +80,7 @@ public class Main {
         GENERATOR_SETUP.setTracing(false);
         GENERATOR_SETUP.setGlex(GLEX);
 
-        LOG.info("Generator code.");
+        LOG.info("Generate Code.");
         generate(GENERATOR_SETUP, generatorHelper);
     }
 
