@@ -64,6 +64,12 @@ public class CDDecoratorTemplate implements CD2CodeInheritanceVisitor, UnaryOper
         ast.addAllCDMethods(new VisitorDecorator(generatorHelper.getGlex()).decorate(generatorHelper.getVisitor()));
     }
 
+    @Override
+    public void handle(ASTCDInterface ast){
+        //Visitor
+        ast.addAllCDMethods(new VisitorDecorator(generatorHelper.getGlex()).decorate(generatorHelper.getVisitor()));
+    }
+
     private class CDDecoratorVisitor implements CD2CodeInheritanceVisitor {
         private List<ASTCDMethod> cdMethods = new ArrayList<>();
         

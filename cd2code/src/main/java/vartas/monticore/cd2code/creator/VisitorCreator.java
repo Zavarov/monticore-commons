@@ -66,6 +66,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
 
         cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
         cdDefinition.streamCDEnums().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
+        cdDefinition.streamCDInterfaces().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
 
         return cdInterface;
     }
