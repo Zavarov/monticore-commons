@@ -1,5 +1,0 @@
-command {
-    test{
-             class : "testCommand"
-    }
-}
