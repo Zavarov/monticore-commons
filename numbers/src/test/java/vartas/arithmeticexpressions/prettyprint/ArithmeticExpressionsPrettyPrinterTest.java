@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Zavarov
+ * Copyright (c) 2020 Zavarov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,47 +19,36 @@ package vartas.arithmeticexpressions.prettyprint;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import vartas.AbstractTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Enclosed.class)
 public class ArithmeticExpressionsPrettyPrinterTest extends AbstractTest {
     public static ArithmeticExpressionsPrettyPrinter prettyPrinter;
 
-    @BeforeClass
-    public static void setUp(){
+    @BeforeAll
+    public static void setUpAll(){
         IndentPrinter printer = new IndentPrinter();
         prettyPrinter = new ArithmeticExpressionsPrettyPrinter(printer);
     }
 
-    @RunWith(Parameterized.class)
-    public static class PrettyPrinter{
-        @Parameters
-        public static Object[] data() {
-            return new Object[] {
-                    "sin(pi)",
-                    "cos@-1.234",
-                    "1 ^ 3",
-                    "cos@-1",
-                    "cos@-1L",
-                    "cos@-1.234F",
-                    "cos@-1.234"
-            };
-        }
-
-        @Parameter
-        public String argument;
-
-        @Test
-        public void testPrettyPrintFunction(){
+    @Nested
+    public class PrettyPrinter{
+        @ParameterizedTest
+        @ValueSource(strings = {
+                "sin(pi)",
+                "cos@-1.234",
+                "1 ^ 3",
+                "cos@-1",
+                "cos@-1L",
+                "cos@-1.234F",
+                "cos@-1.234"
+        })
+        public void testPrettyPrintFunction(String argument){
             ASTExpression expression = parse(argument);
 
             String value = prettyPrinter.prettyprint(expression);

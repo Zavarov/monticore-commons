@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Zavarov
+ * Copyright (c) 2020 Zavarov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
 package vartas;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.se_rwth.commons.logging.Log;
-import org.junit.BeforeClass;
 import vartas.arithmeticexpressions._parser.ArithmeticExpressionsParser;
 import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 
@@ -30,12 +28,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractTest {
-    @BeforeClass
-    public static void setUpClass(){
-        Log.initWARN();
-        Log.enableFailQuick(false);
-    }
-
     public static ASTExpression parse(String expression){
         try{
             ArithmeticExpressionsParser parser = new ArithmeticExpressionsParser();
@@ -44,7 +36,7 @@ public abstract class AbstractTest {
             if(parser.hasErrors())
                 throw new IllegalArgumentException();
             //fail("The parser encountered errors while parsing "+expression);
-            if(!optional.isPresent())
+            if(optional.isEmpty())
                 throw new IllegalArgumentException();
             //fail("The expression couldn't be parsed");
 
