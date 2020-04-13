@@ -30,5 +30,6 @@ MontiCore Commons
 * reddit
 
 **Changed**
+* vartas.arithmeticexpressions -> vartas.monticore.arithmeticexpressions
 * MontiCore 5.3.0 -> MontiCore 6.0.0
 * JUnit4 -> JUnit5

@@ -18,8 +18,8 @@
 package vartas;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import vartas.arithmeticexpressions._parser.ArithmeticExpressionsParser;
-import vartas.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
+import vartas.monticore.arithmeticexpressions._parser.ArithmeticExpressionsParser;
+import vartas.monticore.arithmeticexpressions.calculator.ArithmeticExpressionsValueCalculator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
