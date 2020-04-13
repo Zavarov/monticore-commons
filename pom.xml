@@ -24,7 +24,7 @@
     <groupId>vartas.monticore-commons</groupId>
     <artifactId>monticore-commons</artifactId>
     <packaging>pom</packaging>
-    <version>2.0</version>
+    <version>2.0-SNAPSHOT</version>
     <modules>
         <module>core</module>
         <module>cd2code</module>
@@ -64,14 +64,18 @@
 
         <!-- .. Plugins......................................................... -->
 
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
+        <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
 
 
         <!-- .. Misc .......................................................... -->
 
+        <github.local.server>github</github.local.server>
         <java.version>11</java.version>
         <wagon.provider.version>2.6</wagon.provider.version>
 
@@ -176,7 +180,13 @@
         </pluginRepository>
     </pluginRepositories>
 
-
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Zavarov Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/zavarov/monticore-commons</url>
+        </repository>
+    </distributionManagement>
 
     <!-- == DEFAULT BUILD SETTINGS =========================================== -->
 
@@ -187,6 +197,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
+            <!-- For deploying the code to GitHub  -->
             <!-- create grammar & template jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
