@@ -21,7 +21,6 @@ import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
-import org.junit.jupiter.api.BeforeAll;
 import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
 import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
 import vartas.monticore.cd2java.Main;
@@ -40,11 +39,6 @@ public abstract class BasicCDTest {
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;
     public ASTCDClass cdClass;
-
-    @BeforeAll
-    public static void setUpAll(){
-        //Log.enableFailQuick(false);
-    }
 
     protected void parseCDClass(String className, String classDiagram){
         CD2CodeLanguage cdLanguage = new CD2CodeLanguage();

@@ -28,7 +28,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class CommonExpressionsValueCalculator implements CommonExpressionsVisitor {
-    private Map<ASTNode, BigDecimal> values;
+    private final Map<ASTNode, BigDecimal> values;
     private CommonExpressionsVisitor realThis;
 
     public CommonExpressionsValueCalculator(Map<ASTNode, BigDecimal> values) {

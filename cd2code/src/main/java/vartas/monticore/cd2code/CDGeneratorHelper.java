@@ -18,6 +18,7 @@
 package vartas.monticore.cd2code;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
@@ -142,17 +143,18 @@ public class CDGeneratorHelper {
     }
 
     public ASTMCImportStatement getPackageAsImport(){
-        return getPackageAsImport(Splitters.DOT.splitToList(getRootPackage()));
+        return getPackageAsImport(Splitters.DOT.split(getRootPackage()));
     }
 
     public ASTMCImportStatement getPackageAsImport(String subPackage){
         String qualifiedName = Names.getQualifiedName(getRootPackage(), subPackage);
-        return getPackageAsImport(Splitters.DOT.splitToList(qualifiedName));
+        return getPackageAsImport(Splitters.DOT.split(qualifiedName));
     }
 
-    private ASTMCImportStatement getPackageAsImport(List<String> packageList){
+    private ASTMCImportStatement getPackageAsImport(Iterable<String> packageIterable){
         ASTMCQualifiedName mcQualifiedName;
         ASTMCImportStatement mcImportStatement;
+        List<String> packageList = Lists.newArrayList(packageIterable);
 
         mcQualifiedName = CD2CodeMill.mCQualifiedNameBuilder().setPartList(packageList).build();
         mcImportStatement = CD2CodeMill.mCImportStatementBuilder().setMCQualifiedName(mcQualifiedName).build();
@@ -176,7 +178,7 @@ public class CDGeneratorHelper {
     }
 
     private static class GetStereoValueValuesVisitor implements CD2CodeVisitor {
-        private List<String> stereoValueValues = new ArrayList<>();
+        private final List<String> stereoValueValues = new ArrayList<>();
         private final String cdStereoValueName;
 
         private GetStereoValueValuesVisitor(ASTCDStereoValue cdStereoValue){
@@ -208,7 +210,7 @@ public class CDGeneratorHelper {
 
     @Nonnull
     private static class TypeArgumentVisitor implements CD2CodeInheritanceVisitor, CD2CodeCollectionTypesInheritanceVisitor {
-        private int genericTypeIndex;
+        private final int genericTypeIndex;
         @Nullable
         private ASTMCTypeArgument genericTypeArgument;
 

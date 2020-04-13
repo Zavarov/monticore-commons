@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class MCCommonLiteralsValueCalculator implements MCCommonLiteralsVisitor {
-    private Map<ASTNode, BigDecimal> values;
+    private final Map<ASTNode, BigDecimal> values;
     private MCCommonLiteralsVisitor realThis;
 
     public MCCommonLiteralsValueCalculator(Map<ASTNode, BigDecimal> values) {

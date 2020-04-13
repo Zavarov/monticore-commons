@@ -26,8 +26,8 @@ public enum Errors {
     ;
 
     @Nonnull
-    private String description;
-    private long code;
+    private final String description;
+    private final long code;
 
     Errors(long code, @Nonnull String description){
         this.code = code;

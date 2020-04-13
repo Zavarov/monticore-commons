@@ -50,7 +50,7 @@ public class CD2CodePrettyPrinter extends CD2CodeDelegatorVisitor {
     public CD2CodePrettyPrinter(IndentPrinter printer){
         this.printer = printer;
 
-        this.setCD2CodeVisitor(new InternalCD2CodePrettyPrinter(printer));
+        this.setCD2CodeVisitor(new InternalCD2CodePrettyPrinter());
         this.setCD2CodeBasicTypesVisitor(new CD2CodeBasicTypesPrettyPrinter(printer));
         this.setCD2CodeCollectionTypesVisitor(new CD2CodeCollectionPrettyPrinter(printer));
         this.setCD4AnalysisVisitor(new CDPrettyPrinter(printer));
@@ -124,10 +124,6 @@ public class CD2CodePrettyPrinter extends CD2CodeDelegatorVisitor {
 
     private static class InternalCD2CodePrettyPrinter implements CD2CodeVisitor{
         private CD2CodeVisitor realThis = this;
-        private final IndentPrinter printer;
-        public InternalCD2CodePrettyPrinter(IndentPrinter printer){
-            this.printer = printer;
-        }
 
         @Override
         public CD2CodeVisitor getRealThis(){

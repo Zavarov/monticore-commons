@@ -28,7 +28,7 @@ import java.util.Map;
 public class ExpressionsBasisValueCalculator implements ExpressionsBasisVisitor {
     public static final String E = "e";
     public static final String PI = "pi";
-    private Map<ASTNode, BigDecimal> values;
+    private final Map<ASTNode, BigDecimal> values;
     private ExpressionsBasisVisitor realThis;
 
     public ExpressionsBasisValueCalculator(Map<ASTNode, BigDecimal> values) {

@@ -32,7 +32,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
-    private static Percentage precision = Percentage.withPercentage(10e-15);
+    private static final Percentage precision = Percentage.withPercentage(10e-15);
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)

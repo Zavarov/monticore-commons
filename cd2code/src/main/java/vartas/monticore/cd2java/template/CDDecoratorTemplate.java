@@ -71,7 +71,7 @@ public class CDDecoratorTemplate implements CD2CodeInheritanceVisitor, UnaryOper
     }
 
     private class CDDecoratorVisitor implements CD2CodeInheritanceVisitor {
-        private List<ASTCDMethod> cdMethods = new ArrayList<>();
+        private final List<ASTCDMethod> cdMethods = new ArrayList<>();
         
         private ASTCDAttribute cdAttribute;
 

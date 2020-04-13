@@ -31,11 +31,11 @@ import vartas.monticore.arithmeticexpressions._visitor.ArithmeticExpressionsInhe
 import vartas.monticore.arithmeticexpressions._visitor.ArithmeticExpressionsVisitor;
 
 public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDelegatorVisitor {
-    private IndentPrinter printer;
+    private final IndentPrinter printer;
     public ArithmeticExpressionsPrettyPrinter(IndentPrinter printer){
         this.printer = printer;
 
-        setArithmeticExpressionsVisitor(new ArithmeticExpressionSublanguagePrettyPrinter(printer));
+        setArithmeticExpressionsVisitor(new ArithmeticExpressionSubPrettyPrinter());
         setCommonExpressionsVisitor(new CommonExpressionsPrettyPrinter(printer));
         setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
         setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
@@ -49,14 +49,8 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
         return content;
     }
 
-    private static class ArithmeticExpressionSublanguagePrettyPrinter implements ArithmeticExpressionsInheritanceVisitor {
-        private ArithmeticExpressionsVisitor realThis;
-        private IndentPrinter printer;
-
-        private ArithmeticExpressionSublanguagePrettyPrinter(IndentPrinter printer){
-            this.printer = printer;
-            this.realThis = this;
-        }
+    private class ArithmeticExpressionSubPrettyPrinter implements ArithmeticExpressionsInheritanceVisitor {
+        private ArithmeticExpressionsVisitor realThis = this;
 
         @Override
         public ArithmeticExpressionsVisitor getRealThis(){

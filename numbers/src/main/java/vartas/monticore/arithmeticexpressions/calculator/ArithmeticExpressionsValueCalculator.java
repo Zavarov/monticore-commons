@@ -35,19 +35,19 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
     /**
      * The maximum number of rolls that are allowed at once.
      */
-    private static long MAX_EYE = 1024;
+    private static final long MAX_EYE = 1024;
     /**
      * The maximum number of eyes a die can have.
      */
-    private static long MAX_DICE = 256;
+    private static final long MAX_DICE = 256;
     /**
      * The number generator for the dice.
      */
-    private static Random rng = new Random();
+    private static final Random rng = new Random();
     /**
      * Contains the value of each subexpression.
      */
-    private Map<ASTNode, BigDecimal> values = new HashMap<>();
+    private final Map<ASTNode, BigDecimal> values = new HashMap<>();
 
     /**
      * @param expression the arithmetic expression that is going to be evaluated.
@@ -68,20 +68,14 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
     }
 
     protected ArithmeticExpressionsValueCalculator(){
-        setArithmeticExpressionsVisitor(new ArithmeticExpressionsValueCalculatorSubCalculator(values));
+        setArithmeticExpressionsVisitor(new ArithmeticExpressionsValueCalculatorSubCalculator());
         setCommonExpressionsVisitor(new CommonExpressionsValueCalculator(values));
         setExpressionsBasisVisitor(new ExpressionsBasisValueCalculator(values));
         setMCCommonLiteralsVisitor(new MCCommonLiteralsValueCalculator(values));
     }
 
-    private static class ArithmeticExpressionsValueCalculatorSubCalculator implements ArithmeticExpressionsVisitor {
-        private Map<ASTNode, BigDecimal> values;
-        private ArithmeticExpressionsVisitor realThis;
-
-        private ArithmeticExpressionsValueCalculatorSubCalculator(Map<ASTNode, BigDecimal> values) {
-            this.values = values;
-            this.realThis = this;
-        }
+    private class ArithmeticExpressionsValueCalculatorSubCalculator implements ArithmeticExpressionsVisitor {
+        private ArithmeticExpressionsVisitor realThis = this;
 
         @Override
         public ArithmeticExpressionsVisitor getRealThis(){
