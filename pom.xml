@@ -29,6 +29,7 @@
         <module>core</module>
         <module>cd2code</module>
         <module>numbers</module>
+        <module>cd4code</module>
     </modules>
 
     <properties>

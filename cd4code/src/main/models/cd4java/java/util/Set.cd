@@ -1,0 +1,11 @@
+package java.util;
+
+import java.util.Collection.Collection;
+
+/**
+ * @since Java 11
+ */
+public classdiagram Set{
+    public interface Set extends Collection{
+    }
+}

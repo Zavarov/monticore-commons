@@ -1,0 +1,11 @@
+package java.util;
+
+import java.lang.Iterable.Iterable;
+
+/**
+ * @since Java 11
+ */
+public classdiagram Collection{
+    public interface Collection extends Iterable{
+    }
+}

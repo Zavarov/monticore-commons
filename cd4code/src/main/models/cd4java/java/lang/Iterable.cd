@@ -1,0 +1,12 @@
+package java.lang;
+
+/**
+ * @since Java 11
+ */
+public classdiagram Iterable{
+    public interface Iterable <<T>>{
+        void forEach(Consumer<? super T> action);
+        Iterator<T> iterator();
+        Spliterator<T> spliterator();
+    }
+}

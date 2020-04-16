@@ -1,0 +1,8 @@
+package java.util;
+
+import java.util.Collection.Collection;
+
+public classdiagram List{
+    public interface List extends Collection{
+    }
+}
