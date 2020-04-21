@@ -1,8 +1,26 @@
 package java.util;
 
 import java.util.Collection.Collection;
+import java.util.Comparator.Comparator;
+import java.util.ListIterator.ListIterator;
+import java.util.function.UnaryOperator.UnaryOperator;
 
+/**
+ * @version Java 11
+ */
 public classdiagram List{
-    public interface List extends Collection{
+    public interface List extends Collection <<E>>{
+        void add(int index, E element);
+        boolean addAll(int index, Collection<? extends E> c);
+        E get(int index);
+        int indexOf(Object o);
+        int lastIndexOf(Object o);
+        ListIterator<E> listIterator();
+        ListIterator<E> listIterator(int index);
+        E remove(int index);
+        void replaceAll(UnaryOperator<E> operator);
+        E set(int index, E element);
+        void sort(Comparator<? super E> c);
+        List<E> subList(int fromIndex, int toIndex);
     }
 }

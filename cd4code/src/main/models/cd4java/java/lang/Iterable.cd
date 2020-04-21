@@ -1,10 +1,14 @@
 package java.lang;
 
+import java.util.Iterator.Iterator;
+import java.util.Spliterator.Spliterator;
+import java.util.function.Consumer.Consumer;
+import java.lang.Object.Object;
 /**
- * @since Java 11
+ * @version Java 11
  */
 public classdiagram Iterable{
-    public interface Iterable <<T>>{
+    public interface Iterable extends Object <<T>>{
         void forEach(Consumer<? super T> action);
         Iterator<T> iterator();
         Spliterator<T> spliterator();

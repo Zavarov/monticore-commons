@@ -42,11 +42,12 @@ public class CD4CodeSymbolTableCreatorDelegator extends de.monticore.cd.cd4code.
     @Override
     public CD4CodeArtifactScope createFromAST(ASTCDCompilationUnit ast){
         CD4CodeArtifactScope artifactScope = super.createFromAST(ast);
+
         //TODO Manually patch the ArtifactScope since packages and imports are clearly overrated
         artifactScope.setPackageName(Names.getQualifiedName(ast.getPackageList()));
         artifactScope.setImportList(ast.getMCImportStatementList().stream().map(mcImportStatement -> new ImportStatement(mcImportStatement.getQName(), mcImportStatement.isStar())).collect(Collectors.toList()));
-        //TODO Give the artifact scope a fancy name so that we might be able to recognize it
-        artifactScope.setName("CD4CodeArtifactScope["+ Joiners.DOT.join(ast.getPackageList())+"]");
+        //TODO Since CD4CodeArtifactScope is not an instance of CD4AnalysisScope, the package is not used -> Repurpose the name as package
+        artifactScope.setName(Joiners.DOT.join(ast.getPackageList()));
         return artifactScope;
     }
 }

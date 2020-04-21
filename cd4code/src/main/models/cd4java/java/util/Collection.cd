@@ -1,11 +1,30 @@
 package java.util;
 
 import java.lang.Iterable.Iterable;
+import java.util.Stream.Stream;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
 /**
- * @since Java 11
+ * @version Java 11
  */
 public classdiagram Collection{
-    public interface Collection extends Iterable{
+    public interface Collection extends Iterable <<E>> {
+        boolean add(E e);
+        boolean addAll(Collection<? extends E> c);
+        void clear();
+        boolean contains(Object o);
+        boolean containsAll(Collection<?> c);
+        boolean isEmpty();
+        Stream<E> parallelStream();
+        boolean remove(Object o);
+        boolean removeAll(Collection<?> c);
+        boolean removeIf(Predicate<? super E> filter);
+        boolean retainAll(Collection<?> c);
+        int size();
+        Stream<E> stream();
+        Object[] toArray();
+        E[] toArray(IntFunction<E[]> generator);
+        E[] toArray(E[] a);
     }
 }

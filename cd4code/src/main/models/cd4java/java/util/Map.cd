@@ -1,0 +1,39 @@
+package java.util;
+
+import java.lang.Object.Object;
+import java.util.Collection.Collection;
+import java.util.Set.Set;
+import java.util.function.BiConsumer.BiConsumer;
+import java.util.function.BiFunction.BiFunction;
+import java.util.function.Function.Function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Map{
+    public interface Map extends Object <<K,V>> {
+        void clear();
+        V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+        V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
+        V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+        boolean containsKey(Object object);
+        boolean containsValue(Object object);
+        Set<Map.Entry<K,V>> entrySet();
+        void forEach(BiConsumer<? super K, ? super V> action);
+        V get(Object key);
+        V getOrDefault(Object key, V defaultValue);
+        boolean isEmpty();
+        Set<K> keySet();
+        V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction);
+        V put(K key, V value);
+        void putAll(Map<? extends K, ? extends V> m);
+        V putIfAbsent(K key, V value);
+        V remove(Object key);
+        boolean remove(Object key, Object value);
+        V replace(K key, V value);
+        boolean replace(K key, V oldValue, V newValue);
+        void replaceAll(BiFunction<? super K, ? super V, ? extends V> function);
+        int size();
+        Collection<V> values();
+    }
+}

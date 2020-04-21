@@ -15,17 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2code._symboltable;
+package vartas.monticore.cd4analysis.template;
 
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
+import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
+import de.monticore.cd.cd4analysis._visitor.CD4AnalysisInheritanceVisitor;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 
-public class CD2CodeLanguage extends CD2CodeLanguageTOP{
-    public CD2CodeLanguage() {
-        super("CD2Code Language", CD4AnalysisLanguage.FILE_ENDING);
+import java.util.function.Consumer;
+
+public abstract class CDConsumerTemplate implements CD4AnalysisInheritanceVisitor, Consumer<ASTCD4AnalysisNode> {
+    protected final GlobalExtensionManagement glex;
+    public CDConsumerTemplate(GlobalExtensionManagement glex){
+        this.glex = glex;
     }
 
     @Override
-    protected CD2CodeModelLoader provideModelLoader() {
-        return new CD2CodeModelLoader(this);
+    public void accept(ASTCD4AnalysisNode ast) {
+        ast.accept(this);
     }
 }

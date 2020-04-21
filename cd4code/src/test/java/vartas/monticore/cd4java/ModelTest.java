@@ -17,38 +17,21 @@
 
 package vartas.monticore.cd4java;
 
-import de.monticore.cd.cd4code._symboltable.CD4CodeGlobalScope;
-import de.monticore.io.paths.ModelPath;
-import de.se_rwth.commons.logging.Log;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import vartas.monticore.cd4analysis._symboltable.CD4CodeLanguage;
-
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModelTest {
-    ModelPath modelPath = new ModelPath(Paths.get("src","main","models","cd4java"));
-    CD4CodeLanguage language;
-    CD4CodeGlobalScope globalScope;
-
-    @BeforeAll
-    public static void setUpAll(){
-        Log.initDEBUG();
-    }
-
-    @BeforeEach
-    public void setUp(){
-        language = new CD4CodeLanguage();
-        globalScope = new CD4CodeGlobalScope(modelPath, language);
-    }
-
+public class ModelTest extends BasicCDTest{
     @Test
     public void testLoadIterable(){
         assertThat(globalScope.resolveCDDefinition("java.lang.Iterable")).isPresent();
         assertThat(globalScope.resolveCDType("java.lang.Iterable.Iterable")).isPresent();
+    }
+
+    @Test
+    public void testLoadObject(){
+        assertThat(globalScope.resolveCDDefinition("java.lang.Object")).isPresent();
+        assertThat(globalScope.resolveCDType("java.lang.Object.Object")).isPresent();
     }
 
     @Test
@@ -67,5 +50,17 @@ public class ModelTest {
     public void testLoadSet(){
         assertThat(globalScope.resolveCDDefinition("java.util.Set")).isPresent();
         assertThat(globalScope.resolveCDType("java.util.Set.Set")).isPresent();
+    }
+
+    @Test
+    public void testLoadOptional(){
+        assertThat(globalScope.resolveCDDefinition("java.util.Optional")).isPresent();
+        assertThat(globalScope.resolveCDType("java.util.Optional.Optional")).isPresent();
+    }
+
+    @Test
+    public void testLoadMap(){
+        assertThat(globalScope.resolveCDDefinition("java.util.Map")).isPresent();
+        assertThat(globalScope.resolveCDType("java.util.Map.Map")).isPresent();
     }
 }

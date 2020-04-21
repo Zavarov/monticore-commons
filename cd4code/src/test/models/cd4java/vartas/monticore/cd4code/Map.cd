@@ -1,0 +1,9 @@
+package vartas.monticore.cd4code;
+
+import java.util.Map.Map;
+
+classdiagram Map{
+    public class Subreddit{
+        - Map<ID, Submission> submissions;
+    }
+}

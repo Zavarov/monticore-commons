@@ -15,15 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2java.template;
+package vartas.monticore.cd4analysis._symboltable;
 
-import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
+import de.monticore.cd.cd4code._symboltable.CD4CodeLanguage;
+import de.monticore.cd.cd4code._symboltable.ICD4CodeScope;
+import de.monticore.io.paths.ModelPath;
 
-import java.util.function.Consumer;
+/**
+ * This class patches #getEnclosingScope() to not cause an error,
+ * in order to have determineFullName() work for all symbols.
+ */
+public class CD4CodeGlobalScope extends de.monticore.cd.cd4code._symboltable.CD4CodeGlobalScope {
+    public CD4CodeGlobalScope(ModelPath modelPath, CD4CodeLanguage language) {
+        super(modelPath, language);
+    }
 
-public interface CDConsumerTemplate <T extends ASTCD4AnalysisNode> extends vartas.monticore.cd2code._visitor.CD2CodeInheritanceVisitor, Consumer<T> {
     @Override
-    default void accept(T ast) {
-        ast.accept(this);
+    public ICD4CodeScope getEnclosingScope() {
+        return null;
     }
 }

@@ -15,11 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2code;
+package vartas.monticore.cd4analysis;
 
+import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
+import de.se_rwth.commons.Splitters;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
@@ -46,17 +49,19 @@ public class CDGenerator {
         this.generatorHelper = generatorHelper;
     }
 
-    public void generate(@Nonnull ASTCDCompilationUnit cdCompilationUnit){
-        ASTCDDefinition cdDefinition = cdCompilationUnit.getCDDefinition();
+    public void generate(@Nonnull CDDefinitionSymbol cdDefinitionSymbol){
+        ASTCDDefinition cdDefinition = cdDefinitionSymbol.getAstNode();
+        String packageName = cdDefinitionSymbol.getPackageName();
+        List<String> packageList = Lists.newArrayList(Splitters.DOT.split(packageName));
 
         for(ASTCDClass ast : cdDefinition.getCDClassList())
-            generateClass(cdCompilationUnit.getPackageList(), ast);
+            generateClass(packageList, ast);
 
         for(ASTCDEnum ast : cdDefinition.getCDEnumList())
-            generateEnum(cdCompilationUnit.getPackageList(), ast);
+            generateEnum(packageList, ast);
 
         for(ASTCDInterface ast : cdDefinition.getCDInterfaceList())
-            generateInterface(cdCompilationUnit.getPackageList(), ast);
+            generateInterface(packageList, ast);
     }
 
     private void generateInterface(List<String> packageName, ASTCDInterface ast){

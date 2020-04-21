@@ -1,0 +1,10 @@
+package vartas.monticore.cd4code;
+
+import java.util.List.List;
+
+classdiagram List{
+    public class Database{
+        - List<String> values;
+        + List<String> entries(Instant inclusiveFrom, Instant exclusiveTo);
+    }
+}

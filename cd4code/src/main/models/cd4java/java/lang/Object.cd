@@ -1,0 +1,20 @@
+package java.lang;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Object{
+    public class Object {
+        protected Object clone();
+        public boolean equals(Object obj);
+        protected void finalize();
+        public Class<?> getClass();
+        public int hashCode();
+        public void notify();
+        public void notifyAll();
+        public String toString();
+        public void wait();
+        public void wait(long timeoutMillis);
+        public void wait(long timeoutMillis, int nanos);
+    }
+}

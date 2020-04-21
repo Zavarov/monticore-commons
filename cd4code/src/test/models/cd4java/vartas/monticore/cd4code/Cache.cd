@@ -1,0 +1,9 @@
+package vartas.monticore.cd4code;
+
+import com.google.common.cache.Cache.Cache;
+
+classdiagram Cache{
+    public class Browser{
+        - Cache<URL, Cookie> cookies;
+    }
+}

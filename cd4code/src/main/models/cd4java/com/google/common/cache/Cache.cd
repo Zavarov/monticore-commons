@@ -1,0 +1,35 @@
+package com.google.common.cache;
+
+import com.google.common.cache.CacheStats;
+import com.google.common.collect.ImmutableMap.ImmutableMap;
+import java.util.Map.Map;
+import java.util.concurrent.Callable.Callable;
+import java.util.concurrent.ConcurrentMap.ConcurrentMap;
+import java.util.concurrent.ExecutionException.ExecutionException;
+import java.util.concurrent.UncheckedExecutionException.UncheckedExecutionException;
+import java.lang.Iterable.Iterable;
+import java.lang.Object.Object;
+/**
+ * @version Guava 29.0
+ */
+public classdiagram Cache{
+    public interface Cache extends Object <<K,V>>{
+        ConcurrentMap<K,V> asMap();
+        void cleanUp();
+        V get(K key, Callable<? extends V> loader);
+        ImmutableMap<K,V> getAllPresent(Iterable<?> keys);
+        V getIfPresent(Object key);
+        void invalidate(Object key);
+        void invalidateAll();
+        void invalidateAll(Iterable<?> keys);
+        void put(K key, V value);
+        void putAll(Map<? extends K, ? extends V> m);
+        long size();
+        CacheStats stats();
+        //Custom Methods
+        V get(K key) throws ExecutionException;
+        V getUnchecked(K key) throws UncheckedExecutionException;
+        Collection<V> values();
+        Set<K> keys();
+    }
+}

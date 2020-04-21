@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2code;
+package vartas.monticore.cd4java;
 
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
-import vartas.monticore.cd2code._symboltable.CD2CodeGlobalScope;
-import vartas.monticore.cd2code._symboltable.CD2CodeLanguage;
-import vartas.monticore.cd2java.Main;
+import org.junit.jupiter.api.BeforeEach;
+import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
+import vartas.monticore.cd4analysis._symboltable.CD4CodeLanguage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,23 +31,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BasicCDTest {
-    protected static final Path MODEL_PATH = Paths.get("src","test","resources");
+    protected static final Path MODEL_PATH = Paths.get("src","main","models","cd4java");
+    protected static final Path TEST_MODEL_PATH = Paths.get("src","test","models","cd4java");
     protected static final Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
     protected static final Path OUTPUT_PATH = Paths.get("target","generated-sources");
     protected static final Path SOURCES_PATH = Paths.get("src","main", "java");
+
+    protected CD4CodeLanguage language = new CD4CodeLanguage();
+    protected CD4CodeGlobalScope globalScope;
+    protected ModelPath modelPath;
 
     public ASTCDCompilationUnit cdCompilationUnit;
     public ASTCDDefinition cdDefinition;
     public ASTCDClass cdClass;
 
-    protected void parseCDClass(String className, String classDiagram){
-        CD2CodeLanguage cdLanguage = new CD2CodeLanguage();
-        ModelPath cdModelPath = new ModelPath(MODEL_PATH);
-        CD2CodeGlobalScope cdGlobalScope = new CD2CodeGlobalScope(cdModelPath, cdLanguage);
+    @BeforeEach
+    public void setUp(){
+        modelPath = new ModelPath(TEST_MODEL_PATH, MODEL_PATH);
+        language = new CD4CodeLanguage();
+        globalScope = new CD4CodeGlobalScope(modelPath, language);
+    }
 
-        cdCompilationUnit = Main.parse(cdGlobalScope, cdModelPath, classDiagram);
-        cdDefinition = cdCompilationUnit.getCDDefinition();
-        cdClass = cdDefinition.getCDClassList().stream().filter(cdClazz -> cdClazz.getName().equals(className)).findAny().orElseThrow();
+    protected ASTCDType getCDType(ASTCDDefinition ast, String className){
+        return ast.streamCDClasss().filter(cdClass -> cdClass.getName().equals(className)).findAny().orElseThrow();
     }
 
     protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){
