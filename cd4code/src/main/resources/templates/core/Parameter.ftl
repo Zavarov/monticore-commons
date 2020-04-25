@@ -1,2 +1,2 @@
-<#assign cdPrinter = getGlobalVar("cdPrinter")>
-${include("hook.Annotation")} ${cdPrinter.printType(ast)} ${ast.getName()}
+<#assign mcPrinter = getGlobalVar("mcPrinter")>
+${include("hook.Annotation")} ${mcPrinter.prettyprint(ast.getMCType())} ${ast.getName()}

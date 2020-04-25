@@ -18,20 +18,26 @@
 package vartas.monticore.cd4analysis.decorator;
 
 import de.monticore.cd.cd4analysis._ast.*;
-import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
+import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.codegen.cd2java.AbstractCreator;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CDDefinitionDecorator extends AbstractCreator<ASTCDDefinition, ASTCDDefinition> implements CD4CodeVisitor {
-    private final CDAttributeDecorator attributeDecorator = new CDAttributeDecorator();
-    private final List<ASTCDMethod> methodList = new ArrayList<>();
+public class CDDefinitionDecorator extends AbstractCreator<ASTCDDefinition, ASTCDDefinition> implements CD4CodeInheritanceVisitor {
+    private final CDAttributeDecorator attributeDecorator;
+    private final List<ASTCDMethod> methodList;
+
+    public CDDefinitionDecorator(GlobalExtensionManagement glex){
+        super(glex);
+        this.attributeDecorator = new CDAttributeDecorator(glex);
+        this.methodList = new ArrayList<>();
+    }
 
     @Override
     public ASTCDDefinition decorate(ASTCDDefinition ast) {
-        ast = ast.deepClone();
         ast.accept(getRealThis());
         return ast;
     }
@@ -39,6 +45,11 @@ public class CDDefinitionDecorator extends AbstractCreator<ASTCDDefinition, ASTC
     @Override
     public void visit(ASTCDAttribute ast){
         methodList.addAll(attributeDecorator.decorate(ast));
+    }
+
+    @Override
+    public void visit(ASTCDType ast){
+        methodList.clear();
     }
 
     @Override

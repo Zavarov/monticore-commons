@@ -1,14 +1,15 @@
 package java.util;
 
 import java.lang.Iterable.Iterable;
-import java.util.Stream.Stream;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
+import java.util.stream.Stream.Stream;
+import java.util.function.IntFunction.IntFunction;
+import java.util.function.Predicate.Predicate;
 
 /**
  * @version Java 11
  */
 public classdiagram Collection{
+    <<container>>
     public interface Collection extends Iterable <<E>> {
         boolean add(E e);
         boolean addAll(Collection<? extends E> c);

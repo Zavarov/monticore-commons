@@ -6,7 +6,7 @@ import java.util.Collection.Collection;
  * @version Java 11
  */
 public classdiagram Set{
-    <<essential="false">>
+    <<container>>
     public interface Set extends Collection <<E>>{
     }
 }

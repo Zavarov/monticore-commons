@@ -1,6 +1,8 @@
 package vartas.monticore.cd4code;
 
 import com.google.common.cache.Cache.Cache;
+import java.net.URL.URL;
+import org.json.Cookie.Cookie;
 
 classdiagram Cache{
     public class Browser{

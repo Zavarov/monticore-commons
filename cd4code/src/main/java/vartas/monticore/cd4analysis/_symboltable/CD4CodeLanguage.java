@@ -38,6 +38,11 @@ public class CD4CodeLanguage extends de.monticore.cd.cd4code._symboltable.CD4Cod
         return new CD4CodeSymbolTableCreatorDelegator(enclosingScope);
     }
 
+    /**
+     * Determine the name of the class diagram, given the CD Type.
+     * @param name
+     * @return
+     */
     @Override
     protected Set<String> calculateModelNamesForCDType(String name){
         return Names.getQualifier(name).isEmpty() ? Collections.emptySet() : Collections.singleton(Names.getQualifier(name));

@@ -18,6 +18,7 @@
 package vartas.monticore.cd4analysis._symboltable;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
+import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
 import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
@@ -25,8 +26,10 @@ import de.monticore.cd.cd4analysis._symboltable.CDMethOrConstrSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbolLoader;
 import de.monticore.cd.cd4analysis._symboltable.ICD4AnalysisScope;
 import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
+import de.se_rwth.commons.Joiners;
 
 import java.util.Deque;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,5 +72,22 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
     public void setReturnTypeOfMethod(CDMethOrConstrSymbol methodSymbol, ASTCDMethod astMethod) {
         //TODO
         //Fails when we have nested generic return types.
+    }
+
+    @Override
+    public void visit(ASTCDCompilationUnit ast){
+        super.visit(ast);
+    }
+
+    @Override
+    public void endVisit(ASTCDCompilationUnit ast){
+        //Provide the package name for all sub-symbols
+        CD4CodeSpanningSymbolMock spanningSymbolMock = new CD4CodeSpanningSymbolMock(ast.getCDDefinition().getName());
+        spanningSymbolMock.setPackageName(Joiners.DOT.join(ast.getPackageList()));
+        Optional<ICD4AnalysisScope> scope = getCurrentScope();
+        getCurrentScope().orElseThrow().setSpanningSymbol(spanningSymbolMock);
+
+        //Link to the spanning symbol before leaving the artifact scope
+        super.endVisit(ast);
     }
 }

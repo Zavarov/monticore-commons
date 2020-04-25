@@ -18,7 +18,7 @@
 package vartas.monticore.cd4analysis.template;
 
 import com.google.common.collect.Lists;
-import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.se_rwth.commons.Splitters;
@@ -32,7 +32,7 @@ public class CDBindPackageTemplate extends CDConsumerTemplate{
     }
 
     @Override
-    public void visit(ASTCDDefinition ast){
+    public void visit(ASTCDType ast){
         String packageName = ast.getSymbol().getPackageName();
         List<String> packageList = Lists.newArrayList(Splitters.DOT.split(packageName));
         glex.replaceTemplate(

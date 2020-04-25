@@ -21,7 +21,6 @@ import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.generating.GeneratorSetup;
 import vartas.monticore.cd4analysis.decorator.CDDefinitionDecorator;
-import vartas.monticore.cd4analysis.template.CDBindDecoratorTemplate;
 import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
 import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
 
@@ -29,17 +28,17 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class CDDecoratorGenerator extends CDTemplateGenerator{
-    private final CDDefinitionDecorator decorator = new CDDefinitionDecorator();
+    private final CDDefinitionDecorator decorator;
     public CDDecoratorGenerator(@Nonnull GeneratorSetup generatorSetup, @Nonnull CDGeneratorHelper generatorHelper) {
         super(
                 generatorSetup,
                 generatorHelper,
                 Arrays.asList(
-                        new CDBindDecoratorTemplate(generatorSetup.getGlex()),
                         new CDBindPackageTemplate(generatorSetup.getGlex()),
                         new CDBindImportTemplate(generatorSetup.getGlex())
                 )
         );
+        this.decorator = new CDDefinitionDecorator(generatorSetup.getGlex());
     }
 
     @Override

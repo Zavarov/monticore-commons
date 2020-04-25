@@ -1,5 +1,4 @@
 package java.lang;
-
 /**
  * @version Java 11
  */
@@ -13,8 +12,8 @@ public classdiagram Object{
         public void notify();
         public void notifyAll();
         public String toString();
-        public void wait();
-        public void wait(long timeoutMillis);
-        public void wait(long timeoutMillis, int nanos);
+        public void wait() throws InterruptedException;
+        public void wait(long timeoutMillis) throws InterruptedException;
+        public void wait(long timeoutMillis, int nanos) throws InterruptedException;
     }
 }

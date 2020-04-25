@@ -1,7 +1,8 @@
 package java.util;
 
 import java.lang.Object.Object;
-import java.util.Stream.Stream;
+import java.util.stream.Stream.Stream;
+import java.util.function.Consumer.Consumer;
 import java.util.function.Function.Function;
 import java.util.function.Predicate.Predicate;
 import java.util.function.Supplier.Supplier;
@@ -10,6 +11,7 @@ import java.util.function.Supplier.Supplier;
  * @version Java 11
  */
 public classdiagram Optional{
+    <<container>>
     public interface Optional extends Object <<T>>{
         Optional<T> filter(Predicate<? super T> predicate);
         //<U> Optional<U> flatMap(Function<? super T, ? extends Optional<? extends U>> mapper);

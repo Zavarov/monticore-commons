@@ -2,7 +2,7 @@
 <#assign cdPrinter = getGlobalVar("cdPrinter")>
 ${include("hook.Annotation")}<#t>
 <#-- Method signature -->
-<#if hasModifier>${ast.printModifier()} </#if>${cdPrinter.printReturnType(ast)} ${ast.getName()}<#t>
+<#if hasModifier>${ast.printModifier()} </#if>${cdPrinter.prettyprint(ast.getMCReturnType())} ${ast.getName()}<#t>
     (<#t>
         <#-- Parameters -->
         <#list ast.getCDParameterList() as cdParameter>
@@ -15,7 +15,7 @@ ${ast.printThrowsDecl()}<#t>
 <#if ast.getModifier().isAbstract()>
     ;<#lt>
 <#else>
-    {<#t>
-        ${include("hook.Method")}<#lt>
+    {<#lt>
+        ${include("hook.Method")}
     }
 </#if>

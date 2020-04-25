@@ -6,4 +6,7 @@ classdiagram Map{
     public class Subreddit{
         - Map<ID, Submission> submissions;
     }
+
+    public class ID{}
+    public class Submission{}
 }

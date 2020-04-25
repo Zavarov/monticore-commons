@@ -1,11 +1,4 @@
-import java.net.*;
-import java.time.*;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.function.*;
-import java.util.stream.*;
-import com.google.common.cache.*;
-import com.google.common.collect.*;
-import com.google.common.util.concurrent.UncheckedExecutionException;
+${signature("imports")}
+<#list imports as import>
+import ${import?join(".")};
+</#list>

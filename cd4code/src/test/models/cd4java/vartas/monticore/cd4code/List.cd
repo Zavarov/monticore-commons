@@ -1,6 +1,7 @@
 package vartas.monticore.cd4code;
 
 import java.util.List.List;
+import java.time.Instant.Instant;
 
 classdiagram List{
     public class Database{

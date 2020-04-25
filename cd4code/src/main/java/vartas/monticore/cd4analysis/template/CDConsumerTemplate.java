@@ -18,12 +18,12 @@
 package vartas.monticore.cd4analysis.template;
 
 import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
-import de.monticore.cd.cd4analysis._visitor.CD4AnalysisInheritanceVisitor;
+import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 
 import java.util.function.Consumer;
 
-public abstract class CDConsumerTemplate implements CD4AnalysisInheritanceVisitor, Consumer<ASTCD4AnalysisNode> {
+public abstract class CDConsumerTemplate implements CD4CodeInheritanceVisitor, Consumer<ASTCD4AnalysisNode> {
     protected final GlobalExtensionManagement glex;
     public CDConsumerTemplate(GlobalExtensionManagement glex){
         this.glex = glex;

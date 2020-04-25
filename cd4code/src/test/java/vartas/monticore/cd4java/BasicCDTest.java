@@ -17,7 +17,10 @@
 
 package vartas.monticore.cd4java;
 
-import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
+import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
+import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
@@ -40,10 +43,6 @@ public abstract class BasicCDTest {
     protected CD4CodeLanguage language = new CD4CodeLanguage();
     protected CD4CodeGlobalScope globalScope;
     protected ModelPath modelPath;
-
-    public ASTCDCompilationUnit cdCompilationUnit;
-    public ASTCDDefinition cdDefinition;
-    public ASTCDClass cdClass;
 
     @BeforeEach
     public void setUp(){

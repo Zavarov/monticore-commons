@@ -9,6 +9,7 @@ import java.util.function.UnaryOperator.UnaryOperator;
  * @version Java 11
  */
 public classdiagram List{
+    <<container>>
     public interface List extends Collection <<E>>{
         void add(int index, E element);
         boolean addAll(int index, Collection<? extends E> c);

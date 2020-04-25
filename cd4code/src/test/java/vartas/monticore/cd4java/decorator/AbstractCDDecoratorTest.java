@@ -18,6 +18,7 @@
 package vartas.monticore.cd4java.decorator;
 
 import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd4analysis.decorator.CDDefinitionDecorator;
 import vartas.monticore.cd4java.BasicCDTest;
@@ -28,7 +29,7 @@ public class AbstractCDDecoratorTest extends BasicCDTest {
     @BeforeEach
     public void setUp(){
         super.setUp();
-        cdDefinitionDecorator = new CDDefinitionDecorator();
+        cdDefinitionDecorator = new CDDefinitionDecorator(new GlobalExtensionManagement());
         printer = new CD4CodePrettyPrinterDelegator();
     }
 }
