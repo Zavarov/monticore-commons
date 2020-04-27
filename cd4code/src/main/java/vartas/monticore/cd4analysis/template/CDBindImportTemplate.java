@@ -18,7 +18,7 @@
 package vartas.monticore.cd4analysis.template;
 
 import com.google.common.collect.Lists;
-import de.monticore.cd.cd4analysis._ast.ASTCDField;
+import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
@@ -49,7 +49,7 @@ public class CDBindImportTemplate extends CDConsumerTemplate{
     }
 
     @Override
-    public void visit(ASTCDField ast){
+    public void visit(ASTCDAttribute ast){
         //Load the imports from the CDs the type is associated with.
         //We need those due to the decorator.
         ast.getSymbol().getType().loadSymbol().ifPresent(typeSymbol -> {

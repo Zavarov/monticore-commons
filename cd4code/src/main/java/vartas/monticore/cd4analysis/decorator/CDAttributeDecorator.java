@@ -38,6 +38,7 @@ import vartas.monticore.cd4analysis.calculator.CDMethodCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This decorator attempts to give access to all methods of a given {@link ASTCDAttribute}.<br>
@@ -90,13 +91,47 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
         log.debug("Visiting attribute {}.", ast.getName());
 
         //Fails if there is no class diagram associated with the type
-        ast.getSymbol().getType().loadSymbol().ifPresent(typeSymbol -> {
+        Optional<CDTypeSymbol> typeSymbolOptional = ast.getSymbol().getType().loadSymbol();
+        if(typeSymbolOptional.isPresent()){
+            CDTypeSymbol typeSymbol = typeSymbolOptional.get();
             log.debug("Type of attribute {} successfully loaded as {}.", ast.getName(), typeSymbol.getName());
 
             loadMethods(ast, typeSymbol.getAstNode());
             for(CDTypeSymbol superType : typeSymbol.getSuperTypesTransitive())
                 loadMethods(ast, superType.getAstNode());
-        });
+        }else{
+            log.debug("No type associated with attribute {}, use default getter and setter.", ast.getName());
+            cdMethodList.add(buildGetter(ast));
+            cdMethodList.add(buildSetter(ast));
+        }
+    }
+
+    private ASTCDMethod buildGetter(ASTCDAttribute ast){
+        //Create method
+        ASTCDMethod cdMethod = getCDMethodFacade().createMethod(
+                CDModifier.PUBLIC,
+                ast.getMCType(),
+                "get"+StringUtils.capitalize(ast.getName())
+        );
+        //Bind to template
+        String templateName = Names.getQualifiedName(CDGeneratorHelper.DECORATOR_MODULE, "Get");
+        glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint(templateName, ast, cdMethod));
+
+        return cdMethod;
+    }
+
+    private ASTCDMethod buildSetter(ASTCDAttribute ast){
+        //Create method
+        ASTCDMethod cdMethod = getCDMethodFacade().createMethod(
+                CDModifier.PUBLIC,
+                "set"+StringUtils.capitalize(ast.getName()),
+                getCDParameterFacade().createParameter(ast)
+        );
+        //Bind to template
+        String templateName = Names.getQualifiedName(CDGeneratorHelper.DECORATOR_MODULE, "Set");
+        glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint(templateName, ast, cdMethod));
+
+        return cdMethod;
     }
 
     private void loadMethods(ASTCDAttribute attribute, ASTCDType type){

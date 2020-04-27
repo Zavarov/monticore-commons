@@ -54,7 +54,9 @@ public class CDOptionalDecoratorTest extends AbstractCDDecoratorTest {
             "          String : orElseGetNickname       : 'Supplier<? extends String>'",
             "          String : orElseThrowNickname     : ''",
             "  Stream<String> : streamNickname          : ''",
-            "            void : setNickname             : 'String'"
+            "            void : setNickname             : 'String'",
+            "            void : setId                   : 'int'",
+            "             int : getId                   : ''"
 
 
     }, delimiter = ':')
