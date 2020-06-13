@@ -19,21 +19,28 @@ package vartas.monticore.cd4analysis.decorator;
 
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
+import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
 import de.monticore.codegen.cd2java.AbstractCreator;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class CDDefinitionDecorator extends AbstractCreator<ASTCDDefinition, ASTCDDefinition> implements CD4CodeInheritanceVisitor {
     private final CDAttributeDecorator attributeDecorator;
-    private final List<ASTCDMethod> methodList;
+    private List<ASTCDMethod> methodList;
+    /**
+     * Generates methods can't be added by the time a single type has been handled, in case other types refer to it.
+     * Doing so would cause conflicts when binding the respective templates to the new methods, hence why it has do
+     * be delayed until all types have been visited.
+     */
+    private List<Runnable> restActions = new ArrayList<>();
 
     public CDDefinitionDecorator(GlobalExtensionManagement glex){
         super(glex);
         this.attributeDecorator = new CDAttributeDecorator(glex);
-        this.methodList = new ArrayList<>();
     }
 
     @Override
@@ -43,27 +50,61 @@ public class CDDefinitionDecorator extends AbstractCreator<ASTCDDefinition, ASTC
     }
 
     @Override
+    public void visit(ASTCDDefinition ast){
+        restActions.clear();
+    }
+
+    @Override
+    public void visit(ASTCDType ast){
+        methodList = new ArrayList<>();
+    }
+
+    @Override
     public void visit(ASTCDAttribute ast){
         methodList.addAll(attributeDecorator.decorate(ast));
     }
 
     @Override
-    public void visit(ASTCDType ast){
-        methodList.clear();
+    public void endVisit(ASTCDType ast){
+        ASTCDMethodConsumer consumer = new ASTCDMethodConsumer(ast);
+
+        for(ASTCDMethod method : methodList)
+            restActions.add(() -> consumer.accept(method));
     }
 
     @Override
-    public void endVisit(ASTCDClass ast){
-        ast.addAllCDMethods(methodList);
+    public void endVisit(ASTCDDefinition ast){
+        restActions.forEach(Runnable::run);
     }
 
-    @Override
-    public void endVisit(ASTCDEnum ast){
-        ast.addAllCDMethods(methodList);
-    }
+    private static class ASTCDMethodConsumer implements Consumer<ASTCDMethod>, CD4CodeVisitor {
+        private final ASTCDType ast;
+        private ASTCDMethod cdMethod;
 
-    @Override
-    public void endVisit(ASTCDInterface ast){
-        ast.addAllCDMethods(methodList);
+        public ASTCDMethodConsumer(ASTCDType ast){
+            this.ast = ast;
+        }
+
+        @Override
+        public void accept(ASTCDMethod cdMethod) {
+            this.cdMethod = cdMethod;
+            ast.accept(getRealThis());
+            this.cdMethod = null;
+        }
+
+        @Override
+        public void visit(ASTCDClass ast){
+            ast.addCDMethod(cdMethod);
+        }
+
+        @Override
+        public void visit(ASTCDEnum ast){
+            ast.addCDMethod(cdMethod);
+        }
+
+        @Override
+        public void visit(ASTCDInterface ast){
+            ast.addCDMethod(cdMethod);
+        }
     }
 }

@@ -1,3 +1,2 @@
-${signature("cdAttribute", "cdMethod")}
-<#assign cdParameter = cdMethod.getCDParameter(0)>
+${signature("cdParameter")}
         ${cdParameter.getName()}.handle(this);

@@ -17,7 +17,11 @@
 
 package vartas.monticore.cd4analysis;
 
+import de.monticore.io.paths.IterablePath;
+
 import javax.annotation.Nonnull;
+import java.nio.file.Paths;
+import java.util.Collections;
 
 public class CDGeneratorHelper {
     //----------------------------------------------------------------------------------------------------------------//
@@ -61,4 +65,21 @@ public class CDGeneratorHelper {
     public static final String VISITOR_MODULE = "visitor";
     @Nonnull
     public static final String DECORATOR_MODULE = "decorator";
+    @Nonnull
+    public static final String INITIALIZER_MODULE = "initializer";
+    //----------------------------------------------------------------------------------------------------------------//
+    //
+    //        Generator Parameters
+    //
+    //----------------------------------------------------------------------------------------------------------------//
+    @Nonnull
+    public static final String HANDWRITTEN_FILE_POSTFIX = "TOP";
+    @Nonnull
+    public static final String DEFAULT_FILE_EXTENSION = "java";
+    @Nonnull
+    public static final IterablePath SOURCES_PATH = IterablePath.fromPaths(
+            Collections.singletonList(Paths.get("src","main")),
+            "java"
+    );
+
 }

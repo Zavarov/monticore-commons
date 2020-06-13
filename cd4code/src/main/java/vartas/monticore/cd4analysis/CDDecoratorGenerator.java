@@ -23,6 +23,8 @@ import de.monticore.generating.GeneratorSetup;
 import vartas.monticore.cd4analysis.decorator.CDDefinitionDecorator;
 import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
 import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
+import vartas.monticore.cd4analysis.template.CDHandwrittenFileTemplate;
+import vartas.monticore.cd4analysis.template.CDInitializerTemplate;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -35,7 +37,9 @@ public class CDDecoratorGenerator extends CDTemplateGenerator{
                 generatorHelper,
                 Arrays.asList(
                         new CDBindPackageTemplate(generatorSetup.getGlex()),
-                        new CDBindImportTemplate(generatorSetup.getGlex())
+                        new CDBindImportTemplate(generatorSetup.getGlex()),
+                        new CDInitializerTemplate(generatorSetup.getGlex()),
+                        new CDHandwrittenFileTemplate(generatorSetup.getGlex())
                 )
         );
         this.decorator = new CDDefinitionDecorator(generatorSetup.getGlex());

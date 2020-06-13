@@ -17,26 +17,46 @@
 
 package vartas.monticore.cd4analysis.calculator;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
 import de.monticore.types.MCTypeFacade;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
+import vartas.monticore.cd4analysis.CDMethodComparator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeArgument>, List<ASTCDMethod>>, CD4CodeInheritanceVisitor {
-    private final List<ASTCDMethod> methods = new ArrayList<>();
-    private final ListMultimap<String, String> typeMap = ArrayListMultimap.create();
+/**
+ * This class determines all methods of a given {@link ASTCDType}.<br>
+ * In addition to the methods defined in the type itself, it will also compute inherited
+ * methods from possible superclasses and interfaces.<br>
+ * All generic types are automatically resolved using the arguments provided in the super-structure. And in order
+ * to avoid ambiguity, all of those types have to specified.
+ */
+public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeArgument>, Set<ASTCDMethod>>, CD4CodeInheritanceVisitor {
+    /**
+     * Contains all accessible methods.
+     */
+    private final Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
+    /**
+     * Associates a generic type with their effective type.<br>
+     * The keys represent the the generic types, specified in the individual supertypes.
+     * The values represent the types they are associated with.
+     */
+    private final Map<ASTMCQualifiedName, ASTMCQualifiedName> typeMap = new TreeMap<>(Comparator.comparing(ASTMCQualifiedName::getQName));
 
+    /**
+     * Determines all methods in the given type, as well as all super types.
+     * @param ast the type associated with the methods.
+     * @param typeArguments a list of generic arguments associated with the type.
+     * @return a list of all methods accessible by the provided type.
+     */
     @Override
-    public List<ASTCDMethod> apply(ASTCDType ast, List<ASTMCTypeArgument> typeArguments) {
+    public Set<ASTCDMethod> apply(ASTCDType ast, List<ASTMCTypeArgument> typeArguments) {
         this.methods.clear();
         this.typeMap.clear();
         loadMap(ast, typeArguments);
@@ -44,49 +64,73 @@ public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeA
         return methods;
     }
 
+    /**
+     * Maps the generic arguments of the provided {@link ASTCDType} to their effective type, specified in
+     * an respective sub-class. It is possible that the number of provided arguments is higher than the
+     * number of generic types in the current type. Any generic class also extends {@link Object}, for example,
+     * even though it has no generic types on its own.
+     * @param ast the current {@link ASTCDType} associated with the effective types.
+     * @param typeArguments the effective types for the generic arguments specified in the sub-type.
+     */
     private void loadMap(ASTCDType ast, List<ASTMCTypeArgument> typeArguments){
-        StereotypeVisitor stereotypeVisitor = new StereotypeVisitor();
-        ArgumentVisitor argumentVisitor = new ArgumentVisitor();
+        RetrieveStereotypeVisitor retrieveStereotypeVisitor = new RetrieveStereotypeVisitor();
+        RetrieveArgumentVisitor retrieveArgumentVisitor = new RetrieveArgumentVisitor();
 
         //Generic types
-        List<ASTMCQualifiedName> stereotypes = stereotypeVisitor.apply(ast);
+        List<ASTMCQualifiedName> stereotypes = retrieveStereotypeVisitor.apply(ast);
         //Explicit types
-        List<ASTMCQualifiedName> arguments = argumentVisitor.apply(typeArguments);
+        List<ASTMCQualifiedName> arguments = retrieveArgumentVisitor.apply(typeArguments);
 
         //If a generic class extends from a non-generic class, we have more arguments than stereotypes
         assert(stereotypes.size() <= arguments.size());
 
         for(int i = 0 ; i < stereotypes.size() ; ++i)
-            typeMap.putAll(stereotypes.get(i).getQName(), arguments.get(i).getPartList());
+            typeMap.put(stereotypes.get(i), arguments.get(i));
     }
 
+    /**
+     * Replaces the generic type with the effective type.
+     * @param ast one of the generic arguments of the current {@link ASTCDType}.
+     */
     @Override
     public void visit(ASTMCQualifiedName ast){
         //Replace the generic type with the type specified in the superclass
-        if(typeMap.containsKey(ast.getQName()))
-            ast.setPartList(typeMap.get(ast.getQName()));
+        if(typeMap.containsKey(ast))
+            ast.setPartList(typeMap.get(ast).getPartList());
     }
 
+    /**
+     * One of the methods of the current {@link ASTCDType}. It is possible for a type
+     * to have several instances of the same method, for example when implementing multiple interfaces.
+     * To avoid any collisions, all but one are ignored.
+     * @param ast one of the methods of the current {@link ASTCDType}.
+     */
     @Override
     public void endVisit(ASTCDMethod ast){
-        //Methods in interfaces always visible -> We can't just check if they're public
-        if(!ast.getModifier().isPrivate() && !ast.getModifier().isProtected() && !contains(ast))
-            methods.add(ast);
+        methods.add(ast);
     }
 
-    private boolean contains(ASTCDMethod ast){
-        //TODO Don't iterate over the entire list
-        for (ASTCDMethod method : methods)
-            //Already in the list -> break
-            if (method.deepEquals(ast))
-                return true;
-        return false;
-    }
-
-    private static class StereotypeVisitor implements CD4CodeVisitor, Function<ASTCDType, List<ASTMCQualifiedName>>{
+    /**
+     * Retrieves all generic types of a given {@link ASTCDType}.<br>
+     * The generic types are represented by the keys of the stereotypes.
+     */
+    private static class RetrieveStereotypeVisitor implements CD4CodeVisitor, Function<ASTCDType, List<ASTMCQualifiedName>>{
+        /**
+         * Contains the stereotypes of the provided {@link ASTCDType}.
+         */
         private final List<ASTMCQualifiedName> qualifiedNames = new ArrayList<>();
+        /**
+         * The utility class for transforming the stereotypes into instances of {@link ASTMCType}.
+         */
         private final MCTypeFacade mcTypeFacade = MCTypeFacade.getInstance();
 
+        /**
+         * Retrieves the generic types of the provided {@link ASTCDType}. Since those values are only
+         * accessible by the underlying {@link ASTCDClass} or {@link ASTCDInterface}, we have to break
+         * the encapsulation via the visitor, to access those elements.
+         * @param ast the type associated with the retrieved types.
+         * @return a list containing all generic types of the {@link ASTCDType}.
+         */
         @Override
         public List<ASTMCQualifiedName> apply(ASTCDType ast) {
             qualifiedNames.clear();
@@ -94,6 +138,10 @@ public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeA
             return qualifiedNames;
         }
 
+        /**
+         * Stores the stereotypes of the provided {@link ASTCDClass} in {@link #qualifiedNames}.
+         * @param ast the {@link ASTCDClass} associated with the retrieved stereotypes.
+         */
         @Override
         public void visit(ASTCDClass ast){
             if(ast.isPresentStereotype())
@@ -101,6 +149,10 @@ public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeA
                     qualifiedNames.add(mcTypeFacade.createQualifiedType(stereoValue.getName()).getMCQualifiedName());
         }
 
+        /**
+         * Stores the stereotypes of the provided {@link ASTCDInterface} in {@link #qualifiedNames}.
+         * @param ast the {@link ASTCDInterface} associated with the retrieved stereotypes.
+         */
         @Override
         public void visit(ASTCDInterface ast){
             if(ast.isPresentStereotype())
@@ -109,14 +161,30 @@ public class CDMethodCalculator implements BiFunction<ASTCDType, List<ASTMCTypeA
         }
     }
 
-    private static class ArgumentVisitor implements CD4CodeVisitor, Function<List<ASTMCTypeArgument>, List<ASTMCQualifiedName>>{
+    /**
+     * This class is used to unwrap the the name of the provided argument type.
+     */
+    private static class RetrieveArgumentVisitor implements CD4CodeVisitor, Function<List<ASTMCTypeArgument>, List<ASTMCQualifiedName>>{
+        /**
+         * Internal buffer for the qualified names.
+         */
         private final List<ASTMCQualifiedName> qualifiedNames = new ArrayList<>();
 
+        /**
+         * Stores the qualified name in the internal buffer.
+         * @param ast the qualified name of an {@link ASTMCTypeArgument}.
+         */
         @Override
         public void visit(ASTMCQualifiedName ast){
             qualifiedNames.add(ast);
         }
 
+        /**
+         * Iterates over all arguments and extracts their name. It is possible that an argument doesn't have a name,
+         * e.g. for wildcards. In such a case, the name is simply ignored.
+         * @param astList the generic arguments of an {@link ASTCDType}.
+         * @return a list containing all qualified argument names.
+         */
         @Override
         public List<ASTMCQualifiedName> apply(List<ASTMCTypeArgument> astList) {
             qualifiedNames.clear();

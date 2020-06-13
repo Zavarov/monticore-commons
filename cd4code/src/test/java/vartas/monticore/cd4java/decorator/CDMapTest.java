@@ -30,7 +30,7 @@ import vartas.monticore.cd4java.CSV2StringArray;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CDMapDecoratorTest extends AbstractCDDecoratorTest {
+public class CDMapTest extends AbstractCDDecoratorTest {
     ASTCDDefinition cdDefinition;
     CDDefinitionSymbol cdDefinitionSymbol;
 

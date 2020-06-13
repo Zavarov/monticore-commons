@@ -50,6 +50,12 @@
             <version>${evo-inflector.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${collections4.version}</version>
+        </dependency>
+
         <!-- CD4Analysis -->
         <dependency>
             <groupId>de.monticore.lang</groupId>

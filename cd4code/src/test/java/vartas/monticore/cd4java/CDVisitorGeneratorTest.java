@@ -22,29 +22,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import vartas.monticore.cd4analysis.CDDecoratorGenerator;
+import vartas.monticore.cd4analysis.CDVisitorGenerator;
 
-public class CDDecoratorGeneratorTest extends BasicCDGeneratorTest{
-    CDDecoratorGenerator generator;
+public class CDVisitorGeneratorTest extends BasicCDGeneratorTest{
+    CDVisitorGenerator generator;
 
     @BeforeEach
     public void setUp(){
         super.setUp();
 
-        generator = new CDDecoratorGenerator(
+        generator = new CDVisitorGenerator(
                 setup,
-                helper
+                helper,
+                globalScope
         );
     }
 
     @ParameterizedTest
     @CsvSource(value = {
-            "vartas.monticore.cd4code.Cache",
-            "vartas.monticore.cd4code.List",
-            "vartas.monticore.cd4code.Map",
-            "vartas.monticore.cd4code.Optional",
+            "vartas.monticore.cd4code.Visitor"
     })
     public void testGenerate(String modelPath){
+        CDDecoratorGenerator decorator;
+        decorator = new CDDecoratorGenerator(setup ,helper);
+
         CDDefinitionSymbol cdDefinitionSymbol = globalScope.resolveCDDefinition(modelPath).orElseThrow();
         generator.generate(cdDefinitionSymbol);
+        decorator.generate(cdDefinitionSymbol);
     }
 }

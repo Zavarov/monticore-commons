@@ -34,17 +34,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
+import vartas.monticore.cd4analysis.CDMethodComparator;
 import vartas.monticore.cd4analysis.calculator.CDMethodCalculator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
- * This decorator attempts to give access to all methods of a given {@link ASTCDAttribute}.<br>
+ * This decorator generates decorator methods for all methods of its attributes,
+ * in addition to basic getter and setter methods.
  * The available methods are provided via a class diagram.
  */
-public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<ASTCDMethod>> implements CD4CodeInheritanceVisitor {
+public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, Set<ASTCDMethod>> implements CD4CodeInheritanceVisitor {
     /**
      * This class' Logger.
      */
@@ -52,7 +52,7 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
     /**
      * Contains all methods that have been introduced by decoration the individual attributes..
      */
-    private final List<ASTCDMethod> cdMethodList = new ArrayList<>();
+    private final Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
     /**
      * Contains the (possible) generic arguments of the individual attributes.
      */
@@ -63,29 +63,53 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
      */
     private final CDMethodCalculator cdMethodCalculator = new CDMethodCalculator();
 
+    /**
+     * Creates a fresh decorator instance.
+     * @param glex the {@link GlobalExtensionManagement} binding the templates to the method hook points.
+     */
     public CDAttributeDecorator(GlobalExtensionManagement glex){
         super(glex);
     }
 
+    /**
+     * Derives all methods for the specific attribute.
+     * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
+     * @return a {@link Set} containng all derived methods.
+     */
     @Override
-    public List<ASTCDMethod> decorate(ASTCDAttribute ast) {
+    public Set<ASTCDMethod> decorate(ASTCDAttribute ast) {
         log.debug("Visiting attribute {}.", ast.getName());
 
-        cdMethodList.clear();
+        methods.clear();
         ast.accept(getRealThis());
-        return cdMethodList;
+        return methods;
     }
 
+    /**
+     * Whenever a new attribute is visited, the buffer containing all generic argument types has to be cleared.
+     * This buffer is used to derive the methods of the embedded types.
+     * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
+     */
     @Override
     public void visit(ASTCDAttribute ast){
         typeArguments.clear();
     }
 
+    /**
+     * Visits the generic arguments of an {@link ASTCDAttribute}.
+     * @param ast one of the generic arguments of an {@link ASTCDAttribute}.
+     */
     @Override
     public void visit(ASTMCTypeArgument ast){
         typeArguments.add(ast);
     }
 
+    /**
+     * After all generic arguments have been extracted, calculate the methods.<br>
+     * It will use the methods of the argument type, as well as generic getter and setter.
+     * In case there are collisions, the more specific method is used.
+     * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
+     */
     @Override
     public void endVisit(ASTCDAttribute ast){
         log.debug("Visiting attribute {}.", ast.getName());
@@ -99,13 +123,16 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
             loadMethods(ast, typeSymbol.getAstNode());
             for(CDTypeSymbol superType : typeSymbol.getSuperTypesTransitive())
                 loadMethods(ast, superType.getAstNode());
-        }else{
-            log.debug("No type associated with attribute {}, use default getter and setter.", ast.getName());
-            cdMethodList.add(buildGetter(ast));
-            cdMethodList.add(buildSetter(ast));
         }
+        methods.add(buildGetter(ast));
+        methods.add(buildSetter(ast));
     }
 
+    /**
+     * Constructs the generic getter method.
+     * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
+     * @return the getter method for the corresponding {@link ASTCDAttribute}.
+     */
     private ASTCDMethod buildGetter(ASTCDAttribute ast){
         //Create method
         ASTCDMethod cdMethod = getCDMethodFacade().createMethod(
@@ -120,6 +147,11 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
         return cdMethod;
     }
 
+    /**
+     * Constructs the generic setter method.
+     * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
+     * @return the setter method for the corresponding {@link ASTCDAttribute}.
+     */
     private ASTCDMethod buildSetter(ASTCDAttribute ast){
         //Create method
         ASTCDMethod cdMethod = getCDMethodFacade().createMethod(
@@ -134,39 +166,75 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
         return cdMethod;
     }
 
+    /**
+     * Generates all methods for the corresponding {@link ASTCDAttribute}.
+     * @param attribute one of the attribute in the {@link ASTCDType}.
+     * @param type one of the types in the class diagram.
+     */
     private void loadMethods(ASTCDAttribute attribute, ASTCDType type){
         CDAttributeVisitor cdAttributeVisitor = new CDAttributeVisitor(attribute, type);
         for(ASTCDMethod cdMethod : cdMethodCalculator.apply(type, typeArguments)){
             log.debug("Visiting method {} of type {}.", cdMethod.getName(), type.getName());
-            cdMethod.accept(cdAttributeVisitor);
+            //No symbol -> Not from class diagram -> Handwritten template
+            if(cdMethod.isPresentSymbol() && cdMethod.getSymbol().isIsPublic())
+                cdMethod.accept(cdAttributeVisitor);
         }
     }
 
 
+    /**
+     * This class is used to generate all methods associated with an {@link ASTCDAttribute}.
+     */
     private class CDAttributeVisitor implements CD4CodeInheritanceVisitor {
+        /**
+         * The attribute name is used as an unique identifier when deriving the new method name.
+         */
         private final String fieldName;
+        /**
+         * The type is used when deriving the template.
+         */
         private final ASTCDType cdType;
+        /**
+         * The field is used as an argument for the template.
+         */
         private final ASTCDField cdField;
 
+        /**
+         * Creates a new visitor instance.
+         * @param cdField one of the fields in the {@link ASTCDType}.
+         * @param cdType one of the types in the class diagram.
+         */
         public CDAttributeVisitor(ASTCDField cdField, ASTCDType cdType){
             this.cdField = cdField;
             this.cdType = cdType;
             this.fieldName = StringUtils.capitalize(cdField.getName());
         }
 
+        /**
+         * Transform the method to fit into the class.
+         * @param ast one of the attributes' {@link ASTCDMethod}.
+         */
         @Override
         public void visit(ASTCDMethod ast){
             ast = ast.deepClone();
             bindToTemplate(ast);
             renameMethod(ast);
             makePublic(ast);
-            cdMethodList.add(ast);
+            methods.add(ast);
         }
 
+        /**
+         * Make all generated methods public.
+         * @param ast one of the generated {@link ASTCDMethod}.
+         */
         private void makePublic(ASTCDMethod ast){
             ast.setModifier(CDModifier.PUBLIC.build());
         }
 
+        /**
+         * Change the attributes' method to an unique name.
+         * @param ast one of the generated {@link ASTCDMethod}.
+         */
         private void renameMethod(ASTCDMethod ast){
             //e.g:
             //String content;
@@ -174,6 +242,10 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
             ast.setName(ast.getName() + fieldName);
         }
 
+        /**
+         * Binds the {@link ASTCDMethod} to its corresponding template.
+         * @param ast one of the generated {@link ASTCDMethod}.
+         */
         private void bindToTemplate(ASTCDMethod ast){
             String moduleName = CDGeneratorHelper.DECORATOR_MODULE;
             String packageName = cdType.getSymbol().getPackageName();
@@ -181,6 +253,7 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, List<A
             String qualifiedName = Names.getQualifiedName(packageName, typeName);
             String methodName = StringUtils.capitalize(ast.getName());
             String templateName = Joiners.DOT.join(moduleName, qualifiedName, methodName);
+
             log.debug("Binding method {} of type {} to {}", ast.getName(), cdType.getName(), templateName);
             glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, ast, new TemplateHookPoint(templateName, cdField, ast));
         }

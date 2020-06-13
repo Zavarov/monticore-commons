@@ -17,14 +17,8 @@
 
 package vartas.monticore.cd4analysis._symboltable;
 
-import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
-import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
-import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
-import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
-import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDMethOrConstrSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbolLoader;
-import de.monticore.cd.cd4analysis._symboltable.ICD4AnalysisScope;
+import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._symboltable.*;
 import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
 import de.se_rwth.commons.Joiners;
 
@@ -51,9 +45,14 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
         //TODO find a better way to extract the qualified name
         Matcher matcher = QUALIFIED_NAME.matcher(typeName);
         if(matcher.find()) {
+            //Load type symbol
             qualifiedName = matcher.group();
             CDTypeSymbolLoader typeReference = new CDTypeSymbolLoader(qualifiedName, this.getCurrentScope().orElseThrow());
             fieldSymbol.setType(typeReference);
+            //Load stereotypes
+            if(astAttribute.isPresentModifier() && astAttribute.getModifier().isPresentStereotype())
+                for(ASTCDStereoValue stereoValue : astAttribute.getModifier().getStereotype().getValueList())
+                    fieldSymbol.addStereotype(new Stereotype(stereoValue.getName(), stereoValue.getValue()));
         }else{
             throw new IllegalArgumentException("The type doesn't start with a qualified name.");
         }
