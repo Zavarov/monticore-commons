@@ -51,7 +51,7 @@ public class CDObjectTest extends AbstractCDDecoratorTest {
             "  String : toStringNickname  : ''",
             "    void : waitNickname      : ''",
             "    void : waitNickname      : 'long'",
-            "    void : waitNickname      : 'long, int'"
+            "    void : waitNickname      : 'long : int'"
 
 
     }, delimiter = ':')

@@ -73,6 +73,8 @@ public class CDGeneratorHelper {
     //
     //----------------------------------------------------------------------------------------------------------------//
     @Nonnull
+    public static final String CONTAINER_LABEL = "container";
+    @Nonnull
     public static final String HANDWRITTEN_FILE_POSTFIX = "TOP";
     @Nonnull
     public static final String DEFAULT_FILE_EXTENSION = "java";

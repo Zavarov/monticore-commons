@@ -1,8 +1,0 @@
-package vartas.monticore.cd2code;
-
-classdiagram BrowserCD{
-    <<factory>>
-    public class Browser{
-        - Cache<String, String> history;
-    }
-}

@@ -43,8 +43,8 @@ public class CDListTest extends AbstractCDDecoratorTest{
 
     @ParameterizedTest
     @CsvSource(value = {
-            "                void : addValues          : 'int, String'",
-            "             boolean : addAllValues       : 'int, Collection<? extends String>'",
+            "                void : addValues          : 'int : String'",
+            "             boolean : addAllValues       : 'int : Collection<? extends String>'",
             "              String : getValues          : 'int'",
             "                 int : indexOfValues      : 'Object'",
             "                 int : lastIndexOfValues  : 'Object'",
@@ -52,9 +52,9 @@ public class CDListTest extends AbstractCDDecoratorTest{
             "ListIterator<String> : listIteratorValues : 'int'",
             "              String : removeValues       : 'int'",
             "                void : replaceAllValues   : 'UnaryOperator<String>'",
-            "              String : setValues          : 'int, String'",
+            "              String : setValues          : 'int : String'",
             "                void : sortValues         : 'Comparator<? super String>'",
-            "        List<String> : subListValues      : 'int, int'"
+            "        List<String> : subListValues      : 'int : int'"
     }, delimiter = ':')
     public void testParse(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
         ASTCDDefinition ast = cdDefinitionDecorator.decorate(cdDefinition);

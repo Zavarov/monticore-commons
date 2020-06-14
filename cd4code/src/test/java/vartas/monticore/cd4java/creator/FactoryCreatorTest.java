@@ -15,40 +15,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd2java.creator;
+package vartas.monticore.cd4java.creator;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
-import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
+import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
+import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import de.monticore.types.mcbasictypes._ast.ASTMCReturnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvSource;
-import vartas.monticore.CSV2StringArray;
-import vartas.monticore.cd2code.BasicCDTest;
-import vartas.monticore.cd2code.CDGeneratorHelper;
-import vartas.monticore.cd2code.creator.FactoryCreator;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import vartas.monticore.cd4analysis.creator.FactoryCreator;
+import vartas.monticore.cd4java.BasicCDTest;
+import vartas.monticore.cd4java.CSV2StringArray;
 
 public class FactoryCreatorTest extends BasicCDTest {
-    private ASTCDClass cdFactoryClass;
+    ASTCDClass factory;
+    ASTCDClass cdClass;
+    ASTCDDefinition cdDefinition;
+    CDDefinitionSymbol cdDefinitionSymbol;
+
     @BeforeEach
     public void setUp(){
-        parseCDClass("V","vartas.monticore.cd2java.FactoryCD");
-        cdFactoryClass = FactoryCreator.create(cdClass, new GlobalExtensionManagement());
+        super.setUp();
+        cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Factory").orElseThrow();
+        cdDefinition = cdDefinitionSymbol.getAstNode();
+        cdClass = cdDefinition.getCDClass(0);
+        factory = FactoryCreator.create(cdClass, new GlobalExtensionManagement());
     }
+
     @ParameterizedTest
-    @CsvSource({
-            "V, create, 'V, int, String'",
-            "V, create, 'Supplier<V>, V, int, String'"
+    @CsvSource(value = {
+            "'Supplier<? extends Essay> : String : String : List<String>'",
+            "'Supplier<? extends Essay> : String : String'",
+            "'String : String : List<String>'",
+            "'String : String"
     })
-    public void testParse(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        ASTCDMethod cdMethod = getMethod(cdFactoryClass, methodName, parameters);
-
-        ASTMCReturnType mcReturnType = cdMethod.getMCReturnType();
-
-        assertThat(CDGeneratorHelper.prettyprint(mcReturnType)).isEqualTo(returnName);
+    public void testParse(@ConvertWith(CSV2StringArray.class) String[] parameters){
+        getMethod(factory, "create", parameters);
     }
 }

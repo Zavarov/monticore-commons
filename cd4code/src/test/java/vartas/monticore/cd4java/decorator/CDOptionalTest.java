@@ -44,9 +44,9 @@ public class CDOptionalTest extends AbstractCDDecoratorTest {
     @ParameterizedTest
     @CsvSource(value = {
             "Optional<String> : filterNickname          : 'Predicate<? super String>'",
-            "          String : getNickname             : ''",
+            "Optional<String> : getNickname             : ''",
             "            void : ifPresentNickname       : 'Consumer<? super String>'",
-            "            void : ifPresentOrElseNickname : 'Consumer<? super String>, Runnable'",
+            "            void : ifPresentOrElseNickname : 'Consumer<? super String> : Runnable'",
             "         boolean : isEmptyNickname         : ''",
             "         boolean : isPresentNickname       : ''",
             "Optional<String> : orNickname              : 'Supplier<? extends Optional<? extends String>>'",

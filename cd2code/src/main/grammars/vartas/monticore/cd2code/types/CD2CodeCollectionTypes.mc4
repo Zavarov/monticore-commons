@@ -1,7 +1,0 @@
-package vartas.monticore.cd2code.types;
-
-component grammar CD2CodeCollectionTypes extends de.monticore.types.MCCollectionTypes {
-    MCCacheType extends MCMapType implements MCGenericType <200> =
-        {next("Cache")}? Name "<" key:MCTypeArgument "," value:MCTypeArgument ">"
-    ;
-}

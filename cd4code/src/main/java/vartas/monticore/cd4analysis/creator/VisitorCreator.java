@@ -227,7 +227,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         for(ASTCDAttribute cdAttribute : cdType.getCDAttributeList()){
             Optional<CDTypeSymbol> cdTypeSymbol = cdAttribute.getSymbol().getType().loadSymbol();
             //The accessor for containers has to be provided. (e.g. via iterator and whatnot)
-            if(cdTypeSymbol.flatMap(symbol -> symbol.getStereotype("container")).isPresent())
+            if(cdTypeSymbol.flatMap(symbol -> symbol.getStereotype(CDGeneratorHelper.CONTAINER_LABEL)).isPresent())
                 replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeTemplate(cdTypeSymbol.get()), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
             //isPresent -> Type in local class diagram -> Has generated "accept" method
             else if(cdTypeSymbol.isPresent())

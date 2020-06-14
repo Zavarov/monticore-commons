@@ -1,0 +1,14 @@
+package vartas.monticore.cd4code;
+
+import com.google.common.cache.Cache.Cache;
+import java.util.Map.Map;
+import java.util.Optional.Optional;
+import java.util.List.List;
+
+classdiagram Factory{
+    public class Essay{
+        String title;
+        String author;
+        List<String> words;
+    }
+}

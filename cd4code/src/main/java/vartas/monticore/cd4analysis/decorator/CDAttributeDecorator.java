@@ -107,13 +107,16 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, Set<AS
     /**
      * After all generic arguments have been extracted, calculate the methods.<br>
      * It will use the methods of the argument type, as well as generic getter and setter.
-     * In case there are collisions, the more specific method is used.
+     * In case there are conflicting getter and setter methods, the generic ones are used.
      * @param ast one {@link ASTCDAttribute} in an {@link ASTCDType}.
      */
     @Override
     public void endVisit(ASTCDAttribute ast){
         log.debug("Visiting attribute {}.", ast.getName());
 
+        //Generic beats specific
+        methods.add(buildGetter(ast));
+        methods.add(buildSetter(ast));
         //Fails if there is no class diagram associated with the type
         Optional<CDTypeSymbol> typeSymbolOptional = ast.getSymbol().getType().loadSymbol();
         if(typeSymbolOptional.isPresent()){
@@ -124,8 +127,6 @@ public class CDAttributeDecorator extends AbstractCreator<ASTCDAttribute, Set<AS
             for(CDTypeSymbol superType : typeSymbol.getSuperTypesTransitive())
                 loadMethods(ast, superType.getAstNode());
         }
-        methods.add(buildGetter(ast));
-        methods.add(buildSetter(ast));
     }
 
     /**

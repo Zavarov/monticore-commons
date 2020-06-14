@@ -1,9 +1,0 @@
-package vartas.monticore;
-
-grammar CD2Code extends
-        de.monticore.cd.CD4Code,
-        vartas.monticore.cd2code.types.CD2CodeBasicTypes,
-        vartas.monticore.cd2code.types.CD2CodeCollectionTypes
-{
-    start CDCompilationUnit;
-}

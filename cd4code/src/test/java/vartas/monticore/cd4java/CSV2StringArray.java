@@ -17,26 +17,23 @@
 
 package vartas.monticore.cd4java;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.SimpleArgumentConverter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CSV2StringArray extends SimpleArgumentConverter {
-
-    private static final Pattern PATTERN = Pattern.compile("\\w+(<.+>)?(\\[])?");
-
     @Override
     protected Object convert(Object source, Class<?> targetType) throws ArgumentConversionException {
-        Matcher matcher = PATTERN.matcher(source.toString());
-        List<String> matches = new ArrayList<>();
+        String[] words = source.toString().split(":");
+        List<String> output = new ArrayList<>(words.length);
 
-        while(matcher.find())
-            matches.add(matcher.group());
+        for(String word : words)
+            if(!StringUtils.trim(word).isEmpty())
+                output.add(StringUtils.trim(word));
 
-        return matches.toArray(String[]::new);
+        return output.toArray(new String[0]);
     }
 }

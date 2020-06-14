@@ -1,8 +1,0 @@
-package vartas.monticore.cd2code;
-
-classdiagram InstantCD{
-    <<factory>>
-    public class Person{
-        - Instant birthDate;
-    }
-}
