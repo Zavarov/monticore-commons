@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BasicCDTest {
-    protected static final Path MODEL_PATH = Paths.get("src","main","models","cd4java");
-    protected static final Path TEST_MODEL_PATH = Paths.get("src","test","models","cd4java");
+    protected static final Path MODEL_PATH = Paths.get("src","main","models");
+    protected static final Path TEST_MODEL_PATH = Paths.get("src","test","models");
     protected static final Path TEMPLATE_PATH = Paths.get("src","main","resources","templates");
     protected static final Path OUTPUT_PATH = Paths.get("target","generated-sources");
     protected static final Path SOURCES_PATH = Paths.get("src","main", "java");
