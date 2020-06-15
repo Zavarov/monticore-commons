@@ -80,7 +80,7 @@ public class CDGeneratorHelper {
     public static final String DEFAULT_FILE_EXTENSION = "java";
     @Nonnull
     public static final IterablePath SOURCES_PATH = IterablePath.fromPaths(
-            Collections.singletonList(Paths.get("src","main")),
+            Collections.singletonList(Paths.get("src","main", "java")),
             "java"
     );
 
