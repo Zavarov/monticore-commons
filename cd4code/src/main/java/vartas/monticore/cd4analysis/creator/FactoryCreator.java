@@ -18,6 +18,7 @@
 package vartas.monticore.cd4analysis.creator;
 
 import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.codegen.cd2java.AbstractCreator;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -93,8 +94,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         List<ASTCDParameter> parameters = new ArrayList<>();
 
         parameters.add(createSupplier(ast));
-
-        for (ASTCDAttribute attribute : ast.getCDAttributeList())
+        for (ASTCDAttribute attribute : getAttributes(ast))
             //Containers are optional
             if(!(isContainer(attribute) && !includeContainers))
                 parameters.add(getCDParameterFacade().createParameter(attribute));
@@ -105,11 +105,10 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
     private ASTCDMethod buildMethod(ASTCDClass ast, boolean includeContainers) {
         List<ASTCDParameter> parameters = new ArrayList<>();
 
-        for (ASTCDAttribute attribute : ast.getCDAttributeList()) {
+        for (ASTCDAttribute attribute : getAttributes(ast))
             //Containers are optional
             if (!(isContainer(attribute) && !includeContainers))
                 parameters.add(getCDParameterFacade().createParameter(attribute));
-        }
 
         return buildMethod(ast, parameters);
     }
@@ -123,6 +122,15 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
 
     private void bindToTemplate(ASTCDClass cdClass, ASTCDMethod cdMethod, String template){
         glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint(template, cdClass, cdMethod));
+    }
+
+    private List<ASTCDAttribute> getAttributes(ASTCDType ast){
+        List<ASTCDAttribute> attributes = new ArrayList<>(ast.getCDAttributeList());
+
+        for(CDTypeSymbol symbol : ast.getSymbol().getSuperTypes())
+            attributes.addAll(symbol.getAstNode().getCDAttributeList());
+
+        return attributes;
     }
 
     private boolean isContainer(ASTCDAttribute ast){
