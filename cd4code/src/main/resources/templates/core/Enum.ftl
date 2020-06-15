@@ -1,8 +1,6 @@
 ${include("hook.Package")}
 <#t>
 ${include("hook.Import")}
-<#t>
-${include("core.Import")}
 
 ${include("hook.Annotation")}
 ${ast.printModifier()} enum ${ast.getName()}{
