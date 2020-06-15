@@ -24,12 +24,14 @@ import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.codegen.cd2java.AbstractCreator;
+import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
+import de.monticore.utils.Names;
 import de.se_rwth.commons.Joiners;
 import org.apache.commons.lang3.StringUtils;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
@@ -163,7 +165,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @return the <code>visit</code> method for the associated {@link ASTCDType}.
      */
     protected ASTCDMethod createVisit(ASTCDType cdType){
-        String typeName = cdType.getName();
+        String typeName = getTypeName(cdType);
         String varName = StringUtils.uncapitalize(typeName);
         String signature = String.format(VISIT, typeName, varName);
 
@@ -179,7 +181,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @return the <code>endVisit</code> method for the associated {@link ASTCDType}.
      */
     protected ASTCDMethod createEndVisit(ASTCDType cdType){
-        String typeName = cdType.getName();
+        String typeName = getTypeName(cdType);
         String varName = StringUtils.uncapitalize(typeName);
         String signature = String.format(END_VISIT, typeName, varName);
 
@@ -194,10 +196,10 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @param cdType one of the {@link ASTCDType} of the class diagram.
      * @return the <code>handle</code> method for the associated {@link ASTCDType}.
      */
-    private ASTCDMethod createHandle(ASTCDType cdType){
-        String className = cdType.getName();
-        String varName = StringUtils.uncapitalize(className);
-        String signature = String.format(HANDLE, className, varName);
+    protected ASTCDMethod createHandle(ASTCDType cdType){
+        String typeName = getTypeName(cdType);
+        String varName = StringUtils.uncapitalize(typeName);
+        String signature = String.format(HANDLE, typeName, varName);
 
         ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
         replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint("visitor.Handle", cdMethod));
@@ -215,7 +217,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      */
     protected ASTCDMethod createTraverse(ASTCDType cdType){
         CDAttributeVisitor visitor = new CDAttributeVisitor();
-        String typeName = cdType.getName();
+        String typeName = getTypeName(cdType);
         String varName = StringUtils.uncapitalize(typeName);
         String signature = String.format(TRAVERSE, typeName, varName);
 
@@ -235,6 +237,23 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         }
 
         return cdMethod;
+    }
+
+    /**
+     * In case a handwritten class is detected and the TOP mechanism is applied, the visitor
+     * has to refer to the TOP class instead.
+     * @param ast one of the types in the class diagram.
+     * @return the name of the type the visitor is handling.
+     */
+    private String getTypeName(ASTCDType ast){
+        String qualifiedName = Names.getQualifiedName(ast.getSymbol().getPackageName(), ast.getName());
+
+        if(TransformationHelper.existsHandwrittenClass(CDGeneratorHelper.SOURCES_PATH, qualifiedName)) {
+            //Rename the class
+            return ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX;
+        }else{
+            return ast.getName();
+        }
     }
 
     /**
