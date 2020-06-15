@@ -25,9 +25,11 @@ import vartas.monticore.cd4analysis.CDGeneratorHelper;
 
 public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
     private String packageName;
+    private CDGeneratorHelper generatorHelper;
 
-    public CDHandwrittenFileTemplate(GlobalExtensionManagement glex) {
+    public CDHandwrittenFileTemplate(GlobalExtensionManagement glex, CDGeneratorHelper generatorHelper) {
         super(glex);
+        this.generatorHelper = generatorHelper;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
     public void visit(ASTCDInterface ast){
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CDGeneratorHelper.SOURCES_PATH, qualifiedName))
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName))
             //Rename the interface
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
     }
@@ -48,7 +50,7 @@ public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
     public void visit(ASTCDEnum ast){
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CDGeneratorHelper.SOURCES_PATH, qualifiedName)) {
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the enum
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
             //Rename the constructor as well to match the enum name
@@ -61,7 +63,7 @@ public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
     public void visit(ASTCDClass ast){
         String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CDGeneratorHelper.SOURCES_PATH, qualifiedName)) {
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the class
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
             //Rename the constructor as well to match the class name

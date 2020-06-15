@@ -20,10 +20,19 @@ package vartas.monticore.cd4analysis;
 import de.monticore.io.paths.IterablePath;
 
 import javax.annotation.Nonnull;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
 public class CDGeneratorHelper {
+    private final Path sourcesPath;
+
+    public CDGeneratorHelper(){
+        this(Paths.get("src", "main", "java"));
+    }
+    public CDGeneratorHelper(Path sourcesPath){
+        this.sourcesPath = sourcesPath;
+    }
     //----------------------------------------------------------------------------------------------------------------//
     //
     //        Core Templates
@@ -78,10 +87,9 @@ public class CDGeneratorHelper {
     public static final String HANDWRITTEN_FILE_POSTFIX = "TOP";
     @Nonnull
     public static final String DEFAULT_FILE_EXTENSION = "java";
-    @Nonnull
-    public static final IterablePath SOURCES_PATH = IterablePath.fromPaths(
-            Collections.singletonList(Paths.get("src","main", "java")),
-            "java"
-    );
+
+    public IterablePath getSourcesPath(){
+        return IterablePath.fromPaths(Collections.singletonList(sourcesPath), DEFAULT_FILE_EXTENSION);
+    }
 
 }

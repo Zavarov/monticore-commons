@@ -39,7 +39,7 @@ public class CDDecoratorGenerator extends CDTemplateGenerator{
                         new CDBindPackageTemplate(generatorSetup.getGlex()),
                         new CDBindImportTemplate(generatorSetup.getGlex()),
                         new CDInitializerTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex())
+                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
                 )
         );
         this.decorator = new CDDefinitionDecorator(generatorSetup.getGlex());

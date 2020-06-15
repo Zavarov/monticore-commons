@@ -67,7 +67,7 @@ public class Main {
         setup.setOutputDirectory(OUTPUT_PATH.toFile());
         setup.setTracing(false);
 
-        CDGeneratorHelper helper = new CDGeneratorHelper();
+        CDGeneratorHelper helper = new CDGeneratorHelper(SOURCES_PATH);
 
         //Generate
         CDDefinitionSymbol cdDefinitionSymbol = globalScope.resolveCDDefinition(MODEL).orElseThrow();

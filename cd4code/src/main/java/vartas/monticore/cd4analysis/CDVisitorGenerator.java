@@ -49,7 +49,7 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
                 Arrays.asList(
                         new CDBindPackageTemplate(generatorSetup.getGlex()),
                         new CDBindImportTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex())
+                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
                 )
         );
         stc = new CD4CodeSymbolTableCreatorDelegator(globalScope);
@@ -109,6 +109,6 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
     }
 
     private ASTCDInterface buildCDVisitor(ASTCDDefinition ast){
-        return VisitorCreator.create(ast, generatorSetup.getGlex());
+        return VisitorCreator.create(ast, generatorSetup.getGlex(), generatorHelper);
     }
 }

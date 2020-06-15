@@ -24,6 +24,7 @@ import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import vartas.monticore.cd4analysis.CDGeneratorHelper;
 import vartas.monticore.cd4analysis.creator.VisitorCreator;
 import vartas.monticore.cd4java.BasicCDTest;
 
@@ -37,7 +38,7 @@ public class VisitorCreatorTest extends BasicCDTest {
         super.setUp();
         cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Visitor").orElseThrow();
         cdDefinition = cdDefinitionSymbol.getAstNode();
-        visitor = VisitorCreator.create(cdDefinition, new GlobalExtensionManagement());
+        visitor = VisitorCreator.create(cdDefinition, new GlobalExtensionManagement(), new CDGeneratorHelper());
     }
 
     @ParameterizedTest

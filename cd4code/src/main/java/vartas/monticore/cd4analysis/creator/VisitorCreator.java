@@ -83,23 +83,32 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
     private final CDDefinitionSymbol cdDefinitionSymbol;
 
     /**
+     * The generator helper is required to check for handwritten files.
+     */
+    @Nonnull
+    private CDGeneratorHelper generatorHelper;
+
+    /**
      * Creates a new instance of the visitor creator.
      * @param cdDefinitionSymbol the {@link CDDefinitionSymbol} of the class diagram.
      * @param glex the {@link GlobalExtensionManagement} binding the templates to the hook points.
+     * @param generatorHelper the generator helper instance.
      */
-    private VisitorCreator(@Nonnull CDDefinitionSymbol cdDefinitionSymbol, @Nonnull GlobalExtensionManagement glex){
+    private VisitorCreator(@Nonnull CDDefinitionSymbol cdDefinitionSymbol, @Nonnull GlobalExtensionManagement glex, @Nonnull CDGeneratorHelper generatorHelper){
         super(glex);
         this.cdDefinitionSymbol = cdDefinitionSymbol;
+        this.generatorHelper = generatorHelper;
     }
 
     /**
      * Applies the visitor pattern on all types in the class diagram and creates a new visitor interface.
      * @param cdDefinition the {@link ASTCDDefinition} of the class diagram.
      * @param glex the {@link GlobalExtensionManagement} binding the templates to the hook points.
+     * @param generatorHelper the generator helper instance.
      * @return the visitor interface for the provided class diagram.
      */
-    public static ASTCDInterface create(ASTCDDefinition cdDefinition, GlobalExtensionManagement glex){
-        return new VisitorCreator(cdDefinition.getSymbol(), glex).decorate(cdDefinition);
+    public static ASTCDInterface create(ASTCDDefinition cdDefinition, GlobalExtensionManagement glex, CDGeneratorHelper generatorHelper){
+        return new VisitorCreator(cdDefinition.getSymbol(), glex, generatorHelper).decorate(cdDefinition);
     }
 
     /**
@@ -248,7 +257,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
     private String getTypeName(ASTCDType ast){
         String qualifiedName = Names.getQualifiedName(ast.getSymbol().getPackageName(), ast.getName());
 
-        if(TransformationHelper.existsHandwrittenClass(CDGeneratorHelper.SOURCES_PATH, qualifiedName)) {
+        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the class
             return ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX;
         }else{

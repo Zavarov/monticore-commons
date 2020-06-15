@@ -50,7 +50,7 @@ public class CDFactoryGenerator extends CDTemplateGenerator{
                 Arrays.asList(
                         new CDBindPackageTemplate(generatorSetup.getGlex()),
                         new CDBindImportTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex())
+                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
                 )
         );
         stc = new CD4CodeSymbolTableCreatorDelegator(globalScope);
