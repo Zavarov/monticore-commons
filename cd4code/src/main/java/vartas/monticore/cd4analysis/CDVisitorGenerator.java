@@ -21,7 +21,6 @@ import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.cd4code._ast.CD4CodeMill;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
@@ -40,7 +39,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CDVisitorGenerator extends CDTemplateGenerator{
     private final CD4CodeSymbolTableCreatorDelegator stc;
@@ -74,17 +72,18 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
     private ASTMCImportStatement buildMCImportStatement(Iterable<String> parts){
         return CD4CodeMill.mCImportStatementBuilder()
                 .setMCQualifiedName(buildMCQualifiedName(parts))
+                .setStar(true)
                 .build();
     }
 
-    private ASTMCImportStatement buildMCImportStatement(CDDefinitionSymbol definition, CDTypeSymbol type){
-        //TODO Necessary due to the getFullName not being able to determine the package
-        String qualifiedName = Joiners.DOT.join(definition.getPackageName(), definition.getName(), type.getName());
-        return buildMCImportStatement(Splitters.DOT.split(qualifiedName));
+    private ASTMCImportStatement buildMCImportStatement(String importName){
+        return buildMCImportStatement(Splitters.DOT.split(importName));
     }
 
-    private List<ASTMCImportStatement> buildMCImportStatements(ASTCDDefinition ast){
-        return ast.getSymbol().getTypes().stream().map(symbol -> buildMCImportStatement(ast.getSymbol(), symbol)).collect(Collectors.toUnmodifiableList());
+    private ASTMCImportStatement buildParentMCImportStatement(ASTCDDefinition ast){
+        String qualifiedName = Joiners.DOT.join(ast.getSymbol().getPackageName(), ast.getName(), "*");
+
+        return buildMCImportStatement(qualifiedName);
     }
 
     private List<String> buildPackage(ASTCDDefinition ast){
@@ -97,7 +96,7 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
     private ASTCDCompilationUnit buildCDCompilationUnit(ASTCDDefinition ast){
         return CD4CodeMill.cDCompilationUnitBuilder()
                 .setCDDefinition(buildCDDefinition(ast))
-                .addAllMCImportStatements(buildMCImportStatements(ast))
+                .addMCImportStatement(buildParentMCImportStatement(ast))
                 .addAllPackages(buildPackage(ast))
                 .build();
     }

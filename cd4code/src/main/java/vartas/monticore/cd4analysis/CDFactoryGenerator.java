@@ -17,10 +17,11 @@
 
 package vartas.monticore.cd4analysis;
 
-import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._ast.ASTCDClass;
+import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
+import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4code._ast.CD4CodeMill;
-import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -69,21 +70,34 @@ public class CDFactoryGenerator extends CDTemplateGenerator{
         return builder.build();
     }
 
-    private ASTMCImportStatement buildMCImportStatement(Iterable<String> parts){
+    private ASTMCImportStatement buildMCImportStatement(Iterable<String> parts, boolean isStar){
         return CD4CodeMill.mCImportStatementBuilder()
                 .setMCQualifiedName(buildMCQualifiedName(parts))
+                .setStar(isStar)
                 .build();
     }
 
+    private ASTMCImportStatement buildMCImportStatement(String importName, boolean isStar){
+        return buildMCImportStatement(Splitters.DOT.split(importName), isStar);
+    }
+
     private ASTMCImportStatement buildMCImportStatement(String importName){
-        return buildMCImportStatement(Splitters.DOT.split(importName));
+        return buildMCImportStatement(importName, false);
     }
 
     private List<ASTMCImportStatement> buildMCImportStatements(ASTCDDefinition ast){
-        ImportVisitor visitor = new ImportVisitor();
-        ast.accept(visitor);
+        List<String> imports = new ArrayList<>();
 
-        return visitor.imports.stream().map(this::buildMCImportStatement).collect(Collectors.toUnmodifiableList());
+        imports.add("java.util.function.Supplier.Supplier");
+        imports.addAll(ast.getSymbol().getImports());
+
+        return imports.stream().map(this::buildMCImportStatement).collect(Collectors.toUnmodifiableList());
+    }
+
+    private ASTMCImportStatement buildParentMCImportStatement(ASTCDDefinition ast){
+        String qualifiedName = Joiners.DOT.join(ast.getSymbol().getPackageName(), ast.getName(), "*");
+
+        return buildMCImportStatement(qualifiedName, true);
     }
 
     private List<String> buildPackage(ASTCDDefinition ast){
@@ -97,6 +111,7 @@ public class CDFactoryGenerator extends CDTemplateGenerator{
         return CD4CodeMill.cDCompilationUnitBuilder()
                 .setCDDefinition(buildCDDefinition(ast))
                 .addAllMCImportStatements(buildMCImportStatements(ast))
+                .addMCImportStatement(buildParentMCImportStatement(ast))
                 .addAllPackages(buildPackage(ast))
                 .build();
     }
@@ -114,28 +129,5 @@ public class CDFactoryGenerator extends CDTemplateGenerator{
 
     private ASTCDClass buildCDFactory(ASTCDClass ast){
         return FactoryCreator.create(ast, generatorSetup.getGlex());
-    }
-
-    private static class ImportVisitor implements CD4CodeInheritanceVisitor {
-        private List<String> imports = new ArrayList<>();
-
-        public ImportVisitor(){
-            imports.add("java.util.function.Supplier.Supplier");
-        }
-
-        private void addImport(String packageName, String name){
-            //Format as CD import
-            imports.add(Joiners.DOT.join(packageName, name, name));
-        }
-
-        @Override
-        public void visit(ASTCDType ast){
-            addImport(ast.getSymbol().getPackageName(), ast.getName());
-        }
-
-        @Override
-        public void visit(ASTCDAttribute ast){
-            ast.getSymbol().getType().loadSymbol().ifPresent(type -> addImport(type.getPackageName(), type.getName()));
-        }
     }
 }
