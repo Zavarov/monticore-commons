@@ -36,20 +36,22 @@ public class Main {
     private static Path TEMPLATE_PATH;
     private static Path OUTPUT_PATH;
     private static Path SOURCES_PATH;
+    private static Path CLASSES_PATH;
     private static String MODEL;
 
     public static void main(String[] args){
-        assert args.length >= 5;
+        assert args.length >= 6;
 
         //Setup environment
         MODEL_PATH = Path.of(args[0]);
         TEMPLATE_PATH = Path.of(args[1]);
         OUTPUT_PATH = Path.of(args[2]);
         SOURCES_PATH = Path.of(args[3]);
-        MODEL = args[4];
+        CLASSES_PATH = Path.of(args[4]);
+        MODEL = args[5];
 
         CD4CodeLanguage language = new CD4CodeLanguage();
-        ModelPath modelPath = new ModelPath(MODEL_PATH);
+        ModelPath modelPath = new ModelPath(MODEL_PATH, CLASSES_PATH);
         CD4CodeGlobalScope globalScope = new CD4CodeGlobalScope(modelPath, language);
 
         //Setup generator
