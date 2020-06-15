@@ -26,10 +26,13 @@ import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.se_rwth.commons.Joiners;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
+import vartas.monticore.cd4analysis.CDMethodComparator;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
     private static final String CREATE_TEMPLATE = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "Create");
@@ -59,10 +62,9 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
                 .build();
     }
 
-    private List<ASTCDMethod> buildMethods(ASTCDClass ast){
+    private Set<ASTCDMethod> buildMethods(ASTCDClass ast){
         //Duplicates will be created when there are no container attributes.
-        //Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
-        List<ASTCDMethod> methods = new ArrayList<>();
+        Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
         ASTCDMethod method;
 
         //For non-abstract classes, create a new instance in the method body
