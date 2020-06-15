@@ -89,6 +89,8 @@
         <!-- Classifiers -->
 
         <grammars.classifier>grammars</grammars.classifier>
+        <models.classifier>models</models.classifier>
+        <templates.classifier>templates</templates.classifier>
     </properties>
 
     <dependencyManagement>
@@ -199,7 +201,7 @@
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <!-- For deploying the code to GitHub  -->
-            <!-- create grammar & template jar -->
+            <!-- create grammar, model & template jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -217,6 +219,18 @@
                             <classesDirectory>src/main/grammars</classesDirectory>
                         </configuration>
                     </execution>
+                    <!-- models -->
+                    <execution>
+                        <id>generate-models</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>${models.classifier}</classifier>
+                            <classesDirectory>src/main/models</classesDirectory>
+                        </configuration>
+                    </execution>
                     <!-- templates -->
                     <execution>
                         <id>generate-templates</id>
@@ -225,7 +239,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classifier>templates</classifier>
+                            <classifier>${templates.classifier}</classifier>
                             <classesDirectory>src/main/resources/templates</classesDirectory>
                         </configuration>
                     </execution>
