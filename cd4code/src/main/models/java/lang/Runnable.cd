@@ -1,0 +1,12 @@
+package java.lang;
+
+import java.lang.Throwable.Throwable;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Runnable{
+    public interface Runnable extends Object{
+        + void run();
+    }
+}
