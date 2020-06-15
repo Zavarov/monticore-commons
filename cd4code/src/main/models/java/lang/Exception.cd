@@ -1,0 +1,16 @@
+package java.lang;
+
+import java.lang.Throwable.Throwable;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Exception{
+    public class Exception extends Throwable{
+        + Exception();
+        + Exception(String message);
+        + Exception(String message, Throwable cause);
+        # Exception(String message, Throwable cause, boolean enableSuppression, boolean writeableStackTrace);
+        # Exception(Throwable cause);
+    }
+}

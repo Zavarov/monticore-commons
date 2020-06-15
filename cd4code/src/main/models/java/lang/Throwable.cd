@@ -1,0 +1,30 @@
+package java.lang;
+
+import java.io.PrintStream.PrintStream;
+import java.io.PrintWriter.PrintWriter;
+import java.lang.StackTraceElement.StackTraceElement;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Throwable{
+    public class Throwable extends Object{
+        + Throwable();
+        + Throwable(String message);
+        + Throwable(String message, Throwable cause);
+        # Throwable(String message, Throwable cause, boolean enableSuppression, boolean writeableStackTrace);
+        # Throwable(Throwable cause);
+
+        + void addSuppressed(Throwable exception);
+        + Throwable fillInStackTrace();
+        + Throwable getCause();
+        + String getLocalizedMessage();
+        + String getMessage();
+        + StackTraceElement[] getStackTrace();
+        + Throwable[] getSuppressed();
+        + void printStackTrace();
+        + void printStackTrace(PrintStream s);
+        + void printStackTrace(PrintWriter s);
+        + void setStackTrace(StackTraceElement[] stackTrace);
+    }
+}
