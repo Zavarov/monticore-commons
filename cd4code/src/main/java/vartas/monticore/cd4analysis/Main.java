@@ -28,56 +28,130 @@ import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeLanguage;
 
+import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    private static Path MODEL_PATH;
-    private static Path TEMPLATE_PATH;
-    private static Path OUTPUT_PATH;
+    private static Path MODELS_PATH;
+    private static Path LOCAL_MODELS_PATH;
+    private static Path TEMPLATES_PATH;
+    private static Path LOCAL_TEMPLATES_PATH;
     private static Path SOURCES_PATH;
-    private static Path CLASSES_PATH;
+    private static Path OUTPUT_PATH;
     private static String MODEL;
 
-    public static void main(String[] args){
-        assert args.length >= 6;
+    private static CD4CodeGlobalScope GLOBAL_SCOPE;
+    private static GlobalExtensionManagement GLEX;
+    private static GeneratorSetup GENERATOR_SETUP;
+    private static CDGeneratorHelper GENERATOR_HELPER;
 
-        //Setup environment
-        MODEL_PATH = Path.of(args[0]);
-        TEMPLATE_PATH = Path.of(args[1]);
-        OUTPUT_PATH = Path.of(args[2]);
-        SOURCES_PATH = Path.of(args[3]);
-        CLASSES_PATH = Path.of(args[4]);
-        MODEL = args[5];
+    private static CDFactoryGenerator FACTORY_GENERATOR;
+    private static CDVisitorGenerator VISITOR_GENERATOR;
+    private static CDDecoratorGenerator DECORATOR_GENERATOR;
+
+    public static void main(String[] args){
+        processArguments(args);
+
+        buildGlobalScope();
+        buildGlex();
+        buildGeneratorSetup();
+        buildGeneratorHelper();
+        buildGenerator();
+
+        generate();
+    }
+
+    private static void processArguments(String[] args){
+        assert args.length >= 7;
+        // ------------------------------------------------
+        // Contain the class diagrams
+        // ------------------------------------------------
+        MODELS_PATH = Path.of(args[0]);
+        LOCAL_MODELS_PATH = Path.of(args[1]);
+        // ------------------------------------------------
+        // Contain the FreeMarker templates
+        // ------------------------------------------------
+        TEMPLATES_PATH = Path.of(args[2]);
+        LOCAL_TEMPLATES_PATH = Path.of(args[3]);
+        // ------------------------------------------------
+        // The source directory for the handwritten files
+        // ------------------------------------------------
+        SOURCES_PATH = Path.of(args[4]);
+        // ------------------------------------------------
+        // The target directory for the generated files
+        // ------------------------------------------------
+        OUTPUT_PATH = Path.of(args[5]);
+        MODEL = args[6];
+    }
+
+    private static void buildGlobalScope(){
+        assert MODELS_PATH != null;
+        assert LOCAL_MODELS_PATH != null;
 
         CD4CodeLanguage language = new CD4CodeLanguage();
-        ModelPath modelPath = new ModelPath(MODEL_PATH, CLASSES_PATH);
-        CD4CodeGlobalScope globalScope = new CD4CodeGlobalScope(modelPath, language);
+        ModelPath modelPath = new ModelPath();
 
-        //Setup generator
-        GlobalExtensionManagement glex = new GlobalExtensionManagement();
-        glex.setGlobalValue("cdPrinter", new CD4CodePrettyPrinterDelegator());
-        glex.setGlobalValue("mcPrinter", new MCFullGenericTypesPrettyPrinter(new IndentPrinter()));
+        if(MODELS_PATH.toFile().exists())
+            modelPath.addEntry(MODELS_PATH);
+        if(LOCAL_MODELS_PATH.toFile().exists())
+            modelPath.addEntry(LOCAL_MODELS_PATH);
 
-        GeneratorSetup setup = new GeneratorSetup();
-        setup.setAdditionalTemplatePaths(Collections.singletonList(TEMPLATE_PATH.toFile()));
-        setup.setDefaultFileExtension("java");
-        setup.setGlex(glex);
-        setup.setHandcodedPath(IterablePath.from(SOURCES_PATH.toFile(), "java"));
-        setup.setOutputDirectory(OUTPUT_PATH.toFile());
-        setup.setTracing(false);
+        GLOBAL_SCOPE = new CD4CodeGlobalScope(modelPath, language);
+    }
 
-        CDGeneratorHelper helper = new CDGeneratorHelper(SOURCES_PATH);
+    private static void buildGlex(){
+        GLEX = new GlobalExtensionManagement();
+        GLEX.setGlobalValue("cdPrinter", new CD4CodePrettyPrinterDelegator());
+        GLEX.setGlobalValue("mcPrinter", new MCFullGenericTypesPrettyPrinter(new IndentPrinter()));
+    }
 
-        //Generate
-        CDDefinitionSymbol cdDefinitionSymbol = globalScope.resolveCDDefinition(MODEL).orElseThrow();
+    private static void buildGeneratorSetup(){
+        assert TEMPLATES_PATH != null;
+        assert LOCAL_TEMPLATES_PATH != null;
+        assert SOURCES_PATH != null;
+        assert OUTPUT_PATH != null;
+        assert GLEX != null;
 
-        CDFactoryGenerator factoryGenerator = new CDFactoryGenerator(setup, helper, globalScope);
-        CDVisitorGenerator visitorGenerator = new CDVisitorGenerator(setup, helper, globalScope);
-        CDDecoratorGenerator decoratorGenerator = new CDDecoratorGenerator(setup, helper);
+        List<File> templatePaths = new ArrayList<>();
+        if(TEMPLATES_PATH.toFile().exists())
+            templatePaths.add(TEMPLATES_PATH.toFile());
+        if(LOCAL_TEMPLATES_PATH.toFile().exists())
+            templatePaths.add(LOCAL_TEMPLATES_PATH.toFile());
 
-        factoryGenerator.generate(cdDefinitionSymbol);
-        visitorGenerator.generate(cdDefinitionSymbol);
-        decoratorGenerator.generate(cdDefinitionSymbol);
+        GENERATOR_SETUP = new GeneratorSetup();
+        GENERATOR_SETUP.setAdditionalTemplatePaths(templatePaths);
+        GENERATOR_SETUP.setDefaultFileExtension(CDGeneratorHelper.DEFAULT_FILE_EXTENSION);
+        GENERATOR_SETUP.setGlex(GLEX);
+        GENERATOR_SETUP.setHandcodedPath(IterablePath.from(SOURCES_PATH.toFile(), CDGeneratorHelper.DEFAULT_FILE_EXTENSION));
+        GENERATOR_SETUP.setOutputDirectory(OUTPUT_PATH.toFile());
+        GENERATOR_SETUP.setTracing(false);
+    }
+
+    private static void buildGeneratorHelper(){
+        assert SOURCES_PATH != null;
+
+        GENERATOR_HELPER = new CDGeneratorHelper(SOURCES_PATH);
+    }
+
+    private static void buildGenerator(){
+        FACTORY_GENERATOR = new CDFactoryGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
+        VISITOR_GENERATOR = new CDVisitorGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
+        DECORATOR_GENERATOR = new CDDecoratorGenerator(GENERATOR_SETUP, GENERATOR_HELPER);
+    }
+
+    private static void generate(){
+        assert GLOBAL_SCOPE != null;
+        assert MODEL != null;
+        assert FACTORY_GENERATOR != null;
+        assert VISITOR_GENERATOR != null;
+        assert DECORATOR_GENERATOR != null;
+
+        CDDefinitionSymbol cdDefinitionSymbol = GLOBAL_SCOPE.resolveCDDefinition(MODEL).orElseThrow();
+
+        FACTORY_GENERATOR.generate(cdDefinitionSymbol);
+        VISITOR_GENERATOR.generate(cdDefinitionSymbol);
+        DECORATOR_GENERATOR.generate(cdDefinitionSymbol);
     }
 }
