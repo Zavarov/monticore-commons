@@ -30,10 +30,7 @@ import vartas.monticore.cd4analysis.CDGeneratorHelper;
 import vartas.monticore.cd4analysis.CDMethodComparator;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
     private static final String CREATE_TEMPLATE = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "Create");
@@ -125,12 +122,12 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
     }
 
     private List<ASTCDAttribute> getAttributes(ASTCDType ast){
-        List<ASTCDAttribute> attributes = new ArrayList<>(ast.getCDAttributeList());
+        Set<ASTCDAttribute> attributes = new LinkedHashSet<>(ast.getCDAttributeList());
 
-        for(CDTypeSymbol symbol : ast.getSymbol().getSuperTypes())
+        for(CDTypeSymbol symbol : ast.getSymbol().getSuperTypesTransitive())
             attributes.addAll(symbol.getAstNode().getCDAttributeList());
 
-        return attributes;
+        return new ArrayList<>(attributes);
     }
 
     private boolean isContainer(ASTCDAttribute ast){
