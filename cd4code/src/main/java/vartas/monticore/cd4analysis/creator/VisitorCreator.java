@@ -28,6 +28,7 @@ import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
@@ -237,12 +238,13 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         //Link the individual attributes to their respective visitor template
         for(ASTCDAttribute cdAttribute : cdType.getCDAttributeList()){
             Optional<CDTypeSymbol> cdTypeSymbol = cdAttribute.getSymbol().getType().loadSymbol();
+
             //The accessor for containers has to be provided. (e.g. via iterator and whatnot)
             if(cdTypeSymbol.flatMap(symbol -> symbol.getStereotype(CDGeneratorHelper.CONTAINER_LABEL)).isPresent())
                 replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeTemplate(cdTypeSymbol.get()), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
-            //isPresent -> Type in local class diagram -> Has generated "accept" method
+            //isPresent -> Type is in class diagram -> May have an "accept" method
             else if(cdTypeSymbol.isPresent())
-                replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeDefaultTemplate(), cdMethod.getCDParameter(0), cdAttribute));
+                replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeDefaultTemplate(), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
         }
 
         return cdMethod;
@@ -313,7 +315,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          * A bitmap indicating whether one of the container arguments is associated with an internal class diagram.
          * If so, we can access it via one of the templates.
          */
-        private LinkedHashMap<ASTMCTypeArgument, Boolean> argumentTypes = new LinkedHashMap<>();
+        private LinkedHashMap<String, Boolean> argumentTypes = new LinkedHashMap<>();
 
         /**
          * Associates each of the generic arguments of the provided {@link ASTCDAttribute} with whether there
@@ -322,7 +324,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          * @return an immutable bitmap associating each generic container argument with whether their exists an
          * corresponding class diagram.
          */
-        public List<Map.Entry<ASTMCTypeArgument, Boolean>> accept(ASTCDAttribute ast){
+        public List<Map.Entry<String, Boolean>> accept(ASTCDAttribute ast){
             this.argumentTypes.clear();
             ast.accept(getRealThis());
             return Lists.newArrayList(argumentTypes.entrySet());
@@ -336,15 +338,27 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          */
         @Override
         public void visit(ASTMCGenericType ast){
-            for(ASTMCTypeArgument argument : ast.getMCTypeArgumentList()){
-                //TODO Use Type symbols instead of a pretty printer
-                String qualifiedName = argument.printType(printer);
-                Optional<CDTypeSymbol> typeSymbol = cdDefinitionSymbol.getType(qualifiedName);
-                //isPresent() == True <-> The symbol is in the local scope -> The symbol has an accept method
-                argumentTypes.put(argument, typeSymbol.isPresent());
-            }
+            for(ASTMCTypeArgument argument : ast.getMCTypeArgumentList())
+                processType(argument.printType(printer));
         }
-    }
+
+        /**
+         * In case the provided attribute doesn't belong to a container class.<br>
+         * In this case, the attribute should be visited if and only if its type is in the local class diagram.
+         * @param ast the type of the provided {@link ASTCDAttribute}.
+         */
+        @Override
+        public void visit(ASTMCQualifiedType ast){
+            processType(ast.printType(printer));
+        }
+
+        //TODO Use Type symbols instead of a pretty printer
+        private void processType(String qualifiedName){
+            Optional<CDTypeSymbol> typeSymbol = cdDefinitionSymbol.getType(qualifiedName);
+            //isPresent() == True <-> The symbol is in the local scope -> The symbol has an accept method
+            argumentTypes.put(qualifiedName, typeSymbol.isPresent());
+        }
+}
 
     /**
      * Adds the "accept" method to all types that are associated with the visitor.

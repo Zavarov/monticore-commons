@@ -1,4 +1,4 @@
-${signature("cdParameter", "cdField", "cdArguments")}<#t>
+${signature("cdParameter", "cdField", "cdArguments")}
 <#assign key = cdArguments[0]>
 <#assign value = cdArguments[1]>
 <#if key.getValue()>
