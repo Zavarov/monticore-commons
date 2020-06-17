@@ -1,5 +1,6 @@
 package java.lang;
 
+import java.lang.Object.Object;
 import java.lang.Throwable.Throwable;
 
 /**

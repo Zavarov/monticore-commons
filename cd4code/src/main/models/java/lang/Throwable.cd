@@ -2,6 +2,7 @@ package java.lang;
 
 import java.io.PrintStream.PrintStream;
 import java.io.PrintWriter.PrintWriter;
+import java.lang.Object.Object;
 import java.lang.StackTraceElement.StackTraceElement;
 
 /**
