@@ -410,7 +410,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          * @param ast an arbitrary {@link ASTCDType} in the provided class diagram.
          */
         public void visit(ASTCDType ast){
-            glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, new TemplateHookPoint(computeAcceptorTemplate(), cdParameter));
+            glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdAccept, new TemplateHookPoint(computeAcceptorTemplate(), cdParameter));
         }
 
         /**
