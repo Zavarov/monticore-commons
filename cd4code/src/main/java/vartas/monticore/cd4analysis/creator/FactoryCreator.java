@@ -32,7 +32,7 @@ import vartas.monticore.cd4analysis.CDMethodComparator;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
+public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
     private static final String CREATE_TEMPLATE = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "Create");
     private static final String CREATE_SUPPLIER_TEMPLATE = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "CreateSupplier");
 
@@ -40,12 +40,12 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         super(glex);
     }
 
-    public static ASTCDClass create(ASTCDClass ast, GlobalExtensionManagement glex){
+    public static ASTCDClass create(ASTCDType ast, GlobalExtensionManagement glex){
         return new FactoryCreator(glex).decorate(ast);
     }
 
     @Override
-    public ASTCDClass decorate(ASTCDClass ast) {
+    public ASTCDClass decorate(ASTCDType ast) {
         ASTCDClass factory = buildFactory(ast);
 
         factory.addAllCDMethods(buildMethods(ast));
@@ -53,14 +53,14 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         return factory;
     }
 
-    private ASTCDClass buildFactory(ASTCDClass ast){
+    private ASTCDClass buildFactory(ASTCDType ast){
         return CD4AnalysisMill.cDClassBuilder()
                 .setName(ast.getName()+"Factory")
                 .setModifier(CDModifier.PUBLIC.build())
                 .build();
     }
 
-    private Set<ASTCDMethod> buildMethods(ASTCDClass ast){
+    private Set<ASTCDMethod> buildMethods(ASTCDType ast){
         //Duplicates will be created when there are no container attributes.
         Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
         ASTCDMethod method;
@@ -87,7 +87,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         return methods;
     }
 
-    private ASTCDMethod buildMethodSupplier(ASTCDClass ast, boolean includeContainers){
+    private ASTCDMethod buildMethodSupplier(ASTCDType ast, boolean includeContainers){
         List<ASTCDParameter> parameters = new ArrayList<>();
 
         parameters.add(createSupplier(ast));
@@ -99,7 +99,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         return buildMethod(ast, parameters);
     }
 
-    private ASTCDMethod buildMethod(ASTCDClass ast, boolean includeContainers) {
+    private ASTCDMethod buildMethod(ASTCDType ast, boolean includeContainers) {
         List<ASTCDParameter> parameters = new ArrayList<>();
 
         for (ASTCDAttribute attribute : getAttributes(ast))
@@ -110,14 +110,14 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
         return buildMethod(ast, parameters);
     }
 
-    private ASTCDMethod buildMethod(ASTCDClass ast, List<ASTCDParameter> parameters) {
+    private ASTCDMethod buildMethod(ASTCDType ast, List<ASTCDParameter> parameters) {
         ASTMCType returnType = getMCTypeFacade().createQualifiedType(ast.getName());
         ASTCDMethod method = getCDMethodFacade().createMethod(CDModifier.PUBLIC_STATIC, returnType, "create", parameters);
         String createTemplate = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "create");
         return method;
     }
 
-    private void bindToTemplate(ASTCDClass cdClass, ASTCDMethod cdMethod, String template){
+    private void bindToTemplate(ASTCDType cdClass, ASTCDMethod cdMethod, String template){
         glex.replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint(template, cdClass, cdMethod));
     }
 
@@ -138,7 +138,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDClass, ASTCDClass> {
                 .isPresent();
     }
 
-    private ASTCDParameter createSupplier(ASTCDClass ast){
+    private ASTCDParameter createSupplier(ASTCDType ast){
         ASTMCTypeArgument argument = getMCTypeFacade().createWildCardWithUpperBoundType(ast.getName());
         ASTMCType type = getMCTypeFacade().createBasicGenericTypeOf("Supplier", argument);
 

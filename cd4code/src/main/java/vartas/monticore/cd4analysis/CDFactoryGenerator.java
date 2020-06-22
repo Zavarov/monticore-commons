@@ -20,6 +20,7 @@ package vartas.monticore.cd4analysis;
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4code._ast.CD4CodeMill;
 import de.monticore.generating.GeneratorSetup;
@@ -124,10 +125,15 @@ public class CDFactoryGenerator extends CDTemplateGenerator{
     }
 
     private List<ASTCDClass> buildCDFactories(ASTCDDefinition ast){
-        return ast.getCDClassList().stream().map(this::buildCDFactory).collect(Collectors.toList());
+        List<ASTCDClass> factories = new ArrayList<>();
+
+        ast.getCDClassList().stream().map(this::buildCDFactory).forEach(factories::add);
+        ast.getCDInterfaceList().stream().map(this::buildCDFactory).forEach(factories::add);
+
+        return factories;
     }
 
-    private ASTCDClass buildCDFactory(ASTCDClass ast){
+    private ASTCDClass buildCDFactory(ASTCDType ast){
         return FactoryCreator.create(ast, generatorSetup.getGlex());
     }
 }
