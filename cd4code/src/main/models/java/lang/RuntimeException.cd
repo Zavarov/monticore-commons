@@ -1,0 +1,16 @@
+package java.lang;
+
+import java.lang.Exception.Exception;
+
+/**
+ * @version Java 11
+ */
+public classdiagram RuntimeException{
+    public class RuntimeException extends Exception{
+        + RuntimeException();
+        + RuntimeException(String message);
+        + RuntimeException(String message, Throwable cause);
+        # RuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writeableStackTrace);
+        # RuntimeException(Throwable cause);
+    }
+}
