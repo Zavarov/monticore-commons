@@ -45,9 +45,9 @@ public class InheritanceVisitorCreator extends VisitorCreator{
     public ASTCDInterface decorate(ASTCDDefinition cdDefinition) {
         ASTCDInterface cdInterface = buildVisitor(cdDefinition);
 
-        cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
-        cdDefinition.streamCDEnums().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
-        cdDefinition.streamCDInterfaces().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
+        cdDefinition.streamCDClasss().map(this::createHandle).forEach(cdInterface::addCDMethod);
+        cdDefinition.streamCDEnums().map(this::createHandle).forEach(cdInterface::addCDMethod);
+        cdDefinition.streamCDInterfaces().map(this::createHandle).forEach(cdInterface::addCDMethod);
 
         return cdInterface;
     }
@@ -63,6 +63,13 @@ public class InheritanceVisitorCreator extends VisitorCreator{
 
     @Override
     protected List<String> computeSuperTypes(ASTCDType cdType){
-        return cdType.getSymbol().getSuperTypesTransitive().stream().distinct().map(CDTypeSymbol::getAstNode).map(this::getTypeName).collect(Collectors.toList());
+        return cdType.getSymbol()
+                .getSuperTypesTransitive()
+                .stream()
+                .distinct()
+                .filter(cdSuperType -> cdType.getSymbol().getEnclosingScope().getLocalCDTypeSymbols().contains(cdSuperType))
+                .map(CDTypeSymbol::getAstNode)
+                .map(this::getTypeName)
+                .collect(Collectors.toList());
     }
 }
