@@ -40,7 +40,8 @@ public class CDVisitorGeneratorTest extends BasicCDGeneratorTest{
 
     @ParameterizedTest
     @CsvSource(value = {
-            "vartas.monticore.cd4code.Visitor"
+            "vartas.monticore.cd4code.Visitor",
+            "vartas.monticore.cd4code.InheritanceVisitor"
     })
     public void testGenerate(String modelPath){
         CDDecoratorGenerator decorator;

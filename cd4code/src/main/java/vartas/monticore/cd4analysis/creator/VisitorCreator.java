@@ -95,7 +95,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @param glex the {@link GlobalExtensionManagement} binding the templates to the hook points.
      * @param generatorHelper the generator helper instance.
      */
-    private VisitorCreator(@Nonnull CDDefinitionSymbol cdDefinitionSymbol, @Nonnull GlobalExtensionManagement glex, @Nonnull CDGeneratorHelper generatorHelper){
+    protected VisitorCreator(@Nonnull CDDefinitionSymbol cdDefinitionSymbol, @Nonnull GlobalExtensionManagement glex, @Nonnull CDGeneratorHelper generatorHelper){
         super(glex);
         this.cdDefinitionSymbol = cdDefinitionSymbol;
         this.generatorHelper = generatorHelper;
@@ -146,7 +146,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @param ast the {@link ASTCDDefinition} of the class diagram.
      * @return an empty visitor interface.
      */
-    private ASTCDInterface buildVisitor(ASTCDDefinition ast){
+    protected ASTCDInterface buildVisitor(ASTCDDefinition ast){
         return CD4AnalysisMill.cDInterfaceBuilder()
                 .setName(ast.getName()+"Visitor")
                 .setModifier(CDModifier.PUBLIC.build())
@@ -212,8 +212,18 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         String signature = String.format(HANDLE, typeName, varName);
 
         ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
-        replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint("visitor.Handle", cdMethod));
+        replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint("visitor.Handle", cdMethod, computeSuperTypes(cdType)));
         return cdMethod;
+    }
+
+    /**
+     * Computes the effective name sof the super types of the provide {@link ASTCDType} in the order they appear.
+     * Those names are relevant when calling the visit method for more than just the current type.
+     * @param cdType one of the {@link ASTCDType} of the class diagram.
+     * @return a list containing the effective names of all superypes of the provided {@link ASTCDType}.
+     */
+    protected List<String> computeSuperTypes(ASTCDType cdType){
+        return Collections.emptyList();
     }
 
     /**
@@ -256,7 +266,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * @param ast one of the types in the class diagram.
      * @return the name of the type the visitor is handling.
      */
-    private String getTypeName(ASTCDType ast){
+    protected String getTypeName(ASTCDType ast){
         String qualifiedName = Names.getQualifiedName(ast.getSymbol().getPackageName(), ast.getName());
 
         if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {

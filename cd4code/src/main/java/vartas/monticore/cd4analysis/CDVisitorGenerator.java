@@ -30,6 +30,7 @@ import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeSymbolTableCreatorDelegator;
+import vartas.monticore.cd4analysis.creator.InheritanceVisitorCreator;
 import vartas.monticore.cd4analysis.creator.VisitorCreator;
 import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
 import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
@@ -104,11 +105,14 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
     private ASTCDDefinition buildCDDefinition(ASTCDDefinition ast){
         return CD4CodeMill.cDDefinitionBuilder()
                 .setName(ast.getName()+"Visitor")
-                .addCDInterface(buildCDVisitor(ast))
+                .addAllCDInterfaces(buildCDVisitor(ast))
                 .build();
     }
 
-    private ASTCDInterface buildCDVisitor(ASTCDDefinition ast){
-        return VisitorCreator.create(ast, generatorSetup.getGlex(), generatorHelper);
+    private List<ASTCDInterface> buildCDVisitor(ASTCDDefinition ast){
+        return Arrays.asList(
+                VisitorCreator.create(ast, generatorSetup.getGlex(), generatorHelper),
+                InheritanceVisitorCreator.create(ast, generatorSetup.getGlex(), generatorHelper)
+        );
     }
 }
