@@ -23,7 +23,6 @@ import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
-import vartas.monticore.arithmeticexpressions._ast.ASTAtExpression;
 import vartas.monticore.arithmeticexpressions._ast.ASTMethodExpression;
 import vartas.monticore.arithmeticexpressions._ast.ASTPowExpression;
 import vartas.monticore.arithmeticexpressions._visitor.ArithmeticExpressionsDelegatorVisitor;
@@ -60,11 +59,6 @@ public class ArithmeticExpressionsPrettyPrinter extends ArithmeticExpressionsDel
         @Override
         public void setRealThis(ArithmeticExpressionsVisitor realThis){
             this.realThis = realThis;
-        }
-
-        @Override
-        public void visit(ASTAtExpression node){
-            printer.print("@");
         }
 
         @Override

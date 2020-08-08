@@ -41,12 +41,12 @@ public class ArithmeticExpressionsPrettyPrinterTest extends AbstractTest {
         @ParameterizedTest
         @ValueSource(strings = {
                 "sin(pi)",
-                "cos@-1.234",
+                "cos(-1.234)",
                 "1 ^ 3",
-                "cos@-1",
-                "cos@-1L",
-                "cos@-1.234F",
-                "cos@-1.234"
+                "cos(-1)",
+                "cos(-1L)",
+                "cos(-1.234F)",
+                "cos(-1.234)"
         })
         public void testPrettyPrintFunction(String argument){
             ASTExpression expression = parse(argument);

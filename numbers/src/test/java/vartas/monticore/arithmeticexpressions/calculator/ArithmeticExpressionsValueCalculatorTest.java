@@ -49,19 +49,19 @@ public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
             return Arrays.asList(
                     Pair.of("tan(1.5)", Math.tan(1.5)),
                     Pair.of("sqrt(1.5)", Math.sqrt(1.5)),
-                    Pair.of("sin@1.5", Math.sin(1.5)),
+                    Pair.of("sin(1.5)", Math.sin(1.5)),
                     Pair.of("min(-1,2)", Math.min(-1, 2)),
                     Pair.of("max(-1,2)", Math.max(-1, 2)),
                     Pair.of("max(-1,2)", Math.max(-1, 2)),
                     Pair.of("ln(1.5)", Math.log(1.5)),
                     Pair.of("log(1.5)", Math.log10(1.5)),
-                    Pair.of("floor@1.5", Math.floor(1.5)),
-                    Pair.of("cos@1.5", Math.cos(1.5)),
-                    Pair.of("ceil@1.5", Math.ceil(1.5)),
-                    Pair.of("atan@1.5", Math.atan(1.5)),
-                    Pair.of("asin@1.0", Math.asin(1.0)),
-                    Pair.of("acos@1.0", Math.acos(1.0)),
-                    Pair.of("abs@1.0", Math.abs(-1)),
+                    Pair.of("floor(1.5)", Math.floor(1.5)),
+                    Pair.of("cos(1.5)", Math.cos(1.5)),
+                    Pair.of("ceil(1.5)", Math.ceil(1.5)),
+                    Pair.of("atan(1.5)", Math.atan(1.5)),
+                    Pair.of("asin(1.0)", Math.asin(1.0)),
+                    Pair.of("acos(1.0)", Math.acos(1.0)),
+                    Pair.of("abs(1.0)", Math.abs(-1)),
                     Pair.of("random(1,1)", 1),
                     Pair.of("2^3", Math.pow(2, 3)),
                     Pair.of("7-3.33", 7-3.33),
@@ -80,7 +80,9 @@ public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
                     Pair.of("1", 1),
                     Pair.of("-1", -1),
                     Pair.of("1L", 1),
-                    Pair.of("-1L", -1)
+                    Pair.of("-1L", -1),
+                    Pair.of("sin(e)^pi", Math.pow(Math.sin(Math.E), Math.PI)),
+                    Pair.of("sin(e)+cos(e)", Math.sin(Math.E)+Math.cos(Math.E))
             );
         }
     }
@@ -91,7 +93,6 @@ public class ArithmeticExpressionsValueCalculatorTest extends AbstractTest {
         @ValueSource(strings = {
                 "x",
                 "false",
-                "@x",
                 "x^1",
                 "1^x",
                 "random(x,1)",

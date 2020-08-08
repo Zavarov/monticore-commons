@@ -95,13 +95,6 @@ public class ArithmeticExpressionsValueCalculator extends ArithmeticExpressionsD
         }
 
         @Override
-        public void endVisit(ASTAtExpression node){
-            checkArgument(values.containsKey(node.getExpression()));
-
-            values.put(node, values.get(node.getExpression()));
-        }
-
-        @Override
         public void endVisit(ASTPowExpression node) {
             checkArgument(values.containsKey(node.getLeft()));
             checkArgument(values.containsKey(node.getRight()));

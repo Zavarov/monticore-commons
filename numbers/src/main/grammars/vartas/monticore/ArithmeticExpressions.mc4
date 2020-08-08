@@ -13,18 +13,10 @@ grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions
     ;
 
     /*================================================================================================================*/
-    /*==  Arguments  =================================================================================================*/
-    /*================================================================================================================*/
-
-    AtExpression implements Expression =
-        "@" Expression
-    ;
-
-    /*================================================================================================================*/
     /*==  Operators  =================================================================================================*/
     /*================================================================================================================*/
 
-    PowExpression implements Expression <185> =
+    PowExpression implements Expression <190>, InfixExpression =
         left:Expression operator:"^" right:Expression
     ;
 
@@ -38,63 +30,63 @@ grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions
         name:String
     ;
 
-    RandomNumberExpression implements MethodExpression <250> =
+    RandomNumberExpression implements MethodExpression =
         name:"random" "(" dice:Expression "," eyes:Expression ")"
     ;
 
-    AbsExpression implements MethodExpression <250> =
-        name:"abs" argument:Expression
+    AbsExpression implements MethodExpression =
+        name:"abs" argument:BracketExpression
     ;
 
-    ACosExpression implements MethodExpression <250> =
-        name:"acos" argument:Expression
+    ACosExpression implements MethodExpression =
+        name:"acos" argument:BracketExpression
     ;
 
-    ASinExpression implements MethodExpression <250> =
-        name:"asin" argument:Expression
+    ASinExpression implements MethodExpression =
+        name:"asin" argument:BracketExpression
     ;
 
-    ATanExpression implements MethodExpression <250> =
-        name:"atan" argument:Expression
+    ATanExpression implements MethodExpression =
+        name:"atan" argument:BracketExpression
     ;
 
-    CeilExpression implements MethodExpression <250> =
-        name:"ceil" argument:Expression
+    CeilExpression implements MethodExpression =
+        name:"ceil" argument:BracketExpression
     ;
 
-    CosExpression implements MethodExpression <250> =
-        name:"cos" argument:Expression
+    CosExpression implements MethodExpression =
+        name:"cos" argument:BracketExpression
     ;
 
-    FloorExpression implements MethodExpression <250> =
-        name:"floor" argument:Expression
+    FloorExpression implements MethodExpression =
+        name:"floor" argument:BracketExpression
     ;
 
-    LogExpression implements MethodExpression <250> =
-        name:"log" argument:Expression
+    LogExpression implements MethodExpression =
+        name:"log" argument:BracketExpression
     ;
 
-    LnExpression implements MethodExpression <250> =
-        name:"ln" argument:Expression
+    LnExpression implements MethodExpression =
+        name:"ln" argument:BracketExpression
     ;
 
-    MaxExpression implements MethodExpression <250> =
+    MaxExpression implements MethodExpression =
         name:"max" "(" left:Expression "," right:Expression ")"
     ;
 
-    MinExpression implements MethodExpression <250> =
+    MinExpression implements MethodExpression =
         name:"min" "(" left:Expression "," right:Expression ")"
     ;
 
-    SinExpression implements MethodExpression <250> =
-        name:"sin" argument:Expression
+    SinExpression implements MethodExpression =
+        name:"sin" argument:BracketExpression
     ;
 
-    SqrtExpression implements MethodExpression <250> =
-        name:"sqrt" argument:Expression
+    SqrtExpression implements MethodExpression =
+        name:"sqrt" argument:BracketExpression
     ;
 
-    TanExpression implements MethodExpression <250> =
-        name:"tan" argument:Expression
+    TanExpression implements MethodExpression =
+        name:"tan" argument:BracketExpression
     ;
 }
