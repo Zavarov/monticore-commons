@@ -25,8 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
-import vartas.monticore.cd4analysis.creator.VisitorCreator;
-import vartas.monticore.cd4java.BasicCDTest;
+import vartas.monticore.cd4analysis.visitor.VisitorCreator;
+import vartas.monticore.BasicCDTest;
 
 public class VisitorCreatorTest extends BasicCDTest {
     ASTCDInterface visitor;
@@ -50,9 +50,9 @@ public class VisitorCreatorTest extends BasicCDTest {
             "Role"
     })
     public void testVisitorMethods(String parameter){
-        getMethod(visitor, "visit", parameter);
-        getMethod(visitor, "endVisit", parameter);
-        getMethod(visitor, "traverse", parameter);
-        getMethod(visitor, "handle", parameter);
+        getCDMethod(visitor, "visit", parameter);
+        getCDMethod(visitor, "endVisit", parameter);
+        getCDMethod(visitor, "traverse", parameter);
+        getCDMethod(visitor, "handle", parameter);
     }
 }

@@ -15,31 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4analysis.template;
+package vartas.monticore.cd4analysis.preprocessor.process;
 
 import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.codegen.GeneratorHelper;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.utils.Names;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
 
-public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
-    private String packageName;
-    private CDGeneratorHelper generatorHelper;
+public class CDHandleHandwrittenFilesProcess extends CDProcess {
+    private final CDGeneratorHelper generatorHelper;
 
-    public CDHandwrittenFileTemplate(GlobalExtensionManagement glex, CDGeneratorHelper generatorHelper) {
+    public CDHandleHandwrittenFilesProcess(GlobalExtensionManagement glex, CDGeneratorHelper generatorHelper) {
         super(glex);
         this.generatorHelper = generatorHelper;
     }
 
     @Override
-    public void visit(ASTCDType ast){
-        this.packageName = ast.getSymbol().getPackageName();
-    }
-
-    @Override
     public void visit(ASTCDInterface ast){
-        String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
+        String qualifiedName = ast.getSymbol().getFullName();
 
         if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName))
             //Rename the interface
@@ -48,7 +43,7 @@ public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
 
     @Override
     public void visit(ASTCDEnum ast){
-        String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
+        String qualifiedName = ast.getSymbol().getFullName();
 
         if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the enum
@@ -61,7 +56,7 @@ public class CDHandwrittenFileTemplate extends CDConsumerTemplate{
 
     @Override
     public void visit(ASTCDClass ast){
-        String qualifiedName = Names.getQualifiedName(packageName, ast.getName());
+        String qualifiedName = ast.getSymbol().getFullName();
 
         if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the class

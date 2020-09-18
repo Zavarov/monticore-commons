@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4analysis;
+package vartas.monticore.cd4analysis.factory;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
@@ -29,12 +29,13 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedNameBuilder;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
+import vartas.monticore.cd4analysis.CDGeneratorHelper;
+import vartas.monticore.cd4analysis.CDTemplateGenerator;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeSymbolTableCreatorDelegator;
-import vartas.monticore.cd4analysis.creator.FactoryCreator;
-import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
-import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
-import vartas.monticore.cd4analysis.template.CDHandwrittenFileTemplate;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetImportsForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetPackageForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDHandleHandwrittenFilesProcess;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -42,16 +43,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CDFactoryGenerator extends CDTemplateGenerator{
+public class CDFactoryGenerator extends CDTemplateGenerator {
     private final CD4CodeSymbolTableCreatorDelegator stc;
+
     public CDFactoryGenerator(@Nonnull GeneratorSetup generatorSetup, @Nonnull CDGeneratorHelper generatorHelper, @Nonnull CD4CodeGlobalScope globalScope) {
         super(
                 generatorSetup,
                 generatorHelper,
                 Arrays.asList(
-                        new CDBindPackageTemplate(generatorSetup.getGlex()),
-                        new CDBindImportTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
+                        new CDSetPackageForTypesProcess(generatorSetup.getGlex()),
+                        new CDSetImportsForTypesProcess(generatorSetup.getGlex()),
+                        new CDHandleHandwrittenFilesProcess(generatorSetup.getGlex(), generatorHelper)
                 )
         );
         stc = new CD4CodeSymbolTableCreatorDelegator(globalScope);

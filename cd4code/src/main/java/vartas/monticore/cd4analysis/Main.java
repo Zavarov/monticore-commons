@@ -27,6 +27,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeLanguage;
+import vartas.monticore.cd4analysis.factory.CDFactoryGenerator;
 
 import java.io.File;
 import java.nio.file.Path;

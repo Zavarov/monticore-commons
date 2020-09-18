@@ -25,8 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvSource;
-import vartas.monticore.cd4analysis.creator.FactoryCreator;
-import vartas.monticore.cd4java.BasicCDTest;
+import vartas.monticore.cd4analysis.factory.FactoryCreator;
+import vartas.monticore.BasicCDTest;
 import vartas.monticore.cd4java.CSV2StringArray;
 
 public class FactoryCreatorTest extends BasicCDTest {
@@ -52,6 +52,6 @@ public class FactoryCreatorTest extends BasicCDTest {
             "'String : String"
     })
     public void testParse(@ConvertWith(CSV2StringArray.class) String[] parameters){
-        getMethod(factory, "create", parameters);
+        getCDMethod(factory, "create", parameters);
     }
 }

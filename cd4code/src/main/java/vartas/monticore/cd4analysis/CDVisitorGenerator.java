@@ -31,10 +31,10 @@ import de.se_rwth.commons.Splitters;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4analysis._symboltable.CD4CodeSymbolTableCreatorDelegator;
 import vartas.monticore.cd4analysis.creator.InheritanceVisitorCreator;
-import vartas.monticore.cd4analysis.creator.VisitorCreator;
-import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
-import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
-import vartas.monticore.cd4analysis.template.CDHandwrittenFileTemplate;
+import vartas.monticore.cd4analysis.visitor.VisitorCreator;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetImportsForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetPackageForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDHandleHandwrittenFilesProcess;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -48,9 +48,9 @@ public class CDVisitorGenerator extends CDTemplateGenerator{
                 generatorSetup,
                 generatorHelper,
                 Arrays.asList(
-                        new CDBindPackageTemplate(generatorSetup.getGlex()),
-                        new CDBindImportTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
+                        new CDSetPackageForTypesProcess(generatorSetup.getGlex()),
+                        new CDSetImportsForTypesProcess(generatorSetup.getGlex()),
+                        new CDHandleHandwrittenFilesProcess(generatorSetup.getGlex(), generatorHelper)
                 )
         );
         stc = new CD4CodeSymbolTableCreatorDelegator(globalScope);

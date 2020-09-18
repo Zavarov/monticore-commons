@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4analysis.template;
+package vartas.monticore.cd4analysis.preprocessor.process;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
@@ -27,8 +27,8 @@ import vartas.monticore.cd4analysis.CDGeneratorHelper;
 
 import java.util.Optional;
 
-public class CDInitializerTemplate extends CDConsumerTemplate{
-    public CDInitializerTemplate(GlobalExtensionManagement glex) {
+public class CDInitializeContainerProcess extends CDProcess {
+    public CDInitializeContainerProcess(GlobalExtensionManagement glex) {
         super(glex);
     }
 

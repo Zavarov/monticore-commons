@@ -15,21 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4java.decorator;
+package vartas.monticore.cd4analysis.preprocessor.process;
 
-import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
+import de.monticore.cd.cd4analysis._ast.ASTCD4AnalysisNode;
+import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import org.junit.jupiter.api.BeforeEach;
-import vartas.monticore.cd4analysis.decorator.CDDefinitionDecorator;
-import vartas.monticore.cd4java.BasicCDTest;
 
-public class AbstractCDDecoratorTest extends BasicCDTest {
-    protected CDDefinitionDecorator cdDefinitionDecorator;
-    protected CD4CodePrettyPrinterDelegator printer;
-    @BeforeEach
-    public void setUp(){
-        super.setUp();
-        cdDefinitionDecorator = new CDDefinitionDecorator(new GlobalExtensionManagement());
-        printer = new CD4CodePrettyPrinterDelegator();
+import java.util.function.Consumer;
+
+public abstract class CDProcess implements CD4CodeInheritanceVisitor, Consumer<ASTCD4AnalysisNode> {
+    protected final GlobalExtensionManagement glex;
+    public CDProcess(GlobalExtensionManagement glex){
+        this.glex = glex;
+    }
+
+    @Override
+    public void accept(ASTCD4AnalysisNode ast) {
+        ast.accept(this);
     }
 }

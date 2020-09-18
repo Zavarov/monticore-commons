@@ -19,14 +19,14 @@ package vartas.monticore.cd4analysis;
 
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.generating.GeneratorSetup;
-import vartas.monticore.cd4analysis.template.CDConsumerTemplate;
+import vartas.monticore.cd4analysis.preprocessor.process.CDProcess;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
 public class CDTemplateGenerator extends CDGenerator{
-    private final List<CDConsumerTemplate> templateList;
+    private final List<CDProcess> templateList;
 
     public CDTemplateGenerator(@Nonnull GeneratorSetup generatorSetup, @Nonnull CDGeneratorHelper generatorHelper) {
         this(generatorSetup, generatorHelper, Collections.emptyList());
@@ -35,7 +35,7 @@ public class CDTemplateGenerator extends CDGenerator{
     public CDTemplateGenerator(
             @Nonnull GeneratorSetup generatorSetup,
             @Nonnull CDGeneratorHelper generatorHelper,
-            @Nonnull List<CDConsumerTemplate> templateList
+            @Nonnull List<CDProcess> templateList
     )
     {
         super(generatorSetup, generatorHelper);
@@ -44,7 +44,7 @@ public class CDTemplateGenerator extends CDGenerator{
 
     @Override
     public void generate(@Nonnull CDDefinitionSymbol cdDefinitionSymbol){
-        for(CDConsumerTemplate template : templateList)
+        for(CDProcess template : templateList)
             template.accept(cdDefinitionSymbol.getAstNode());
 
         super.generate(cdDefinitionSymbol);

@@ -26,12 +26,13 @@ import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import vartas.monticore.cd4analysis.CDGeneratorHelper;
+import vartas.monticore.cd4analysis.visitor.VisitorCreator;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InheritanceVisitorCreator extends VisitorCreator{
+public class InheritanceVisitorCreator extends VisitorCreator {
 
     protected InheritanceVisitorCreator(@Nonnull CDDefinitionSymbol cdDefinitionSymbol, @Nonnull GlobalExtensionManagement glex, @Nonnull CDGeneratorHelper generatorHelper){
         super(cdDefinitionSymbol, glex, generatorHelper);

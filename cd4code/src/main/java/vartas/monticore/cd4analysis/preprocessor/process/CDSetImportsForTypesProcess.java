@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4analysis.template;
+package vartas.monticore.cd4analysis.preprocessor.process;
 
 import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class CDBindImportTemplate extends CDConsumerTemplate{
+public class CDSetImportsForTypesProcess extends CDProcess {
     private Set<List<String>> importSet;
 
-    public CDBindImportTemplate(GlobalExtensionManagement glex) {
+    public CDSetImportsForTypesProcess(GlobalExtensionManagement glex) {
         super(glex);
     }
 

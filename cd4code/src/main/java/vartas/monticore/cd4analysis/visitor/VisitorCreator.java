@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4analysis.creator;
+package vartas.monticore.cd4analysis.visitor;
 
 import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis._ast.*;
@@ -75,6 +75,10 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * This method is the hook point used to apply the visitor.
      */
     public static final String ACCEPT = "public void accept(%s visitor);";
+
+    public static final String WALK_UP_FROM = "void walkUpFrom(%s %s);";
+    public static final String END_WALK_UP_FROM = "void endWalkUpFrom(%s %s)";
+    public static final String GET_REAL_THIS = "protected %s getRealThis()";
 
     /**
      * The definition symbol is stored locally to have easy access to the package.<br>

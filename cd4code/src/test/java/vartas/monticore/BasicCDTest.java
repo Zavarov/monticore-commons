@@ -15,12 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package vartas.monticore.cd4java;
+package vartas.monticore;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
 import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
@@ -43,19 +44,25 @@ public abstract class BasicCDTest {
     protected CD4CodeLanguage language = new CD4CodeLanguage();
     protected CD4CodeGlobalScope globalScope;
     protected ModelPath modelPath;
+    protected CD4CodePrettyPrinterDelegator printer;
 
     @BeforeEach
     public void setUp(){
         modelPath = new ModelPath(TEST_MODEL_PATH, MODEL_PATH);
         language = new CD4CodeLanguage();
         globalScope = new CD4CodeGlobalScope(modelPath, language);
+        printer = new CD4CodePrettyPrinterDelegator();
+    }
+
+    protected ASTCDDefinition getCDDefinition(String name){
+        return globalScope.resolveCDDefinition(name).orElseThrow().getAstNode();
     }
 
     protected ASTCDType getCDType(ASTCDDefinition ast, String className){
         return ast.streamCDClasss().filter(cdClass -> cdClass.getName().equals(className)).findAny().orElseThrow();
     }
 
-    protected ASTCDMethod getMethod(ASTCDType cdType, String methodName, String... parameterNames){
+    protected ASTCDMethod getCDMethod(ASTCDType cdType, String methodName, String... parameterNames){
         List<ASTCDMethod> methods = cdType.getCDMethodList()
                 .stream()
                 .filter(method -> method.getName().equals(methodName))

@@ -20,35 +20,34 @@ package vartas.monticore.cd4analysis;
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.generating.GeneratorSetup;
-import vartas.monticore.cd4analysis.decorator.CDDefinitionDecorator;
-import vartas.monticore.cd4analysis.template.CDBindImportTemplate;
-import vartas.monticore.cd4analysis.template.CDBindPackageTemplate;
-import vartas.monticore.cd4analysis.template.CDHandwrittenFileTemplate;
-import vartas.monticore.cd4analysis.template.CDInitializerTemplate;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetImportsForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDSetPackageForTypesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDHandleHandwrittenFilesProcess;
+import vartas.monticore.cd4analysis.preprocessor.process.CDInitializeContainerProcess;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class CDDecoratorGenerator extends CDTemplateGenerator{
-    private final CDDefinitionDecorator decorator;
+    //private final CDDefinitionDecorator decorator;
     public CDDecoratorGenerator(@Nonnull GeneratorSetup generatorSetup, @Nonnull CDGeneratorHelper generatorHelper) {
         super(
                 generatorSetup,
                 generatorHelper,
                 Arrays.asList(
-                        new CDBindPackageTemplate(generatorSetup.getGlex()),
-                        new CDBindImportTemplate(generatorSetup.getGlex()),
-                        new CDInitializerTemplate(generatorSetup.getGlex()),
-                        new CDHandwrittenFileTemplate(generatorSetup.getGlex(), generatorHelper)
+                        new CDSetPackageForTypesProcess(generatorSetup.getGlex()),
+                        new CDSetImportsForTypesProcess(generatorSetup.getGlex()),
+                        new CDInitializeContainerProcess(generatorSetup.getGlex()),
+                        new CDHandleHandwrittenFilesProcess(generatorSetup.getGlex(), generatorHelper)
                 )
         );
-        this.decorator = new CDDefinitionDecorator(generatorSetup.getGlex());
+        //this.decorator = new CDDefinitionDecorator(generatorSetup.getGlex());
     }
 
     @Override
     public void generate(@Nonnull CDDefinitionSymbol cdDefinitionSymbol){
         ASTCDDefinition ast = cdDefinitionSymbol.getAstNode();
-        ast = decorator.decorate(ast);
+        //ast = decorator.decorate(ast);
         cdDefinitionSymbol.setAstNode(ast);
 
         super.generate(cdDefinitionSymbol);

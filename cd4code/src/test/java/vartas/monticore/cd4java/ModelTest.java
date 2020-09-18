@@ -18,10 +18,11 @@
 package vartas.monticore.cd4java;
 
 import org.junit.jupiter.api.Test;
+import vartas.monticore.BasicCDTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModelTest extends BasicCDTest{
+public class ModelTest extends BasicCDTest {
     @Test
     public void testLoadIterable(){
         assertThat(globalScope.resolveCDDefinition("java.lang.Iterable")).isPresent();
