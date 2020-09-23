@@ -1,4 +1,4 @@
-${signature("cdClass")}
-<#list cdClass.getCDAttributeList() as cdAttribute>
-    ${tc.include("hook.Attribute", cdAttribute)}
+${signature("cdClass", "cdAttributes")}
+<#list cdAttributes as cdAttribute>
+    ${tc.include("hook.Attribute", cdAttribute)}<#rt>
 </#list>

@@ -28,6 +28,7 @@ public classdiagram Optional{
         //<X extends Throwable> orElseThrow(Supplier<? extends X> exceptionSupplier);
         Stream<T> stream();
         //Custom methods
+        <<template="decorator.java.util.Optional.Set">>
         void set(T newValue);
     }
 }

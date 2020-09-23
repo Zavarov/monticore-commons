@@ -1,2 +1,2 @@
-${signature("cdAttribute", "cdMethod")}
+${signature("cdAttribute", "cdMethod")}<#rt>
         return this.${cdAttribute.getName()};

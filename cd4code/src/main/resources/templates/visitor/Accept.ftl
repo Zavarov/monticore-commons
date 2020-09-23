@@ -1,2 +1,2 @@
 ${signature("cdParameter")}
-        ${cdParameter.getName()}.handle(this);
+${cdParameter.getName()}.handle(getRealThis());

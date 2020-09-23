@@ -26,8 +26,8 @@ import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import org.junit.jupiter.api.BeforeEach;
-import vartas.monticore.cd4analysis._symboltable.CD4CodeGlobalScope;
-import vartas.monticore.cd4analysis._symboltable.CD4CodeLanguage;
+import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
+import vartas.monticore.cd4code._symboltable.CD4CodeLanguage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
