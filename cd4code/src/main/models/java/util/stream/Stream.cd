@@ -6,7 +6,7 @@ import java.util.stream.BaseStream.BaseStream;
  * @version Java 11
  */
 public classdiagram Stream{
-    public interface Stream extends BaseStream <<T, Stream<T>>> {
+    public interface Stream extends BaseStream <<T, S>> {
         boolean allMatch(Predicate<? super T> predicate);
         boolean anyMatch(Predicate<? super T> predicate);
         //<R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R,R> combiner);

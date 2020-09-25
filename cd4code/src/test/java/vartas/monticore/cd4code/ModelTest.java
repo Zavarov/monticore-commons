@@ -18,7 +18,6 @@
 package vartas.monticore.cd4code;
 
 import de.se_rwth.commons.Joiners;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import vartas.monticore.BasicCDTest;
@@ -28,13 +27,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ModelTest extends BasicCDTest {
     @ParameterizedTest
     @CsvSource(value = {
+            "java.io : Serializable",
+
+            "java.lang : CharSequence",
+            "java.lang : Comparable",
+            "java.lang : Exception",
             "java.lang : Iterable",
             "java.lang : Object",
+            "java.lang : Runnable",
+            "java.lang : RuntimeException",
+            "java.lang : String",
+            "java.lang : Throwable",
+
+            "java.util.stream : BaseStream",
+            "java.util.stream : IntStream",
+            "java.util.stream : Stream",
+
             "java.util : Collection",
             "java.util : List",
-            "java.util : Set",
+            "java.util : Locale",
+            "java.util : Map",
             "java.util : Optional",
-            "java.util : Map"
+            "java.util : Set"
     }, delimiter = ':')
     public void testModel(String packageName, String className){
         String qualifiedName;

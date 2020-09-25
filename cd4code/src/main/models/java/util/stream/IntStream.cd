@@ -36,10 +36,10 @@ public classdiagram IntStream{
         boolean noneMatch(IntPredicate predicate);
         IntStream peek(IntConsumer action);
         int reduce(int identity, IntBinaryOperator op);
-        OptionalInt(IntBinaryOperator op);
+        OptionalInt reduce(IntBinaryOperator op);
         IntStream skip(long n);
         IntStream sorted();
-        int sum(),
+        int sum();
         IntSummaryStatistics summaryStatistics();
         IntStream takeWhile(IntPredicate predicate);
         int[] toArray();
