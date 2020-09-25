@@ -1,0 +1,11 @@
+package java.lang;
+
+
+/**
+ * @version Java 11
+ */
+public classdiagram Comparable{
+    public interface Comparable<<T>>{
+        int compareTo(T o);
+    }
+}

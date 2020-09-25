@@ -134,7 +134,7 @@ public class CDMethodCalculator implements BiFunction<CDTypeSymbol, List<ASTMCQu
         @Override
         public void visit(ASTMCQualifiedName node){
             if(genericTypes.containsKey(node.getQName()))
-                node.setPartList(genericTypes.get(node.getQName()));
+                node.setPartsList(genericTypes.get(node.getQName()));
         }
 
         /**

@@ -19,11 +19,16 @@ package vartas.monticore.cd4code;
 
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.io.paths.IterablePath;
+import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mcbasictypes._visitor.MCBasicTypesVisitor;
+import de.monticore.types.mcfullgenerictypes._visitor.MCFullGenericTypesVisitor;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CDGeneratorHelper {
     private final Path sourcesPath;
@@ -97,5 +102,20 @@ public class CDGeneratorHelper {
 
     public boolean existsHandwrittenClass(String qualifiedName){
         return TransformationHelper.existsHandwrittenClass(getSourcesPath(), qualifiedName);
+    }
+
+    public static boolean isPrimitive(ASTMCType node){
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        MCFullGenericTypesVisitor visitor = new MCFullGenericTypesVisitor() {
+            @Override
+            public void visit(ASTMCPrimitiveType node){
+                result.set(true);
+            }
+        };
+
+        node.accept(visitor);
+
+        return result.get();
     }
 }

@@ -42,11 +42,11 @@ public class CDFactoryGeneratorTest extends BasicCDGeneratorTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "vartas.monticore.cd4code.Factory"
+            "vartas.monticore.cd4code.factory.Factory"
     })
     public void testGenerate(String modelPath){
         CDDecoratorGenerator decorator;
-        decorator = new CDDecoratorGenerator(setup ,helper, globalScope);
+        decorator = new CDDecoratorGenerator(setup ,helper, null);
 
         ASTCDDefinition node = globalScope.resolveCDDefinition(modelPath).map(CDDefinitionSymbol::getAstNode).orElseThrow();
         generator.generate(node);

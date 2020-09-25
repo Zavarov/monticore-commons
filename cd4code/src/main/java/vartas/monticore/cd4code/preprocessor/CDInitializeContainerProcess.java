@@ -34,9 +34,9 @@ public class CDInitializeContainerProcess extends CDProcess {
 
     @Override
     public void visit(ASTCDAttribute ast){
-            Optional<CDTypeSymbol> cdTypeSymbol = ast.getSymbol().getType().loadSymbol();
+            CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType();
             //Only containers need to be initialized
-            if(cdTypeSymbol.flatMap(symbol -> symbol.getStereotype("container")).isPresent())
+            if(cdTypeSymbol.getStereotype("container").isPresent())
                 initialize(ast);
     }
 
@@ -46,7 +46,7 @@ public class CDInitializeContainerProcess extends CDProcess {
     }
 
     private String getTemplateName(ASTCDAttribute ast){
-        CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType().loadSymbol().orElseThrow();
+        CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType();
 
         String moduleName = CDGeneratorHelper.INITIALIZER_MODULE;
         String packageName = cdTypeSymbol.getPackageName();

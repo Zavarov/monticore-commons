@@ -18,10 +18,10 @@
 package vartas.monticore.cd4code.visitor;
 
 import com.google.common.collect.Lists;
+import de.monticore.cd.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbolTOP;
 import de.monticore.cd.cd4code._visitor.CD4CodeInheritanceVisitor;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.codegen.cd2java.AbstractCreator;
@@ -268,14 +268,18 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
 
         //Link the individual attributes to their respective visitor template
         for(ASTCDAttribute cdAttribute : cdType.getCDAttributeList()) {
-            Optional<CDTypeSymbol> cdTypeSymbol = cdAttribute.getSymbol().getType().loadSymbol();
+            //Primitive types can't be loaded
+            if(CDGeneratorHelper.isPrimitive(cdAttribute.getMCType()))
+                continue;
+
+            CDTypeSymbol cdTypeSymbol = cdAttribute.getSymbol().getType().lazyLoadDelegate();
 
             //The accessor for containers has to be provided. (e.g. via iterator and whatnot)
-            if (cdTypeSymbol.flatMap(symbol -> symbol.getStereotype(CDGeneratorHelper.CONTAINER_LABEL)).isPresent()) {
+            if (cdTypeSymbol.getStereotype(CDGeneratorHelper.CONTAINER_LABEL).isPresent()) {
                 cdAttributes.add(cdAttribute);
-                replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeTemplate(cdTypeSymbol.get()), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
-            //isPresent -> Type is in class diagram -> Should have an "accept" method
-            } else if (cdTypeSymbol.isPresent()) {
+                replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeTemplate(cdTypeSymbol), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
+            //getSpannedScope::CDDefinition -> Type is in class diagram -> Should have an "accept" method
+            } else if (cdType.getSpannedScope().getLocalCDTypeSymbols().contains(cdTypeSymbol)) {
                 cdAttributes.add(cdAttribute);
                 replaceTemplate(CDGeneratorHelper.ATTRIBUTE_HOOK, cdAttribute, new TemplateHookPoint(computeDefaultTemplate(), cdMethod.getCDParameter(0), cdAttribute, visitor.accept(cdAttribute)));
             }

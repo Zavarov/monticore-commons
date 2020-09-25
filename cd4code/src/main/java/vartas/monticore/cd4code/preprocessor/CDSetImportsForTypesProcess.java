@@ -17,9 +17,9 @@
 
 package vartas.monticore.cd4code.preprocessor;
 
-import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
-import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -27,9 +27,11 @@ import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
 import vartas.monticore.cd4code.CDGeneratorHelper;
-import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CDSetImportsForTypesProcess extends CDProcess {
     private Set<List<String>> importSet;
@@ -47,13 +49,13 @@ public class CDSetImportsForTypesProcess extends CDProcess {
     }
 
     @Override
-    public void visit(ASTCDAttribute ast){
-        //Load the imports from the CDs the type is associated with.
-        //We need those due to the decorator.
-        ast.getSymbol().getType().loadSymbol().ifPresent(typeSymbol -> {
-            loadImports(typeSymbol);
-            typeSymbol.getSuperTypesTransitive().forEach(this::loadImports);
-        });
+    public void visit(ASTCDAttribute ast) {
+        //Load the imports from the CDs the type is associated with. We need those due to the decorator.
+        if (!CDGeneratorHelper.isPrimitive(ast.getMCType())) {
+            CDTypeSymbol symbol = ast.getSymbol().getType().lazyLoadDelegate();
+            loadImports(symbol);
+            symbol.getSuperTypesTransitive().forEach(this::loadImports);
+        }
     }
 
     @Override

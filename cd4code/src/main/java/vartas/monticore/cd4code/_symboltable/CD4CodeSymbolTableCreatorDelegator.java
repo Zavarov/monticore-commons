@@ -18,12 +18,26 @@
 package vartas.monticore.cd4code._symboltable;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
-import de.monticore.cd.cd4code._symboltable.CD4CodeArtifactScope;
+import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbolSurrogate;
+import de.monticore.cd.cd4analysis._symboltable.ICD4AnalysisScope;
+import de.monticore.cd.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd.cd4code._symboltable.ICD4CodeGlobalScope;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ImportStatement;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccollectiontypes._ast.ASTMCBasicTypeArgument;
+import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
+import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
+import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
+import de.monticore.types.prettyprint.MCCollectionTypesPrettyPrinter;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Names;
+import de.se_rwth.commons.logging.Log;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -40,16 +54,11 @@ public class CD4CodeSymbolTableCreatorDelegator extends de.monticore.cd.cd4code.
     }
 
     @Override
-    public CD4CodeArtifactScope createFromAST(ASTCDCompilationUnit ast){
-        CD4CodeArtifactScope artifactScope = super.createFromAST(ast);
-
+    public ICD4CodeArtifactScope createFromAST(ASTCDCompilationUnit ast){
+        ICD4CodeArtifactScope artifactScope = super.createFromAST(ast);
         //TODO Manually patch the ArtifactScope since packages and imports are clearly overrated
-        artifactScope.setPackageName(Names.getQualifiedName(ast.getPackageList()));
-        artifactScope.setImportList(ast.getMCImportStatementList().stream().map(mcImportStatement -> new ImportStatement(mcImportStatement.getQName(), mcImportStatement.isStar())).collect(Collectors.toList()));
-        //TODO Since CD4CodeArtifactScope is not an instance of CD4AnalysisScope, the package is not used -> Repurpose the name as package
-        artifactScope.setName(Joiners.DOT.join(ast.getPackageList()));
-        //TODO Packages apparently cease to exist in super languages (See above)
-        artifactScope.setPackageName(Joiners.DOT.join(ast.getPackageList()));
+        artifactScope.setPackageName(Names.constructQualifiedName(ast.getPackageList()));
+        artifactScope.setImportsList(ast.getMCImportStatementList().stream().map(mcImportStatement -> new ImportStatement(mcImportStatement.getQName(), mcImportStatement.isStar())).collect(Collectors.toList()));
         return artifactScope;
     }
 }

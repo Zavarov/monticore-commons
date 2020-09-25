@@ -17,21 +17,32 @@
 
 package vartas.monticore.cd4code._symboltable;
 
-import de.monticore.cd.cd4code._symboltable.CD4CodeLanguage;
-import de.monticore.cd.cd4code._symboltable.ICD4CodeScope;
+import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
+import de.monticore.cd.cd4code._parser.CD4CodeParser;
+import de.monticore.cd.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.modelloader.ParserBasedAstProvider;
+
+import java.util.Optional;
 
 /**
  * This class patches #getEnclosingScope() to not cause an error,
  * in order to have determineFullName() work for all symbols.
  */
 public class CD4CodeGlobalScope extends de.monticore.cd.cd4code._symboltable.CD4CodeGlobalScope {
-    public CD4CodeGlobalScope(ModelPath modelPath, CD4CodeLanguage language) {
-        super(modelPath, language);
+    public CD4CodeGlobalScope(ModelPath modelPath, String modelFileExtension) {
+        super(modelPath, modelFileExtension);
     }
 
-    @Override
-    public ICD4CodeScope getEnclosingScope() {
-        return null;
+    /**
+     * CD4Code is still barely functional
+     */
+    public void enableModelLoader() {
+        ParserBasedAstProvider<ASTCDCompilationUnit> astProvider = new ParserBasedAstProvider<>(new CD4CodeParser(), "CD4Code");
+        //TODO Use the patched STC
+        CD4CodeSymbolTableCreatorDelegator stc = new vartas.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator(getRealThis());
+        //TODO Use the patched model loader
+        CD4CodeModelLoader ml = new CD4CodeModelLoader(astProvider, stc, modelFileExtension);
+        this.modelLoader = Optional.of(ml);
     }
 }

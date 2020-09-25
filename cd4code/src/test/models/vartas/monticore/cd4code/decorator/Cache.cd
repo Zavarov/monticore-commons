@@ -1,4 +1,4 @@
-package vartas.monticore.cd4code;
+package vartas.monticore.cd4code.decorator;
 
 import com.google.common.cache.Cache.Cache;
 import java.net.URL.URL;

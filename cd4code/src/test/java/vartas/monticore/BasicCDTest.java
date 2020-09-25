@@ -21,13 +21,14 @@ import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
 import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
-import vartas.monticore.cd4code._symboltable.CD4CodeLanguage;
+import vartas.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,21 +42,25 @@ public abstract class BasicCDTest {
     protected static final Path OUTPUT_PATH = Paths.get("target","generated-sources");
     protected static final Path SOURCES_PATH = Paths.get("src","main", "java");
 
-    protected CD4CodeLanguage language = new CD4CodeLanguage();
     protected CD4CodeGlobalScope globalScope;
+    protected CD4CodeSymbolTableCreatorDelegator stc;
     protected ModelPath modelPath;
     protected CD4CodePrettyPrinterDelegator printer;
 
     @BeforeEach
     public void setUp(){
         modelPath = new ModelPath(TEST_MODEL_PATH, MODEL_PATH);
-        language = new CD4CodeLanguage();
-        globalScope = new CD4CodeGlobalScope(modelPath, language);
+        globalScope = new CD4CodeGlobalScope(modelPath, "cd");
         printer = new CD4CodePrettyPrinterDelegator();
+        stc = new CD4CodeSymbolTableCreatorDelegator(globalScope);
+    }
+
+    protected CDDefinitionSymbol getCDDefinitionSymbol(String name){
+        return globalScope.resolveCDDefinition(name).orElseThrow();
     }
 
     protected ASTCDDefinition getCDDefinition(String name){
-        return globalScope.resolveCDDefinition(name).orElseThrow().getAstNode();
+        return getCDDefinitionSymbol(name).getAstNode();
     }
 
     protected ASTCDType getCDType(ASTCDDefinition ast, String className){

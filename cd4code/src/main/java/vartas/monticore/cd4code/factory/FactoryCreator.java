@@ -17,6 +17,7 @@
 
 package vartas.monticore.cd4code.factory;
 
+import de.monticore.cd.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.facade.CDModifier;
@@ -133,8 +134,8 @@ public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
     private boolean isContainer(ASTCDAttribute ast){
         return ast.getSymbol()
                 .getType()
-                .loadSymbol()
-                .flatMap(type -> type.getStereotype(CDGeneratorHelper.CONTAINER_LABEL))
+                .lazyLoadDelegate()
+                .getStereotype(CDGeneratorHelper.CONTAINER_LABEL)
                 .isPresent();
     }
 

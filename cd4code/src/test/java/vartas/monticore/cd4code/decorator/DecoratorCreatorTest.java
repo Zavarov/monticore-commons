@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvSource;
-import vartas.monticore.cd4code.BasicCDGeneratorTest;
 import vartas.monticore.CSV2StringArray;
+import vartas.monticore.cd4code.BasicCDGeneratorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +18,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
     @BeforeEach
     public void setUp(){
         super.setUp();
+        //Log.enableFailQuick(false);
     }
 
     @ParameterizedTest
@@ -42,7 +43,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
 
     }, delimiter = ':')
     public void testDecorateCache(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Cache").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.Cache");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "Browser");
@@ -72,7 +73,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
             "      String[] : toArrayValues        : 'String[]'"
     }, delimiter = ':')
     public void testDecorateCollection(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.List").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.List");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "Database");
@@ -90,7 +91,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
             " Spliterator<String> : spliteratorValues : ''"
     }, delimiter = ':')
     public void testDecorateIterable(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.List").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.List");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "Database");
@@ -116,7 +117,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
             "        List<String> : subListValues      : 'int : int'"
     }, delimiter = ':')
     public void testDecorateList(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.List").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.List");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "Database");
@@ -156,7 +157,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
 
     }, delimiter = ':')
     public void testDecorateMap(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Map").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.Map");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "Subreddit");
@@ -181,7 +182,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
 
     }, delimiter = ':')
     public void testDecorateObject(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Optional").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.Optional");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "User");
@@ -211,7 +212,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
 
     }, delimiter = ':')
     public void testDecorateOptional(String returnName, String methodName, @ConvertWith(CSV2StringArray.class) String[] parameters){
-        CDDefinitionSymbol symbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Optional").orElseThrow();
+        CDDefinitionSymbol symbol = getCDDefinitionSymbol("vartas.monticore.cd4code.decorator.Optional");
         ASTCDDefinition ast = DecoratorCreator.create(symbol.getAstNode(), glex);
 
         ASTCDType cdClass = getCDType(ast, "User");

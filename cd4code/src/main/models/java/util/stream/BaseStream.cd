@@ -1,0 +1,21 @@
+package java.util.stream;
+
+import java.lang.Runnable.Runnable;
+import java.util.Iterator.Iterator;
+import java.util.Spliterator.Spliterator;
+
+/**
+ * @version Java 11
+ */
+public classdiagram BaseStream{
+    public interface BaseStream extends BaseStream <<T, S>> {
+        void close();
+        boolean isParallel();
+        Iterator<T> iterator();
+        S onClose(Runnable closeHandler);
+        S parallel();
+        S sequential();
+        Spliterator<T> spliterator();
+        S unordered();
+    }
+}

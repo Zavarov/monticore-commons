@@ -37,7 +37,7 @@ public class FactoryCreatorTest extends BasicCDTest {
     @BeforeEach
     public void setUp(){
         super.setUp();
-        cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Factory").orElseThrow();
+        cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.factory.Factory").orElseThrow();
         cdDefinition = cdDefinitionSymbol.getAstNode();
         cdClass = cdDefinition.getCDClass(0);
         factory = FactoryCreator.create(cdClass, new GlobalExtensionManagement());

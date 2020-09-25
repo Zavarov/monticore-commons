@@ -17,51 +17,32 @@
 
 package vartas.monticore.cd4code;
 
+import de.se_rwth.commons.Joiners;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import vartas.monticore.BasicCDTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModelTest extends BasicCDTest {
-    @Test
-    public void testLoadIterable(){
-        assertThat(globalScope.resolveCDDefinition("java.lang.Iterable")).isPresent();
-        assertThat(globalScope.resolveCDType("java.lang.Iterable.Iterable")).isPresent();
-    }
+    @ParameterizedTest
+    @CsvSource(value = {
+            "java.lang : Iterable",
+            "java.lang : Object",
+            "java.util : Collection",
+            "java.util : List",
+            "java.util : Set",
+            "java.util : Optional",
+            "java.util : Map"
+    }, delimiter = ':')
+    public void testModel(String packageName, String className){
+        String qualifiedName;
 
-    @Test
-    public void testLoadObject(){
-        assertThat(globalScope.resolveCDDefinition("java.lang.Object")).isPresent();
-        assertThat(globalScope.resolveCDType("java.lang.Object.Object")).isPresent();
-    }
+        qualifiedName = Joiners.DOT.join(packageName, className);
+        assertThat(globalScope.resolveCDDefinition(qualifiedName)).isPresent();
 
-    @Test
-    public void testLoadCollection(){
-        assertThat(globalScope.resolveCDDefinition("java.util.Collection")).isPresent();
-        assertThat(globalScope.resolveCDType("java.util.Collection.Collection")).isPresent();
-    }
-
-    @Test
-    public void testLoadList(){
-        assertThat(globalScope.resolveCDDefinition("java.util.List")).isPresent();
-        assertThat(globalScope.resolveCDType("java.util.List.List")).isPresent();
-    }
-
-    @Test
-    public void testLoadSet(){
-        assertThat(globalScope.resolveCDDefinition("java.util.Set")).isPresent();
-        assertThat(globalScope.resolveCDType("java.util.Set.Set")).isPresent();
-    }
-
-    @Test
-    public void testLoadOptional(){
-        assertThat(globalScope.resolveCDDefinition("java.util.Optional")).isPresent();
-        assertThat(globalScope.resolveCDType("java.util.Optional.Optional")).isPresent();
-    }
-
-    @Test
-    public void testLoadMap(){
-        assertThat(globalScope.resolveCDDefinition("java.util.Map")).isPresent();
-        assertThat(globalScope.resolveCDType("java.util.Map.Map")).isPresent();
+        qualifiedName = Joiners.DOT.join(packageName, className, className);
+        assertThat(globalScope.resolveCDType(qualifiedName)).isPresent();
     }
 }

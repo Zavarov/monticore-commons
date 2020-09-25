@@ -27,7 +27,6 @@ import de.monticore.io.paths.ModelPath;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
-import vartas.monticore.cd4code._symboltable.CD4CodeLanguage;
 import vartas.monticore.cd4code.decorator.CDDecoratorGenerator;
 import vartas.monticore.cd4code.factory.CDFactoryGenerator;
 import vartas.monticore.cd4code.visitor.CDVisitorGenerator;
@@ -94,7 +93,6 @@ public class Main {
         assert MODELS_PATH != null;
         assert LOCAL_MODELS_PATH != null;
 
-        CD4CodeLanguage language = new CD4CodeLanguage();
         ModelPath modelPath = new ModelPath();
 
         if(MODELS_PATH.toFile().exists())
@@ -102,7 +100,7 @@ public class Main {
         if(LOCAL_MODELS_PATH.toFile().exists())
             modelPath.addEntry(LOCAL_MODELS_PATH);
 
-        GLOBAL_SCOPE = new CD4CodeGlobalScope(modelPath, language);
+        GLOBAL_SCOPE = new CD4CodeGlobalScope(modelPath, "cd");
     }
 
     private static void buildGlex(){

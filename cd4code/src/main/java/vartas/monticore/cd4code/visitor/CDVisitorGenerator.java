@@ -20,8 +20,7 @@ package vartas.monticore.cd4code.visitor;
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
-import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
-import de.monticore.cd.cd4code._ast.CD4CodeMill;
+import de.monticore.cd.cd4code.CD4CodeMill;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -57,7 +56,7 @@ public class CDVisitorGenerator extends CDPreprocessorGenerator {
     private ASTMCQualifiedName buildMCQualifiedName(Iterable<String> parts){
         ASTMCQualifiedNameBuilder builder = CD4CodeMill.mCQualifiedNameBuilder();
         for(String part : parts)
-            builder.addPart(part);
+            builder.addParts(part);
         return builder.build();
     }
 
@@ -89,7 +88,7 @@ public class CDVisitorGenerator extends CDPreprocessorGenerator {
         return CD4CodeMill.cDCompilationUnitBuilder()
                 .setCDDefinition(buildCDDefinition(ast))
                 .addMCImportStatement(buildParentMCImportStatement(ast))
-                .addAllPackages(buildPackage(ast))
+                .addAllPackage(buildPackage(ast))
                 .build();
     }
 

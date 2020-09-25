@@ -42,7 +42,7 @@ public class VisitorCreatorTest extends BasicCDTest {
     @BeforeEach
     public void setUp(){
         super.setUp();
-        cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.Visitor").orElseThrow();
+        cdDefinitionSymbol = globalScope.resolveCDDefinition("vartas.monticore.cd4code.visitor.Visitor").orElseThrow();
         cdDefinition = cdDefinitionSymbol.getAstNode();
         visitor = VisitorCreator.create(cdDefinition, new GlobalExtensionManagement(), new CDGeneratorHelper());
     }

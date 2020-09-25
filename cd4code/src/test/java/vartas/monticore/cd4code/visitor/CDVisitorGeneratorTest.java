@@ -41,12 +41,12 @@ public class CDVisitorGeneratorTest extends BasicCDGeneratorTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "vartas.monticore.cd4code.Visitor",
-            "vartas.monticore.cd4code.InheritanceVisitor"
+            "vartas.monticore.cd4code.visitor.Visitor",
+            "vartas.monticore.cd4code.visitor.InheritanceVisitor"
     })
     public void testGenerate(String modelPath){
         CDDecoratorGenerator decorator;
-        decorator = new CDDecoratorGenerator(setup ,helper, globalScope);
+        decorator = new CDDecoratorGenerator(setup ,helper, null);
 
         ASTCDDefinition node = globalScope.resolveCDDefinition(modelPath).map(CDDefinitionSymbol::getAstNode).orElseThrow();
         generator.generate(node);

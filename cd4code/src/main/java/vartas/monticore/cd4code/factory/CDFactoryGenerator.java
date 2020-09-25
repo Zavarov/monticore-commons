@@ -21,8 +21,7 @@ import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDCompilationUnit;
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
-import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
-import de.monticore.cd.cd4code._ast.CD4CodeMill;
+import de.monticore.cd.cd4code.CD4CodeMill;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -33,13 +32,9 @@ import vartas.monticore.cd4code.CDGeneratorHelper;
 import vartas.monticore.cd4code.CDPreprocessorGenerator;
 import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
-import vartas.monticore.cd4code.preprocessor.CDSetImportsForTypesProcess;
-import vartas.monticore.cd4code.preprocessor.CDSetPackageForTypesProcess;
-import vartas.monticore.cd4code.preprocessor.CDHandleHandwrittenFilesProcess;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +59,7 @@ public class CDFactoryGenerator extends CDPreprocessorGenerator {
     private ASTMCQualifiedName buildMCQualifiedName(Iterable<String> parts){
         ASTMCQualifiedNameBuilder builder = CD4CodeMill.mCQualifiedNameBuilder();
         for(String part : parts)
-            builder.addPart(part);
+            builder.addParts(part);
         return builder.build();
     }
 
@@ -110,7 +105,7 @@ public class CDFactoryGenerator extends CDPreprocessorGenerator {
                 .setCDDefinition(buildCDDefinition(ast))
                 .addAllMCImportStatements(buildMCImportStatements(ast))
                 .addMCImportStatement(buildParentMCImportStatement(ast))
-                .addAllPackages(buildPackage(ast))
+                .addAllPackage(buildPackage(ast))
                 .build();
     }
 
