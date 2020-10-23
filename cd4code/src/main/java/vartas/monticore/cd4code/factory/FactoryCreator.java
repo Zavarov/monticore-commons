@@ -94,7 +94,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
         parameters.add(createSupplier(ast));
         for (ASTCDAttribute attribute : getAttributes(ast))
             //Containers are optional
-            if(!(isContainer(attribute) && !includeContainers))
+            if(!(CDGeneratorHelper.isContainer(attribute) && !includeContainers))
                 parameters.add(getCDParameterFacade().createParameter(attribute));
 
         return buildMethod(ast, parameters);
@@ -105,7 +105,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
 
         for (ASTCDAttribute attribute : getAttributes(ast))
             //Containers are optional
-            if (!(isContainer(attribute) && !includeContainers))
+            if (!(CDGeneratorHelper.isContainer(attribute) && !includeContainers))
                 parameters.add(getCDParameterFacade().createParameter(attribute));
 
         return buildMethod(ast, parameters);
@@ -129,14 +129,6 @@ public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
             attributes.addAll(symbol.getAstNode().getCDAttributeList());
 
         return new ArrayList<>(attributes);
-    }
-
-    private boolean isContainer(ASTCDAttribute ast){
-        return ast.getSymbol()
-                .getType()
-                .lazyLoadDelegate()
-                .getStereotype(CDGeneratorHelper.CONTAINER_LABEL)
-                .isPresent();
     }
 
     private ASTCDParameter createSupplier(ASTCDType ast){

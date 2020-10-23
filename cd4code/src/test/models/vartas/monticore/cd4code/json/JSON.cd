@@ -1,0 +1,19 @@
+package vartas.monticore.cd4code.json;
+
+import java.lang.String.String;
+import java.util.List.List;
+
+classdiagram JSON{
+    public class Structure{
+        String stringAttr;
+        int intAttr;
+        long longAttr;
+        float floatAttr;
+        double doubleAttr;
+        boolean booleanAttr;
+        Element elementAttr;
+        List<String> listAttr;
+    }
+
+    public class Element{}
+}

@@ -17,11 +17,14 @@
 
 package vartas.monticore.cd4code;
 
+import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
+import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
+import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.mcbasictypes._visitor.MCBasicTypesVisitor;
 import de.monticore.types.mcfullgenerictypes._visitor.MCFullGenericTypesVisitor;
 
 import javax.annotation.Nonnull;
@@ -79,6 +82,8 @@ public class CDGeneratorHelper {
     @Nonnull
     public static final String VISITOR_MODULE = "visitor";
     @Nonnull
+    public static final String JSON_MODULE = "json";
+    @Nonnull
     public static final String DECORATOR_MODULE = "decorator";
     @Nonnull
     public static final String INITIALIZER_MODULE = "initializer";
@@ -104,6 +109,10 @@ public class CDGeneratorHelper {
         return TransformationHelper.existsHandwrittenClass(getSourcesPath(), qualifiedName);
     }
 
+    public static boolean isPrimitive(ASTCDAttribute node){
+        return isPrimitive(node.getMCType());
+    }
+
     public static boolean isPrimitive(ASTMCType node){
         AtomicBoolean result = new AtomicBoolean(false);
 
@@ -117,5 +126,29 @@ public class CDGeneratorHelper {
         node.accept(visitor);
 
         return result.get();
+    }
+
+    public static boolean isContainer(ASTCDType node){
+        return node.isPresentSymbol() && isContainer(node.getSymbol());
+    }
+
+    public static boolean isContainer(ASTCDAttribute node){
+        return isContainer(node.getSymbol().getType().lazyLoadDelegate());
+    }
+
+    public static boolean isContainer(CDTypeSymbol symbol){
+        return symbol.getStereotype(CONTAINER_LABEL).isPresent();
+    }
+
+    public static boolean inLocalScope(ASTCDType node, CDTypeSymbol symbol){
+        return node.getEnclosingScope().getLocalCDTypeSymbols().contains(symbol);
+    }
+
+    public static boolean inLocalScope(ASTCDType node, CDFieldSymbol symbol){
+        return inLocalScope(node, symbol.getType().lazyLoadDelegate());
+    }
+
+    public static boolean inLocalScope(ASTCDType node, ASTCDAttribute ast){
+        return inLocalScope(node, ast.getSymbol());
     }
 }

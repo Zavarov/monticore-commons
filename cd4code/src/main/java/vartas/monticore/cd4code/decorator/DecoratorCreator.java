@@ -18,9 +18,6 @@
 package vartas.monticore.cd4code.decorator;
 
 import de.monticore.cd.cd4analysis._ast.*;
-import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
-import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbolSurrogate;
 import de.monticore.cd.cd4analysis._symboltable.Stereotype;
 import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
 import de.monticore.cd.facade.CDMethodFacade;
@@ -29,10 +26,7 @@ import de.monticore.cd.facade.CDParameterFacade;
 import de.monticore.codegen.cd2java.AbstractCreator;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
-import de.monticore.types.MCBasicTypesHelper;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import de.monticore.types.mcbasictypes._ast.MCBasicTypesLiterals;
 import de.monticore.utils.Names;
 import de.se_rwth.commons.Joiners;
 import org.apache.commons.lang3.StringUtils;
@@ -147,7 +141,7 @@ public class DecoratorCreator extends AbstractCreator<ASTCDDefinition, ASTCDDefi
             log.debug("Decorating {}", node.getName());
             CDAttributeDecorator decorator = new CDAttributeDecorator(glex, node);
 
-            if(!CDGeneratorHelper.isPrimitive(node.getMCType()))
+            if(!CDGeneratorHelper.isPrimitive(node))
                 methodCalculator.apply(node.getSymbol().getType().lazyLoadDelegate().getAstNode(), qualifiedTypes).forEach(method -> method.accept(decorator));
 
             //Default getter and setter have priority

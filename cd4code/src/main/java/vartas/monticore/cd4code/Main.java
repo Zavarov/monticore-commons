@@ -29,6 +29,7 @@ import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4code.decorator.CDDecoratorGenerator;
 import vartas.monticore.cd4code.factory.CDFactoryGenerator;
+import vartas.monticore.cd4code.json.CDJSONGenerator;
 import vartas.monticore.cd4code.visitor.CDVisitorGenerator;
 
 import java.io.File;
@@ -53,6 +54,7 @@ public class Main {
     private static CDFactoryGenerator FACTORY_GENERATOR;
     private static CDVisitorGenerator VISITOR_GENERATOR;
     private static CDDecoratorGenerator DECORATOR_GENERATOR;
+    private static CDJSONGenerator JSON_GENERATOR;
 
     public static void main(String[] args){
         processArguments(args);
@@ -141,6 +143,7 @@ public class Main {
         FACTORY_GENERATOR = new CDFactoryGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
         VISITOR_GENERATOR = new CDVisitorGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
         DECORATOR_GENERATOR = new CDDecoratorGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
+        JSON_GENERATOR = new CDJSONGenerator(GENERATOR_SETUP, GENERATOR_HELPER, GLOBAL_SCOPE);
     }
 
     private static void generate(){
@@ -155,6 +158,7 @@ public class Main {
 
         FACTORY_GENERATOR.generate(node);
         VISITOR_GENERATOR.generate(node);
+        JSON_GENERATOR.generate(node);
         DECORATOR_GENERATOR.generate(node);
     }
 }
