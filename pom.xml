@@ -51,8 +51,8 @@
         <discord.bot.version>3.4.1</discord.bot.version>
 
         <!-- Monticore -->
-        <monticore.version>6.3.0</monticore.version>
-        <monticore.previous.version>6.3.0</monticore.previous.version>
+        <monticore.version>6.4.0</monticore.version>
+        <monticore.previous.version>6.4.0</monticore.previous.version>
         <cd4analysis.version>1.7.0.2</cd4analysis.version>
         <grammars.classifier>grammars</grammars.classifier>
 
