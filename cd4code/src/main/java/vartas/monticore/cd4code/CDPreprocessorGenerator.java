@@ -19,7 +19,6 @@ package vartas.monticore.cd4code;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDDefinition;
 import de.monticore.generating.GeneratorSetup;
-import vartas.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import vartas.monticore.cd4code.preprocessor.CD2CDPreprocessor;
 
 import javax.annotation.Nonnull;

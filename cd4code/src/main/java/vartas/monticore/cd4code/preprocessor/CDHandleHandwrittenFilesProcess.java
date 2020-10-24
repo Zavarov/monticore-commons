@@ -17,7 +17,10 @@
 
 package vartas.monticore.cd4code.preprocessor;
 
-import de.monticore.cd.cd4analysis._ast.*;
+import de.monticore.cd.cd4analysis._ast.ASTCDClass;
+import de.monticore.cd.cd4analysis._ast.ASTCDConstructor;
+import de.monticore.cd.cd4analysis._ast.ASTCDEnum;
+import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import vartas.monticore.cd4code.CDGeneratorHelper;

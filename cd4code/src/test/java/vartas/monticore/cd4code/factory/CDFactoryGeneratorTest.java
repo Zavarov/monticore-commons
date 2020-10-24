@@ -24,7 +24,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import vartas.monticore.cd4code.BasicCDGeneratorTest;
 import vartas.monticore.cd4code.decorator.CDDecoratorGenerator;
-import vartas.monticore.cd4code.factory.CDFactoryGenerator;
 
 public class CDFactoryGeneratorTest extends BasicCDGeneratorTest {
     CDFactoryGenerator generator;

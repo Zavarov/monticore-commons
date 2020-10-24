@@ -92,6 +92,13 @@ public class CDGeneratorHelper {
     //        Generator Parameters
     //
     //----------------------------------------------------------------------------------------------------------------//
+    /**
+     * When generating the JSON de-serializer, the attribute names are used keys for the JSON entries. In case the JSON
+     * file has to be compatible with 3rd-party applications, it is possible to annotate the attributes with this label
+     * to use a separate key.
+     */
+    @Nonnull
+    public static final String KEY_LABEL = "key";
     @Nonnull
     public static final String CONTAINER_LABEL = "container";
     @Nonnull

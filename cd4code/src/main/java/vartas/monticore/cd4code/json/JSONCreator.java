@@ -6,6 +6,7 @@ import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._symboltable.Stereotype;
 import de.monticore.cd.cd4analysis._visitor.CD4AnalysisVisitor;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -130,15 +131,15 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
             @Override
             public void visit(ASTMCPrimitiveType node){
                 if(node.isBoolean()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_BOOLEAN, method, attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_BOOLEAN, getKey(attribute), attribute);
                 }else if(node.isDouble()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_DOUBLE, method, attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_DOUBLE, getKey(attribute), attribute);
                 }else if(node.isFloat()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_FLOAT, method, attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_FLOAT, getKey(attribute), attribute);
                 }else if(node.isInt()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_INT, method, attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_INT, getKey(attribute), attribute);
                 }else if(node.isLong()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_LONG, method, attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_LONG, getKey(attribute), attribute);
                 }
             }
 
@@ -146,7 +147,7 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
             public void visit(ASTCDAttribute node){
                 if(!CDGeneratorHelper.isPrimitive(node))
                     if(node.getSymbol().getType().lazyLoadDelegate().getFullName().equals("java.lang.String.String"))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_STRING, method, attribute);
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_STRING, getKey(attribute), attribute);
             }
         };
 
@@ -178,16 +179,16 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         CD4AnalysisVisitor templateVisitor = new CD4AnalysisVisitor() {
             @Override
             public void visit(ASTMCPrimitiveType node){
-                setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, method, attribute);
+                setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute);
             }
 
             @Override
             public void visit(ASTCDAttribute node){
                 if(!CDGeneratorHelper.isPrimitive(node)) {
                     if(CDGeneratorHelper.inLocalScope(type, node))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_LOCAL, method, attribute, node.getSymbol().getType().lazyLoadDelegate());
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_LOCAL, node.getSymbol().getType().lazyLoadDelegate(), getKey(attribute), attribute);
                     else if (node.getSymbol().getType().lazyLoadDelegate().getFullName().equals("java.lang.String.String"))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, method, attribute);
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute);
                 }
             }
         };
@@ -196,5 +197,9 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_HANDWRITTEN, attribute);
         //Use more specific templates for types that can be resolved directly
         attribute.accept(templateVisitor);
+    }
+
+    private String getKey(ASTCDAttribute node){
+        return node.getSymbol().getStereotype(CDGeneratorHelper.KEY_LABEL).map(Stereotype::getValue).orElse(node.getName());
     }
 }

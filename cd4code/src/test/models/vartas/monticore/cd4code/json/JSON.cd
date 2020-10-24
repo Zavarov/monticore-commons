@@ -5,6 +5,7 @@ import java.util.List.List;
 
 classdiagram JSON{
     public class Structure{
+        <<key="label">>
         String stringAttr;
         int intAttr;
         long longAttr;

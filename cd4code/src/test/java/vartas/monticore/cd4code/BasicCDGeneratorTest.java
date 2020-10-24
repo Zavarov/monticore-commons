@@ -25,7 +25,6 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import vartas.monticore.BasicCDTest;
-import vartas.monticore.cd4code.CDGeneratorHelper;
 
 import java.util.Collections;
 
