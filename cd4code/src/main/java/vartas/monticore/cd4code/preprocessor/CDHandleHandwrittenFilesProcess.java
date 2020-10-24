@@ -47,6 +47,8 @@ public class CDHandleHandwrittenFilesProcess extends CDProcess {
             //Rename the constructor as well to match the enum name
             for (ASTCDConstructor cdConstructor : ast.getCDConstructorList())
                 cdConstructor.setName(ast.getName());
+            //Make the enum abstract
+            ast.getModifier().setAbstract(true);
         }
     }
 
@@ -58,6 +60,8 @@ public class CDHandleHandwrittenFilesProcess extends CDProcess {
             //Rename the constructor as well to match the class name
             for (ASTCDConstructor cdConstructor : ast.getCDConstructorList())
                 cdConstructor.setName(ast.getName());
+            //Make the class abstract
+            ast.getModifier().setAbstract(true);
         }
     }
 }
