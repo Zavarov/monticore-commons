@@ -95,7 +95,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * an instance of the base class is required for the method, which this one provides. The MontiCore visitor
      * had exactly the same issue. However, the developers decided to explicitly cast each TOP class to its base class.
      */
-    public static final String GET_REAL_THIS = "protected %s getRealThis();";
+    public static final String GET_REAL_THIS = "public %s getRealThis();";
     /**
      * Signature of the accept method.<br>
      * This method is the hook point used to apply the visitor.
