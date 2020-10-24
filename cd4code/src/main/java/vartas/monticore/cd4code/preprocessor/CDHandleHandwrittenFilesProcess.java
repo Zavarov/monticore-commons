@@ -23,6 +23,7 @@ import de.monticore.cd.cd4analysis._ast.ASTCDEnum;
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.utils.Names;
 import vartas.monticore.cd4code.CDGeneratorHelper;
 
 public class CDHandleHandwrittenFilesProcess extends CDProcess {
@@ -57,7 +58,7 @@ public class CDHandleHandwrittenFilesProcess extends CDProcess {
 
     @Override
     public void visit(ASTCDClass ast){
-        String qualifiedName = ast.getSymbol().getFullName();
+        String qualifiedName = Names.getQualifiedName(ast.getSymbol().getPackageName(), ast.getName());
 
         if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
             //Rename the class
