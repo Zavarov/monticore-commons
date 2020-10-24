@@ -113,9 +113,7 @@ public class FactoryCreator extends AbstractCreator<ASTCDType, ASTCDClass> {
 
     private ASTCDMethod buildMethod(ASTCDType ast, List<ASTCDParameter> parameters) {
         ASTMCType returnType = getMCTypeFacade().createQualifiedType(ast.getName());
-        ASTCDMethod method = getCDMethodFacade().createMethod(CDModifier.PUBLIC_STATIC, returnType, "create", parameters);
-        String createTemplate = Joiners.DOT.join(CDGeneratorHelper.FACTORY_MODULE, "create");
-        return method;
+        return getCDMethodFacade().createMethod(CDModifier.PUBLIC_STATIC, returnType, "create", parameters);
     }
 
     private void bindToTemplate(ASTCDType cdClass, ASTCDMethod cdMethod, String template){

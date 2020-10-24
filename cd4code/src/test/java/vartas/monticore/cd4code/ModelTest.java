@@ -39,6 +39,10 @@ public class ModelTest extends BasicCDTest {
             "java.lang : String",
             "java.lang : Throwable",
 
+            "java.nio.file : Path",
+
+            "java.time : Instant",
+
             "java.util.stream : BaseStream",
             "java.util.stream : IntStream",
             "java.util.stream : Stream",
@@ -48,7 +52,10 @@ public class ModelTest extends BasicCDTest {
             "java.util : Locale",
             "java.util : Map",
             "java.util : Optional",
-            "java.util : Set"
+            "java.util : Set",
+
+            "com.google.common.cache : Cache",
+            "com.google.common.collect : Multimap"
     }, delimiter = ':')
     public void testModel(String packageName, String className){
         String qualifiedName;

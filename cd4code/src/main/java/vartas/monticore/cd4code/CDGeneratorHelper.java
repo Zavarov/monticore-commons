@@ -140,7 +140,7 @@ public class CDGeneratorHelper {
     }
 
     public static boolean isContainer(ASTCDAttribute node){
-        return isContainer(node.getSymbol().getType().lazyLoadDelegate());
+        return !isPrimitive(node) && isContainer(node.getSymbol().getType().lazyLoadDelegate());
     }
 
     public static boolean isContainer(CDTypeSymbol symbol){
