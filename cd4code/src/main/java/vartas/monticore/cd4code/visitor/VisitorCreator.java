@@ -522,10 +522,10 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         public void visit(ASTCDType ast){
             cdGetRealThis = getCDMethodFacade().createMethodByDefinition(String.format(GET_REAL_THIS, ast.getName()));
 
-            if(generatorHelper.existsHandwrittenClass(ast.getSymbol().getFullName())) {
-                cdGetRealThis.setModifier(CDModifier.PROTECTED_ABSTRACT.build());
+            if(generatorHelper.existsHandwrittenClass(ast)) {
+                cdGetRealThis.setModifier(CDModifier.PUBLIC_ABSTRACT.build());
             }else{
-                cdGetRealThis.setModifier(CDModifier.PROTECTED.build());
+                cdGetRealThis.setModifier(CDModifier.PUBLIC.build());
                 glex.replaceTemplate(
                         CDGeneratorHelper.METHOD_HOOK,
                         cdGetRealThis,

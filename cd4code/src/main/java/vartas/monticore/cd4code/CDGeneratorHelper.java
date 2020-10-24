@@ -26,6 +26,7 @@ import de.monticore.io.paths.IterablePath;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mcfullgenerictypes._visitor.MCFullGenericTypesVisitor;
+import de.monticore.utils.Names;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
@@ -114,6 +115,14 @@ public class CDGeneratorHelper {
 
     public boolean existsHandwrittenClass(String qualifiedName){
         return TransformationHelper.existsHandwrittenClass(getSourcesPath(), qualifiedName);
+    }
+
+    public boolean existsHandwrittenClass(CDTypeSymbol symbol){
+        return existsHandwrittenClass(Names.getQualifiedName(symbol.getPackageName(), symbol.getName()));
+    }
+
+    public boolean existsHandwrittenClass(ASTCDType node){
+        return existsHandwrittenClass(node.getSymbol());
     }
 
     public static boolean isPrimitive(ASTCDAttribute node){

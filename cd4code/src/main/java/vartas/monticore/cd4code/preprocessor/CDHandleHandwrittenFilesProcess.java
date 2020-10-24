@@ -21,9 +21,7 @@ import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDConstructor;
 import de.monticore.cd.cd4analysis._ast.ASTCDEnum;
 import de.monticore.cd.cd4analysis._ast.ASTCDInterface;
-import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
-import de.monticore.utils.Names;
 import vartas.monticore.cd4code.CDGeneratorHelper;
 
 public class CDHandleHandwrittenFilesProcess extends CDProcess {
@@ -36,18 +34,14 @@ public class CDHandleHandwrittenFilesProcess extends CDProcess {
 
     @Override
     public void visit(ASTCDInterface ast){
-        String qualifiedName = ast.getSymbol().getFullName();
-
-        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName))
+        if(generatorHelper.existsHandwrittenClass(ast))
             //Rename the interface
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
     }
 
     @Override
     public void visit(ASTCDEnum ast){
-        String qualifiedName = ast.getSymbol().getFullName();
-
-        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
+        if(generatorHelper.existsHandwrittenClass(ast)) {
             //Rename the enum
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
             //Rename the constructor as well to match the enum name
@@ -58,9 +52,7 @@ public class CDHandleHandwrittenFilesProcess extends CDProcess {
 
     @Override
     public void visit(ASTCDClass ast){
-        String qualifiedName = Names.getQualifiedName(ast.getSymbol().getPackageName(), ast.getName());
-
-        if(TransformationHelper.existsHandwrittenClass(generatorHelper.getSourcesPath(), qualifiedName)) {
+        if(generatorHelper.existsHandwrittenClass(ast)) {
             //Rename the class
             ast.setName(ast.getName() + CDGeneratorHelper.HANDWRITTEN_FILE_POSTFIX);
             //Rename the constructor as well to match the class name
