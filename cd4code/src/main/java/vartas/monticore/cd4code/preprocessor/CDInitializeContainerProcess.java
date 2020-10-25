@@ -22,7 +22,7 @@ import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.cd4analysis._symboltable.Stereotype;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
-import de.se_rwth.commons.Joiners;
+import de.monticore.utils.Names;
 import vartas.monticore.cd4code.CDGeneratorHelper;
 
 import java.util.Optional;
@@ -34,10 +34,12 @@ public class CDInitializeContainerProcess extends CDProcess {
 
     @Override
     public void visit(ASTCDAttribute ast){
-            CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType();
+        if(!CDGeneratorHelper.isPrimitive(ast)) {
+            CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType().lazyLoadDelegate();
             //Only containers need to be initialized
-            if(cdTypeSymbol.getStereotype("container").isPresent())
+            if (cdTypeSymbol.getStereotype("container").isPresent())
                 initialize(ast);
+        }
     }
 
     private void initialize(ASTCDAttribute ast){
@@ -46,12 +48,13 @@ public class CDInitializeContainerProcess extends CDProcess {
     }
 
     private String getTemplateName(ASTCDAttribute ast){
-        CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType();
+        CDTypeSymbol cdTypeSymbol = ast.getSymbol().getType().lazyLoadDelegate();
 
         String moduleName = CDGeneratorHelper.INITIALIZER_MODULE;
         String packageName = cdTypeSymbol.getPackageName();
         String typeName = cdTypeSymbol.getName();
 
-        return Joiners.DOT.join(moduleName, packageName, typeName);
+        String qualifiedName = packageName.isBlank() ? moduleName : Names.getQualifiedName(moduleName, packageName);
+        return Names.getQualifiedName(qualifiedName, typeName);
     }
 }
