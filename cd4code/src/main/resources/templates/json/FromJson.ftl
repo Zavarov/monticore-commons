@@ -1,5 +1,4 @@
-${signature("cdType", "cdMethod")}
-<#assign cdAttributes = cdType.getCDAttributeList()>
+${signature("cdType", "cdMethod", "cdAttributes")}
 <#assign target = cdMethod.getCDParameter(0).getName()>
 <#assign source = cdMethod.getCDParameter(1).getName()>
 <#assign json = "JSON" + cdType.getName()>

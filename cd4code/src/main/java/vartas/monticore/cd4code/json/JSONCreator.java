@@ -1,5 +1,6 @@
 package vartas.monticore.cd4code.json;
 
+import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
@@ -13,12 +14,15 @@ import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.utils.Names;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import vartas.monticore.cd4code.CDCreator;
 import vartas.monticore.cd4code.CDGeneratorHelper;
 import vartas.monticore.cd4code.CDMethodComparator;
 
 import javax.annotation.Nonnull;
+import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -89,19 +93,23 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
 
         methods.addAll(buildFromJson(ast));
-        for(ASTCDAttribute attribute : ast.getCDAttributeList())
+        for(ASTCDAttribute attribute : getAttributes(ast))
             methods.add(buildFromJson(ast, attribute));
 
         methods.add(buildToJson(ast));
-        for(ASTCDAttribute attribute : ast.getCDAttributeList())
+        for(ASTCDAttribute attribute : getAttributes(ast))
             methods.add(buildToJson(ast, attribute));
-
-        for(CDTypeSymbol parent : ast.getSymbol().getSuperTypes())
-            methods.addAll(buildMethods(parent.getAstNode()));
 
         return methods;
     }
 
+    /**
+     * Generates the static methods for deserializing instances of the given {@link ASTCDType}.<br>
+     * There are three different methods, one for deserializing it from a {@link Path}, {@link String}
+     * and {@link JSONObject}.
+     * @param ast The {@link ASTCDType} that is deserialized.
+     * @return The generated methods.
+     */
     private Set<ASTCDMethod> buildFromJson(ASTCDType ast){
         Set<ASTCDMethod> methods = new HashSet<>();
         ASTCDMethod method;
@@ -115,12 +123,18 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         methods.add(method);
 
         method = buildMethod(FROM_JSON_METHOD, ast.getName());
-        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_JSON_TEMPLATE, ast, method);
+        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_JSON_TEMPLATE, ast, method, getAttributes(ast));
         methods.add(method);
 
         return methods;
     }
 
+    /**
+     * Generates the methods for deserializing the individual attributes of a given {@link  ASTCDType}.
+     * @param type The {@link ASTCDType} containing the attributes.
+     * @param attribute An {@link ASTCDAttribute} of a given {@link ASTCDType}.
+     * @return The method that deserializes the given {@link ASTCDAttribute}.
+     */
     private ASTCDMethod buildFromJson(ASTCDType type, ASTCDAttribute attribute){
         ASTCDMethod method;
 
@@ -161,15 +175,26 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         attribute.accept(templateVisitor);
     }
 
+    /**
+     * Generates the static method for serializing instances of the given {@link ASTCDType}.
+     * @param ast The {@link ASTCDType} that is serialized.
+     * @return The generated method.
+     */
     private ASTCDMethod buildToJson(ASTCDType ast){
         ASTCDMethod method;
 
         method = buildMethod(TO_JSON_METHOD, ast.getName());
-        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_JSON_TEMPLATE, ast, method);
+        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_JSON_TEMPLATE, ast, method, getAttributes(ast));
 
         return method;
     }
 
+    /**
+     * Generates the methods for serializing the individual attributes of a given {@link  ASTCDType}.
+     * @param type The {@link ASTCDType} containing the attributes.
+     * @param attribute An {@link ASTCDAttribute} of a given {@link ASTCDType}.
+     * @return The method that serializes the given {@link ASTCDAttribute}.
+     */
     private ASTCDMethod buildToJson(ASTCDType type, ASTCDAttribute attribute){
         ASTCDMethod method;
 
@@ -205,5 +230,15 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
 
     private String getKey(ASTCDAttribute node){
         return node.getSymbol().getStereotype(CDGeneratorHelper.KEY_LABEL).map(Stereotype::getValue).orElse(node.getName());
+    }
+
+    private List<ASTCDAttribute> getAttributes(ASTCDType node){
+        List<ASTCDAttribute> attributes = Lists.newArrayList();
+
+        attributes.addAll(node.getCDAttributeList());
+        for(CDTypeSymbol parent : node.getSymbol().getSuperTypes())
+            attributes.addAll(getAttributes(parent.getAstNode()));
+
+        return attributes;
     }
 }
