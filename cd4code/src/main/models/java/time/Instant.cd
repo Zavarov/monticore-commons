@@ -1,7 +1,15 @@
 package java.time;
 
 import java.lang.Object.Object;
-import java.time.Temporal.Temporal;
+import java.time.ZoneId.ZoneId;
+import java.time.ZoneOffset.ZoneOffset;
+import java.time.ZonedDateTime.ZonedDateTime;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.ValueRange.ValueRange;
 import java.time.OffsetDateTime.OffsetDateTime;
 
 /**
@@ -28,7 +36,7 @@ public classdiagram Instant{
         + Instant minusMillis(long millisToSubtract);
         + Instant minusNanos(long nanosToSubtract);
         + Instant minusSeconds(long secondsToSubtract);
-        + Instant plus(long amountToAdd);
+        + Instant plus(long amountToAdd, TemporalUnit unit);
         + Instant plus(TemporalAmount amountToAdd);
         + Instant plusMillis(long millisToAdd);
         + Instant plusNanos(long nanosToAdd);

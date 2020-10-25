@@ -53,9 +53,10 @@ public class ModelTest extends BasicCDTest {
             "java.nio.file : Path",
             "java.nio.file : Watchable",
 
+            //TODO "java.time.temporal : Temporal",
+
             //TODO "java.time : Instant",
             //TODO "java.time : OffsetDateTime",
-            //TODO "java.time : Temporal",
 
             "java.util.concurrent : Callable",
             "java.util.concurrent : ConcurrentMap",
