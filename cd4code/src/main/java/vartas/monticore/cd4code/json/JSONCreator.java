@@ -1,11 +1,11 @@
 package vartas.monticore.cd4code.json;
 
-import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDClass;
 import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.cd4analysis._symboltable.Stereotype;
 import de.monticore.cd.cd4analysis._visitor.CD4AnalysisVisitor;
 import de.monticore.cd.facade.CDModifier;
@@ -15,11 +15,12 @@ import de.monticore.utils.Names;
 import org.apache.commons.lang3.StringUtils;
 import vartas.monticore.cd4code.CDCreator;
 import vartas.monticore.cd4code.CDGeneratorHelper;
+import vartas.monticore.cd4code.CDMethodComparator;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class is responsible for creating the JSON representation of a corresponding {@link ASTCDType}. The serialization
@@ -83,9 +84,9 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
                 .build();
     }
 
-    private List<ASTCDMethod> buildMethods(ASTCDType ast){
+    private Set<ASTCDMethod> buildMethods(ASTCDType ast){
         //Duplicates will be created when there are no container attributes.
-        List<ASTCDMethod> methods = Lists.newArrayList();
+        Set<ASTCDMethod> methods = new TreeSet<>(new CDMethodComparator());
 
         methods.addAll(buildFromJson(ast));
         for(ASTCDAttribute attribute : ast.getCDAttributeList())
@@ -94,6 +95,9 @@ public class JSONCreator extends CDCreator<ASTCDClass> {
         methods.add(buildToJson(ast));
         for(ASTCDAttribute attribute : ast.getCDAttributeList())
             methods.add(buildToJson(ast, attribute));
+
+        for(CDTypeSymbol parent : ast.getSymbol().getSuperTypes())
+            methods.addAll(buildMethods(parent.getAstNode()));
 
         return methods;
     }
