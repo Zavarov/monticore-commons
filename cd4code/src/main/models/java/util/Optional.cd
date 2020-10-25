@@ -1,6 +1,7 @@
 package java.util;
 
 import java.lang.Object.Object;
+import java.lang.Runnable.Runnable;
 import java.util.stream.Stream.Stream;
 import java.util.function.Consumer.Consumer;
 import java.util.function.Function.Function;

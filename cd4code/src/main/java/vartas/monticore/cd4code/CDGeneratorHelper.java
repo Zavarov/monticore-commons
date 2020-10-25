@@ -18,6 +18,7 @@
 package vartas.monticore.cd4code;
 
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
+import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
 import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
@@ -123,6 +124,10 @@ public class CDGeneratorHelper {
 
     public boolean existsHandwrittenClass(ASTCDType node){
         return existsHandwrittenClass(node.getSymbol());
+    }
+
+    public static boolean isPrimitive(ASTCDParameter node){
+        return isPrimitive(node.getMCType());
     }
 
     public static boolean isPrimitive(ASTCDAttribute node){

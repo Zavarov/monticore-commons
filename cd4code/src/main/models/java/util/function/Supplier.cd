@@ -1,0 +1,10 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Supplier{
+    public interface Supplier <<T>> {
+        T get();
+    }
+}

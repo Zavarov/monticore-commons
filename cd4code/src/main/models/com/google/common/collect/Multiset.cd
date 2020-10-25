@@ -1,0 +1,40 @@
+package com.google.common.collect;
+
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.util.function.Consumer.Consumer;
+import java.util.function.ObjIntConsumer.ObjIntConsumer;
+import java.util.Collection.Collection;
+import java.util.Set.Set;
+import java.util.Iterator.Iterator;
+import java.util.Spliterator.Spliterator;
+
+/**
+ * @version Guava 29.0
+ */
+public classdiagram Multiset{
+    <<container>>
+    public interface Multiset extends Collection<<E>>{
+        boolean add(E element);
+        int add(E element, int occurrences);
+        boolean contains(Object element);
+        boolean containsAll(Collection<?> elements);
+        int count(Object element);
+        Set<E> elementSet();
+        Set<Multiset.Entry<E>> entrySet();
+        boolean equals(Object object);
+        void forEach(Consumer<? super E> action);
+        void forEachEntry(ObjIntConsumer<? super E> action);
+        int hashCode();
+        Iterator<E> iterator();
+        boolean remove(Object element);
+        int remove(Object element, int occurrences);
+        boolean removeAll(Collection<?> c);
+        boolean retainAll(Collection<?> c);
+        int setCount(E element, int count);
+        boolean setCount(E element, int oldCount, int newCount);
+        int size();
+        Spliterator<E> spliterator();
+        String toString();
+    }
+}

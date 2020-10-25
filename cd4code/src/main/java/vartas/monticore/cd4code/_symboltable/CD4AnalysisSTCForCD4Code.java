@@ -37,15 +37,13 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class patches the generation of the CD4Code symbol table when dealing with fully generic types.
  */
 public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltable.CD4AnalysisSTCForCD4Code {
     protected CD4CodePrettyPrinterDelegator printer = new CD4CodePrettyPrinterDelegator();
-    protected Pattern QUALIFIED_NAME = Pattern.compile("(\\w+\\.)*\\w+");
+    private static final String REGEX ="[<\\[]";
 
     public CD4AnalysisSTCForCD4Code(Deque<? extends ICD4AnalysisScope> scopeStack) {
         super(scopeStack);
@@ -55,7 +53,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
     public void addStereotypes(CDMethOrConstrSymbol methodSymbol, ASTCDStereotype astStereotype) {
         if (astStereotype != null) {
             for(ASTCDStereoValue value : astStereotype.getValueList()) {
-                //TODO Used to be (getName, getName)
+                //Used to be (getName, getName)
                 methodSymbol.addStereotype(new Stereotype(value.getName(), value.getValue()));
             }
         }
@@ -66,15 +64,10 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
     public void initialize_CDAttribute(CDFieldSymbol fieldSymbol, ASTCDAttribute astAttribute){
         ASTMCType astType = astAttribute.getMCType();
 
-        //TODO Print the type, even if they're generic
-        String typeName = printer.prettyprint(astAttribute.getMCType());
-        Matcher matcher = QUALIFIED_NAME.matcher(typeName);
-        if(matcher.find())
-            typeName = matcher.group();
-        else
-            return;
+        //Ignore generic arguments
+        String baseName = printer.prettyprint(astAttribute.getMCType()).split(REGEX)[0];
 
-        CDTypeSymbolSurrogate typeReference = new CDTypeSymbolSurrogate(typeName, this.getCurrentScope().orElseThrow());
+        CDTypeSymbolSurrogate typeReference = new CDTypeSymbolSurrogate(baseName, this.getCurrentScope().orElseThrow());
         fieldSymbol.setType(typeReference);
         this.addTypeArgumentsToTypeSymbol(typeReference, astType);
         if (astAttribute.isPresentModifier()) {
@@ -101,8 +94,9 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
 
     @Override
     protected void initialize_CDParameter(CDFieldSymbol symbol, ASTCDParameter ast) {
-        //TODO Print the type, even if they're generic
-        CDTypeSymbolSurrogate paramTypeSymbol = new CDTypeSymbolSurrogate(printer.prettyprint(ast.getMCType()), this.getCurrentScope().orElseThrow());
+        //Ignore generic arguments
+        String baseName = printer.prettyprint(ast.getMCType()).split(REGEX)[0];
+        CDTypeSymbolSurrogate paramTypeSymbol = new CDTypeSymbolSurrogate(baseName, this.getCurrentScope().orElseThrow());
         this.addTypeArgumentsToTypeSymbol(paramTypeSymbol, ast.getMCType());
         symbol.setType(paramTypeSymbol);
         symbol.setIsParameter(true);
@@ -141,7 +135,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
                         actualTypeArguments.add(typeArgumentSymbolReference);
                     }
                 } else if(astTypeArgument instanceof ASTMCWildcardTypeArgument) {
-                    //TODO Believe it or not, wildcards *do* exist
+                    //Believe it or not, wildcards *do* exist
                     ASTMCWildcardTypeArgument astmcWildcardTypeArgument = (ASTMCWildcardTypeArgument) astTypeArgument;
                     if (astmcWildcardTypeArgument.isPresentLowerBound()) {
                         ASTMCType astTypeLowerBound = astmcWildcardTypeArgument.getLowerBound();
@@ -157,7 +151,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
                 } else if (astTypeArgument instanceof ASTMCCustomTypeArgument){
                     ASTMCCustomTypeArgument astmcCustomTypeArgument = (ASTMCCustomTypeArgument) astTypeArgument;
                     ASTMCType astCustomType = astmcCustomTypeArgument.getMCType();
-                    typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astCustomType.printType(new MCFullGenericTypesPrettyPrinter(new IndentPrinter())), (ICD4AnalysisScope)this.getCurrentScope().get());
+                    typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astCustomType.printType(new MCFullGenericTypesPrettyPrinter(new IndentPrinter())), this.getCurrentScope().orElseThrow());
                     this.addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astCustomType);
                     actualTypeArguments.add(typeArgumentSymbolReference);
                 } else {
@@ -170,7 +164,15 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
 
     @Override
     public void setReturnTypeOfMethod(CDMethOrConstrSymbol methodSymbol, ASTCDMethod astMethod) {
-        //TODO Fails when we have nested generic return types.
+        //Ignore generic arguments
+        String baseName = printer.prettyprint(astMethod.getMCReturnType()).split(REGEX)[0];
+
+        CDTypeSymbolSurrogate returnSymbol = new CDTypeSymbolSurrogate(baseName, this.getCurrentScope().orElseThrow());
+        if (astMethod.getMCReturnType().isPresentMCType()) {
+            this.addTypeArgumentsToTypeSymbol(returnSymbol, astMethod.getMCReturnType().getMCType());
+        }
+
+        methodSymbol.setReturnType(returnSymbol);
     }
 
     /*

@@ -1,19 +1,23 @@
 package java.lang;
+
+import java.lang.Class.Class;
+import java.lang.String.String;
+import java.lang.InterruptedException.InterruptedException;
 /**
  * @version Java 11
  */
 public classdiagram Object{
     public class Object {
-        protected Object clone();
-        public boolean equals(Object obj);
-        protected void finalize();
-        public Class<?> getClass();
-        public int hashCode();
-        public void notify();
-        public void notifyAll();
-        public String toString();
-        public void wait() throws InterruptedException;
-        public void wait(long timeoutMillis) throws InterruptedException;
-        public void wait(long timeoutMillis, int nanos) throws InterruptedException;
+        # Object clone();
+        + boolean equals(Object obj);
+        # void finalize();
+        //+ Class<?> getClass();
+        + int hashCode();
+        + void notify();
+        + void notifyAll();
+        + String toString();
+        + void wait() throws InterruptedException;
+        + void wait(long timeoutMillis) throws InterruptedException;
+        + void wait(long timeoutMillis, int nanos) throws InterruptedException;
     }
 }

@@ -1,5 +1,13 @@
 package com.google.common.collect;
 
+import java.lang.Object.Object;
+import java.lang.Iterable.Iterable;
+import java.util.Map.Map;
+import java.util.Set.Set;
+import java.util.Collection.Collection;
+import java.util.function.BiConsumer.BiConsumer;
+import com.google.common.collect.Multiset.Multiset;
+
 /**
  * @version Guava 29.0
  */

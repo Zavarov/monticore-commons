@@ -170,7 +170,7 @@ public class DecoratorCreatorTest extends BasicCDGeneratorTest {
     @ParameterizedTest
     @CsvSource(value = {
             " boolean : equalsNickname    : 'Object'",
-            "Class<?> : getClassNickname  : ''",
+            //TODO "Class<?> : getClassNickname  : ''",
             "     int : hashCodeNickname  : ''",
             "    void : notifyNickname    : ''",
             "    void : notifyAllNickname : ''",

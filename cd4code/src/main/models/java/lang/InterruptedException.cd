@@ -1,0 +1,10 @@
+package java.lang;
+
+import java.lang.Exception.Exception;
+/**
+ * @version Java 11
+ */
+public classdiagram InterruptedException{
+    public interface InterruptedException extends Exception <<T>>{
+    }
+}

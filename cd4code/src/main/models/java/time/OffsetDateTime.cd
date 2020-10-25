@@ -1,0 +1,78 @@
+package java.time;
+
+/**
+ * @version Java 11
+ */
+public classdiagram OffsetDateTime{
+    public class OffsetDateTime extends Object implements Temporal, TemporalAdjuster, Serializable, Comparable<<OffsetDateTime>>{
+        +Temporal adjustInto(Temporal temporal);
+        + ZonedDateTime atZoneSameInstant(ZoneId zone);
+        + ZonedDateTime atZoneSimilarLocal(ZoneId zone);
+        + int compareTo(OffsetDateTime other);
+        + boolean equals(Object obj);
+        + String format(DateTimeFormatter formatter);
+        + int get(TemporalField field);
+        + int getDayOfMonth();
+        + DayOfWeek getDayOfWeek();
+        + int getDayOfYear();
+        + int getHour();
+        + long getLong(TemporalField field);
+        + int getMinute();
+        + Month getMonth();
+        + int getMonthValue();
+        + int getNano();
+        + ZoneOffset getOffset();
+        + int getSecond();
+        + int getYear();
+        + int hashCode();
+        + boolean isAfter(OffsetDateTime other);
+        + boolean isBefore(OffsetDateTime other);
+        + boolean isEqual(OffsetDateTime other);
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + OffsetDateTime minus(long amountToSubtract, TemporalUnit unit);
+        + OffsetDateTime minus(TemporalAmount amountToSubtract);
+        + OffsetDateTime minusDays(long days);
+        + OffsetDateTime minusHours(long hours);
+        + OffsetDateTime minusMinutes(long minutes);
+        + OffsetDateTime minusMonths(long months);
+        + OffsetDateTime minusNanos(long nanos);
+        + OffsetDateTime minusSeconds(long seconds);
+        + OffsetDateTime minusWeeks(long weeks);
+        + OffsetDateTime minusYears(long years);
+        + OffsetDateTime plus(long amountToAdd, TemporalUnit unit);
+        + OffsetDateTime plus(TemporalAmount amountToAdd);
+        + OffsetDateTime plusDays(long days);
+        + OffsetDateTime plusHours(long hours);
+        + OffsetDateTime plusMinutes(long minutes);
+        + OffsetDateTime plusMonths(long months);
+        + OffsetDateTime plusNanos(long nanos);
+        + OffsetDateTime plusSeconds(long seconds);
+        + OffsetDateTime plusWeeks(long weeks);
+        + OffsetDateTime plusYears(long years);
+        //+ <R> query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + long toEpochSecond();
+        + Instant toInstant();
+        + LocalDate toLocalDate();
+        + LocalDateTime toLocalDateTime();
+        + LocalTime toLocalTime();
+        + OffsetTime toOffsetTime();
+        + String toString();
+        + ZonedDateTime toZonedDateTime();
+        + OffsetDateTime truncatedTo(TemporalUnit unit);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + OffsetDateTime with(TemporalAdjuster adjuster);
+        + OffsetDateTime with(TemporalField field, long newValue);
+        + OffsetDateTime withDayOfMonth(int dayOfMonth);
+        + OffsetDateTime withDayOfYear(int dayOfYear);
+        + OffsetDateTime withHour(int hour);
+        + OffsetDateTime withMinute(int minute);
+        + OffsetDateTime withMonth(int month);
+        + OffsetDateTime withNano(int nanoOfSecond);
+        + OffsetDateTime withOffsetSameInstant(ZoneOffset offset);
+        + OffsetDateTime withOffsetSameLocal(ZoneOffset offset);
+        + OffsetDateTime withSecond(int second);
+        + OffsetDateTime withYear(int year);
+    }
+}

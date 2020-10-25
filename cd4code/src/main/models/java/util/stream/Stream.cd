@@ -1,6 +1,8 @@
 package java.util.stream;
 
+import java.util.function.Predicate.Predicate;
 import java.util.stream.BaseStream.BaseStream;
+import java.util.Optional.Optional;
 
 /**
  * @version Java 11

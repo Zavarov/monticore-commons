@@ -1,0 +1,27 @@
+package java.lang;
+
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.lang.Serializable.Serializable;
+
+/**
+ * @version Java 11
+ */
+public classdiagram StackTraceElement{
+    public class StackTraceElement extends Object implements Serializable{
+        + StackTraceElement(String declaringClass, String methodName, String fileName, int lineNumber);
+        + StackTraceElement(String classLoaderName, String moduleName, String moduleVersion, String declaringClass, String methodName, String fileName, int lineNumber);
+
+        + boolean equals(Object obj);
+        + String getClassLoaderName();
+        + String getClassName();
+        + String getFileName();
+        + int getLineNumber();
+        + String getMethodName();
+        + String getModuleName();
+        + String getModuleVersion();
+        + int hashCode();
+        + boolean isNativeMethod();
+        + String toString();
+    }
+}

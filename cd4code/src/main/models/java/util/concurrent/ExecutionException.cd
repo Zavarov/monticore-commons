@@ -1,0 +1,16 @@
+package java.util.concurrent;
+
+import java.lang.Exception.Exception;
+import java.lang.String.String;
+import java.lang.Throwable.Throwable;
+/**
+ * @version Java 11
+ */
+public classdiagram ExecutionException{
+    public class ExecutionException extends Exception {
+        # ExecutionException();
+        # ExceptionException(String message);
+        # ExceptionException(String message, Throwable cause);
+        # ExceptionException(Throwable cause);
+    }
+}

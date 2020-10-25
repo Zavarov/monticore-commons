@@ -1,0 +1,10 @@
+package java.util.concurrent;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Callable{
+    public interface Callable <<V>> {
+        V call();
+    }
+}

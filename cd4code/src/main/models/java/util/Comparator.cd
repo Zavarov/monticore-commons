@@ -1,0 +1,19 @@
+package java.util;
+
+import java.lang.Object.Object;
+/**
+ * @version Java 11
+ */
+public classdiagram Comparator{
+    public interface Comparator <<T>> {
+        int compare(T o1, T o2);
+        boolean equals(Object obj);
+        Comparator<T> reversed();
+        Comparator<T> thenComparing(Comparator<? super T> other);
+        //<U extends Comparable<? super U>> Comparator<T> thenComparing(Function<? super T, ? extends U> keyExtractor);
+        //<U> Comparator<T> thenComparing(Function<? super T, ? extends U> keyExtractor, Comparator<? super U> keyComparator);
+        Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> keyExtractor);
+        Comparator<T> thenComparingInt(ToIntFunction<? super T> keyExtractor);
+        Comparator<T> thenComparingLong(ToLongFunction<? super T> keyExtractor);
+    }
+}

@@ -1,0 +1,17 @@
+package java.time;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Temporal{
+    public interface Temporal extends TemporalAccessor{
+        boolean isSupported(TemporalUnit unit);
+        Temporal minus(long amountToSubtract, TemporalUnit unit);
+        Temporal minus(TemporalAmount amount);
+        Temporal plus(long amountToAdd, TemporalUnit unit);
+        Temporal plus(TemporalUnit amount);
+        long until(Temporal endExclusive, TemporalUnit unit);
+        Temporal with(TemporalAdjuster adjuster);
+        Temporal with(TemporalField field, long newValue);
+    }
+}

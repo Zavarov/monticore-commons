@@ -1,0 +1,11 @@
+package java.nio.file;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Watchable{
+    public interface Watchable{
+        //WatchKey register(WatchService watcher, WatchEvent.Kind<?>... events);
+        //WatchKey register(WatchService watcher, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifiers);
+    }
+}
