@@ -149,7 +149,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
     public ASTCDInterface decorate(ASTCDDefinition cdDefinition) {
         ASTCDInterface cdInterface = buildVisitor(cdDefinition);
 
-        buildAcceptor(cdDefinition, cdInterface);
+        buildHookpoints(cdDefinition, cdInterface);
 
         cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
         cdDefinition.streamCDEnums().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
@@ -162,7 +162,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * Generates the <code>accept</code> method for all types in the provided class diagram.
      * @param ast the {@link ASTCDDefinition} of the class diagram.
      */
-    private void buildAcceptor(ASTCDDefinition ast, ASTCDInterface visitor){
+    private void buildHookpoints(ASTCDDefinition ast, ASTCDInterface visitor){
         ast.accept(new CDDefinitionVisitor(visitor));
     }
 
@@ -350,12 +350,13 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
      * The <code>accept</code> method is specified in <code>Accept.ftl</code>
      * @return the template path for the accept method.
      */
-    private String computeAcceptorTemplate(){
+    private String computeAcceptTemplate(){
         return computeTemplate("Accept");
     }
 
     /**
-     * The <code>accept</code> method is specified in <code>Default.ftl</code>
+     * The <code>accept</code> method is specified in <code>Default.ftl</code> This is the default template
+     * by traversing through a type by calling its <code>accept</code> method.
      * @return the template path for the accept method.
      */
     private String computeDefaultTemplate(){
@@ -469,9 +470,9 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          * @param cdVisitor the visitor of the class diagram.
          */
         public CDDefinitionVisitor(ASTCDInterface cdVisitor){
-            this.cdAccept = getCDMethodFacade().createMethodByDefinition(String.format(ACCEPT, cdVisitor.getName()));
-            this.cdParameter = cdAccept.getCDParameter(0);  //Visitor class
             this.cdVisitor = cdVisitor;
+            this.cdAccept = buildAccept();
+            this.cdParameter = cdAccept.getCDParameter(0);  //Visitor class
         }
 
         /**
@@ -500,6 +501,10 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
             ast.getSymbol().addImport(importName);
         }
 
+        private ASTCDMethod buildAccept(){
+            return getCDMethodFacade().createMethodByDefinition(String.format(ACCEPT, cdVisitor.getName()));
+        }
+
         /**
          * Binds the <code>accept</code> method to its corresponding template.<br>
          */
@@ -507,7 +512,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
             glex.replaceTemplate(
                     CDGeneratorHelper.METHOD_HOOK,
                     cdAccept,
-                    new TemplateHookPoint(computeAcceptorTemplate(), cdParameter)
+                    new TemplateHookPoint(computeAcceptTemplate(), cdParameter)
             );
         }
 
@@ -520,9 +525,16 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
          * @param ast The current {@link ASTCDType} associated with the method.
          */
         public void visit(ASTCDType ast){
-            cdGetRealThis = getCDMethodFacade().createMethodByDefinition(String.format(GET_REAL_THIS, ast.getName()));
+            cdGetRealThis = buildGetRealThis(ast);
+            handleGetRealThis(ast);
+        }
 
-            if(generatorHelper.existsHandwrittenClass(ast)) {
+        private ASTCDMethod buildGetRealThis(ASTCDType ast){
+            return getCDMethodFacade().createMethodByDefinition(String.format(GET_REAL_THIS, ast.getName()));
+        }
+
+        private void handleGetRealThis(ASTCDType type){
+            if(generatorHelper.existsHandwrittenClass(type)) {
                 cdGetRealThis.getModifier().setAbstract(true);
             }else{
                 glex.replaceTemplate(

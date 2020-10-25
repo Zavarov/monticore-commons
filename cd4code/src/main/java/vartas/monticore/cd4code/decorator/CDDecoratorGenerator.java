@@ -35,7 +35,7 @@ public class CDDecoratorGenerator extends CDPreprocessorGenerator {
 
     @Override
     public void generate(@Nonnull ASTCDDefinition node){
-        node = DecoratorCreator.create(node.deepClone(), generatorSetup.getGlex());
+        node = DecoratorCreator.create(node, generatorSetup.getGlex());
         super.generate(node);
     }
 }

@@ -17,6 +17,8 @@
 
 package vartas.monticore.cd4code.decorator;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.Stereotype;
 import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
@@ -47,6 +49,7 @@ import java.util.TreeSet;
  * The decorator
  */
 public class DecoratorCreator extends AbstractCreator<ASTCDDefinition, ASTCDDefinition> implements CD4CodeVisitor {
+    private final Multimap<ASTCDType, ASTCDMethod> calculatedMethods = HashMultimap.create();
     /**
      * This class' Logger.
      */
@@ -66,10 +69,16 @@ public class DecoratorCreator extends AbstractCreator<ASTCDDefinition, ASTCDDefi
 
     @Override
     public ASTCDDefinition decorate(ASTCDDefinition node) {
-
+        //Calculate methods
         node.forEachCDEnums(type -> type.accept(getRealThis()));
         node.forEachCDClasss(type -> type.accept(getRealThis()));
         node.forEachCDInterfaces(type -> type.accept(getRealThis()));
+
+        //Add methods. Has to be done separately, in case types reference each other.
+        //In that case, they would include the decorated methods in the calculation.
+        node.forEachCDEnums(type -> type.addAllCDMethods(calculatedMethods.get(type)));
+        node.forEachCDClasss(type -> type.addAllCDMethods(calculatedMethods.get(type)));
+        node.forEachCDInterfaces(type -> type.addAllCDMethods(calculatedMethods.get(type)));
 
         return node;
     }
@@ -79,21 +88,21 @@ public class DecoratorCreator extends AbstractCreator<ASTCDDefinition, ASTCDDefi
         log.debug("Decorating {}.", node.getName());
         CDTypeDecorator decorator = new CDTypeDecorator(glex);
         node.accept(decorator);
-        node.addAllCDMethods(decorator.methods);
+        calculatedMethods.putAll(node, decorator.methods);
     }
     @Override
     public void handle(ASTCDInterface node){
         log.debug("Decorating {}.", node.getName());
         CDTypeDecorator decorator = new CDTypeDecorator(glex);
         node.accept(decorator);
-        node.addAllCDMethods(decorator.methods);
+        calculatedMethods.putAll(node, decorator.methods);
     }
     @Override
     public void handle(ASTCDEnum node){
         log.debug("Decorating {}.", node.getName());
         CDTypeDecorator decorator = new CDTypeDecorator(glex);
         node.accept(decorator);
-        node.addAllCDMethods(decorator.methods);
+        calculatedMethods.putAll(node, decorator.methods);
     }
 
     private static class CDTypeDecorator extends CDProcess{
