@@ -1,7 +1,7 @@
 package java.math;
 
 import java.lang.Object.Object;
-import java.lang.Serializable.Serializable;
+import java.io.Serializable.Serializable;
 
 /**
  * @version Java 11

@@ -1,7 +1,7 @@
 package java.util;
 
 import java.lang.Object.Object;
-import java.lang.Serializable.Serializable;
+import java.io.Serializable.Serializable;
 import java.util.stream.DoubleStream.DoubleStream;
 import java.util.stream.IntStream.IntStream;
 import java.util.stream.LongStream.LongStream;
@@ -21,7 +21,7 @@ public classdiagram Random{
         + IntStream ints();
         + IntStream ints(int randomNumberOrigin, int RandomNumberBound);
         + IntStream ints(long streamSize);
-        + IntStream( intslong streamSize, int randomNumberOrigin, int RandomNumberBound);
+        + IntStream ints(long streamSize, int randomNumberOrigin, int RandomNumberBound);
         + LongStream longs();
         + LongStream longs(long randomNumberOrigin, long RandomNumberBound);
         + LongStream longs(long streamSize);
