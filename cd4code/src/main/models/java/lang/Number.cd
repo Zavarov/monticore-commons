@@ -1,4 +1,4 @@
-package java.math;
+package java.lang;
 
 import java.lang.Object.Object;
 import java.io.Serializable.Serializable;
