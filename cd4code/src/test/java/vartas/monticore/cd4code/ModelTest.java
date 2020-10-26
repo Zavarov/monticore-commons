@@ -53,6 +53,12 @@ public class ModelTest extends BasicCDTest {
             "java.nio.file : Path",
             "java.nio.file : Watchable",
 
+            "java.math : BigDecimal",
+            "java.math : BigInteger",
+            "java.math : MathContext",
+            "java.math : Number",
+            "java.math : RoundingMode",
+
             //TODO "java.time.temporal : Temporal",
 
             //TODO "java.time : Instant",
@@ -84,6 +90,7 @@ public class ModelTest extends BasicCDTest {
             "java.util : Locale",
             "java.util : Map",
             "java.util : Optional",
+            //TODO "java.util : Random",
             "java.util : Spliterator",
             "java.util : Set",
 
