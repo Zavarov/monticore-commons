@@ -63,6 +63,8 @@ public class ModelTest extends BasicCDTest {
 
             //TODO "java.time : Instant",
             //TODO "java.time : OffsetDateTime",
+            //TODO "java.time : LocalDate",
+            //TODO "java.time : LocalTime",
 
             "java.util.concurrent : Callable",
             "java.util.concurrent : ConcurrentMap",
