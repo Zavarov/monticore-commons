@@ -14,7 +14,7 @@ public classdiagram Temporal{
         Temporal minus(long amountToSubtract, TemporalUnit unit);
         Temporal minus(TemporalAmount amount);
         Temporal plus(long amountToAdd, TemporalUnit unit);
-        Temporal plus(TemporalUnit amount);
+        Temporal plus(TemporalAmount amount);
         long until(Temporal endExclusive, TemporalUnit unit);
         Temporal with(TemporalAdjuster adjuster);
         Temporal with(TemporalField field, long newValue);
