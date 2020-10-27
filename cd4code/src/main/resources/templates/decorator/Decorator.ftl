@@ -1,6 +1,6 @@
 ${signature("cdAttribute", "cdMethod")}<#rt>
 <#assign suffix = cdAttribute.getName()?cap_first>
-<#assign method = cdMethod.getName()?keep_before(suffix)>
+<#assign method = cdMethod.getName()?keep_before_last(suffix)>
 <#assign hasReturnType = !cdMethod.getMCReturnType().isPresentMCVoidType()>
         <#if hasReturnType>return </#if>this.${cdAttribute.getName()}.${method}(<#rt>
 <#list cdMethod.getCDParameterList() as cdParameter>
