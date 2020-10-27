@@ -14,6 +14,7 @@ import java.time.LocalDateTime.LocalDateTime;
 import java.time.ZonedDateTime.ZonedDateTime;
 import java.time.OffsetDateTime.OffsetDateTime;
 import java.time.ZoneId.ZoneId;
+import java.time.ZoneOffset.ZoneOffset;
 import java.time.LocalTime.LocalTime;
 import java.time.OffsetTime.OffsetTime;
 import java.time.Period.Period;
@@ -32,7 +33,7 @@ public classdiagram LocalDate{
         + LocalDateTime atTime(int hour, int minute);
         + LocalDateTime atTime(int hour, int minute, int second);
         + LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond);
-        + LocalDate atTime(LocalTime time);
+        + LocalDateTime atTime(LocalTime time);
         + OffsetDateTime atTime(OffsetTime time);
         + int compareTo(ChronoLocalDate other);
         + Stream<LocalDate> datesUntil(LocalDate endExclusive);

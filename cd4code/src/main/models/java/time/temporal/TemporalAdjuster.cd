@@ -7,6 +7,6 @@ import java.time.temporal.Temporal.Temporal;
  */
 public classdiagram TemporalAdjuster{
     public interface TemporalAdjuster{
-        Temporal adjustInot(Temporal temporal);
+        Temporal adjustInto(Temporal temporal);
     }
 }
