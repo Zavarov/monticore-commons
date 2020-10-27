@@ -31,7 +31,7 @@ public classdiagram ChronoLocalDate{
         boolean isEqual(ChronoLocalDate other);
         boolean isLeapYear();
         boolean isSupported(TemporalField field);
-        boolean isSupprted(TemporalUnit unit);
+        boolean isSupported(TemporalUnit unit);
         int lengthOfMonth();
         int lengthOfYear();
         ChronoLocalDate minus(long amountToSubtract, TemporalUnit unit);
@@ -41,7 +41,7 @@ public classdiagram ChronoLocalDate{
         //<R> R query(TemporalQuery<R> query);
         long toEpochDay();
         String toString();
-        ChronoPeriod unitl(ChronoLocalDate endDateExclusive);
+        ChronoPeriod until(ChronoLocalDate endDateExclusive);
         long until(Temporal endExclusive, TemporalUnit unit);
         ChronoLocalDate with(TemporalAdjuster adjuster);
         ChronoLocalDate with(TemporalField field, long newValue);
