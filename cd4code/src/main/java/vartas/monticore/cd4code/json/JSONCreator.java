@@ -30,7 +30,7 @@ import java.util.TreeSet;
  * This class is responsible for creating the JSON representation of a corresponding {@link ASTCDType}. The serialization
  * is done via a {@code ToJson} method.
  */
-public class JSONCreator extends CDCreator<ASTCDClass> {
+public class JSONCreator extends CDCreator<ASTCDType> {
     public static final String FROM_PATH_TEMPLATE = "FromPath";
     public static final String FROM_STRING_TEMPLATE = "FromString";
     public static final String FROM_JSON_TEMPLATE = "FromJson";

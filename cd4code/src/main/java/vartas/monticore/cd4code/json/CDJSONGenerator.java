@@ -106,6 +106,7 @@ public class CDJSONGenerator extends CDPreprocessorGenerator {
 
         ast.getCDClassList().stream().map(this::buildJsonType).forEach(factories::add);
         ast.getCDInterfaceList().stream().map(this::buildJsonType).forEach(factories::add);
+        ast.getCDEnumList().stream().map(this::buildJsonType).forEach(factories::add);
 
         return factories;
     }
