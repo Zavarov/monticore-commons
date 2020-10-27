@@ -1,0 +1,31 @@
+package java.time.temporal;
+
+import java.lang.String.String;
+import java.lang.Long.Long;
+import java.util.Locale.Locale;
+import java.util.Map.Map;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAccessor.TemporalAccessor;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.format.ResolverStyle.ResolverStyle;
+
+/**
+ * @version Java 11
+ */
+public classdiagram TemporalField{
+    public interface TemporalField{
+        //<R extends Temporal> R adjustInto(R temporal, long newValue);
+        TemporalUnit getBaseUnit();
+        String getDisplayName(Locale locale);
+        long getFrom(TemporalAccessor temporal);
+        TemporalUnit getRangeUnit();
+        boolean isDateBased();
+        boolean isSupportedBy(TemporalAccessor temporal);
+        boolean isTimeBased();
+        ValueRange range();
+        ValueRange rangeRefinedBy(TemporalAccessor temporal);
+        TemporalAccessor resolve(Map<TemporalField, Long> fieldVaues, TemporalAccessor partialTemporal, ResolverStyle resolverStyle);
+        String toString();
+    }
+}

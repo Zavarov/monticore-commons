@@ -42,6 +42,7 @@ public class ModelTest extends BasicCDTest {
             "java.lang : Exception",
             "java.lang : InterruptedException",
             "java.lang : Iterable",
+            "java.lang : Number",
             "java.lang : Object",
             "java.lang : Runnable",
             "java.lang : RuntimeException",
@@ -56,15 +57,25 @@ public class ModelTest extends BasicCDTest {
             "java.math : BigDecimal",
             "java.math : BigInteger",
             "java.math : MathContext",
-            "java.math : Number",
             "java.math : RoundingMode",
 
-            //TODO "java.time.temporal : Temporal",
+            //TODO "java.time.chrono : ChronoLocalDate",
 
+            "java.time.format : ResolverStyle",
+
+            "java.time.temporal : Temporal",
+            "java.time.temporal : TemporalAccessor",
+            "java.time.temporal : TemporalAdjuster",
+            "java.time.temporal : TemporalAmount",
+            "java.time.temporal : TemporalField",
+            "java.time.temporal : TemporalUnit",
+            "java.time.temporal : ValueRange",
+
+            "java.time : Duration",
             //TODO "java.time : Instant",
-            //TODO "java.time : OffsetDateTime",
             //TODO "java.time : LocalDate",
             //TODO "java.time : LocalTime",
+            //TODO "java.time : OffsetDateTime",
 
             "java.util.concurrent : Callable",
             "java.util.concurrent : ConcurrentMap",
