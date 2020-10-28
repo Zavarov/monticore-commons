@@ -1,0 +1,45 @@
+package java.time.chrono;
+
+import java.lang.Object.Object;
+import java.lang.Comparable.Comparable;
+import java.time.ZoneOffset.ZoneOffset;
+import java.time.Instant.Instant;
+import java.time.LocalTime.LocalTime;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.chrono.Chronology.Chronology;
+/**
+ * @version Java 11
+ */
+public classdiagram ChronoLocalDateTime{
+    //<D extends ChronoLocalDate>
+    public interface ChronoLocalDateTime extends Temporal, TemporalAdjuster, Comparable<<ChronoLocalDateTime>>{
+        Temporal adjustInto(Temporal temporal);
+        //ChronoZonedDateTime<D> atTime(ZoneId zone);
+        int compareTo(ChronoLocalDateTime<?> other);
+        boolean equals(Object obj);
+        String format(DateTimeFormatter formatter);
+        Chronology getChronology();
+        int hashCode();
+        boolean isAfter(ChronoLocalDateTime<?> other);
+        boolean isBefore(ChronoLocalDateTime<?> other);
+        boolean isEqual(ChronoLocalDateTime<?> other);
+        boolean isSupported(TemporalField field);
+        boolean isSupported(TemporalUnit unit);
+        //ChronoLocalDateTime<D> minus(long amountToSubtract, TemporalUnit unit);
+        //ChronoLocalDateTime<D> minus(TemporalAmount amount);
+        //ChronoLocalDateTime<D> plus(long amountToAdd, TemporalUnit unit);
+        //ChronoLocalDateTime<D> plus(TemporalAmount amount);
+        //<R> R query(TemporalQuery<R> query);
+        long toEpochSecond(ZoneOffset offset);
+        Instant toInstant(ZoneOffset offset);
+        //D toLocalDate();
+        LocalTime toLocalTime();
+        String toString();
+        //ChronoLocalDateTime<D> with(TemporalAdjuster adjuster);
+        //ChronoLocalDateTime<D> with(TemporalField field, long newValue);
+    }
+}

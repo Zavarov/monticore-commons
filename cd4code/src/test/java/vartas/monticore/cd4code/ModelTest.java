@@ -60,6 +60,7 @@ public class ModelTest extends BasicCDTest {
             "java.math : RoundingMode",
 
             //TODO "java.time.chrono : ChronoLocalDate",
+            //TODO "java.time.chrono : ChronoLocalDateTime",
 
             "java.time.format : ResolverStyle",
 
@@ -74,6 +75,7 @@ public class ModelTest extends BasicCDTest {
             "java.time : Duration",
             //TODO "java.time : Instant",
             //TODO "java.time : LocalDate",
+            //TODO "java.time : LocalDateTime",
             //TODO "java.time : LocalTime",
             //TODO "java.time : OffsetDateTime",
 
