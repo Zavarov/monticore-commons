@@ -1,0 +1,38 @@
+package java.time.temporal;
+
+import java.time.temporal.Temporal.Temporal;
+import java.time.Duration.Duration;
+import java.lang.String.String;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ChronoUnit{
+    public enum ChronoUnit{
+        CENTURIES,
+        DAYS,
+        DECADES,
+        ERAS,
+        FOREVER,
+        HALF_DAYS,
+        HOURS,
+        MICROS,
+        MILLENNIA,
+        MILLIS,
+        MINUTES,
+        MONTHS,
+        NANOS,
+        SECONDS,
+        WEEKS,
+        YEARS;
+
+        //<R extends Temporal> R addto(R temporal, long amount);
+        long between(Temporal temporal1Inclusive, Temporal temporal2Exclusive);
+        Duration getDuration();
+        boolean isDateBased();
+        boolean isDurationEstimated();
+        boolean isSupportedBy(Temporal temporal);
+        boolean isTimeBased();
+        String toString();
+    }
+}

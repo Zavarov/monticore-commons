@@ -64,6 +64,7 @@ public class ModelTest extends BasicCDTest {
 
             "java.time.format : ResolverStyle",
 
+            "java.time.temporal : ChronoUnit",
             "java.time.temporal : Temporal",
             "java.time.temporal : TemporalAccessor",
             "java.time.temporal : TemporalAdjuster",
