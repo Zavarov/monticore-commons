@@ -1,0 +1,9 @@
+package java.io;
+
+
+/**
+ * @version Java 11
+ */
+public classdiagram Serializable{
+    public interface Serializable{}
+}

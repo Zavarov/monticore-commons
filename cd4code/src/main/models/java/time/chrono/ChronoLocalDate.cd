@@ -1,0 +1,49 @@
+package java.time.chrono;
+
+import java.time.LocalTime.LocalTime;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.chrono.ChronoLocalDateTime.ChronoLocalDateTime;
+import java.time.chrono.Chronology.Chronology;
+import java.time.chrono.Era.Era;
+import java.time.chrono.ChronoPeriod.ChronoPeriod;
+import java.lang.Comparable.Comparable;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ChronoLocalDate{
+    public interface ChronoLocalDate extends Temporal, TemporalAdjuster, Comparable<<ChronoLocalDate>>{
+        Temporal adjustInto(Temporal temporal);
+        ChronoLocalDateTime<?> atTime(LocalTime localTime);
+        int compareTo(ChronoLocalDate other);
+        boolean equals(Object obj);
+        String format(DateTimeFormatter formatter);
+        Chronology getChronology();
+        Era getEra();
+        int hashCode();
+        boolean isAfter(ChronoLocalDate other);
+        boolean isBefore(ChronoLocalDate other);
+        boolean isEqual(ChronoLocalDate other);
+        boolean isLeapYear();
+        boolean isSupported(TemporalField field);
+        boolean isSupported(TemporalUnit unit);
+        int lengthOfMonth();
+        int lengthOfYear();
+        ChronoLocalDate minus(long amountToSubtract, TemporalUnit unit);
+        ChronoLocalDate minus(TemporalAmount amount);
+        ChronoLocalDate plus(long amountToAdd, TemporalUnit unit);
+        ChronoLocalDate plus(TemporalAmount amount);
+        //<R> R query(TemporalQuery<R> query);
+        long toEpochDay();
+        String toString();
+        ChronoPeriod until(ChronoLocalDate endDateExclusive);
+        long until(Temporal endExclusive, TemporalUnit unit);
+        ChronoLocalDate with(TemporalAdjuster adjuster);
+        ChronoLocalDate with(TemporalField field, long newValue);
+    }
+}

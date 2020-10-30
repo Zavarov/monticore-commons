@@ -1,0 +1,88 @@
+package java.lang;
+
+import java.io.Serializable.Serializable;
+import java.lang.CharSequence.CharSequence;
+import java.lang.Comparable.Comparable;
+import java.lang.Object.Object;
+import java.lang.StringBuffer.StringBuffer;
+import java.util.stream.Stream.Stream;
+import java.util.stream.IntStream.IntStream;
+import java.util.Locale.Locale;
+
+/**
+ * @version Java 11
+ */
+public classdiagram String{
+    public class String extends Object implements Serializable, CharSequence, Comparable<<String>>{
+        + String();
+        + String(byte[] bytes);
+        + String(byte[] ascii, int hibyte);                         //Deprecated
+        + String(byte[] bytes, int offset, int length);
+        + String(byte[] ascii, int hibyte, int offset, int count);  //Deprecated
+        + String(byte[] bytes, int offset, int length, String charsetName);
+        + String(byte[] bytes, int offset, int length, Charset charset);
+        + String(char[] value);
+        + String(char[] value, int offset, int count);
+        + String(int[] codePoints, int offset, int count);
+        + String(String original);
+        + String(StringBuffer buffer);
+        + String(StringBuilder builder);
+
+        + char charAt(int index);
+        + IntStream chars();
+        + int codePointAt(int index);
+        + int codePointBefore(int index);
+        + int codePointCount(int beginIndex, int endIndex);
+        + IntStream codePoints();
+        + int compareTo(String anotherString);
+        + int compareToIgnoreCase(String str);
+        + String concat(String str);
+        + boolean contains(CharSequence s);
+        + boolean contentEquals(CharSequence cs);
+        + boolean contentEquals(StringBuffer sb);
+        + boolean endsWith(String suffix);
+        + boolean equals(Object anObject);
+        + boolean equalsIgnoreCase(String anotherString);
+        + byte[] getBytes();
+        + void getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin);
+        + int hashCode();
+        + int indexOf(int ch);
+        + int indexOf(int ch, int fromIndex);
+        + int indexOf(String str);
+        + int indexOf(String str, int fromIndex);
+        + String intern();
+        + boolean isBlank();
+        + boolean isEmpty();
+        + int lastIndexOf(int ch);
+        + int lastIndexOf(int ch, int fromIndex);
+        + int lastIndexOf(String str);
+        + int lastIndexOf(String str, int fromIndex);
+        + int length();
+        + Stream<String> lines();
+        + boolean matches(String regex);
+        + int offsetByCodePoints(int index, int codePointOffset);
+        + boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len);
+        + boolean regionMatches(int toffset, String other, int ooffset, int len);
+        + String repeat(int count);
+        + String replace(char oldChar, char newChar);
+        + String replace(CharSequence target, CharSequence replacement);
+        + String replaceAll(String regex, String replacement);
+        + String replaceFirst(String regex, String replacement);
+        + String[] split(String regex);
+        + String[] split(String regex, int limit);
+        + boolean startsWith(String prefix);
+        + boolean startsWith(String prefix, int toffset);
+        + String strip();
+        + String stripLeading();
+        + String stripTrailing();
+        + CharSequence subSequence(int beginIndex, int endIndex);
+        + String substring(int beginIndex);
+        + String substring(int beginIndex, int endIndex);
+        + char[] toCharArray();
+        + String toLowerCase();
+        + String toLowerCase(Locale locale);
+        + String toUpperCase();
+        + String toUpperCase(Locale locale);
+        + String trim();
+    }
+}

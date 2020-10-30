@@ -1,0 +1,28 @@
+package java.util.concurrent;
+
+import java.util.Map.Map;
+
+import java.lang.Object.Object;
+import java.util.function.BiConsumer.BiConsumer;
+import java.util.function.BiFunction.BiFunction;
+import java.util.function.Function.Function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ConcurrentMap{
+    <<container>>
+    public interface ConcurrentMap extends Map <<K,V>> {
+        V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+        V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
+        V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction);
+        void forEach(BiConsumer<? super K, ? super V> action);
+        V getOrDefault(Object key, V defaultValue);
+        V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction);
+        V putIfAbsent(K key, V value);
+        boolean remove(Object key, Object value);
+        V replace(K key, V value);
+        boolean replace(K key, V oldValue, V newValue);
+        void replaceAll(BiFunction<? super K, ? super V, ? extends V> function);
+    }
+}

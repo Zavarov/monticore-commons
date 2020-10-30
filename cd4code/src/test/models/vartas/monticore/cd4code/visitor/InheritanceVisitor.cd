@@ -1,0 +1,12 @@
+package vartas.monticore.cd4code.visitor;
+
+import java.lang.Object.Object;
+
+classdiagram InheritanceVisitor{
+    public class GrandParent extends Object{
+    }
+    public class Parent extends GrandParent{
+    }
+    public class Child extends Parent{
+    }
+}

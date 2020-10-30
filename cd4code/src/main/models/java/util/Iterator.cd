@@ -1,0 +1,15 @@
+package java.util;
+
+import java.util.function.Consumer.Consumer;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Iterator{
+    public interface Iterator <<E>> {
+        void forEachRemaining(Consumer<? super E> action);
+        boolean hasNext();
+        E next();
+        void remove();
+    }
+}

@@ -16,6 +16,6 @@ ${ast.printThrowsDecl()}<#t>
     ;<#lt>
 <#else>
     {<#lt>
-        ${include("hook.Method")}
+        ${include("hook.Method")}<#lt>
     }
 </#if>

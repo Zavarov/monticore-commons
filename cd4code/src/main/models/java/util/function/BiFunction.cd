@@ -1,0 +1,11 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram BiFunction{
+    public interface BiFunction <<T, U, R>> {
+        //<V> BiFunction<T,U,V> andThen(Function<? super R, ? extends V> after);
+        R apply(T t, U u);
+    }
+}

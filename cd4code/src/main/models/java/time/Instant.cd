@@ -1,0 +1,53 @@
+package java.time;
+
+import java.lang.Object.Object;
+import java.time.ZoneId.ZoneId;
+import java.time.ZoneOffset.ZoneOffset;
+import java.time.ZonedDateTime.ZonedDateTime;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.OffsetDateTime.OffsetDateTime;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Instant{
+    public class Instant extends Object{
+        + Temporal adjustInto(Temporal temporal);
+        + OffsetDateTime atOffset(ZoneOffset offset);
+        + ZonedDateTime atZone(ZoneId zone);
+        + int compareTo(Instant otherInstant);
+        + boolean equals(Object otherInstant);
+        + int get(TemporalField field);
+        + long getEpochSecond();
+        + long getLong(TemporalField field);
+        + int getNano();
+        + int hashCode();
+        + boolean isAfter(Instant otherInstant);
+        + boolean isBefore(Instant otherInstant);
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + Instant minus(long amountToSubtract, TemporalUnit unit);
+        + Instant minus(TemporalAmount amountToSubtract);
+        + Instant minusMillis(long millisToSubtract);
+        + Instant minusNanos(long nanosToSubtract);
+        + Instant minusSeconds(long secondsToSubtract);
+        + Instant plus(long amountToAdd, TemporalUnit unit);
+        + Instant plus(TemporalAmount amountToAdd);
+        + Instant plusMillis(long millisToAdd);
+        + Instant plusNanos(long nanosToAdd);
+        + Instant plusSeconds(long secondsToAdd);
+        //+ <R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + long toEpochMilli();
+        + String toString();
+        + Instant truncatedTo(TemporalUnit unit);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + Instant with(TemporalAdjuster adjuster);
+        + Instant with(TemporalField field, long newValue);
+    }
+}

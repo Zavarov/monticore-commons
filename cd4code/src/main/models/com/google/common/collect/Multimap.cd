@@ -1,0 +1,39 @@
+package com.google.common.collect;
+
+import java.lang.Object.Object;
+import java.lang.Iterable.Iterable;
+import java.util.Map.Map;
+import java.util.Set.Set;
+import java.util.Collection.Collection;
+import java.util.function.BiConsumer.BiConsumer;
+import com.google.common.collect.Multiset.Multiset;
+
+/**
+ * @version Guava 29.0
+ */
+public classdiagram Multimap{
+    <<container>>
+    public interface Multimap <<K,V>>{
+        Map<K, Collection<V>> asMap();
+        void clear();
+        boolean containsEntry(Object key, Object value);
+        boolean containsKey(Object key);
+        boolean containsValue(Object value);
+        Collection<Map.Entry<K,V>> entries();
+        boolean equals(Object obj);
+        void forEach(BiConsumer<? super K, ? super V> action);
+        Collection<V> get(K key);
+        int hashCode();
+        boolean isEmpty();
+        Multiset<K> keys();
+        Set<K> keySet();
+        boolean put(K key, V value);
+        boolean putAll(K key, Iterable<? extends V> values);
+        boolean putAll(Multimap<? extends K, ? extends V> multimap);
+        boolean remove(Object key, Object value);
+        Collection<V> removeAll(Object key);
+        Collection<V> replaceValues(K key, Iterable<? extends V> values);
+        int size();
+        Collection<V> values();
+    }
+}

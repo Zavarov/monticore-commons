@@ -1,0 +1,47 @@
+package java.util.stream;
+
+import java.lang.Iterable.Iterable;
+import java.util.stream.Stream.Stream;
+import java.util.function.IntFunction.IntFunction;
+import java.util.function.Predicate.Predicate;
+
+/**
+ * @version Java 11
+ */
+public classdiagram IntStream{
+    public interface IntStream extends BaseStream <<Integer, IntStream>> {
+        boolean allMatch(IntPredicate predicate);
+        boolean anyMatch(IntPredicate predicate);
+        DoubleStream asDoubleStream();
+        LongStream asLongStream();
+        OptionalDouble average();
+        Stream<Integer> boxed();
+        //<R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R,R> combiner);
+        long count();
+        IntStream distinct();
+        IntStream dropWhile(IntPredicate predicate);
+        IntStream filter(IntPredicate predicate);
+        OptionalInt findAny();
+        OptionalInt findFirst();
+        IntStream flatMap(IntFunction<? extends IntStream> mapper);
+        void forEach(IntConsumer action);
+        void forEachOrdered(IntConsumer action);
+        IntStream limit(long maxSize);
+        IntStream map(IntUnaryOperator mapper);
+        DoubleStream mapToDouble(IntToDoubleFunction mapper);
+        LongStream mapToLong(IntToLongFunction mapper);
+        //<U> Stream<U> mapToObj(IntFunction<? extends U> mapper);
+        OptionalInt max();
+        OptionalInt min();
+        boolean noneMatch(IntPredicate predicate);
+        IntStream peek(IntConsumer action);
+        int reduce(int identity, IntBinaryOperator op);
+        OptionalInt reduce(IntBinaryOperator op);
+        IntStream skip(long n);
+        IntStream sorted();
+        int sum();
+        IntSummaryStatistics summaryStatistics();
+        IntStream takeWhile(IntPredicate predicate);
+        int[] toArray();
+    }
+}

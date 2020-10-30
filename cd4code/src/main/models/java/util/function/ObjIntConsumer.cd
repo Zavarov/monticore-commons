@@ -1,0 +1,10 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ObjIntConsumer{
+    public interface ObjIntConsumer <<T>> {
+        void accept(T t, int value);
+    }
+}

@@ -1,0 +1,10 @@
+package java.util.function;
+
+import java.util.Function.Function;
+/**
+ * @version Java 11
+ */
+public classdiagram UnaryOperator{
+    public interface UnaryOperator extends Function <<T, T>> {
+    }
+}

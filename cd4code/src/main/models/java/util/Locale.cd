@@ -1,0 +1,41 @@
+package java.util;
+
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.util.Set.Set;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Locale{
+    public interface Locale extends Object{
+        Object clone();
+        boolean equals(Object obj);
+        String getFCountry();
+        String getDisplayCountry();
+        String getDisplayCountry(Locale inLocale);
+        String getDisplayLanguage();
+        String getDisplayLanguage(Locale inLocale);
+        String getDisplayName();
+        String getDisplayName(Locale inLocale);
+        String getDisplayScript();
+        String getDisplayScript(Locale inLocale);
+        String getDisplayVariant();
+        String getDisplayVariant(Locale inLocale);
+        String getExtension(char key);
+        Set<Character> getExtensionKeys();
+        String getISO3Country();
+        String getISO3Language();
+        String getLanguage();
+        String getScript();
+        Set<String> getUnicodeLocaleAttributes();
+        Set<String> getUnicodeLocaleKeys();
+        String getUnicodeLocaleType(String key);
+        String getVariant();
+        boolean hasExtensions();
+        int hashCode();
+        Locale stripExtensions();
+        String toLanguageTag();
+        String toString();
+    }
+}

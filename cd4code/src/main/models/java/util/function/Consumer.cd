@@ -1,0 +1,11 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Consumer{
+    public interface Consumer <<T>> {
+        void accept(T t);
+        Consumer<T> andThen(Consumer<? super T> after);
+    }
+}

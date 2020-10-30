@@ -1,0 +1,20 @@
+package java.util;
+
+import java.util.function.Consumer.Consumer;
+import java.util.Comparator.Comparator;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Spliterator{
+    public interface Spliterator <<T>> {
+        int characteristics();
+        long estimateSize();
+        void forEachRemaining(Consumer<? super T> action);
+        Comparator<? super T> getComparator();
+        long getExactSizeIfKnown();
+        boolean hasCharacteristics(int characteristics);
+        boolean tryAdvance(Consumer<? super T> action);
+        Spliterator<T> trySplit();
+    }
+}

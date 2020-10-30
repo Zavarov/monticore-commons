@@ -1,0 +1,12 @@
+package java.time.temporal;
+
+import java.time.temporal.Temporal.Temporal;
+
+/**
+ * @version Java 11
+ */
+public classdiagram TemporalAdjuster{
+    public interface TemporalAdjuster{
+        Temporal adjustInto(Temporal temporal);
+    }
+}

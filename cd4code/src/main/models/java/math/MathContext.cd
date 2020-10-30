@@ -1,0 +1,23 @@
+package java.math;
+
+import java.lang.String.String;
+import java.lang.Object.Object;
+import java.io.Serializable.Serializable;
+import java.math.RoundingMode.RoundingMode;
+
+/**
+ * @version Java 11
+ */
+public classdiagram MathContext{
+    public class MathContext extends Object implements Serializable{
+        MathContext(int setPrecision);
+        MathContext(int setPrecision, RoundingMode setRoundingMode);
+        MathContext(String val);
+
+        + boolean equals(Object x);
+        + int getPrecision();
+        + RoundingMode getRoundingMode();
+        + int hashCode();
+        + String toString();
+    }
+}

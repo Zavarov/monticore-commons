@@ -1,0 +1,87 @@
+package java.time;
+
+import java.io.Serializable.Serializable;
+import java.lang.Object.Object;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.chrono.ChronoLocalDate.ChronoLocalDate;
+import java.time.chrono.IsoChronology.IsoChronology;
+import java.time.chrono.IsoEra.IsoEra;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.LocalDateTime.LocalDateTime;
+import java.time.ZonedDateTime.ZonedDateTime;
+import java.time.OffsetDateTime.OffsetDateTime;
+import java.time.ZoneId.ZoneId;
+import java.time.ZoneOffset.ZoneOffset;
+import java.time.LocalTime.LocalTime;
+import java.time.OffsetTime.OffsetTime;
+import java.time.Period.Period;
+import java.time.DayOfWeek.DayOfWeek;
+import java.time.Month.Month;
+import java.util.stream.Stream.Stream;
+
+/**
+ * @version Java 11
+ */
+public classdiagram LocalDate{
+    public final class LocalDate extends Object implements Temporal, TemporalAdjuster, ChronoLocalDate, Serializable{
+        + Temporal adjustInto(Temporal temporal);
+        + LocalDateTime atStartOfDay();
+        + ZonedDateTime atStartOfDay(ZoneId zone);
+        + LocalDateTime atTime(int hour, int minute);
+        + LocalDateTime atTime(int hour, int minute, int second);
+        + LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond);
+        + LocalDateTime atTime(LocalTime time);
+        + OffsetDateTime atTime(OffsetTime time);
+        + int compareTo(ChronoLocalDate other);
+        + Stream<LocalDate> datesUntil(LocalDate endExclusive);
+        + Stream<LocalDate> datesUntil(LocalDate endExclusive, Period step);
+        + boolean equals(Object obj);
+        + String format(DateTimeFormatter formatter);
+        + int get(TemporalField field);
+        + IsoChronology getChronology();
+        + int getDayOfMonth();
+        + DayOfWeek getDayOfWeek();
+        + int getDayOfYear();
+        + IsoEra getEra();
+        + long getLong(TemporalField field);
+        + Month getMonth();
+        + int getMonthValue();
+        + int getYear();
+        + int hashCode();
+        + boolean isAfter(ChronoLocalDate other);
+        + boolean isBefore(ChronoLocalDate other);
+        + boolean isEqual(ChronoLocalDate other);
+        + boolean isLeapYear();
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + int lengthOfMonth();
+        + int lengthOfYear();
+        + LocalDate minus(long amountToSubtract, TemporalUnit unit);
+        + LocalDate minus(TemporalAmount amount);
+        + LocalDate minusDays(long daysToSubtract);
+        + LocalDate minusMonths(long monthsToSubtract);
+        + LocalDate minusWeeks(long weeksToSubtract);
+        + LocalDate minusYears(long yearsToSubtract);
+        + LocalDate plus(long amountToAdd, TemporalUnit unit);
+        + LocalDate plus(TemporalAmount amount);
+        + LocalDate plusDays(long daysToAdd);
+        + LocalDate plusMonths(long monthsToAdd);
+        + LocalDate plusWeeks(long weeksToAdd);
+        + LocalDate plusYears(long yearsToAdd);
+        //<R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + long toEpochSecond(LocalTime date, ZoneOffset offset);
+        + String toString();
+        + Period until(ChronoLocalDate endDateExclusive);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + LocalDate with(TemporalAdjuster adjuster);
+        + LocalDate with(TemporalField field, long newValue);
+        + LocalDate withDayOfMonth(int dayOfMonth);
+        + LocalDate withDayOfYear(int dayOfYear);
+        + LocalDate withMonth(int month);
+        + LocalDate withYear(int year);
+    }
+}

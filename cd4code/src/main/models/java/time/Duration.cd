@@ -1,0 +1,66 @@
+package java.time;
+
+import java.io.Serializable.Serializable;
+import java.lang.String.String;
+import java.lang.Object.Object;
+import java.lang.Comparable.Comparable;
+import java.util.List.List;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Duration{
+    public class Duration extends Object implements TemporalAmount, Serializable, Comparable<<Duration>>{
+        + Duration abs();
+        + Temporal addTo(Temporal temporal);
+        + int compareTo(Duration otherDuration);
+        + Duration dividedBy(long divisor);
+        + long dividedBy(Duration duration);
+        + boolean equals(Object obj);
+        + long get(TemporalUnit unit);
+        + int getNano();
+        + long getSeconds();
+        + List<TemporalUnit> getUnits();
+        + int hashCode();
+        + boolean isNegative();
+        + boolean isZero();
+        + Duration minus(long amountToSubtract, TemporalUnit unit);
+        + Duration minus(Duration duration);
+        + Duration minusDays(long daysToSubtract);
+        + Duration minusHours(long hoursToSubtract);
+        + Duration minusMillis(long millisToSubtract);
+        + Duration minusMinutes(long minutesToSubtract);
+        + Duration minusNanos(long nanosToSubtract);
+        + Duration minusSeconds(long secondsToSubtract);
+        + Duration multipliedBy(long multiplicand);
+        + Duration negated();
+        + Duration plus(long amountToAdd, TemporalUnit unit);
+        + Duration plus(Duration duration);
+        + Duration plusDays(long daysToAdd);
+        + Duration plusHours(long hoursToAdd);
+        + Duration plusMillis(long millisToAdd);
+        + Duration plusMinutes(long minutesToAdd);
+        + Duration plusNanos(long nanosToAdd);
+        + Duration plusSeconds(long secondsToAdd);
+        + Temporal subtractFrom(Temporal temporal);
+        + long toDays();
+        + long toDaysPart();
+        + long toHours();
+        + int toHoursPart();
+        + long toMillis();
+        + int toMillisPart();
+        + long toMinutes();
+        + int toMinutesPart();
+        + long toNanos();
+        + int toNanosPart();
+        + long toSeconds();
+        + int toSecondsPart();
+        + String toString();
+        + Duration truncatedTo(TemporalUnit unit);
+        + Duration withNanos(int nanoOfSecond);
+        + Duration withSeconds(long seconds);
+    }
+}

@@ -1,0 +1,90 @@
+package java.time;
+
+import java.io.Serializable.Serializable;
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.lang.Comparable.Comparable;
+import java.time.OffsetDateTime.OffsetDateTime;
+import java.time.ZonedDateTime.ZonedDateTime;
+import java.time.ZoneId.ZoneId;
+import java.time.DayOfWeek.DayOfWeek;
+import java.time.Month.Month;
+import java.time.LocalDate.LocalDate;
+import java.time.LocalTime.LocalTime;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.chrono.ChronoLocalDateTime.ChronoLocalDateTime;
+
+
+/**
+ * @version Java 11
+ */
+public classdiagram LocalDateTime{
+    public final class LocalDateTime extends Object implements Temporal, TemporalAdjuster, ChronoLocalDateTime, Serializable, Comparable <<ChronoLocalDateTime>>{
+        + Temporal adjustInto(Temporal temporal);
+        + OffsetDateTime atOffset(ZoneOffset offset);
+        + ZonedDateTime atZone(ZoneId zone);
+        + int compareTo(ChronoLocalDateTime<?> other);
+        + boolean equals(Object obj);
+        + String format(DateTimeFormatter formatter);
+        + int get(TemporalField field);
+        + int getDayOfMonth();
+        + DayOfWeek getDayOfWeek();
+        + int getDayOfYear();
+        + int getHour();
+        + long getLong(TemporalField field);
+        + int getMinute();
+        + Month getMonth();
+        + int getMonthValue();
+        + int getNano();
+        + int getSecond();
+        + int getYear();
+        + int hashCode();
+        + boolean isAfter(ChronoLocalDateTime<?> other);
+        + boolean isBefore(ChronoLocalDateTime<?> other);
+        + boolean isEqual(ChronoLocalDateTime<?> other);
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + LocalDateTime minus(long amountToSubtract, TemporalUnit unit);
+        + LocalDateTime minus(TemporalAmount amount);
+        + LocalDateTime minusDays(long days);
+        + LocalDateTime minusHours(long hours);
+        + LocalDateTime minusMinutes(long minutes);
+        + LocalDateTime minusMonths(long months);
+        + LocalDateTime minusNanos(long nanos);
+        + LocalDateTime minusSeconds(long seconds);
+        + LocalDateTime minusWeeks(long weeks);
+        + LocalDateTime minusYears(long years);
+        + LocalDateTime plus(long amountToAdd, TemporalUnit unit);
+        + LocalDateTime plus(TemporalAmount amount);
+        + LocalDateTime plusDays(long days);
+        + LocalDateTime plusHours(long hours);
+        + LocalDateTime plusMinutes(long minutes);
+        + LocalDateTime plusMonths(long months);
+        + LocalDateTime plusNanos(long nanos);
+        + LocalDateTime plusSeconds(long seconds);
+        + LocalDateTime plusWeeks(long weeks);
+        + LocalDateTime plusYears(long years);
+        //<R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + LocalDate toLocalDate();
+        + LocalTime toLocalTime();
+        + String toString();
+        + LocalDateTime truncatedTo(TemporalUnit unit);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + LocalDateTime with(TemporalAdjuster adjuster);
+        + LocalDateTime with(TemporalField field, long newValue);
+        + LocalDateTime withDayOfMonth(int dayOfMonth);
+        + LocalDateTime withDayOfYear(int dayOfYear);
+        + LocalDateTime withHour(int hour);
+        + LocalDateTime withMinute(int minute);
+        + LocalDateTime withMonth(int month);
+        + LocalDateTime withNano(int nanoOfSecond);
+        + LocalDateTime withSecond(int second);
+        + LocalDateTime withYear(int year);
+    }
+}

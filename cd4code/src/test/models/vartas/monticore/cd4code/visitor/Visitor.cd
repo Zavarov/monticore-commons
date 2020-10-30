@@ -1,0 +1,28 @@
+package vartas.monticore.cd4code.visitor;
+
+import com.google.common.cache.Cache.Cache;
+import java.lang.String.String;
+import java.util.Map.Map;
+import java.util.Optional.Optional;
+import java.util.List.List;
+
+classdiagram Visitor{
+    public class Member{
+        Optional<Role> role;
+        String name;
+    }
+    public class Message{
+        String content;
+        Member author;
+    }
+    public class Guild{
+        Map<Member, Message> messages;
+        Cache<String, Member> members;
+    }
+    public class TextChannel{
+        List<Message> messages;
+    }
+    public class Role{
+        long id;
+    }
+}

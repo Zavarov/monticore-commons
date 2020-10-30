@@ -1,0 +1,10 @@
+package vartas.monticore.cd4code.decorator;
+
+import java.util.Optional.Optional;
+
+classdiagram Optional{
+    public class User{
+        - int id;
+        - Optional<String> nickname;
+    }
+}

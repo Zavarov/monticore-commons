@@ -1,0 +1,18 @@
+package java.lang;
+
+import java.lang.String.String;
+import java.util.stream.IntStream.IntStream;
+
+/**
+ * @version Java 11
+ */
+public classdiagram CharSequence{
+    public interface CharSequence{
+        char charAt(int index);
+        IntStream chars();
+        IntStream codePoints();
+        int length();
+        CharSequence subSequence(int beginIndex, int endIndex);
+        String toString();
+    }
+}

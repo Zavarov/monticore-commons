@@ -1,0 +1,44 @@
+package java.nio.file;
+
+import java.lang.String.String;
+import java.lang.Object.Object;
+import java.lang.Comparable.Comparable;
+import java.lang.Iterable.Iterable;
+import java.nio.file.Watchable.Watchable;
+import java.util.Iterator.Iterator;
+/**
+ * @version Java 11
+ */
+public classdiagram Path{
+    public interface Path extends Watchable, Comparable, Iterable <<Path>>{
+        int compareTo(Path other);
+        boolean endsWith(String other);
+        boolean endsWith(Path other);
+        boolean equals(Object other);
+        Path getFileName();
+        //FileSystem getFileSystem();
+        Path getName(int index);
+        int getNameCount();
+        Path getParent();
+        Path getRoot();
+        int hashCode();
+        boolean isAbsolute();
+        Iterator<Path> iterator();
+        Path normalize();
+        //WatchKey register(WatchService watcher, WatchEvent.Kind<?>... events);
+        //WatchKey register(WatchService watcher, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifiers);
+        Path relativize(Path other);
+        Path resolve(String other);
+        Path resolve(Path other);
+        Path resolveSibling(String other);
+        Path resolveSibling(Path other);
+        boolean startsWith(String other);
+        boolean startsWith(Path other);
+        Path subpath(int beginIndex, int endIndex);
+        Path toAbsolutePath();
+        //File toFile();
+        //Path toRealPath(LinkOption... options);
+        String toString();
+        //URI toUri();
+    }
+}

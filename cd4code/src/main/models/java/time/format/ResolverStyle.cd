@@ -1,0 +1,12 @@
+package java.time.format;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ResolverStyle{
+    public enum ResolverStyle{
+        LENIENT,
+        SMART,
+        STRICT;
+    }
+}

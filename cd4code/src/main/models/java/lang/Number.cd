@@ -1,0 +1,18 @@
+package java.lang;
+
+import java.lang.Object.Object;
+import java.io.Serializable.Serializable;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Number{
+    public abstract class Number extends Object implements Serializable{
+        + byte byteValue();
+        + abstract double doubleValue();
+        + abstract float floatValue();
+        + abstract int intValue();
+        + abstract long longValue();
+        + short shortValue();
+    }
+}

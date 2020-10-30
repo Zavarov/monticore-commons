@@ -1,0 +1,11 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram BiConsumer{
+    public interface BiConsumer <<T, U>> {
+        void accept(T t, U u);
+        BiConsumer<T, U> andThen(BiConsumer<? super T, ? super U> after);
+    }
+}

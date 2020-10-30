@@ -1,0 +1,72 @@
+package java.math;
+
+import java.lang.String.String;
+import java.lang.Object.Object;
+import java.lang.Number.Number;
+import java.lang.Comparable.Comparable;
+import java.util.Random.Random;
+
+/**
+ * @version Java 11
+ */
+public classdiagram BigInteger{
+    public class BigInteger extends Number implements Comparable <<BigInteger>>{
+        BigInteger(byte[] val);
+        BigInteger(byte[] val, int off, int len);
+        BigInteger(int signum, byte[] magnitude);
+        BigInteger(int signum, byte[] magnitude, int off, int len);
+        BigInteger(int bitLength, int certainty, Random rnd);
+        BigInteger(int numBits, Random rnd);
+        BigInteger(String val);
+        BigInteger(String val, int radix);
+
+        + BigInteger abs();
+        + BigInteger add(BigInteger val);
+        + BigInteger and(BigInteger val);
+        + BigInteger andNot(BigInteger val);
+        + int bitCount();
+        + int bitLength();
+        + byte byteValueExact();
+        + BigInteger clearBit(int n);
+        + int compareTo(BigInteger val);
+        + BigInteger divide(BigInteger val);
+        + BigInteger[] divideAndRemainder(BigInteger val);
+        + double doubleValue();
+        + boolean equals(Object x);
+        + BigInteger flipBit(int n);
+        + float floatValue();
+        + BigInteger gcd(BigInteger val);
+        + int getLowestBit();
+        + int hashCode();
+        + int intValue();
+        + int intValueExact();
+        + boolean isProbablePrime(int certainty);
+        + long longValue();
+        + long longValueExact();
+        + BigInteger max(BigInteger val);
+        + BigInteger min(BigInteger val);
+        + BigInteger mod(BigInteger m);
+        + BigInteger modInverse(BigInteger m);
+        + BigInteger modPow(BigInteger exponent, BigInteger m);
+        + BigInteger multiply(BigInteger val);
+        + BigInteger negate();
+        + BigInteger nextProbablePrime();
+        + BigInteger not();
+        + BigInteger or(BigInteger val);
+        + BigInteger pow(int exponent);
+        + BigInteger remainder(BigInteger val);
+        + BigInteger setBit(int n);
+        + BigInteger shiftLeft(int n);
+        + BigInteger shiftRight(int n);
+        + short shortValueExact();
+        + int signum();
+        + BigInteger sqrt();
+        + BigInteger[] sqrtAndRemainder();
+        + BigInteger subtract(BigInteger val);
+        + boolean testBit(int n);
+        + byte[] toByteArray();
+        + String toString();
+        + String toString(int radix);
+        + BigInteger xor(BigInteger val);
+    }
+}

@@ -1,0 +1,13 @@
+package java.util.function;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Predicate{
+    public interface Predicate <<T>> {
+        Predicate<T> and(Predicate<? super T> other);
+        Predicate<T> negate();
+        Predicate<T> or(Predicate<? super T> other);
+        boolean test(T t);
+    }
+}

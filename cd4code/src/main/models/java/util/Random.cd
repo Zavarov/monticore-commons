@@ -1,0 +1,40 @@
+package java.util;
+
+import java.lang.Object.Object;
+import java.io.Serializable.Serializable;
+import java.util.stream.DoubleStream.DoubleStream;
+import java.util.stream.IntStream.IntStream;
+import java.util.stream.LongStream.LongStream;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Random{
+    public class Random extends Object implements Serializable{
+        Random();
+        Random(long seed);
+
+        + DoubleStream doubles();
+        + DoubleStream doubles(double randomNumberOrigin, double RandomNumberBound);
+        + DoubleStream doubles(long streamSize);
+        + DoubleStream doubles(long streamSize, double randomNumberOrigin, double RandomNumberBound);
+        + IntStream ints();
+        + IntStream ints(int randomNumberOrigin, int RandomNumberBound);
+        + IntStream ints(long streamSize);
+        + IntStream ints(long streamSize, int randomNumberOrigin, int RandomNumberBound);
+        + LongStream longs();
+        + LongStream longs(long randomNumberOrigin, long RandomNumberBound);
+        + LongStream longs(long streamSize);
+        + LongStream longs(long streamSize, long randomNumberOrigin, long RandomNumberBound);
+        # int next(int bits);
+        + boolean nextBoolean();
+        + void nextBytes(byte[] bytes);
+        + double nextDouble();
+        + float nextFloat();
+        + double nextGaussian();
+        + int nextInt();
+        + int nextInt(int bound);
+        + long nextLong();
+        + void setSeed(long seed);
+    }
+}

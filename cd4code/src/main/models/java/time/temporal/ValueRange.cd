@@ -1,0 +1,27 @@
+package java.time.temporal;
+
+import java.io.Serializable.Serializable;
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.time.temporal.TemporalField.TemporalField;
+
+/**
+ * @version Java 11
+ */
+public classdiagram ValueRange{
+    public final class ValueRange extends Object implements Serializable{
+        + int checkValidIntValue(long value, TemporalField field);
+        + long checkValidValue(long checkValidValue, TemporalField field);
+        + boolean equals(Object obj);
+        + long getLargestMinimum();
+        + long getMaximum();
+        + long getMinimum();
+        + long getSmallestMaximum();
+        + int hashCode();
+        + boolean isFixed();
+        + boolean isIntValue();
+        + boolean isValidIntValue(long value);
+        + boolean isValidValue(long value);
+        + String toString();
+    }
+}

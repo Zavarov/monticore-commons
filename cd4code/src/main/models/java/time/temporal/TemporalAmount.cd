@@ -1,0 +1,17 @@
+package java.time.temporal;
+
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.util.List.List;
+
+/**
+ * @version Java 11
+ */
+public classdiagram TemporalAmount{
+    public interface TemporalAmount{
+        Temporal addTo(Temporal temporal);
+        long get(TemporalUnit unit);
+        List<TemporalUnit> getUnits();
+        Temporal subtractFrom(Temporal temporal);
+    }
+}

@@ -1,0 +1,67 @@
+package java.time;
+
+import java.io.Serializable.Serializable;
+import java.lang.Comparable.Comparable;
+import java.lang.Object.Object;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.LocalDateTime.LocalDateTime;
+import java.time.LocalDate.LocalDate;
+import java.time.OffsetDateTime.OffsetDateTime;
+import java.time.ZoneOffset.ZoneOffset;
+
+/**
+ * @version Java 11
+ */
+public classdiagram LocalTime{
+    public final class LocalTime extends Object implements Temporal, TemporalAdjuster, Serializable, Comparable <<LocalTime>>{
+        + Temporal adjustInto(Temporal temporal);
+        + LocalDateTime atDate(LocalDate date);
+        + OffsetDateTime atOffset(ZoneOffset offset);
+        + int compareTo(LocalTime other);
+        + boolean equals(Object obj);
+        + String format(DateTimeFormatter formatter);
+        + int get(TemporalField field);
+        + int getHour();
+        + long getLong(TemporalField field);
+        + int getMinute();
+        + int getNano();
+        + int getSecond();
+        + int hashCode();
+        + boolean isAfter(LocalTime other);
+        + boolean isBefore(LocalTime other);
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + LocalTime minus(long amountToSubtract, TemporalUnit unit);
+        + LocalTime minus(TemporalAmount amount);
+        + LocalTime minusHours(long hoursToSubtract);
+        + LocalTime minusMinutes(long minutesToSubtract);
+        + LocalTime minusNanos(long nanosToSubtract);
+        + LocalTime minusSeconds(long secondsToSubtract);
+        + LocalTime plus(long amountToAdd, TemporalUnit unit);
+        + LocalTime plus(TemporalAmount amount);
+        + LocalTime plusHours(long hoursToAdd);
+        + LocalTime plusMinutes(long minutesToAdd);
+        + LocalTime plusNanos(long nanosToAdd);
+        + LocalTime plusSeconds(long secondsToAdd);
+        //<R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + long toEpochSecond(LocalDate date, ZoneOffset offset);
+        + long toNanoOfDay();
+        + long toSecondOfDay();
+        + String toString();
+        + LocalTime truncatedTo(TemporalUnit unit);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + LocalTime with(TemporalAdjuster adjuster);
+        + LocalTime with(TemporalField field, long newValue);
+        + LocalTime withHour(int hour);
+        + LocalTime withMinute(int minute);
+        + LocalTime withNano(int nanoOfSecond);
+        + LocalTime withSecond(int second);
+    }
+}

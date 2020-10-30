@@ -1,5 +1,6 @@
 package java.util;
 
+import java.lang.Object.Object;
 import java.util.Collection.Collection;
 import java.util.Comparator.Comparator;
 import java.util.ListIterator.ListIterator;

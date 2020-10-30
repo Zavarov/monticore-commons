@@ -1,0 +1,21 @@
+package java.time.temporal;
+
+import java.lang.String.String;
+import java.time.Duration.Duration;
+import java.time.temporal.Temporal.Temporal;
+
+/**
+ * @version Java 11
+ */
+public classdiagram TemporalUnit{
+    public interface TemporalUnit{
+        //<R extends Temporal> R addTo(R temporal, long amount);
+        long between(Temporal temporal1Inclusive, Temporal temporal2Exclusive);
+        Duration getDuration();
+        boolean isDateBased();
+        boolean isDurationEstimated();
+        boolean isSupportedBy(Temporal temporal);
+        boolean isTimeBased();
+        String toString();
+    }
+}

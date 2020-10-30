@@ -30,9 +30,13 @@ public classdiagram Cache{
         long size();
         CacheStats stats();
         //Custom Methods
+        <<template="decorator.com.google.common.cache.Cache.Get">>
         V get(K key) throws ExecutionException;
+        <<template="decorator.com.google.common.cache.Cache.GetUnchecked">>
         V getUnchecked(K key) throws UncheckedExecutionException;
-        Collection<V> values();
+        <<template="decorator.com.google.common.cache.Cache.Keys">>
         Set<K> keys();
+        <<template="decorator.com.google.common.cache.Cache.Values">>
+        Collection<V> values();
     }
 }
