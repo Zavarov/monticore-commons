@@ -8,6 +8,7 @@ grammar ArithmeticExpressions extends de.monticore.expressions.CommonExpressions
     start Expression;
 
     //Simple literals only allow non-negative numeric literals
+    @Override
     LiteralExpression implements Expression <340> =
         SignedLiteral
     ;
