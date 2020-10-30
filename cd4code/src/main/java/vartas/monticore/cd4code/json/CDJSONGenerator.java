@@ -81,7 +81,7 @@ public class CDJSONGenerator extends CDPreprocessorGenerator {
     private List<String> buildPackage(ASTCDDefinition ast){
         List<String> packageList = new ArrayList<>();
         Splitters.DOT.split(ast.getSymbol().getPackageName()).forEach(packageList::add);
-        packageList.add(CDGeneratorHelper.JSON_MODULE);
+        packageList.add(CDGeneratorHelper.JSON_PACKAGE);
         return packageList;
     }
 

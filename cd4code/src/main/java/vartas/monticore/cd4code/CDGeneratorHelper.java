@@ -81,10 +81,15 @@ public class CDGeneratorHelper {
     //----------------------------------------------------------------------------------------------------------------//
     @Nonnull
     public static final String FACTORY_MODULE = "factory";
+    public static final String FACTORY_PACKAGE = "$" + FACTORY_MODULE;
     @Nonnull
     public static final String VISITOR_MODULE = "visitor";
     @Nonnull
+    public static final String VISITOR_PACKAGE = "$" + VISITOR_MODULE;
+    @Nonnull
     public static final String JSON_MODULE = "json";
+    @Nonnull
+    public static final String JSON_PACKAGE = "$" + JSON_MODULE;
     @Nonnull
     public static final String DECORATOR_MODULE = "decorator";
     @Nonnull

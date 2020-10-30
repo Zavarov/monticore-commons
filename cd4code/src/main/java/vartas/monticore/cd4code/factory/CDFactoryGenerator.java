@@ -96,7 +96,7 @@ public class CDFactoryGenerator extends CDPreprocessorGenerator {
     private List<String> buildPackage(ASTCDDefinition ast){
         List<String> packageList = new ArrayList<>();
         Splitters.DOT.split(ast.getSymbol().getPackageName()).forEach(packageList::add);
-        packageList.add(CDGeneratorHelper.FACTORY_MODULE);
+        packageList.add(CDGeneratorHelper.FACTORY_PACKAGE);
         return packageList;
     }
 

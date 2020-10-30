@@ -493,7 +493,7 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
         private void handleImport(ASTCDDefinition ast){
             String importName = Joiners.DOT.join(
                     cdDefinitionSymbol.getPackageName(),
-                    CDGeneratorHelper.VISITOR_MODULE,
+                    CDGeneratorHelper.VISITOR_PACKAGE,
                     cdParameter.getName(),
                     cdVisitor.getName()
             );
