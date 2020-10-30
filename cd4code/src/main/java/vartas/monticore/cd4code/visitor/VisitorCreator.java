@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * and then continue with all of the classes attributes. If one of them is associated with a type in the class diagram,
  * the visitor is applied on it. In case of container classes, the visitor is applied on all contained elements.<br>
  * <code>visit</code> will access the elements in inorder, while <code>endVisit</code> accesses them in postorder.
- * @link https://en.wikipedia.org/wiki/Visitor_pattern Visitor
+ * @see <a href="https://en.wikipedia.org/wiki/Visitor_pattern">https://en.wikipedia.org/wiki/Visitor_pattern</a>
  */
 public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterface> {
     /**
