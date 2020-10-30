@@ -85,7 +85,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
 
             if (astModifier.isPresentStereotype()) {
                 for (ASTCDStereoValue stereoValue : astModifier.getStereotype().getValueList()) {
-                    Stereotype stereotype = new Stereotype(stereoValue.getName(), stereoValue.getName());
+                    Stereotype stereotype = new Stereotype(stereoValue.getName(), stereoValue.getValue());
                     fieldSymbol.addStereotype(stereotype);
                 }
             }
