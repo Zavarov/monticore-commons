@@ -24,7 +24,7 @@
     <groupId>zav.mc</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>2.4.1</version>
+    <version>2.4.2</version>
     <modules>
         <module>core</module>
         <module>numbers</module>
@@ -122,7 +122,13 @@
             <groupId>de.monticore</groupId>
             <artifactId>monticore-generator</artifactId>
             <version>${monticore.version}</version>
-            <scope>provided</scope>
+            <!-- Use slf4j-jdk14 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Test Dependencies -->
