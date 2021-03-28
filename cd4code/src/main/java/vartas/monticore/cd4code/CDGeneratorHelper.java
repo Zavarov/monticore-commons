@@ -20,6 +20,7 @@ package vartas.monticore.cd4code;
 import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
 import de.monticore.cd.cd4analysis._ast.ASTCDParameter;
 import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._symboltable.CDDefinitionSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.codegen.mc2cd.TransformationHelper;
@@ -32,7 +33,7 @@ import de.monticore.utils.Names;
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CDGeneratorHelper {
@@ -81,15 +82,16 @@ public class CDGeneratorHelper {
     //----------------------------------------------------------------------------------------------------------------//
     @Nonnull
     public static final String FACTORY_MODULE = "factory";
-    public static final String FACTORY_PACKAGE = "$" + FACTORY_MODULE;
+    @Nonnull
+    public static final String FACTORY_PACKAGE = "_" + FACTORY_MODULE;
     @Nonnull
     public static final String VISITOR_MODULE = "visitor";
     @Nonnull
-    public static final String VISITOR_PACKAGE = "$" + VISITOR_MODULE;
+    public static final String VISITOR_PACKAGE = "_" + VISITOR_MODULE;
     @Nonnull
     public static final String JSON_MODULE = "json";
     @Nonnull
-    public static final String JSON_PACKAGE = "$" + JSON_MODULE;
+    public static final String JSON_PACKAGE = "_" + JSON_MODULE;
     @Nonnull
     public static final String DECORATOR_MODULE = "decorator";
     @Nonnull
@@ -105,7 +107,9 @@ public class CDGeneratorHelper {
      * to use a separate key.
      */
     @Nonnull
-    public static final String KEY_LABEL = "key";
+    public static final String JSON_KEY = "key";
+    @Nonnull
+    public static final String JSON_IGNORE = "ignore";
     @Nonnull
     public static final String CONTAINER_LABEL = "container";
     @Nonnull
@@ -176,5 +180,46 @@ public class CDGeneratorHelper {
 
     public static boolean inLocalScope(ASTCDType node, ASTCDAttribute ast){
         return inLocalScope(node, ast.getSymbol());
+    }
+
+    public static Set<CDTypeSymbol> getSuperTypesTransitive(CDTypeSymbol symbol){
+        Set<CDTypeSymbol> symbols = new HashSet<>();
+        Deque<CDTypeSymbol> remaining = new LinkedList<>();
+
+        remaining.add(symbol);
+        while(!remaining.isEmpty()){
+            symbol = remaining.remove();
+            for(CDTypeSymbol supertype : symbol.getSuperTypes()){
+                //Avoid recursive loops caused by self-references
+                if(!symbols.contains(supertype)) {
+                    symbols.add(supertype);
+                    remaining.add(supertype);
+                }
+            }
+        }
+
+        return symbols;
+    }
+
+    public static Set<String> getImports(CDDefinitionSymbol symbol){
+        //Add local imports
+        Set<String> imports = new HashSet<>(symbol.getImports());
+
+        //Add all inherited imports
+        for(CDTypeSymbol type : symbol.getTypes())
+            for(CDTypeSymbol supertype : getSuperTypesTransitive(type))
+                imports.addAll((getImports(supertype)));
+
+        return imports;
+    }
+
+    public static Set<String> getImports(CDTypeSymbol symbol){
+        Set<String> imports = new HashSet<>();
+
+        //CDType -> CDDefinition::SpannedScope -> CDArtifact::SpannedScope
+        for(CDDefinitionSymbol definition : symbol.getEnclosingScope().getEnclosingScope().getLocalCDDefinitionSymbols())
+            imports.addAll(definition.getImports());
+
+        return imports;
     }
 }

@@ -20,6 +20,7 @@ package vartas.monticore.cd4code._symboltable;
 import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.*;
 import de.monticore.cd.cd4code.CD4CodePrettyPrinterDelegator;
+import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -29,7 +30,6 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcfullgenerictypes._ast.ASTMCWildcardTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
-import de.monticore.types.prettyprint.MCCollectionTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 
@@ -54,7 +54,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
         if (astStereotype != null) {
             for(ASTCDStereoValue value : astStereotype.getValueList()) {
                 //Used to be (getName, getName)
-                methodSymbol.addStereotype(new Stereotype(value.getName(), value.getValue()));
+                methodSymbol.addStereotype(new Stereotype(value.getName(), value.isPresentValue() ? value.getValue() : null));
             }
         }
 
@@ -85,7 +85,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
 
             if (astModifier.isPresentStereotype()) {
                 for (ASTCDStereoValue stereoValue : astModifier.getStereotype().getValueList()) {
-                    Stereotype stereotype = new Stereotype(stereoValue.getName(), stereoValue.getValue());
+                    Stereotype stereotype = new Stereotype(stereoValue.getName(), stereoValue.isPresentValue() ? stereoValue.getValue() : null);
                     fieldSymbol.addStereotype(stereotype);
                 }
             }
@@ -120,7 +120,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
                     ASTMCBasicTypeArgument astmcBasicTypeArgument = (ASTMCBasicTypeArgument)astTypeArgument;
                     if (astmcBasicTypeArgument.getMCQualifiedType() != null) {
                         ASTMCQualifiedType astTypeNoBound = astmcBasicTypeArgument.getMCQualifiedType();
-                        typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astTypeNoBound.printType(new MCCollectionTypesPrettyPrinter(new IndentPrinter())), this.getCurrentScope().orElseThrow());
+                        typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astTypeNoBound.printType(new MCFullGenericTypesPrettyPrinter(new IndentPrinter())), this.getCurrentScope().orElseThrow());
                         this.addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound);
                         actualTypeArguments.add(typeArgumentSymbolReference);
                     } else {
@@ -130,7 +130,7 @@ public class CD4AnalysisSTCForCD4Code extends de.monticore.cd.cd4code._symboltab
                     ASTMCPrimitiveTypeArgument astmcPrimitiveTypeArgument = (ASTMCPrimitiveTypeArgument)astTypeArgument;
                     if (astmcPrimitiveTypeArgument.getMCPrimitiveType() != null) {
                         ASTMCType astTypeNoBound = astmcPrimitiveTypeArgument.getMCPrimitiveType();
-                        typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astTypeNoBound.printType(new MCCollectionTypesPrettyPrinter(new IndentPrinter())), this.getCurrentScope().orElseThrow());
+                        typeArgumentSymbolReference = new CDTypeSymbolSurrogate(astTypeNoBound.printType(new MCFullGenericTypesPrettyPrinter(new IndentPrinter())), this.getCurrentScope().orElseThrow());
                         this.addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound);
                         actualTypeArguments.add(typeArgumentSymbolReference);
                     }

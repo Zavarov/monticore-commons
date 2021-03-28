@@ -1,0 +1,13 @@
+package java.util;
+
+import java.lang.Object.Object;
+import java.util.Collection.Collection;
+
+/**
+ * @version Java 11
+ */
+public classdiagram AbstractCollection{
+    <<container>>
+    public abstract class AbstractCollection extends Object implements Collection <<E>> {
+    }
+}

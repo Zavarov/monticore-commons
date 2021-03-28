@@ -1,0 +1,40 @@
+package java.time;
+
+import java.time.temporal.TemporalAccessor.TemporalAccessor;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+
+/**
+ * @version Java 11
+ */
+public classdiagram Month{
+    public enum Month implements TemporalAccessor, TemporalAdjuster{
+        JANUARY,
+        FEBRUARY,
+        MARCH,
+        APRIL,
+        MAY,
+        JUNE,
+        JULY,
+        AUGUST,
+        SEPTEMBER,
+        OCTOBER,
+        NOVEMBER,
+        DECEMBER;
+
+        + Temporal adjustInto(Temporal temporal);
+        + int firstDayOfYear(boolean leapYear);
+        + Month firstMonthOfQuarter();
+        + int get(TemporalField field);
+        + String getDisplayName(TextStyle style, Locale locale);
+        + long getLong(TemporalField field);
+        + int getValue();
+        + boolean isSupported(TemporalField field);
+        + int length(boolean leapYear);
+        + int maxLength();
+        + int minLength();
+        + Month minus(long months);
+        + Month plus(long months);
+//      + <R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+    }
+}

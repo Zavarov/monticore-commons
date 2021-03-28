@@ -1,0 +1,33 @@
+package java.time;
+
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.lang.Comparable.Comparable;
+import java.lang.Serializable.Serializable;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAccessor.TemporalAccessor;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.zone.ZoneRules.ZoneRules;
+import java.time.ZoneId.ZoneId;
+/**
+ * @version Java 11
+ */
+public classdiagram ZoneOffset{
+    public abstract class ZoneOffset extends ZoneId implements TemporalAccessor, TemporalAdjuster, Comparable<<ZoneOffset>>{
+        + Temporal adjustInto(Temporal temporal);
+        + int compareTo(ZoneOffset other);
+        + boolean equals(Object obj);
+        + int get(TemporalField field);
+        + String getId();
+        + long getLong(TemporalField field);
+        + ZoneRules getRules();
+        + int getTotalSeconds();
+        + int hashCode();
+        + boolean isSupported(TemporalField field);
+//        + <R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + String toString();
+    }
+}

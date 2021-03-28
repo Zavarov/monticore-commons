@@ -2,6 +2,7 @@ package java.util.stream;
 
 import java.lang.Iterable.Iterable;
 import java.util.stream.Stream.Stream;
+import java.util.stream.BaseStream.BaseStream;
 import java.util.function.IntFunction.IntFunction;
 import java.util.function.Predicate.Predicate;
 

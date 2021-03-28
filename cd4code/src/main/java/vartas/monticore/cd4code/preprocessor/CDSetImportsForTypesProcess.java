@@ -46,6 +46,7 @@ public class CDSetImportsForTypesProcess extends CDProcess {
         importSet = new TreeSet<>(Comparator.comparing(Joiners.DOT::join));
         //Load imports for this CD
         loadImports(ast.getSymbol());
+        ast.getSymbol().getSuperTypesTransitive().forEach(this::loadImports);
     }
 
     @Override
@@ -53,6 +54,7 @@ public class CDSetImportsForTypesProcess extends CDProcess {
         //Load the imports from the CDs the type is associated with. We need those due to the decorator.
         if (!CDGeneratorHelper.isPrimitive(ast.getMCType())) {
             CDTypeSymbol symbol = ast.getSymbol().getType().lazyLoadDelegate();
+            loadImport(symbol); //Everything in the same scope as the symbol may not be explicitly imported
             loadImports(symbol);
             symbol.getSuperTypesTransitive().forEach(this::loadImports);
         }
@@ -63,6 +65,13 @@ public class CDSetImportsForTypesProcess extends CDProcess {
         glex.replaceTemplate(CDGeneratorHelper.IMPORT_HOOK, ast, new TemplateHookPoint("core.Import", importSet));
     }
 
+    private void loadImport(CDTypeSymbol cdTypeSymbol){
+        //Import all symbols in the shared scope
+        for(CDTypeSymbol symbol : cdTypeSymbol.getEnclosingScope().getLocalCDTypeSymbols()){
+            loadImport(symbol.getFullName());
+        }
+    }
+
     private void loadImports(CDTypeSymbol cdTypeSymbol){
         //CDType -> CDDefinition::SpannedScope -> CDArtifact::SpannedScope
         for(CDDefinitionSymbol symbol : cdTypeSymbol.getEnclosingScope().getEnclosingScope().getLocalCDDefinitionSymbols())
@@ -71,10 +80,14 @@ public class CDSetImportsForTypesProcess extends CDProcess {
 
     private void loadImports(CDDefinitionSymbol symbol){
         for(String qualifiedImport : symbol.getImports()){
-            List<String> qualifiedNames = Lists.newArrayList(Splitters.DOT.split(qualifiedImport));
-            //Remove the Class Diagram from the import.
-            qualifiedNames.remove(qualifiedNames.size() - 2);
-            importSet.add(qualifiedNames);
+            loadImport(qualifiedImport);
         }
+    }
+
+    private void loadImport(String qualifiedImport){
+        List<String> qualifiedNames = Lists.newArrayList(Splitters.DOT.split(qualifiedImport));
+        //Remove the Class Diagram from the import.
+        qualifiedNames.remove(qualifiedNames.size() - 2);
+        importSet.add(qualifiedNames);
     }
 }

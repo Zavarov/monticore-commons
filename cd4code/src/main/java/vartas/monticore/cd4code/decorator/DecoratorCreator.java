@@ -132,7 +132,7 @@ public class DecoratorCreator extends AbstractCreator<ASTCDDefinition, ASTCDDefi
 
         /**
          * Counts one of the qualified generic types of the current {@link ASTCDAttribute}.
-         * @param node One of the qualified types of teh current {@link ASTCDAttribute}.
+         * @param node One of the qualified types of the current {@link ASTCDAttribute}.
          */
         @Override
         public void visit(ASTMCQualifiedType node){

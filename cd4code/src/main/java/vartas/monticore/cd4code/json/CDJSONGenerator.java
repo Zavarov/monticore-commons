@@ -64,6 +64,8 @@ public class CDJSONGenerator extends CDPreprocessorGenerator {
     private List<ASTMCImportStatement> buildMCImportStatements(ASTCDDefinition ast){
         List<String> imports = new ArrayList<>(ast.getSymbol().getImports());
 
+        //Required by the attributes
+        imports.add("java.lang.String.String");
         //Required by OfJson
         imports.add("java.io.IOException.IOException");
         imports.add("java.nio.file.Path.Path");

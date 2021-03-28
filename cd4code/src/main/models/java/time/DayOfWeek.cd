@@ -1,0 +1,30 @@
+package java.time;
+
+import java.time.temporal.TemporalAccessor.TemporalAccessor;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+
+/**
+ * @version Java 11
+ */
+public classdiagram DayOfWeek{
+    public enum DayOfWeek implements TemporalAccessor, TemporalAdjuster{
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+        SUNDAY;
+
+        + Temporal adjustInto(Temporal temporal);
+        + int get(TemporalField field);
+        + String getDisplayName(TextStyle style, Locale locale);
+        + long getLong(TemporalField field);
+        + int getValue();
+        + boolean isSupported(TemporalField field);
+        + DayOfWeek minus(long days);
+        + DayOfWeek plus(long days);
+//      + <R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+    }
+}

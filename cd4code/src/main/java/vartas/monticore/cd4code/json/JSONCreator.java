@@ -1,17 +1,17 @@
 package vartas.monticore.cd4code.json;
 
-import com.google.common.collect.Lists;
 import de.monticore.cd.cd4analysis.CD4AnalysisMill;
-import de.monticore.cd.cd4analysis._ast.ASTCDAttribute;
-import de.monticore.cd.cd4analysis._ast.ASTCDClass;
-import de.monticore.cd.cd4analysis._ast.ASTCDMethod;
-import de.monticore.cd.cd4analysis._ast.ASTCDType;
+import de.monticore.cd.cd4analysis._ast.*;
 import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 import de.monticore.cd.cd4analysis._symboltable.Stereotype;
-import de.monticore.cd.cd4analysis._visitor.CD4AnalysisVisitor;
+import de.monticore.cd.cd4code._visitor.CD4CodeVisitor;
 import de.monticore.cd.facade.CDModifier;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.generating.templateengine.StringHookPoint;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
+import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
+import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import de.monticore.utils.Names;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -21,10 +21,7 @@ import vartas.monticore.cd4code.CDMethodComparator;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * This class is responsible for creating the JSON representation of a corresponding {@link ASTCDType}. The serialization
@@ -64,6 +61,8 @@ public class JSONCreator extends CDCreator<ASTCDType> {
     public static final String FROM_JSON_ATTRIBUTE_METHOD = "protected void $from%s(JSONObject source, %s target);";
     public static final String TO_JSON_ATTRIBUTE_METHOD = "protected void $to%s(%s source, JSONObject target);";
 
+    private MCFullGenericTypesPrettyPrinter typePrinter = new MCFullGenericTypesPrettyPrinter(new IndentPrinter());
+
     private JSONCreator(@Nonnull GlobalExtensionManagement glex){
         super(glex);
     }
@@ -77,6 +76,7 @@ public class JSONCreator extends CDCreator<ASTCDType> {
         ASTCDClass json = buildClass(ast);
 
         json.addAllCDMethods(buildMethods(ast));
+        json.addAllCDAttributes(buildAttributes(ast));
 
         return json;
     }
@@ -86,6 +86,30 @@ public class JSONCreator extends CDCreator<ASTCDType> {
                 .setName("JSON"+ast.getName())
                 .setModifier(CDModifier.PUBLIC.build())
                 .build();
+    }
+
+    private Set<ASTCDAttribute> buildAttributes(ASTCDType ast){
+        Set<ASTCDAttribute> attributes = new HashSet<>();
+
+        for(ASTCDAttribute attribute : getAttributes(ast)) {
+            //Creates an attribute of the type: protected static final KEY = "key";
+            //The key is the key used to store the value of the variable in the JSON object.
+            ASTCDAttribute node = getCDAttributeFacade().createAttribute(
+                    CDModifier.PROTECTED_STATIC_FINAL,
+                    "String",
+                    attribute.getName().toUpperCase(Locale.ENGLISH)
+            );
+
+            glex.replaceTemplate(
+                    CDGeneratorHelper.VALUE_HOOK,
+                    node,
+                    new StringHookPoint(" = \"" + getKey(attribute) + "\"")
+            );
+
+            attributes.add(node);
+        }
+
+        return attributes;
     }
 
     private Set<ASTCDMethod> buildMethods(ASTCDType ast){
@@ -145,19 +169,45 @@ public class JSONCreator extends CDCreator<ASTCDType> {
     }
 
     private void setFromTemplate(ASTCDMethod method, ASTCDAttribute attribute){
-        CD4AnalysisVisitor templateVisitor = new CD4AnalysisVisitor() {
+        CD4CodeVisitor templateVisitor = new CD4CodeVisitor() {
             @Override
             public void visit(ASTMCPrimitiveType node){
                 if(node.isBoolean()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_BOOLEAN, getKey(attribute), attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_BOOLEAN, getKey(attribute), attribute, false);
                 }else if(node.isDouble()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_DOUBLE, getKey(attribute), attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_DOUBLE, getKey(attribute), attribute, false);
                 }else if(node.isFloat()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_FLOAT, getKey(attribute), attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_FLOAT, getKey(attribute), attribute, false);
                 }else if(node.isInt()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_INT, getKey(attribute), attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_INT, getKey(attribute), attribute, false);
                 }else if(node.isLong()){
-                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_LONG, getKey(attribute), attribute);
+                    setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_LONG, getKey(attribute), attribute, false);
+                }
+            }
+
+            @Override
+            public void visit(ASTMCOptionalType node){
+                switch(node.getMCTypeArgument().printType(typePrinter)){
+                    case "String":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_STRING, getKey(attribute), attribute, true);
+                        break;
+                    case "Boolean":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_BOOLEAN, getKey(attribute), attribute, true);
+                        break;
+                    case "Double":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_DOUBLE, getKey(attribute), attribute, true);
+                        break;
+                    case "Float":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_FLOAT, getKey(attribute), attribute, true);
+                        break;
+                    case "Integer":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_INT, getKey(attribute), attribute, true);
+                        break;
+                    case "Long":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_LONG, getKey(attribute), attribute, true);
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -165,7 +215,7 @@ public class JSONCreator extends CDCreator<ASTCDType> {
             public void visit(ASTCDAttribute node){
                 if(!CDGeneratorHelper.isPrimitive(node))
                     if(node.getSymbol().getType().lazyLoadDelegate().getFullName().equals("java.lang.String.String"))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_STRING, getKey(attribute), attribute);
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, FROM_STRING, getKey(attribute), attribute, false);
             }
         };
 
@@ -205,19 +255,35 @@ public class JSONCreator extends CDCreator<ASTCDType> {
     }
 
     private void setToTemplate(ASTCDType type, ASTCDMethod method, ASTCDAttribute attribute){
-        CD4AnalysisVisitor templateVisitor = new CD4AnalysisVisitor() {
+        CD4CodeVisitor templateVisitor = new CD4CodeVisitor() {
             @Override
             public void visit(ASTMCPrimitiveType node){
-                setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute);
+                setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute, false);
             }
 
             @Override
-            public void visit(ASTCDAttribute node){
+            public void visit(ASTMCOptionalType node){
+                switch(node.getMCTypeArgument().printType(typePrinter)){
+                    case "String":
+                    case "Boolean":
+                    case "Double":
+                    case "Float":
+                    case "Integer":
+                    case "Long":
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void endVisit(ASTCDAttribute node){
                 if(!CDGeneratorHelper.isPrimitive(node)) {
                     if(CDGeneratorHelper.inLocalScope(type, node))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_LOCAL, node.getSymbol().getType().lazyLoadDelegate(), getKey(attribute), attribute);
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_LOCAL, node.getSymbol().getType().lazyLoadDelegate(), getKey(attribute), attribute, false);
                     else if (node.getSymbol().getType().lazyLoadDelegate().getFullName().equals("java.lang.String.String"))
-                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute);
+                        setTemplate(method, CDGeneratorHelper.JSON_MODULE, TO_NATIVE, getKey(attribute), attribute, false);
                 }
             }
         };
@@ -229,15 +295,19 @@ public class JSONCreator extends CDCreator<ASTCDType> {
     }
 
     private String getKey(ASTCDAttribute node){
-        return node.getSymbol().getStereotype(CDGeneratorHelper.KEY_LABEL).map(Stereotype::getValue).orElse(node.getName());
+        return node.getSymbol().getStereotype(CDGeneratorHelper.JSON_KEY).map(Stereotype::getValue).orElse(node.getName());
     }
 
-    private List<ASTCDAttribute> getAttributes(ASTCDType node){
-        List<ASTCDAttribute> attributes = Lists.newArrayList();
+    private Set<ASTCDAttribute> getAttributes(ASTCDType node){
+        //Avoid duplicates
+        Set<ASTCDAttribute> attributes = new TreeSet<>(Comparator.comparing(ASTCDAttributeTOP::getName));
 
+        //Get all attributes
         attributes.addAll(node.getCDAttributeList());
         for(CDTypeSymbol parent : node.getSymbol().getSuperTypes())
             attributes.addAll(getAttributes(parent.getAstNode()));
+        //Filter attributes that are ignored;
+        attributes.removeIf(ast -> ast.getSymbol().getStereotype(CDGeneratorHelper.JSON_IGNORE).isPresent());
 
         return attributes;
     }

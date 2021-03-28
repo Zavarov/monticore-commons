@@ -1,6 +1,6 @@
 package java.util.function;
 
-import java.util.Function.Function;
+import java.util.function.Function.Function;
 /**
  * @version Java 11
  */

@@ -2,6 +2,7 @@ package vartas.monticore.cd4code.json;
 
 import java.lang.String.String;
 import java.util.List.List;
+import java.util.Optional.Optional;
 
 classdiagram JSON{
     public class Structure{
@@ -14,6 +15,7 @@ classdiagram JSON{
         boolean booleanAttr;
         Element elementAttr;
         List<String> listAttr;
+        Optional<String> optAttr;
     }
 
     public class Element{}

@@ -56,7 +56,7 @@ public class Main {
     private static CDDecoratorGenerator DECORATOR_GENERATOR;
     private static CDJSONGenerator JSON_GENERATOR;
 
-    public static void main(String[] args){
+    public static void main(String... args){
         processArguments(args);
 
         buildGlobalScope();

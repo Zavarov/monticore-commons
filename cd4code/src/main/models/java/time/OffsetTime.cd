@@ -1,0 +1,70 @@
+package java.time;
+
+import java.io.Serializable.Serializable;
+import java.lang.Comparable.Comparable;
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.time.temporal.Temporal.Temporal;
+import java.time.temporal.TemporalAdjuster.TemporalAdjuster;
+import java.time.temporal.TemporalField.TemporalField;
+import java.time.temporal.TemporalUnit.TemporalUnit;
+import java.time.temporal.TemporalAmount.TemporalAmount;
+import java.time.temporal.ValueRange.ValueRange;
+import java.time.format.DateTimeFormatter.DateTimeFormatter;
+import java.time.LocalDate.LocalDate;
+import java.time.LocalTime.LocalTime;
+import java.time.OffsetDateTime.OffsetDateTime;
+import java.time.ZoneOffset.ZoneOffset;
+
+/**
+ * @version Java 11
+ */
+public classdiagram OffsetTime{
+    public class OffsetTime extends Object implements Temporal, TemporalAdjuster, Serializable, Comparable <<OffsetTime>>{
+        + Temporal adjustInto(Temporal temporal);
+        + OffsetDateTime atDate(LocalDate date);
+        + int compareTo(OffsetTime other);
+        + boolean equals(Object obj);
+        + String format(DateTimeFormatter formatter);
+        + int get(TemporalField field);
+        + int getHour();
+        + long getLong(TemporalField field);
+        + int getMinute();
+        + int getNano();
+        + ZoneOffset getOffset();
+        + int getSecond();
+        + int hashCode();
+        + boolean isAfter(OffsetTime other);
+        + boolean isBefore(OffsetTime other);
+        + boolean isEqual(OffsetTime other);
+        + boolean isSupported(TemporalField field);
+        + boolean isSupported(TemporalUnit unit);
+        + OffsetTime minus(long amountToSubtract, TemporalUnit unit);
+        + OffsetTime minus(TemporalAmount amountToSubtract);
+        + OffsetTime minusHours(long hours);
+        + OffsetTime minusMinutes(long minutes);
+        + OffsetTime minusNanos(long nanos);
+        + OffsetTime minusSeconds(long seconds);
+        + OffsetTime plus(long amountToAdd, TemporalUnit unit);
+        + OffsetTime plus(TemporalAmount amount);
+        + OffsetTime plusHours(long hours);
+        + OffsetTime plusMinutes(long minutes);
+        + OffsetTime plusNanos(long nanos);
+        + OffsetTime plusSeconds(long seconds);
+        //<R> R query(TemporalQuery<R> query);
+        + ValueRange range(TemporalField field);
+        + long toEpochSecond(LocalDate date);
+        + LocalTime toLocalTime();
+        + String toString();
+        + OffsetTime truncatedTo(TemporalUnit unit);
+        + long until(Temporal endExclusive, TemporalUnit unit);
+        + OffsetTime with(TemporalAdjuster adjuster);
+        + OffsetTime with(TemporalField field, long newValue);
+        + OffsetTime withHour(int hour);
+        + OffsetTime withMinute(int minute);
+        + OffsetTime withNano(int nanoOfSecond);
+        + OffsetTime withOffsetSameInstant(ZoneOffset offset);
+        + OffsetTime withOffsetSameLocal(ZoneOffset offset);
+        + OffsetTime withSecond(int second);
+    }
+}

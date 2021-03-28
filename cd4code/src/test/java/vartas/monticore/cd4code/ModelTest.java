@@ -63,6 +63,7 @@ public class ModelTest extends BasicCDTest {
             //TODO "java.time.chrono : ChronoLocalDateTime",
 
             "java.time.format : ResolverStyle",
+            //TODO "java.time.format : DateTimeFormatter",
 
             "java.time.temporal : ChronoUnit",
             "java.time.temporal : Temporal",
@@ -73,12 +74,18 @@ public class ModelTest extends BasicCDTest {
             "java.time.temporal : TemporalUnit",
             "java.time.temporal : ValueRange",
 
+            //TODO "java.time : DayOfWeek",
             "java.time : Duration",
             //TODO "java.time : Instant",
             //TODO "java.time : LocalDate",
-            //TODO "java.time : LocalDateTime",
+            "java.time : LocalDateTime",
             //TODO "java.time : LocalTime",
-            //TODO "java.time : OffsetDateTime",
+            //TODO "java.time : Month",
+            "java.time : OffsetDateTime",
+            "java.time : OffsetTime",
+            //TODO "java.time : ZonedDateTime",
+            //TODO "java.time : ZoneId",
+            //TODO "java.time : ZoneOffset",
 
             "java.util.concurrent : Callable",
             "java.util.concurrent : ConcurrentMap",
@@ -98,6 +105,9 @@ public class ModelTest extends BasicCDTest {
             //TODO "java.util.stream : IntStream",
             //TODO "java.util.stream : Stream",
 
+
+            "java.util : AbstractCollection",
+            "java.util : AbstractList",
             "java.util : Collection",
             //TODO "java.util : Comparator",
             "java.util : Iterator",

@@ -1,0 +1,22 @@
+package java.time;
+
+import java.lang.Object.Object;
+import java.lang.String.String;
+import java.io.Serializable.Serializable;
+import java.util.Locale.Locale;
+import java.time.format.TextStyle.TextStyle;
+import java.time.zone.ZoneRules.ZoneRules;
+/**
+ * @version Java 11
+ */
+public classdiagram ZoneId{
+    public abstract class ZoneId extends Object implements Serializable{
+        + boolean equals(Object obj);
+        + String getDisplayName(TextStyle style, Locale locale);
+        + abstract String getId();
+        + abstract ZoneRules getRules();
+        + int hashCode();
+        + ZoneId normalized();
+        + String toString();
+    }
+}

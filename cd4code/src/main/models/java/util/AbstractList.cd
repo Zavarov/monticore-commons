@@ -1,0 +1,13 @@
+package java.util;
+
+import java.util.AbstractCollection.AbstractCollection;
+import java.util.List.List;
+
+/**
+ * @version Java 11
+ */
+public classdiagram AbstractList{
+    <<container>>
+    public abstract class AbstractList extends AbstractCollection implements List <<E>>{
+    }
+}

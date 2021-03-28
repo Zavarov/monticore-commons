@@ -35,7 +35,9 @@ import vartas.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CDFactoryGenerator extends CDPreprocessorGenerator {
@@ -79,7 +81,7 @@ public class CDFactoryGenerator extends CDPreprocessorGenerator {
     }
 
     private List<ASTMCImportStatement> buildMCImportStatements(ASTCDDefinition ast){
-        List<String> imports = new ArrayList<>();
+        Set<String> imports = new HashSet<>();
 
         imports.add("java.util.function.Supplier.Supplier");
         imports.addAll(ast.getSymbol().getImports());

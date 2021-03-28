@@ -148,14 +148,33 @@ public class VisitorCreator extends AbstractCreator<ASTCDDefinition, ASTCDInterf
     @Override
     public ASTCDInterface decorate(ASTCDDefinition cdDefinition) {
         ASTCDInterface cdInterface = buildVisitor(cdDefinition);
+        //TODO Handle the symbol properly
+        CDTypeSymbol symbol = new CDTypeSymbol(cdInterface.getName());
+        symbol.setPackageName(Names.getQualifiedName(cdDefinition.getSymbol().getPackageName(), CDGeneratorHelper.VISITOR_PACKAGE));
+        cdInterface.setSymbol(symbol);
 
         buildHookpoints(cdDefinition, cdInterface);
 
+        cdInterface.addCDMethod(buildGetRealThis(cdInterface));
         cdDefinition.streamCDClasss().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
         cdDefinition.streamCDEnums().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
         cdDefinition.streamCDInterfaces().map(this::createMethods).forEach(cdInterface::addAllCDMethods);
 
         return cdInterface;
+    }
+
+    private ASTCDMethod buildGetRealThis(ASTCDInterface cdVisitor){
+        String typeName = cdVisitor.getName();
+        String signature = String.format(GET_REAL_THIS, typeName);
+
+        ASTCDMethod cdMethod = getCDMethodFacade().createMethodByDefinition(signature);
+        replaceTemplate(CDGeneratorHelper.METHOD_HOOK, cdMethod, new TemplateHookPoint("visitor.GetRealThis"));
+
+        //Has to be overwritten in case a handwritten visitor exists.
+        if(generatorHelper.existsHandwrittenClass(cdVisitor))
+            cdMethod.getModifier().setAbstract(true);
+
+        return cdMethod;
     }
 
     /**
