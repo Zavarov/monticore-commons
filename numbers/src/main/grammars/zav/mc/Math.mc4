@@ -1,0 +1,93 @@
+package zav.mc;
+
+/**
+ * This grammar defines primitive arithmetic functions.
+ */
+grammar Math extends de.monticore.expressions.CommonExpressions,
+                                      de.monticore.literals.MCCommonLiterals{
+    start Expression;
+
+    //Simple literals only allow non-negative numeric literals
+    @Override
+    LiteralExpression implements Expression <340> =
+        SignedLiteral
+    ;
+
+    /*================================================================================================================*/
+    /*==  Operators  =================================================================================================*/
+    /*================================================================================================================*/
+
+    PowExpression implements Expression <190>, InfixExpression =
+        left:Expression operator:"^" right:Expression
+    ;
+
+    /*================================================================================================================*/
+    /*==  Methods  ===================================================================================================*/
+    /*================================================================================================================*/
+
+    interface MethodExpression extends Expression;
+
+    astrule MethodExpression =
+        name:String
+    ;
+
+    RandomNumberExpression implements MethodExpression =
+        name:"random" "(" dice:Expression "," eyes:Expression ")"
+    ;
+
+    AbsExpression implements MethodExpression =
+        name:"abs" argument:BracketExpression
+    ;
+
+    ACosExpression implements MethodExpression =
+        name:"acos" argument:BracketExpression
+    ;
+
+    ASinExpression implements MethodExpression =
+        name:"asin" argument:BracketExpression
+    ;
+
+    ATanExpression implements MethodExpression =
+        name:"atan" argument:BracketExpression
+    ;
+
+    CeilExpression implements MethodExpression =
+        name:"ceil" argument:BracketExpression
+    ;
+
+    CosExpression implements MethodExpression =
+        name:"cos" argument:BracketExpression
+    ;
+
+    FloorExpression implements MethodExpression =
+        name:"floor" argument:BracketExpression
+    ;
+
+    LogExpression implements MethodExpression =
+        name:"log" argument:BracketExpression
+    ;
+
+    LnExpression implements MethodExpression =
+        name:"ln" argument:BracketExpression
+    ;
+
+    MaxExpression implements MethodExpression =
+        name:"max" "(" left:Expression "," right:Expression ")"
+    ;
+
+    MinExpression implements MethodExpression =
+        name:"min" "(" left:Expression "," right:Expression ")"
+    ;
+
+    SinExpression implements MethodExpression =
+        name:"sin" argument:BracketExpression
+    ;
+
+    SqrtExpression implements MethodExpression =
+        name:"sqrt" argument:BracketExpression
+    ;
+
+    TanExpression implements MethodExpression =
+        name:"tan" argument:BracketExpression
+    ;
+}

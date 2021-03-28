@@ -20,9 +20,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>monticore-commons</artifactId>
-        <groupId>vartas.monticore-commons</groupId>
-        <version>2.4</version>
+        <artifactId>root</artifactId>
+        <groupId>zav.mc</groupId>
+        <version>2.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,7 +33,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>vartas.monticore-commons</groupId>
+            <groupId>zav.mc</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
