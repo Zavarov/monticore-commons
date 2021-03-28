@@ -33,6 +33,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.prettyprint.MCFullGenericTypesPrettyPrinter;
 import de.se_rwth.commons.Joiners;
+import de.se_rwth.commons.Names;
 import org.apache.commons.lang3.StringUtils;
 import vartas.monticore.cd4code.CDGeneratorHelper;
 
