@@ -24,7 +24,7 @@
     <groupId>zav.mc</groupId>
     <artifactId>root</artifactId>
     <packaging>pom</packaging>
-    <version>2.4.2</version>
+    <version>2.4.3</version>
     <modules>
         <module>core</module>
         <module>numbers</module>
