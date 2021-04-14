@@ -21,6 +21,6 @@ public class CD2CDPreprocessor implements Consumer<ASTCDDefinition> {
         node.accept(new CDInitializeContainerProcess(glex));
         node.accept(new CDSetImportsForTypesProcess(glex));
         node.accept(new CDSetPackageForTypesProcess(glex));
-        node.accept(new CDInheritedConstructorProcess(glex));
+        //node.accept(new CDInheritedConstructorProcess(glex));
     }
 }
