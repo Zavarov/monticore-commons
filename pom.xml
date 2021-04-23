@@ -35,20 +35,11 @@
         <!-- .. Libraries ..................................................... -->
 
         <evo-inflector.version>1.2.2</evo-inflector.version>
-        <chart.version>1.1.9</chart.version>
-        <reddit.version>2.4.1</reddit.version>
-        <slf4j.version>1.7.30</slf4j.version>
-        <jda.version>4.1.1_110</jda.version>
-
-        <jda.version>4.1.1_110</jda.version>
+        <logback.version>1.2.3</logback.version>
         <json.version>20190722</json.version>
 
         <commons-text.version>1.8</commons-text.version>
         <collections4.version>4.4</collections4.version>
-        <evo.inflector.version>1.2.2</evo.inflector.version>
-        <reddit.version>2.4</reddit.version>
-        <chart.version>1.1.8</chart.version>
-        <discord.bot.version>3.4.1</discord.bot.version>
 
         <!-- Monticore -->
         <monticore.version>6.4.0</monticore.version>
@@ -92,15 +83,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <!-- MontiCore Dependencies -->
